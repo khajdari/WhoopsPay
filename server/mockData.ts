@@ -214,37 +214,40 @@ export async function seedMockData() {
       isDefault: false,
     });
 
-    // Create payment methods for mdoe user
-    await storage.addPaymentMethod({
-      userId: "mdoe",
-      type: "card",
-      cardName: "Mairy Doe",
-      cardNumber: "4111-1111-1111-6639",
-      bankName: "Chase Bank",
-      expiryDate: "12/26", 
-      cvv: "123",
-      isDefault: true,
-    });
+    // Create payment methods for mdoe user (only if they don't exist)
+    const existingPaymentMethods = await storage.getUserPaymentMethods("mdoe");
+    if (existingPaymentMethods.length === 0) {
+      await storage.addPaymentMethod({
+        userId: "mdoe",
+        type: "card",
+        cardName: "Mairy Doe",
+        cardNumber: "4111-1111-1111-6639",
+        bankName: "Chase Bank",
+        expiryDate: "12/26", 
+        cvv: "123",
+        isDefault: true,
+      });
 
-    await storage.addPaymentMethod({
-      userId: "mdoe",
-      type: "card",
-      cardName: "M. Doe",
-      cardNumber: "5555-5555-5555-4111",
-      bankName: "Bank of America",
-      expiryDate: "09/27", 
-      cvv: "456",
-      isDefault: false,
-    });
+      await storage.addPaymentMethod({
+        userId: "mdoe",
+        type: "card",
+        cardName: "M. Doe",
+        cardNumber: "5555-5555-5555-4111",
+        bankName: "Bank of America",
+        expiryDate: "09/27", 
+        cvv: "456",
+        isDefault: false,
+      });
 
-    await storage.addPaymentMethod({
-      userId: "mdoe", 
-      type: "bank",
-      bankName: "Chase Bank",
-      accountNumber: "123456782123",
-      routingNumber: "021000021",
-      isDefault: false,
-    });
+      await storage.addPaymentMethod({
+        userId: "mdoe", 
+        type: "bank",
+        bankName: "Chase Bank",
+        accountNumber: "123456782123",
+        routingNumber: "021000021",
+        isDefault: false,
+      });
+    }
 
     console.log("Mock data seeded successfully with intentional vulnerabilities");
   } catch (error) {
