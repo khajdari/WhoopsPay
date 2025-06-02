@@ -42,7 +42,7 @@ export async function seedMockData() {
       lastName: "Doe",
       profileImageUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
       balance: "2150.00",
-      username: "edoe",
+
       ssn: "555-12-3456",
       bankAccount: "1111-2222-3333-4444",
       creditCard: "3782-8224-6310-005",
