@@ -187,6 +187,13 @@ export default function Wallet() {
       </main>
 
       <MobileNav />
+      
+      {showAddCardModal && (
+        <AddCardModal onClose={() => setShowAddCardModal(false)} />
+      )}
+      {showAddBankModal && (
+        <AddBankModal onClose={() => setShowAddBankModal(false)} />
+      )}
     </div>
   );
 }
