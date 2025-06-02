@@ -57,14 +57,7 @@ export default function SendMoney() {
       return;
     }
     
-    if (!recipient || !amount) {
-      toast({
-        title: "Missing information",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
+
 
     // VULNERABLE: No input validation or sanitization
     // This allows for potential XSS attacks through the note field
