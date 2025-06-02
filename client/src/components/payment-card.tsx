@@ -34,7 +34,7 @@ export function PaymentCard({ type, cardNumber, cardName, bankName, accountNumbe
       <div className={`relative p-4 rounded-xl bg-gradient-to-br ${colors} text-white shadow-lg min-h-[120px] flex flex-col justify-between`}>
         <div className="flex justify-between items-start">
           <div>
-            <div className="text-sm opacity-90">{brand}</div>
+            <div className="text-sm opacity-90">Debit Card</div>
             <div className="text-lg font-medium">{cardName || 'Mairy Doe'}</div>
           </div>
           <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
@@ -55,21 +55,21 @@ export function PaymentCard({ type, cardNumber, cardName, bankName, accountNumbe
 
   // Bank account card
   return (
-    <div className="relative p-4 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 text-white shadow-lg min-h-[120px] flex flex-col justify-between">
+    <div className="relative p-4 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-700 text-white shadow-lg min-h-[120px] flex flex-col justify-between">
       <div className="flex justify-between items-start">
         <div>
           <div className="text-sm opacity-90">Bank Account</div>
-          <div className="text-lg font-medium">{bankName || 'Bank'}</div>
+          <div className="text-lg font-medium">{bankName || 'Chase Bank'}</div>
         </div>
         <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-          <div className="w-4 h-4 border-2 border-white/60 rounded"></div>
+          <div className="w-5 h-3 bg-white/60 rounded-sm"></div>
         </div>
       </div>
       <div className="flex justify-between items-end">
         <div className="text-lg font-mono tracking-wider">
           ••••{accountNumber ? accountNumber.slice(-4) : '0000'}
         </div>
-        <div className="text-xs opacity-75">BANK</div>
+        <div className="text-xs opacity-75">CHECKING</div>
       </div>
     </div>
   );
