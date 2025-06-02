@@ -78,7 +78,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
         <div>
           <div className="text-sm opacity-90">Bank Account</div>
           <div className="text-lg font-medium">
-            {bankName || 'Chase Bank'}
+            {cardName || 'Account Holder'}
           </div>
         </div>
         <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
@@ -89,7 +89,9 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
         <div className="text-lg font-mono tracking-wider">
           {iban ? `••••${iban.slice(-4)}` : '••••0000'}
         </div>
-        <div className="text-xs opacity-75">CHECKING</div>
+        <div className="text-xs opacity-75 uppercase">
+          {bankName || 'BANK'}
+        </div>
       </div>
     </div>
   );
