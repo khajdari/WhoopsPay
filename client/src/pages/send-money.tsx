@@ -399,7 +399,7 @@ export default function SendMoney() {
                         <SelectValue placeholder="Select funding source" />
                       </SelectTrigger>
                       <SelectContent>
-                        {paymentMethods.map((method: any) => (
+                        {paymentMethods.map((method) => (
                           <SelectItem key={method.id} value={method.id.toString()}>
                             {method.type === 'card' ? (
                               `${method.cardName} - **** ${method.cardNumber?.slice(-4)} (${method.bankName})`
@@ -457,7 +457,7 @@ export default function SendMoney() {
                         <SelectValue placeholder="Select destination" />
                       </SelectTrigger>
                       <SelectContent>
-                        {paymentMethods.map((method: any) => (
+                        {paymentMethods.map((method) => (
                           <SelectItem key={method.id} value={method.id.toString()}>
                             {method.type === 'card' ? (
                               `${method.cardName} - **** ${method.cardNumber?.slice(-4)} (${method.bankName})`
