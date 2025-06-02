@@ -20,7 +20,7 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
   
   const [bankName, setBankName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
-  const [routingNumber, setRoutingNumber] = useState("");
+  const [iban, setIban] = useState("");
   const [accountHolderName, setAccountHolderName] = useState("");
 
   const addBankMutation = useMutation({
@@ -64,17 +64,17 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
     }
   };
 
-  const handleRoutingNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '');
-    if (value.length <= 9) { // Routing numbers are 9 digits
-      setRoutingNumber(value);
+  const handleIbanChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (value.length <= 34) { // IBAN max length is 34 characters
+      setIban(value);
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!bankName || !accountNumber || !routingNumber || !accountHolderName) {
+    if (!bankName || !accountNumber || !iban || !accountHolderName) {
       toast({
         title: "Missing information",
         description: "Please fill in all required fields",
@@ -83,10 +83,10 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
       return;
     }
 
-    if (routingNumber.length !== 9) {
+    if (iban.length < 15) {
       toast({
-        title: "Invalid routing number",
-        description: "Routing number must be 9 digits",
+        title: "Invalid IBAN",
+        description: "IBAN must be at least 15 characters",
         variant: "destructive",
       });
       return;
