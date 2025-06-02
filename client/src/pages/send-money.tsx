@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ArrowLeft, Send, DollarSign, CreditCard, Banknote } from "lucide-react";
 import { useLocation } from "wouter";
+import type { PaymentMethod } from "@shared/schema";
 
 export default function SendMoney() {
   const { user } = useAuth();
@@ -36,6 +37,11 @@ export default function SendMoney() {
   // Withdraw Money
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [withdrawDestination, setWithdrawDestination] = useState("");
+
+  // Fetch user's payment methods
+  const { data: paymentMethods = [] } = useQuery<PaymentMethod[]>({
+    queryKey: ["/api/payment-methods"],
+  });
 
   const sendMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -393,9 +399,15 @@ export default function SendMoney() {
                         <SelectValue placeholder="Select funding source" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="bank">Bank Account</SelectItem>
-                        <SelectItem value="debit">Debit Card</SelectItem>
-                        <SelectItem value="credit">Credit Card</SelectItem>
+                        {paymentMethods.map((method: any) => (
+                          <SelectItem key={method.id} value={method.id.toString()}>
+                            {method.type === 'card' ? (
+                              `${method.cardName} - **** ${method.cardNumber?.slice(-4)} (${method.bankName})`
+                            ) : (
+                              `${method.bankName} - ****${method.accountNumber?.slice(-4)}`
+                            )}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -445,8 +457,15 @@ export default function SendMoney() {
                         <SelectValue placeholder="Select destination" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="bank">Bank Account</SelectItem>
-                        <SelectItem value="debit">Debit Card</SelectItem>
+                        {paymentMethods.map((method: any) => (
+                          <SelectItem key={method.id} value={method.id.toString()}>
+                            {method.type === 'card' ? (
+                              `${method.cardName} - **** ${method.cardNumber?.slice(-4)} (${method.bankName})`
+                            ) : (
+                              `${method.bankName} - ****${method.accountNumber?.slice(-4)}`
+                            )}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
