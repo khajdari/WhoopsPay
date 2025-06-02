@@ -22,8 +22,8 @@ export function MobileNav() {
               <a
                 className={`flex flex-col items-center justify-center h-full transition-colors ${
                   item.current
-                    ? "text-blue-600"
-                    : "text-gray-500 hover:text-blue-600"
+                    ? "paypal-blue"
+                    : "text-gray-500 hover:paypal-blue"
                 }`}
               >
                 <Icon size={20} className="mb-1" />
