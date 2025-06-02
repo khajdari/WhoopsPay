@@ -10,7 +10,7 @@ export async function seedMockData() {
       firstName: "Alice",
       lastName: "Smith",
       profileImageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
-      balance: "1,250.50",
+      balance: "1250.50",
       // VULNERABLE: Sensitive data stored unencrypted
       ssn: "123-45-6789",
       bankAccount: "4532-1234-5678-9012",
@@ -37,7 +37,7 @@ export async function seedMockData() {
       firstName: "Carol",
       lastName: "Davis",
       profileImageUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-      balance: "2,150.00",
+      balance: "2150.00",
       ssn: "555-12-3456",
       bankAccount: "1111-2222-3333-4444",
       creditCard: "3782-8224-6310-005",

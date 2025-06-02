@@ -54,9 +54,9 @@ export default function Dashboard() {
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Good morning, {user?.firstName || 'User'}
+            Hi {user?.firstName || 'there'}
           </h2>
-          <p className="text-gray-600">Here's what's happening with your account today.</p>
+          <p className="text-gray-600">Here's what's happening with your money.</p>
         </div>
 
         {/* Account Balance Card */}
