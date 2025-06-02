@@ -55,10 +55,8 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
         </div>
         <div className="flex justify-between items-end">
           <div className="text-lg font-mono tracking-wider">{maskedNumber}</div>
-          <div className="text-xs opacity-75">
-            {brand === 'Visa' && 'VISA'}
-            {brand === 'MasterCard' && 'MASTERCARD'}
-            {brand === 'American Express' && 'AMEX'}
+          <div className="text-xs opacity-75 uppercase">
+            {bankName || brand}
           </div>
         </div>
       </div>
@@ -79,8 +77,8 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
       <div className="flex justify-between items-start">
         <div>
           <div className="text-sm opacity-90">Bank Account</div>
-          <div className="text-lg font-medium font-mono tracking-wider">
-            {iban ? `••••${iban.slice(-4)}` : '••••0000'}
+          <div className="text-lg font-medium">
+            {bankName || 'Chase Bank'}
           </div>
         </div>
         <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
@@ -89,11 +87,9 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
       </div>
       <div className="flex justify-between items-end">
         <div className="text-lg font-mono tracking-wider">
-          ••••{accountNumber ? accountNumber.slice(-4) : '0000'}
+          {iban ? `••••${iban.slice(-4)}` : '••••0000'}
         </div>
-        <div className="text-xs opacity-75 uppercase">
-          {bankName || 'CHECKING'}
-        </div>
+        <div className="text-xs opacity-75">CHECKING</div>
       </div>
     </div>
   );

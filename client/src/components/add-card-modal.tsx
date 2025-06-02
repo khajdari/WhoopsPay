@@ -20,6 +20,7 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
   
   const [cardNumber, setCardNumber] = useState("");
   const [cardName, setCardName] = useState("");
+  const [bankName, setBankName] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
 
@@ -101,7 +102,7 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!cardNumber || !cardName || !expiryDate || !cvv) {
+    if (!cardNumber || !cardName || !bankName || !expiryDate || !cvv) {
       toast({
         title: "Missing information",
         description: "Please fill in all required fields",
@@ -116,6 +117,7 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
       type: "card",
       cardNumber: cardNumber.replace(/\s/g, ''), // Remove spaces
       cardName,
+      bankName,
       expiryDate,
       cvv,
     });
@@ -152,6 +154,18 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
               placeholder="John Doe"
               value={cardName}
               onChange={(e) => setCardName(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="bankName">Issuing Bank</Label>
+            <Input
+              id="bankName"
+              type="text"
+              placeholder="Chase Bank"
+              value={bankName}
+              onChange={(e) => setBankName(e.target.value)}
               required
             />
           </div>
