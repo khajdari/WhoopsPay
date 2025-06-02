@@ -179,7 +179,8 @@ export async function seedMockData() {
     await storage.addPaymentMethod({
       userId: "mock_user_1",
       type: "card",
-      cardNumber: "4111-1111-1111-1111", // VULNERABLE: Unencrypted card
+      cardName: "John Doe",
+      cardNumber: "4532-1234-5678-9012", // VULNERABLE: Unencrypted card
       expiryDate: "12/25",
       cvv: "123", // VULNERABLE: Stored CVV
       isDefault: true,
@@ -188,7 +189,8 @@ export async function seedMockData() {
     await storage.addPaymentMethod({
       userId: "mock_user_1", 
       type: "bank",
-      accountNumber: "123456789", // VULNERABLE: Unencrypted account
+      bankName: "Chase Bank",
+      accountNumber: "987654321", // VULNERABLE: Unencrypted account
       routingNumber: "021000021",
       isDefault: false,
     });
@@ -196,10 +198,20 @@ export async function seedMockData() {
     await storage.addPaymentMethod({
       userId: "mock_user_2",
       type: "card",
-      cardNumber: "5555-5555-5555-4444",
+      cardName: "Mairy Doe",
+      cardNumber: "5555-4444-3333-2222",
       expiryDate: "08/26", 
       cvv: "456",
       isDefault: true,
+    });
+
+    await storage.addPaymentMethod({
+      userId: "mock_user_2", 
+      type: "bank",
+      bankName: "Bank of America",
+      accountNumber: "456789123",
+      routingNumber: "026009593",
+      isDefault: false,
     });
 
     console.log("Mock data seeded successfully with intentional vulnerabilities");

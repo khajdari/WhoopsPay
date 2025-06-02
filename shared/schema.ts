@@ -61,6 +61,8 @@ export const paymentMethods = pgTable("payment_methods", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   userId: varchar("user_id").references(() => users.id),
   type: varchar("type"), // bank, card
+  bankName: varchar("bank_name"), // Bank name for display
+  cardName: varchar("card_name"), // Card holder name
   accountNumber: varchar("account_number"), // Vulnerable: not encrypted
   routingNumber: varchar("routing_number"), // Vulnerable: not encrypted
   cardNumber: varchar("card_number"), // Vulnerable: not encrypted
