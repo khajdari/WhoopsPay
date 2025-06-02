@@ -62,7 +62,7 @@ export async function seedMockData() {
       fromUserId: "mdoe",
       toUserId: "jdoe",
       amount: "75.50", 
-      description: "<script>alert('XSS Attack!')</script>Gift for birthday", // VULNERABLE: XSS payload
+      description: "Gift for birthday", // VULNERABLE: XSS payload removed
       status: "completed",
     });
 
@@ -78,7 +78,7 @@ export async function seedMockData() {
       fromUserId: "jdoe",
       toUserId: "edoe",
       amount: "25.99",
-      description: "<img src=x onerror=alert('Stored XSS')>Coffee", // VULNERABLE: Another XSS payload
+      description: "Coffee", // VULNERABLE: XSS payload removed
       status: "completed", 
     });
 
