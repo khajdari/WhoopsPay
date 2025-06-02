@@ -44,8 +44,7 @@ export default function Landing() {
             <Button 
               onClick={handleLogin}
               size="lg" 
-              variant="outline" 
-              className="border-white text-white"
+              className="bg-white paypal-blue"
             >
               Log In
             </Button>
