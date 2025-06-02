@@ -299,9 +299,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // VULNERABLE: No limits on add money amount
       await storage.updateUserBalance(userId, newBalance.toString());
 
-      // Create a transaction record for add money
+      // Create a transaction record for add money (using the user as both from and to)
       await storage.createTransaction({
-        fromUserId: "system_add_money",
+        fromUserId: userId,
         toUserId: userId,
         amount: amount.toString(),
         description: `Added money from ${source}`,
@@ -345,11 +345,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const newBalance = currentBalance - withdrawAmount;
       await storage.updateUserBalance(userId, newBalance.toString());
 
-      // Create a transaction record for withdrawal
+      // Create a transaction record for withdrawal (using the user as both from and to)
       await storage.createTransaction({
         fromUserId: userId,
-        toUserId: "system_withdraw",
-        amount: amount.toString(),
+        toUserId: userId,
+        amount: (-parseFloat(amount)).toString(), // Negative amount for withdrawal
         description: `Withdrawal to ${destination}`,
         status: "completed"
       });
