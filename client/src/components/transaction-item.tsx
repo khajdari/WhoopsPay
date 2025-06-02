@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowUpRight, ArrowDownLeft, ShoppingCart, University, Play, Music, Car, Coffee, CreditCard } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft, ShoppingCart, University, Play, Music, Car, Coffee, Smartphone } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 interface TransactionItemProps {
@@ -67,9 +67,9 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
               <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                 <Coffee className="w-5 h-5 text-green-700" />
               </div>
-            ) : transaction.description?.toLowerCase().includes('paypal') ? (
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <CreditCard className="w-5 h-5 text-blue-600" />
+            ) : transaction.description?.toLowerCase().includes('apple') ? (
+              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                <Smartphone className="w-5 h-5 text-gray-800" />
               </div>
             ) : transaction.description?.toLowerCase().includes('bank') ? (
               <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">

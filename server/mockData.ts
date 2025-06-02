@@ -126,7 +126,7 @@ export async function seedMockData() {
       fromUserId: "edoe",
       toUserId: "jdoe",
       amount: "125.00",
-      description: "PayPal transfer",
+      description: "Apple App Store purchase",
       status: "completed",
     });
 
