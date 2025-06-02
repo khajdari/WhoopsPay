@@ -23,6 +23,9 @@ export default function Profile() {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     email: user?.email || "",
+    address: user?.address || "",
+    nationality: user?.nationality || "",
+    gender: user?.gender || "",
   });
 
   const updateProfileMutation = useMutation({
@@ -56,6 +59,9 @@ export default function Profile() {
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       email: user?.email || "",
+      address: user?.address || "",
+      nationality: user?.nationality || "",
+      gender: user?.gender || "",
     });
     setIsEditing(false);
   };
@@ -159,6 +165,39 @@ export default function Profile() {
                   />
                 </div>
 
+                <div>
+                  <Label htmlFor="address">Address</Label>
+                  <Input
+                    id="address"
+                    value={formData.address}
+                    onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                    disabled={!isEditing}
+                    placeholder="123 Main St, City, Country"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <Label htmlFor="nationality">Nationality</Label>
+                    <Input
+                      id="nationality"
+                      value={formData.nationality}
+                      onChange={(e) => setFormData(prev => ({ ...prev, nationality: e.target.value }))}
+                      disabled={!isEditing}
+                      placeholder="American"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="gender">Gender</Label>
+                    <Input
+                      id="gender"
+                      value={formData.gender}
+                      onChange={(e) => setFormData(prev => ({ ...prev, gender: e.target.value }))}
+                      disabled={!isEditing}
+                      placeholder="Male/Female/Other"
+                    />
+                  </div>
+                </div>
 
               </form>
             </CardContent>
