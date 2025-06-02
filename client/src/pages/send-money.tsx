@@ -40,7 +40,14 @@ export default function SendMoney() {
 
   // Fetch user's payment methods
   const { data: paymentMethods = [] } = useQuery<PaymentMethod[]>({
-    queryKey: ["/api/payment-methods"],
+    queryKey: ["/api/payment-methods", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const response = await fetch(`/api/payment-methods?userId=${user.id}`);
+      if (!response.ok) throw new Error('Failed to fetch payment methods');
+      return response.json();
+    },
+    enabled: !!user?.id,
   });
 
   const sendMoneyMutation = useMutation({
