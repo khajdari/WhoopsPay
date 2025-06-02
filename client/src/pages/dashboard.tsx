@@ -6,6 +6,7 @@ import { SendMoneyModal } from "@/components/send-money-modal";
 import { AddCardModal } from "@/components/add-card-modal";
 import { AddBankModal } from "@/components/add-bank-modal";
 import { TransactionItem } from "@/components/transaction-item";
+import { PaymentCard } from "@/components/payment-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,6 +21,16 @@ export default function Dashboard() {
 
   const { data: transactions, isLoading: transactionsLoading } = useQuery({
     queryKey: ["/api/transactions"],
+    enabled: !!user,
+  });
+
+  const { data: paymentMethods, isLoading: paymentMethodsLoading } = useQuery({
+    queryKey: ["/api/payment-methods", user?.id],
+    queryFn: async () => {
+      const response = await fetch(`/api/payment-methods?userId=${user?.id}`);
+      if (!response.ok) throw new Error('Failed to fetch payment methods');
+      return response.json();
+    },
     enabled: !!user,
   });
 
@@ -139,30 +150,70 @@ export default function Dashboard() {
               </div>
               
               <div className="p-6 space-y-4">
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CreditCard className="w-8 h-8 text-gray-400" />
+                {paymentMethodsLoading ? (
+                  <div className="space-y-4">
+                    <Skeleton className="h-24 w-full rounded-xl" />
+                    <Skeleton className="h-24 w-full rounded-xl" />
                   </div>
-                  <p className="text-sm text-gray-600 mb-6">Add a payment method to make transactions easier</p>
-                  
+                ) : paymentMethods && paymentMethods.length > 0 ? (
                   <div className="space-y-3">
-                    <Button 
-                      className="w-full bg-paypal-blue text-white"
-                      onClick={() => setShowAddCardModal(true)}
-                    >
-                      <CreditCard className="w-4 h-4 mr-2" />
-                      Add Card
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full"
-                      onClick={() => setShowAddBankModal(true)}
-                    >
-                      <University className="w-4 h-4 mr-2" />
-                      Add Bank Account
-                    </Button>
+                    {paymentMethods.map((method: any) => (
+                      <PaymentCard
+                        key={method.id}
+                        type={method.type}
+                        cardNumber={method.cardNumber}
+                        cardName={method.cardName}
+                        bankName={method.bankName}
+                        accountNumber={method.accountNumber}
+                      />
+                    ))}
+                    
+                    <div className="flex space-x-2 pt-4">
+                      <Button 
+                        size="sm"
+                        className="flex-1 bg-paypal-blue text-white"
+                        onClick={() => setShowAddCardModal(true)}
+                      >
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        Add Card
+                      </Button>
+                      <Button 
+                        size="sm"
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => setShowAddBankModal(true)}
+                      >
+                        <University className="w-4 h-4 mr-2" />
+                        Add Bank
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <CreditCard className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <p className="text-sm text-gray-600 mb-6">Add a payment method to make transactions easier</p>
+                    
+                    <div className="space-y-3">
+                      <Button 
+                        className="w-full bg-paypal-blue text-white"
+                        onClick={() => setShowAddCardModal(true)}
+                      >
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        Add Card
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={() => setShowAddBankModal(true)}
+                      >
+                        <University className="w-4 h-4 mr-2" />
+                        Add Bank Account
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </Card>
           </div>
