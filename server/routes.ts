@@ -214,12 +214,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/payment-methods', async (req: any, res) => {
     try {
       // VULNERABLE: No authentication check
-      const { userId } = req.body;
+      const { userId, accountHolderName, ...rest } = req.body;
       
       // VULNERABLE: Storing sensitive payment data without encryption
       const paymentMethodData = {
-        ...req.body,
+        ...rest,
         userId,
+        // Map accountHolderName to cardName for bank accounts
+        cardName: accountHolderName || rest.cardName,
       };
       
       // WARNING: Credit card numbers, CVV, etc. stored in plain text
