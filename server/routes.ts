@@ -88,7 +88,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Transaction endpoints
   app.post('/api/transactions', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      // VULNERABLE: No authentication check - anyone can create transactions
+      const { fromUserId } = req.body;
       
       // VULNERABLE: Insufficient input validation
       const transactionData = req.body;
@@ -97,7 +98,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Users can send any amount, even if they don't have sufficient balance
       const transaction = await storage.createTransaction({
         ...transactionData,
-        fromUserId: userId,
+        fromUserId: fromUserId,
       });
 
       // Update balances without proper checks
@@ -124,8 +125,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/transactions', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const transactions = await storage.getUserTransactions(userId);
+      // VULNERABLE: No authentication - returns all transactions
+      const transactions = await storage.getAllTransactions();
       res.json(transactions);
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -168,7 +169,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Payment method endpoints
   app.post('/api/payment-methods', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      // VULNERABLE: No authentication check
+      const { userId } = req.body;
       
       // VULNERABLE: Storing sensitive payment data without encryption
       const paymentMethodData = {
@@ -187,8 +189,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/payment-methods', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const paymentMethods = await storage.getUserPaymentMethods(userId);
+      // VULNERABLE: No authentication - exposes all payment methods
+      const { userId } = req.query;
+      if (!userId) {
+        return res.status(400).json({ message: "UserId required" });
+      }
+      const paymentMethods = await storage.getUserPaymentMethods(userId as string);
       res.json(paymentMethods);
     } catch (error) {
       console.error("Error fetching payment methods:", error);
