@@ -25,7 +25,20 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
 
   const addBankMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("/api/payment-methods", "POST", data);
+      const response = await fetch("/api/payment-methods", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to add bank account");
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       toast({
