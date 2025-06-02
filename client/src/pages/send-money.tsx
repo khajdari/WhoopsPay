@@ -169,7 +169,7 @@ export default function SendMoney() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  className="flex-1 bg-paypal-blue hover:bg-paypal-darkblue text-white"
                   disabled={sendMoneyMutation.isPending}
                 >
                   {sendMoneyMutation.isPending ? "Sending..." : "Send Money"}

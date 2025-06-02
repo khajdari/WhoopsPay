@@ -68,13 +68,13 @@ export default function Dashboard() {
               <div className="flex space-x-4">
                 <Button
                   onClick={() => setShowSendModal(true)}
-                  className="bg-white text-blue-600 hover:bg-gray-100"
+                  className="bg-white paypal-blue hover:bg-gray-100"
                 >
                   Send
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-blue-600"
+                  className="border-white text-white hover:bg-white hover:paypal-blue"
                 >
                   Request
                 </Button>

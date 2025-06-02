@@ -109,7 +109,7 @@ export default function Transactions() {
                 <p className="text-sm mt-1">
                   {searchQuery ? "Try adjusting your search" : "You haven't made any transactions yet"}
                 </p>
-                <Button className="mt-4 bg-blue-600 hover:bg-blue-700">
+                <Button className="mt-4 bg-paypal-blue hover:bg-paypal-darkblue text-white">
                   Send Money
                 </Button>
               </div>
