@@ -30,7 +30,6 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
-  username: varchar("username").unique(),
   balance: decimal("balance", { precision: 10, scale: 2 }).default("0.00"),
   // Vulnerable: storing sensitive data without encryption
   ssn: varchar("ssn"), // Social Security Number - should be encrypted
