@@ -20,9 +20,6 @@ export default function Landing() {
             <div className="flex items-center">
               <h1 className="text-2xl font-bold paypal-blue">InsecurePay</h1>
             </div>
-            <Button onClick={handleLogin} className="bg-paypal-blue text-white">
-              Log In
-            </Button>
           </div>
         </div>
       </header>
