@@ -15,7 +15,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
     const getCardBrand = (number: string) => {
       const firstDigit = number.charAt(0);
       if (firstDigit === '4') return 'Visa';
-      if (firstDigit === '5') return 'Mastercard';
+      if (firstDigit === '5') return 'MasterCard';
       if (firstDigit === '3') return 'American Express';
       return 'Card';
     };
@@ -56,7 +56,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
           <div className="text-lg font-mono tracking-wider">{maskedNumber}</div>
           <div className="text-xs opacity-75">
             {brand === 'Visa' && 'VISA'}
-            {brand === 'Mastercard' && 'MC'}
+            {brand === 'MasterCard' && 'MASTERCARD'}
             {brand === 'American Express' && 'AMEX'}
           </div>
         </div>
