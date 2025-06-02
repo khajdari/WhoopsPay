@@ -17,11 +17,11 @@ export function PaymentCard({ type, cardNumber, cardName, bankName, accountNumbe
       return 'Card';
     };
 
-    // Get brand colors
+    // Get brand colors - using more professional/banking colors
     const getBrandColors = (number: string) => {
       const firstDigit = number.charAt(0);
       if (firstDigit === '4') return 'from-blue-600 to-blue-800'; // Visa blue
-      if (firstDigit === '5') return 'from-red-500 to-orange-600'; // Mastercard red/orange
+      if (firstDigit === '5') return 'from-slate-700 to-slate-900'; // Mastercard dark
       if (firstDigit === '3') return 'from-green-600 to-teal-700'; // Amex green
       return 'from-gray-600 to-gray-800'; // Default
     };
@@ -35,7 +35,7 @@ export function PaymentCard({ type, cardNumber, cardName, bankName, accountNumbe
         <div className="flex justify-between items-start">
           <div>
             <div className="text-sm opacity-90">{brand}</div>
-            <div className="text-lg font-medium">{cardName || 'Card Holder'}</div>
+            <div className="text-lg font-medium">{cardName || 'Mairy Doe'}</div>
           </div>
           <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
             <div className="w-6 h-4 bg-white/40 rounded-sm"></div>
