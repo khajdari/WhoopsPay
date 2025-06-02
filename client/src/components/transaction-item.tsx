@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowUpRight, ArrowDownLeft, ShoppingCart, University } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft, ShoppingCart, University, Play, Music, Car, Coffee, CreditCard } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 interface TransactionItemProps {
@@ -51,9 +51,29 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
               <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
                 <ShoppingCart className="w-5 h-5 text-orange-600" />
               </div>
-            ) : transaction.description?.toLowerCase().includes('bank') ? (
+            ) : transaction.description?.toLowerCase().includes('netflix') ? (
+              <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                <Play className="w-5 h-5 text-red-600" />
+              </div>
+            ) : transaction.description?.toLowerCase().includes('spotify') ? (
               <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                <University className="w-5 h-5 text-green-600" />
+                <Music className="w-5 h-5 text-green-600" />
+              </div>
+            ) : transaction.description?.toLowerCase().includes('uber') ? (
+              <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
+                <Car className="w-5 h-5 text-white" />
+              </div>
+            ) : transaction.description?.toLowerCase().includes('starbucks') ? (
+              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <Coffee className="w-5 h-5 text-green-700" />
+              </div>
+            ) : transaction.description?.toLowerCase().includes('paypal') ? (
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <CreditCard className="w-5 h-5 text-blue-600" />
+              </div>
+            ) : transaction.description?.toLowerCase().includes('bank') ? (
+              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                <University className="w-5 h-5 text-gray-600" />
               </div>
             ) : (
               <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">

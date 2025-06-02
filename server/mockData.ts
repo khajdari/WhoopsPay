@@ -90,6 +90,46 @@ export async function seedMockData() {
       status: "completed",
     });
 
+    await storage.createTransaction({
+      fromUserId: "jdoe",
+      toUserId: "mdoe",
+      amount: "15.99",
+      description: "Netflix subscription",
+      status: "completed",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "edoe",
+      toUserId: "jdoe",
+      amount: "9.99",
+      description: "Spotify Premium",
+      status: "completed",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "mdoe",
+      toUserId: "edoe",
+      amount: "23.45",
+      description: "Uber ride - Downtown",
+      status: "completed",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "jdoe",
+      toUserId: "mdoe",
+      amount: "7.85",
+      description: "Starbucks coffee",
+      status: "completed",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "edoe",
+      toUserId: "jdoe",
+      amount: "125.00",
+      description: "PayPal transfer",
+      status: "completed",
+    });
+
     // Create transactions with your current authenticated user ID (43412562)
     // These will show up in your transaction history for testing
     await storage.createTransaction({
