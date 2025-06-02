@@ -16,16 +16,24 @@ import Admin from "@/pages/admin";
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
 
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
   return (
     <Switch>
-      {isLoading || !isAuthenticated ? (
-        <Route path="/" component={Landing} />
+      {!isAuthenticated ? (
+        <>
+          <Route path="/login" component={Login} />
+          <Route path="/" component={Landing} />
+        </>
       ) : (
         <>
           <Route path="/" component={Dashboard} />
           <Route path="/send" component={SendMoney} />
           <Route path="/transactions" component={Transactions} />
           <Route path="/wallet" component={Wallet} />
+          <Route path="/admin" component={Admin} />
         </>
       )}
       <Route component={NotFound} />

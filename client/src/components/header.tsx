@@ -6,11 +6,11 @@ import { Bell, ChevronDown, Menu } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 export function Header() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [location] = useLocation();
 
   const handleLogout = () => {
-    window.location.href = "/api/logout";
+    logout();
   };
 
   const navigation = [
