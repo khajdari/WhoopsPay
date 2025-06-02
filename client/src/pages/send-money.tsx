@@ -2,15 +2,15 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
-import { MobileNav } from "@/components/mobile-nav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Send, DollarSign, CreditCard, Banknote } from "lucide-react";
 import { useLocation } from "wouter";
 
 export default function SendMoney() {
@@ -19,10 +19,24 @@ export default function SendMoney() {
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
   
-  const [recipient, setRecipient] = useState("");
-  const [amount, setAmount] = useState("");
-  const [note, setNote] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
+  // Send Money
+  const [sendRecipient, setSendRecipient] = useState("");
+  const [sendAmount, setSendAmount] = useState("");
+  const [sendNote, setSendNote] = useState("");
+  const [sendPaymentMethod, setSendPaymentMethod] = useState("");
+  
+  // Request Money
+  const [requestFrom, setRequestFrom] = useState("");
+  const [requestAmount, setRequestAmount] = useState("");
+  const [requestNote, setRequestNote] = useState("");
+  
+  // Add Money
+  const [addAmount, setAddAmount] = useState("");
+  const [addSource, setAddSource] = useState("");
+  
+  // Withdraw Money
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [withdrawDestination, setWithdrawDestination] = useState("");
 
   const sendMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -31,14 +45,80 @@ export default function SendMoney() {
     onSuccess: () => {
       toast({
         title: "Money sent successfully!",
-        description: `$${amount} has been sent to ${recipient}`,
+        description: `$${sendAmount} has been sent to ${sendRecipient}`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
-      setLocation("/");
+      setSendRecipient("");
+      setSendAmount("");
+      setSendNote("");
     },
     onError: (error: Error) => {
       toast({
         title: "Failed to send money",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const requestMoneyMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await apiRequest("POST", "/api/money-requests", data);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Money request sent!",
+        description: `Request for $${requestAmount} sent to ${requestFrom}`,
+      });
+      setRequestFrom("");
+      setRequestAmount("");
+      setRequestNote("");
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Failed to request money",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const addMoneyMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await apiRequest("POST", "/api/add-money", data);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Money added successfully!",
+        description: `$${addAmount} added to your account`,
+      });
+      queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
+      setAddAmount("");
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Failed to add money",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const withdrawMoneyMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await apiRequest("POST", "/api/withdraw-money", data);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Withdrawal initiated!",
+        description: `$${withdrawAmount} withdrawal request submitted`,
+      });
+      queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
+      setWithdrawAmount("");
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Failed to withdraw money",
         description: error.message,
         variant: "destructive",
       });

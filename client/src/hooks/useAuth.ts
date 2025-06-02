@@ -20,6 +20,11 @@ export function useAuth() {
     setIsLoading(false);
   }, []);
 
+  const login = (userData: User) => {
+    localStorage.setItem("insecurePay_user", JSON.stringify(userData));
+    setUser(userData);
+  };
+
   const logout = () => {
     localStorage.removeItem("insecurePay_user");
     setUser(null);
@@ -30,6 +35,7 @@ export function useAuth() {
     user,
     isLoading,
     isAuthenticated: !!user,
+    login,
     logout,
   };
 }

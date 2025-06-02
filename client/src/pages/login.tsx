@@ -51,7 +51,8 @@ export default function Login() {
       if (data.success) {
         // Store user data in localStorage (VULNERABLE: insecure storage)
         localStorage.setItem("insecurePay_user", JSON.stringify(data.user));
-        setLocation("/");
+        // Force a page reload to update auth state
+        window.location.href = "/";
       } else {
         setError(data.message || "Login failed");
       }
