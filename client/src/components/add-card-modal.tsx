@@ -45,18 +45,16 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
   });
 
   const formatCardNumber = (value: string) => {
-    const cleaned = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-    const matches = cleaned.match(/\d{4,16}/g);
-    const match = matches && matches[0] || '';
-    const parts = [];
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4));
-    }
-    if (parts.length) {
-      return parts.join(' ');
-    } else {
-      return '';
-    }
+    // Remove all non-digits
+    const cleaned = value.replace(/\D/g, '');
+    
+    // Limit to 16 digits
+    const limited = cleaned.substring(0, 16);
+    
+    // Add spaces every 4 digits
+    const formatted = limited.replace(/(.{4})/g, '$1 ').trim();
+    
+    return formatted;
   };
 
   const formatExpiryDate = (value: string) => {
@@ -68,10 +66,9 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
   };
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatCardNumber(e.target.value);
-    if (formatted.length <= 19) { // 16 digits + 3 spaces
-      setCardNumber(formatted);
-    }
+    const value = e.target.value;
+    const formatted = formatCardNumber(value);
+    setCardNumber(formatted);
   };
 
   const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
