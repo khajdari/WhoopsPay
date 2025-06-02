@@ -57,7 +57,11 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
               </div>
             ) : (
               <Avatar className="w-10 h-10">
-                <AvatarFallback>
+                <AvatarImage 
+                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${isOutgoing ? transaction.toUserId : transaction.fromUserId}`} 
+                  alt={`${isOutgoing ? transaction.toUserId : transaction.fromUserId} avatar`}
+                />
+                <AvatarFallback className="bg-blue-100 text-blue-600 font-semibold">
                   {getContactName().substring(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>

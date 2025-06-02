@@ -60,9 +60,9 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center space-x-2">
                   <Avatar className="w-8 h-8">
-                    <AvatarImage src={user?.profileImageUrl} alt={user?.firstName} />
+                    <AvatarImage src={user?.profileImageUrl || undefined} alt={user?.firstName || "User"} />
                     <AvatarFallback>
-                      {user?.firstName?.[0]}{user?.lastName?.[0]}
+                      {user?.firstName?.[0] || "U"}{user?.lastName?.[0] || ""}
                     </AvatarFallback>
                   </Avatar>
                   <span className="hidden sm:block text-sm font-medium text-gray-700">
@@ -72,11 +72,15 @@ export function Header() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem>
-                  Profile Settings
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="cursor-pointer">
+                    Profile Settings
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Security
+                <DropdownMenuItem asChild>
+                  <Link href="/settings" className="cursor-pointer">
+                    Security
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   Help & Support

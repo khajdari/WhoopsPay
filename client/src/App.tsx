@@ -12,6 +12,8 @@ import SendMoney from "@/pages/send-money";
 import Transactions from "@/pages/transactions";
 import Wallet from "@/pages/wallet";
 import Admin from "@/pages/admin";
+import Profile from "@/pages/profile";
+import Settings from "@/pages/settings";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -34,6 +36,8 @@ function Router() {
           <Route path="/transactions" component={Transactions} />
           <Route path="/wallet" component={Wallet} />
           <Route path="/admin" component={Admin} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/settings" component={Settings} />
         </>
       )}
       <Route component={NotFound} />
