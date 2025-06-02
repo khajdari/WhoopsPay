@@ -25,6 +25,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // VULNERABLE: Local login for test users (no proper security)
+  app.post('/api/auth/local-login', async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      // VULNERABLE: Plain text password comparison
+      const testUsers = [
+        { username: 'jdoe', password: 'pass', id: 'jdoe' },
+        { username: 'mdoe', password: 'pass', id: 'mdoe' },
+        { username: 'edoe', password: 'pass', id: 'edoe' }
+      ];
+      
+      const user = testUsers.find(u => u.username === username && u.password === password);
+      
+      if (user) {
+        const fullUser = await storage.getUser(user.id);
+        if (fullUser) {
+          // VULNERABLE: No proper session management, just returning user data
+          res.json({ success: true, user: fullUser });
+        } else {
+          res.status(404).json({ success: false, message: "User not found in database" });
+        }
+      } else {
+        res.status(401).json({ success: false, message: "Invalid credentials" });
+      }
+    } catch (error) {
+      console.error("Local login error:", error);
+      res.status(500).json({ success: false, message: "Login failed" });
+    }
+  });
+
   // VULNERABLE: User search with SQL injection
   app.get('/api/users/search', isAuthenticated, async (req: any, res) => {
     try {
