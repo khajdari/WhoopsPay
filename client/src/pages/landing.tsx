@@ -4,7 +4,11 @@ import { Shield, Send, Smartphone, CreditCard, Globe, Users } from "lucide-react
 
 export default function Landing() {
   const handleLogin = () => {
-    window.location.href = "/api/login";
+    window.location.href = "/login";
+  };
+
+  const handleSignup = () => {
+    window.location.href = "/signup";
   };
 
   return (
@@ -34,7 +38,7 @@ export default function Landing() {
           </p>
           <div className="space-x-4">
             <Button 
-              onClick={handleLogin}
+              onClick={handleSignup}
               size="lg" 
               className="bg-white paypal-blue hover:bg-gray-100"
             >
@@ -162,7 +166,7 @@ export default function Landing() {
             Sign up for your free InsecurePay account today
           </p>
           <Button 
-            onClick={handleLogin}
+            onClick={handleSignup}
             size="lg" 
             className="bg-paypal-blue hover:bg-paypal-darkblue text-white"
           >
