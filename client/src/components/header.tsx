@@ -37,15 +37,15 @@ export function Header() {
           <nav className="hidden md:flex space-x-8">
             {navigation.map((item) => (
               <Link key={item.name} href={item.href}>
-                <a
-                  className={`px-3 py-2 text-sm font-medium transition-colors ${
+                <span
+                  className={`px-3 py-2 text-sm font-medium transition-colors cursor-pointer ${
                     item.current
                       ? "paypal-blue border-b-2 border-paypal-blue"
                       : "text-gray-700 hover:paypal-blue"
                   }`}
                 >
                   {item.name}
-                </a>
+                </span>
               </Link>
             ))}
           </nav>
@@ -73,14 +73,20 @@ export function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem asChild>
-                  <Link href="/profile" className="cursor-pointer">
+                  <button 
+                    onClick={() => window.location.href = '/profile'}
+                    className="w-full text-left cursor-pointer"
+                  >
                     Profile Settings
-                  </Link>
+                  </button>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/settings" className="cursor-pointer">
+                  <button 
+                    onClick={() => window.location.href = '/settings'}
+                    className="w-full text-left cursor-pointer"
+                  >
                     Security
-                  </Link>
+                  </button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   Help & Support
