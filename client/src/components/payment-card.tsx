@@ -1,0 +1,76 @@
+interface PaymentCardProps {
+  type: 'card' | 'bank';
+  cardNumber?: string;
+  cardName?: string;
+  bankName?: string;
+  accountNumber?: string;
+}
+
+export function PaymentCard({ type, cardNumber, cardName, bankName, accountNumber }: PaymentCardProps) {
+  if (type === 'card') {
+    // Determine card brand based on first digit
+    const getCardBrand = (number: string) => {
+      const firstDigit = number.charAt(0);
+      if (firstDigit === '4') return 'Visa';
+      if (firstDigit === '5') return 'Mastercard';
+      if (firstDigit === '3') return 'American Express';
+      return 'Card';
+    };
+
+    // Get brand colors
+    const getBrandColors = (number: string) => {
+      const firstDigit = number.charAt(0);
+      if (firstDigit === '4') return 'from-blue-600 to-blue-800'; // Visa blue
+      if (firstDigit === '5') return 'from-red-500 to-orange-600'; // Mastercard red/orange
+      if (firstDigit === '3') return 'from-green-600 to-teal-700'; // Amex green
+      return 'from-gray-600 to-gray-800'; // Default
+    };
+
+    const brand = getCardBrand(cardNumber || '');
+    const colors = getBrandColors(cardNumber || '');
+    const maskedNumber = cardNumber ? `••••${cardNumber.slice(-4)}` : '••••';
+
+    return (
+      <div className={`relative p-4 rounded-xl bg-gradient-to-br ${colors} text-white shadow-lg min-h-[120px] flex flex-col justify-between`}>
+        <div className="flex justify-between items-start">
+          <div>
+            <div className="text-sm opacity-90">{brand}</div>
+            <div className="text-lg font-medium">{cardName || 'Card Holder'}</div>
+          </div>
+          <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+            <div className="w-6 h-4 bg-white/40 rounded-sm"></div>
+          </div>
+        </div>
+        <div className="flex justify-between items-end">
+          <div className="text-lg font-mono tracking-wider">{maskedNumber}</div>
+          <div className="text-xs opacity-75">
+            {brand === 'Visa' && 'VISA'}
+            {brand === 'Mastercard' && 'MC'}
+            {brand === 'American Express' && 'AMEX'}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Bank account card
+  return (
+    <div className="relative p-4 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 text-white shadow-lg min-h-[120px] flex flex-col justify-between">
+      <div className="flex justify-between items-start">
+        <div>
+          <div className="text-sm opacity-90">Bank Account</div>
+          <div className="text-lg font-medium">{bankName || 'Bank'}</div>
+        </div>
+        <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+          <div className="w-4 h-4 border-2 border-white/60 rounded"></div>
+        </div>
+      </div>
+      <div className="flex justify-between items-end">
+        <div className="text-lg font-mono tracking-wider">
+          ••••{accountNumber ? accountNumber.slice(-4) : '0000'}
+        </div>
+        <div className="text-xs opacity-75">BANK</div>
+      </div>
+    </div>
+  );
+}
