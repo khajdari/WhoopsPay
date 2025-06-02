@@ -79,7 +79,7 @@ export default function Login() {
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center space-x-2">
             <CreditCard className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">InsecurePay</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">OopsPay</h1>
           </div>
           <p className="text-gray-600 dark:text-gray-400">
             The safer, easier way to send and receive money

@@ -74,7 +74,7 @@ export default function Dashboard() {
         <div className="paypal-gradient rounded-xl p-6 text-white mb-8">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-blue-100 text-sm mb-2">PayPal balance</p>
+              <p className="text-blue-100 text-sm mb-2">OopsPay balance</p>
               <h3 className="text-3xl font-bold mb-4">${balance}</h3>
               <div className="flex space-x-4">
                 <Button

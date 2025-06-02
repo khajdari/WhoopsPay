@@ -28,7 +28,7 @@ export function Header() {
           <div className="flex items-center">
             <Link href="/">
               <h1 className="text-2xl font-bold paypal-blue cursor-pointer">
-                InsecurePay
+                OopsPay
               </h1>
             </Link>
           </div>
