@@ -20,7 +20,7 @@ export default function Landing() {
             <div className="flex items-center">
               <h1 className="text-2xl font-bold paypal-blue">InsecurePay</h1>
             </div>
-            <Button onClick={handleLogin} className="bg-paypal-blue hover:bg-paypal-darkblue text-white">
+            <Button onClick={handleLogin} className="bg-paypal-blue text-white">
               Log In
             </Button>
           </div>
@@ -40,7 +40,7 @@ export default function Landing() {
             <Button 
               onClick={handleSignup}
               size="lg" 
-              className="bg-white paypal-blue hover:bg-gray-100"
+              className="bg-white paypal-blue"
             >
               Sign Up
             </Button>
@@ -48,7 +48,7 @@ export default function Landing() {
               onClick={handleLogin}
               size="lg" 
               variant="outline" 
-              className="border-white text-white hover:bg-white hover:paypal-blue"
+              className="border-white text-white"
             >
               Log In
             </Button>
@@ -168,7 +168,7 @@ export default function Landing() {
           <Button 
             onClick={handleSignup}
             size="lg" 
-            className="bg-paypal-blue hover:bg-paypal-darkblue text-white"
+            className="bg-paypal-blue text-white"
           >
             Get Started Now
           </Button>
