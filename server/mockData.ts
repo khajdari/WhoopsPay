@@ -7,81 +7,84 @@ export async function seedMockData() {
     
     // Create mock users with intentionally vulnerable data
     await storage.upsertUser({
-      id: "mock_user_1",
-      email: "alice.smith@email.com",
-      firstName: "Alice",
-      lastName: "Smith",
-      profileImageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
+      id: "jdoe",
+      email: "john.doe@email.com",
+      firstName: "John",
+      lastName: "Doe",
+      profileImageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
       balance: "1250.50",
+
       // VULNERABLE: Sensitive data stored unencrypted
       ssn: "123-45-6789",
       bankAccount: "4532-1234-5678-9012",
       creditCard: "4111-1111-1111-1111",
-      password: "password123", // VULNERABLE: Plain text password
+      password: "pass", // VULNERABLE: Plain text password
     });
 
     await storage.upsertUser({
-      id: "mock_user_2", 
-      email: "bob.johnson@email.com",
-      firstName: "Bob",
-      lastName: "Johnson",
-      profileImageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+      id: "mdoe", 
+      email: "mairy.doe@email.com",
+      firstName: "Mairy",
+      lastName: "Doe",
+      profileImageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
       balance: "875.25",
+
       ssn: "987-65-4321",
       bankAccount: "5555-4444-3333-2222",
       creditCard: "5555-5555-5555-4444",
-      password: "admin", // VULNERABLE: Weak password
+      password: "pass", // VULNERABLE: Weak password
     });
 
     await storage.upsertUser({
-      id: "mock_user_3",
-      email: "carol.davis@email.com", 
-      firstName: "Carol",
-      lastName: "Davis",
+      id: "edoe",
+      email: "elisa.doe@email.com", 
+      firstName: "Elisa",
+      lastName: "Doe",
       profileImageUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
       balance: "2150.00",
+      username: "edoe",
       ssn: "555-12-3456",
       bankAccount: "1111-2222-3333-4444",
       creditCard: "3782-8224-6310-005",
-      password: "qwerty", // VULNERABLE: Common password
+      password: "pass", // VULNERABLE: Common password
     });
 
     // Create mock transactions between mock users
     await storage.createTransaction({
-      fromUserId: "mock_user_1",
-      toUserId: "mock_user_2", 
+      fromUserId: "jdoe",
+      toUserId: "mdoe", 
       amount: "150.00",
       description: "Dinner split",
       status: "completed",
     });
 
     await storage.createTransaction({
-      fromUserId: "mock_user_2",
-      toUserId: "mock_user_1",
+      fromUserId: "mdoe",
+      toUserId: "jdoe",
       amount: "75.50", 
       description: "<script>alert('XSS Attack!')</script>Gift for birthday", // VULNERABLE: XSS payload
       status: "completed",
     });
 
     await storage.createTransaction({
-      fromUserId: "mock_user_3",
-      toUserId: "mock_user_1",
+      fromUserId: "edoe",
+      toUserId: "jdoe",
       amount: "200.00",
       description: "Rent payment",
       status: "pending",
     });
 
     await storage.createTransaction({
-      fromUserId: "mock_user_1",
-      toUserId: "mock_user_3",
+      fromUserId: "jdoe",
+      toUserId: "edoe",
       amount: "25.99",
       description: "<img src=x onerror=alert('Stored XSS')>Coffee", // VULNERABLE: Another XSS payload
       status: "completed", 
     });
 
     await storage.createTransaction({
-      fromUserId: "mock_user_2",
-      toUserId: "mock_user_3",
+      fromUserId: "mdoe",
+      toUserId: "edoe",
       amount: "500.00",
       description: "Amazon.com purchase - Electronics",
       status: "completed",
