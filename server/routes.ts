@@ -1,29 +1,13 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
 import { insertTransactionSchema, insertPaymentMethodSchema } from "@shared/schema";
 import { seedMockData } from "./mockData";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
-
   // Seed mock data for vulnerability testing
   await seedMockData();
-
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
 
   // VULNERABLE: Local login for test users (no proper security)
   app.post('/api/auth/local-login', async (req, res) => {
@@ -57,7 +41,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // VULNERABLE: User search with SQL injection
-  app.get('/api/users/search', isAuthenticated, async (req: any, res) => {
+  app.get('/api/users/search', async (req: any, res) => {
     try {
       const query = req.query.q as string;
       
@@ -102,7 +86,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Transaction endpoints
-  app.post('/api/transactions', isAuthenticated, async (req: any, res) => {
+  app.post('/api/transactions', async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       
@@ -138,7 +122,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/transactions', isAuthenticated, async (req: any, res) => {
+  app.get('/api/transactions', async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const transactions = await storage.getUserTransactions(userId);
@@ -182,7 +166,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Payment method endpoints
-  app.post('/api/payment-methods', isAuthenticated, async (req: any, res) => {
+  app.post('/api/payment-methods', async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       
@@ -201,7 +185,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/payment-methods', isAuthenticated, async (req: any, res) => {
+  app.get('/api/payment-methods', async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const paymentMethods = await storage.getUserPaymentMethods(userId);
