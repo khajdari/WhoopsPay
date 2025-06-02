@@ -3,8 +3,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
 import { MobileNav } from "@/components/mobile-nav";
 import { SendMoneyModal } from "@/components/send-money-modal";
-import { AddCardModal } from "@/components/add-card-modal";
-import { AddBankModal } from "@/components/add-bank-modal";
 import { TransactionItem } from "@/components/transaction-item";
 import { PaymentCard } from "@/components/payment-card";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,8 +14,6 @@ import { useState } from "react";
 export default function Dashboard() {
   const { user } = useAuth();
   const [showSendModal, setShowSendModal] = useState(false);
-  const [showAddCardModal, setShowAddCardModal] = useState(false);
-  const [showAddBankModal, setShowAddBankModal] = useState(false);
 
   const { data: transactions, isLoading: transactionsLoading } = useQuery({
     queryKey: ["/api/transactions"],
@@ -167,51 +163,14 @@ export default function Dashboard() {
                         accountNumber={method.accountNumber}
                       />
                     ))}
-                    
-                    <div className="flex space-x-2 pt-4">
-                      <Button 
-                        size="sm"
-                        className="flex-1 bg-paypal-blue text-white"
-                        onClick={() => setShowAddCardModal(true)}
-                      >
-                        <CreditCard className="w-4 h-4 mr-2" />
-                        Add Card
-                      </Button>
-                      <Button 
-                        size="sm"
-                        variant="outline" 
-                        className="flex-1"
-                        onClick={() => setShowAddBankModal(true)}
-                      >
-                        <University className="w-4 h-4 mr-2" />
-                        Add Bank
-                      </Button>
-                    </div>
                   </div>
                 ) : (
                   <div className="text-center py-8">
                     <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <CreditCard className="w-8 h-8 text-gray-400" />
                     </div>
-                    <p className="text-sm text-gray-600 mb-6">Add a payment method to make transactions easier</p>
-                    
-                    <div className="space-y-3">
-                      <Button 
-                        className="w-full bg-paypal-blue text-white"
-                        onClick={() => setShowAddCardModal(true)}
-                      >
-                        <CreditCard className="w-4 h-4 mr-2" />
-                        Add Card
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="w-full"
-                        onClick={() => setShowAddBankModal(true)}
-                      >
-                        <University className="w-4 h-4 mr-2" />
-                        Add Bank Account
-                      </Button>
-                    </div>
+                    <p className="text-sm text-gray-600">No payment methods added</p>
+                    <p className="text-xs text-gray-500 mt-2">Manage payment methods in your Wallet</p>
                   </div>
                 )}
               </div>
@@ -224,12 +183,6 @@ export default function Dashboard() {
       
       {showSendModal && (
         <SendMoneyModal onClose={() => setShowSendModal(false)} />
-      )}
-      {showAddCardModal && (
-        <AddCardModal onClose={() => setShowAddCardModal(false)} />
-      )}
-      {showAddBankModal && (
-        <AddBankModal onClose={() => setShowAddBankModal(false)} />
       )}
     </div>
   );

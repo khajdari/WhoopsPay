@@ -1,7 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
 import { MobileNav } from "@/components/mobile-nav";
+import { AddCardModal } from "@/components/add-card-modal";
+import { AddBankModal } from "@/components/add-bank-modal";
+import { PaymentCard } from "@/components/payment-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,8 +13,11 @@ import { useState } from "react";
 
 export default function Wallet() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [showBalance, setShowBalance] = useState(true);
   const [showSensitiveData, setShowSensitiveData] = useState(false);
+  const [showAddCardModal, setShowAddCardModal] = useState(false);
+  const [showAddBankModal, setShowAddBankModal] = useState(false);
 
   const { data: userProfile, isLoading: profileLoading } = useQuery({
     queryKey: [`/api/users/${user?.id}/profile`],
@@ -19,7 +25,12 @@ export default function Wallet() {
   });
 
   const { data: paymentMethods, isLoading: paymentMethodsLoading } = useQuery({
-    queryKey: ["/api/payment-methods"],
+    queryKey: ["/api/payment-methods", user?.id],
+    queryFn: async () => {
+      const response = await fetch(`/api/payment-methods?userId=${user?.id}`);
+      if (!response.ok) throw new Error('Failed to fetch payment methods');
+      return response.json();
+    },
     enabled: !!user,
   });
 
@@ -82,53 +93,43 @@ export default function Wallet() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Payment Methods</CardTitle>
-              <Button size="sm" variant="outline">
-                <Plus className="w-4 h-4 mr-1" />
-                Add Method
-              </Button>
+              <div className="flex space-x-2">
+                <Button 
+                  size="sm" 
+                  className="bg-paypal-blue text-white"
+                  onClick={() => setShowAddCardModal(true)}
+                >
+                  <CreditCard className="w-4 h-4 mr-1" />
+                  Add Card
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setShowAddBankModal(true)}
+                >
+                  <University className="w-4 h-4 mr-1" />
+                  Add Bank
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
             {paymentMethodsLoading ? (
               <div className="space-y-4">
-                {[1, 2].map((i) => (
-                  <div key={i} className="flex items-center space-x-4 p-4 border rounded-lg">
-                    <Skeleton className="w-8 h-8" />
-                    <div className="flex-1">
-                      <Skeleton className="h-4 w-32 mb-2" />
-                      <Skeleton className="h-3 w-24" />
-                    </div>
-                    <Skeleton className="h-8 w-16" />
-                  </div>
-                ))}
+                <Skeleton className="h-24 w-full rounded-xl" />
+                <Skeleton className="h-24 w-full rounded-xl" />
               </div>
             ) : paymentMethods && paymentMethods.length > 0 ? (
               <div className="space-y-4">
                 {paymentMethods.map((method: any) => (
-                  <div key={method.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      {method.type === 'bank' ? (
-                        <University className="w-4 h-4 text-blue-600" />
-                      ) : (
-                        <CreditCard className="w-4 h-4 text-blue-600" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium">
-                        {method.type === 'bank' ? 'Bank Account' : 'Credit Card'}
-                      </p>
-                      {/* VULNERABLE: Exposing sensitive payment data */}
-                      <p className="text-sm text-gray-500">
-                        {showSensitiveData 
-                          ? method.accountNumber || method.cardNumber 
-                          : `****${(method.accountNumber || method.cardNumber)?.slice(-4)}`
-                        }
-                      </p>
-                    </div>
-                    <Button variant="ghost" size="sm">
-                      Remove
-                    </Button>
-                  </div>
+                  <PaymentCard
+                    key={method.id}
+                    type={method.type}
+                    cardNumber={method.cardNumber}
+                    cardName={method.cardName}
+                    bankName={method.bankName}
+                    accountNumber={method.accountNumber}
+                  />
                 ))}
               </div>
             ) : (
