@@ -130,7 +130,7 @@ export default function Admin() {
                         dangerouslySetInnerHTML={{ __html: transaction.description }}
                       />
                     </div>
-                    {transaction.description.includes('<script>') || transaction.description.includes('<img') && (
+                    {(transaction.description.includes('<script>') || transaction.description.includes('<img')) && (
                       <Badge variant="destructive" className="mt-2">
                         ⚠️ Contains XSS Payload
                       </Badge>
