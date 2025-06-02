@@ -56,15 +56,11 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
                 <University className="w-5 h-5 text-green-600" />
               </div>
             ) : (
-              <Avatar className="w-10 h-10">
-                <AvatarImage 
-                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${isOutgoing ? transaction.toUserId : transaction.fromUserId}`} 
-                  alt={`${isOutgoing ? transaction.toUserId : transaction.fromUserId} avatar`}
-                />
-                <AvatarFallback className="bg-blue-100 text-blue-600 font-semibold">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <span className="text-blue-600 font-semibold text-sm">
                   {getContactName().substring(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+                </span>
+              </div>
             )}
           </div>
           <div className="ml-4">

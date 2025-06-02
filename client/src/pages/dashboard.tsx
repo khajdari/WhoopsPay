@@ -84,8 +84,7 @@ export default function Dashboard() {
                   Send
                 </Button>
                 <Button
-                  variant="outline"
-                  className="border-white text-white hover:bg-white hover:paypal-blue"
+                  className="bg-white paypal-blue hover:bg-gray-100"
                 >
                   Request
                 </Button>
