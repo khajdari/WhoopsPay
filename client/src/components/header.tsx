@@ -88,9 +88,7 @@ export function Header() {
                     Security
                   </button>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Help & Support
-                </DropdownMenuItem>
+
                 <DropdownMenuItem onClick={handleLogout}>
                   Log Out
                 </DropdownMenuItem>
