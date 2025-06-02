@@ -157,6 +157,7 @@ export default function Wallet() {
                     cardName={method.cardName}
                     bankName={method.bankName}
                     accountNumber={method.accountNumber}
+                    iban={method.iban}
                     showDelete={true}
                     onDelete={handleDeletePaymentMethod}
                   />

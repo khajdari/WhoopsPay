@@ -5,11 +5,12 @@ interface PaymentCardProps {
   cardName?: string;
   bankName?: string;
   accountNumber?: string;
+  iban?: string;
   showDelete?: boolean;
   onDelete?: (id: number) => void;
 }
 
-export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountNumber, showDelete, onDelete }: PaymentCardProps) {
+export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountNumber, iban, showDelete, onDelete }: PaymentCardProps) {
   if (type === 'card') {
     // Determine card brand based on first digit
     const getCardBrand = (number: string) => {
@@ -78,7 +79,9 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
       <div className="flex justify-between items-start">
         <div>
           <div className="text-sm opacity-90">Bank Account</div>
-          <div className="text-lg font-medium">{bankName || 'Chase Bank'}</div>
+          <div className="text-lg font-medium font-mono tracking-wider">
+            {iban ? `••••${iban.slice(-4)}` : '••••0000'}
+          </div>
         </div>
         <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
           <div className="w-5 h-3 bg-white/60 rounded-sm"></div>
@@ -88,7 +91,9 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
         <div className="text-lg font-mono tracking-wider">
           ••••{accountNumber ? accountNumber.slice(-4) : '0000'}
         </div>
-        <div className="text-xs opacity-75">CHECKING</div>
+        <div className="text-xs opacity-75 uppercase">
+          {bankName || 'CHECKING'}
+        </div>
       </div>
     </div>
   );
