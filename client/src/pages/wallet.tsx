@@ -39,9 +39,7 @@ export default function Wallet() {
 
   const deletePaymentMethodMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest(`/api/payment-methods/${id}`, {
-        method: "DELETE",
-      });
+      await apiRequest(`/api/payment-methods/${id}`, "DELETE");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/payment-methods"] });
@@ -153,11 +151,14 @@ export default function Wallet() {
                 {paymentMethods.map((method: any) => (
                   <PaymentCard
                     key={method.id}
+                    id={method.id}
                     type={method.type}
                     cardNumber={method.cardNumber}
                     cardName={method.cardName}
                     bankName={method.bankName}
                     accountNumber={method.accountNumber}
+                    showDelete={true}
+                    onDelete={handleDeletePaymentMethod}
                   />
                 ))}
               </div>
