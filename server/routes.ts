@@ -277,6 +277,94 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Mock data overview route for testing
+  // Add money endpoint (VULNERABLE: No proper verification)
+  app.post('/api/add-money', async (req: any, res) => {
+    try {
+      const { userId, amount, source } = req.body;
+      
+      // VULNERABLE: No authentication check
+      // VULNERABLE: No verification of funding source
+      if (!userId || !amount || !source) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const currentBalance = parseFloat(user.balance || "0");
+      const newBalance = currentBalance + parseFloat(amount);
+      
+      // VULNERABLE: No limits on add money amount
+      await storage.updateUserBalance(userId, newBalance.toString());
+
+      // Create a transaction record for add money
+      await storage.createTransaction({
+        fromUserId: "system_add_money",
+        toUserId: userId,
+        amount: amount.toString(),
+        description: `Added money from ${source}`,
+        status: "completed"
+      });
+
+      res.json({ 
+        success: true, 
+        newBalance: newBalance.toString(),
+        message: `Successfully added $${amount} from ${source}` 
+      });
+    } catch (error) {
+      console.error("Error adding money:", error);
+      res.status(500).json({ message: "Failed to add money" });
+    }
+  });
+
+  // Withdraw money endpoint (VULNERABLE: Insufficient checks)
+  app.post('/api/withdraw-money', async (req: any, res) => {
+    try {
+      const { userId, amount, destination } = req.body;
+      
+      // VULNERABLE: No authentication check
+      if (!userId || !amount || !destination) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const currentBalance = parseFloat(user.balance || "0");
+      const withdrawAmount = parseFloat(amount);
+      
+      // VULNERABLE: No proper balance verification
+      if (currentBalance < withdrawAmount) {
+        return res.status(400).json({ message: "Insufficient balance" });
+      }
+
+      const newBalance = currentBalance - withdrawAmount;
+      await storage.updateUserBalance(userId, newBalance.toString());
+
+      // Create a transaction record for withdrawal
+      await storage.createTransaction({
+        fromUserId: userId,
+        toUserId: "system_withdraw",
+        amount: amount.toString(),
+        description: `Withdrawal to ${destination}`,
+        status: "completed"
+      });
+
+      res.json({ 
+        success: true, 
+        newBalance: newBalance.toString(),
+        message: `Successfully withdrew $${amount} to ${destination}` 
+      });
+    } catch (error) {
+      console.error("Error withdrawing money:", error);
+      res.status(500).json({ message: "Failed to withdraw money" });
+    }
+  });
+
   app.get('/api/mock-data', async (req, res) => {
     try {
       const users = await storage.getAllUsers();

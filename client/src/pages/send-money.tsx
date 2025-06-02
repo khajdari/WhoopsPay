@@ -23,7 +23,6 @@ export default function SendMoney() {
   const [sendRecipient, setSendRecipient] = useState("");
   const [sendAmount, setSendAmount] = useState("");
   const [sendNote, setSendNote] = useState("");
-  const [sendPaymentMethod, setSendPaymentMethod] = useState("");
   
   // Request Money
   const [requestFrom, setRequestFrom] = useState("");
@@ -48,6 +47,7 @@ export default function SendMoney() {
         description: `$${sendAmount} has been sent to ${sendRecipient}`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
       setSendRecipient("");
       setSendAmount("");
       setSendNote("");
@@ -61,30 +61,9 @@ export default function SendMoney() {
     },
   });
 
-  const requestMoneyMutation = useMutation({
-    mutationFn: async (data: any) => {
-      return await apiRequest("POST", "/api/money-requests", data);
-    },
-    onSuccess: () => {
-      toast({
-        title: "Money request sent!",
-        description: `Request for $${requestAmount} sent to ${requestFrom}`,
-      });
-      setRequestFrom("");
-      setRequestAmount("");
-      setRequestNote("");
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Failed to request money",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
   const addMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
+      // VULNERABLE: No authentication check on add money endpoint
       return await apiRequest("POST", "/api/add-money", data);
     },
     onSuccess: () => {
@@ -94,6 +73,7 @@ export default function SendMoney() {
       });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
       setAddAmount("");
+      setAddSource("");
     },
     onError: (error: Error) => {
       toast({
@@ -115,6 +95,7 @@ export default function SendMoney() {
       });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
       setWithdrawAmount("");
+      setWithdrawDestination("");
     },
     onError: (error: Error) => {
       toast({
@@ -125,10 +106,10 @@ export default function SendMoney() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSendMoney = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!recipient || !amount) {
+    if (!sendRecipient || !sendAmount) {
       toast({
         title: "Missing fields",
         description: "Please fill in recipient and amount",
@@ -136,18 +117,78 @@ export default function SendMoney() {
       });
       return;
     }
-    
-
 
     // VULNERABLE: No input validation or sanitization
-    // This allows for potential XSS attacks through the note field
-    // and SQL injection through the recipient field
     sendMoneyMutation.mutate({
       fromUserId: user?.id,
-      toUserId: recipient, // VULNERABLE: Direct user input without validation
-      amount: parseFloat(amount),
-      description: note, // VULNERABLE: Stored without sanitization (XSS risk)
+      toUserId: sendRecipient,
+      amount: parseFloat(sendAmount),
+      description: sendNote,
       status: "completed",
+    });
+  };
+
+  const handleRequestMoney = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!requestFrom || !requestAmount) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Create a money request transaction
+    sendMoneyMutation.mutate({
+      fromUserId: requestFrom,
+      toUserId: user?.id,
+      amount: parseFloat(requestAmount),
+      description: `Money request: ${requestNote}`,
+      status: "pending",
+    });
+    
+    setRequestFrom("");
+    setRequestAmount("");
+    setRequestNote("");
+  };
+
+  const handleAddMoney = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!addAmount || !addSource) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    addMoneyMutation.mutate({
+      userId: user?.id,
+      amount: parseFloat(addAmount),
+      source: addSource,
+    });
+  };
+
+  const handleWithdrawMoney = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!withdrawAmount || !withdrawDestination) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    withdrawMoneyMutation.mutate({
+      userId: user?.id,
+      amount: parseFloat(withdrawAmount),
+      destination: withdrawDestination,
     });
   };
 
@@ -155,7 +196,7 @@ export default function SendMoney() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <main className="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8 mobile-nav-spacing">
+      <main className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <Button
             variant="ghost"
@@ -165,121 +206,264 @@ export default function SendMoney() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Dashboard
           </Button>
-          <h1 className="text-2xl font-bold text-gray-900">Send Money</h1>
-          <p className="text-gray-600">Send money to friends and family</p>
+          <h1 className="text-3xl font-bold text-gray-900">Money Center</h1>
+          <p className="text-gray-600 mt-2">
+            Send, request, add, or withdraw money
+          </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Send Payment</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Recipient - VULNERABLE to injection attacks */}
-              <div>
-                <Label htmlFor="recipient">Send to</Label>
-                <Input
-                  id="recipient"
-                  type="text"
-                  placeholder="Email, phone number, or user ID"
-                  value={recipient}
-                  onChange={(e) => setRecipient(e.target.value)}
-                  required
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  Enter the recipient's email, phone, or user ID
-                </p>
-              </div>
+        <Tabs defaultValue="send" className="space-y-6">
+          <TabsList className="grid grid-cols-4 w-full">
+            <TabsTrigger value="send" className="flex items-center gap-2">
+              <Send className="w-4 h-4" />
+              Send
+            </TabsTrigger>
+            <TabsTrigger value="request" className="flex items-center gap-2">
+              <DollarSign className="w-4 h-4" />
+              Request
+            </TabsTrigger>
+            <TabsTrigger value="add" className="flex items-center gap-2">
+              <CreditCard className="w-4 h-4" />
+              Add Money
+            </TabsTrigger>
+            <TabsTrigger value="withdraw" className="flex items-center gap-2">
+              <Banknote className="w-4 h-4" />
+              Withdraw
+            </TabsTrigger>
+          </TabsList>
 
-              {/* Amount */}
-              <div>
-                <Label htmlFor="amount">Amount</Label>
-                <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-gray-500">$</span>
-                  <Input
-                    id="amount"
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    placeholder="0.00"
-                    className="pl-8"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
+          {/* Send Money Tab */}
+          <TabsContent value="send">
+            <Card>
+              <CardHeader>
+                <CardTitle>Send Money</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSendMoney} className="space-y-6">
+                  <div>
+                    <Label htmlFor="send-recipient">Send to</Label>
+                    <Input
+                      id="send-recipient"
+                      type="text"
+                      placeholder="Email, phone number, or user ID"
+                      value={sendRecipient}
+                      onChange={(e) => setSendRecipient(e.target.value)}
+                      required
+                    />
+                    <p className="text-sm text-gray-500 mt-1">
+                      Try: jdoe, mdoe, or edoe
+                    </p>
+                  </div>
 
-              {/* Note - VULNERABLE to XSS attacks */}
-              <div>
-                <Label htmlFor="note">What's this for? (Optional)</Label>
-                <Input
-                  id="note"
-                  type="text"
-                  placeholder="Add a note"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  This note will be visible to the recipient
-                </p>
-              </div>
+                  <div>
+                    <Label htmlFor="send-amount">Amount</Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                      <Input
+                        id="send-amount"
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        placeholder="0.00"
+                        className="pl-8"
+                        value={sendAmount}
+                        onChange={(e) => setSendAmount(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
 
-              {/* Payment Method */}
-              <div>
-                <Label htmlFor="payment-method">Payment method</Label>
-                <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select payment method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="balance">PayPal Balance</SelectItem>
-                    <SelectItem value="bank">Bank Account ****1234</SelectItem>
-                    <SelectItem value="card">Visa ****5678</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+                  <div>
+                    <Label htmlFor="send-note">Note (Optional)</Label>
+                    <Input
+                      id="send-note"
+                      type="text"
+                      placeholder="What's this for?"
+                      value={sendNote}
+                      onChange={(e) => setSendNote(e.target.value)}
+                    />
+                  </div>
 
-              <div className="flex space-x-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => setLocation("/")}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  className="flex-1 bg-paypal-blue hover:bg-paypal-darkblue text-white"
-                  disabled={sendMoneyMutation.isPending}
-                >
-                  {sendMoneyMutation.isPending ? "Sending..." : "Send Money"}
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+                  <Button 
+                    type="submit" 
+                    className="w-full"
+                    disabled={sendMoneyMutation.isPending}
+                  >
+                    {sendMoneyMutation.isPending ? "Sending..." : "Send Money"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        {/* Vulnerability Warning (for educational purposes) */}
-        <Card className="mt-6 border-red-200 bg-red-50">
-          <CardContent className="pt-6">
-            <div className="flex items-start space-x-3">
-              <div className="text-red-600 text-sm">⚠️</div>
-              <div>
-                <h3 className="text-sm font-medium text-red-800">Educational Notice</h3>
-                <p className="text-sm text-red-700 mt-1">
-                  This form contains intentional security vulnerabilities including:
-                  lack of input validation, XSS potential in the note field, and 
-                  insufficient authorization checks.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          {/* Request Money Tab */}
+          <TabsContent value="request">
+            <Card>
+              <CardHeader>
+                <CardTitle>Request Money</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleRequestMoney} className="space-y-6">
+                  <div>
+                    <Label htmlFor="request-from">Request from</Label>
+                    <Input
+                      id="request-from"
+                      type="text"
+                      placeholder="Email, phone number, or user ID"
+                      value={requestFrom}
+                      onChange={(e) => setRequestFrom(e.target.value)}
+                      required
+                    />
+                    <p className="text-sm text-gray-500 mt-1">
+                      Try: jdoe, mdoe, or edoe
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="request-amount">Amount</Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                      <Input
+                        id="request-amount"
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        placeholder="0.00"
+                        className="pl-8"
+                        value={requestAmount}
+                        onChange={(e) => setRequestAmount(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="request-note">Note (Optional)</Label>
+                    <Input
+                      id="request-note"
+                      type="text"
+                      placeholder="What's this for?"
+                      value={requestNote}
+                      onChange={(e) => setRequestNote(e.target.value)}
+                    />
+                  </div>
+
+                  <Button 
+                    type="submit" 
+                    className="w-full"
+                    disabled={sendMoneyMutation.isPending}
+                  >
+                    {sendMoneyMutation.isPending ? "Requesting..." : "Request Money"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Add Money Tab */}
+          <TabsContent value="add">
+            <Card>
+              <CardHeader>
+                <CardTitle>Add Money</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleAddMoney} className="space-y-6">
+                  <div>
+                    <Label htmlFor="add-amount">Amount</Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                      <Input
+                        id="add-amount"
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        placeholder="0.00"
+                        className="pl-8"
+                        value={addAmount}
+                        onChange={(e) => setAddAmount(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="add-source">Funding Source</Label>
+                    <Select value={addSource} onValueChange={setAddSource} required>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select funding source" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="bank">Bank Account</SelectItem>
+                        <SelectItem value="debit">Debit Card</SelectItem>
+                        <SelectItem value="credit">Credit Card</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Button 
+                    type="submit" 
+                    className="w-full"
+                    disabled={addMoneyMutation.isPending}
+                  >
+                    {addMoneyMutation.isPending ? "Adding..." : "Add Money"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Withdraw Money Tab */}
+          <TabsContent value="withdraw">
+            <Card>
+              <CardHeader>
+                <CardTitle>Withdraw Money</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleWithdrawMoney} className="space-y-6">
+                  <div>
+                    <Label htmlFor="withdraw-amount">Amount</Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                      <Input
+                        id="withdraw-amount"
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        placeholder="0.00"
+                        className="pl-8"
+                        value={withdrawAmount}
+                        onChange={(e) => setWithdrawAmount(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="withdraw-destination">Withdraw to</Label>
+                    <Select value={withdrawDestination} onValueChange={setWithdrawDestination} required>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select destination" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="bank">Bank Account</SelectItem>
+                        <SelectItem value="debit">Debit Card</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Button 
+                    type="submit" 
+                    className="w-full"
+                    disabled={withdrawMoneyMutation.isPending}
+                  >
+                    {withdrawMoneyMutation.isPending ? "Processing..." : "Withdraw Money"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </main>
-
-      <MobileNav />
     </div>
   );
 }
