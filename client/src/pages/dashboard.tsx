@@ -1,0 +1,194 @@
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
+import { Header } from "@/components/header";
+import { MobileNav } from "@/components/mobile-nav";
+import { SendMoneyModal } from "@/components/send-money-modal";
+import { TransactionItem } from "@/components/transaction-item";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Send, HandCoins, Plus, University, Wallet } from "lucide-react";
+import { useState } from "react";
+
+export default function Dashboard() {
+  const { user } = useAuth();
+  const [showSendModal, setShowSendModal] = useState(false);
+
+  const { data: transactions, isLoading: transactionsLoading } = useQuery({
+    queryKey: ["/api/transactions"],
+    enabled: !!user,
+  });
+
+  const { data: userProfile, isLoading: profileLoading } = useQuery({
+    queryKey: [`/api/users/${user?.id}/profile`],
+    enabled: !!user,
+  });
+
+  if (profileLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <div className="space-y-4">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-32 w-full" />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <Skeleton key={i} className="h-24" />
+              ))}
+            </div>
+          </div>
+        </main>
+        <MobileNav />
+      </div>
+    );
+  }
+
+  const balance = userProfile?.balance || "0.00";
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 mobile-nav-spacing">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Good morning, {user?.firstName || 'User'}
+          </h2>
+          <p className="text-gray-600">Here's what's happening with your account today.</p>
+        </div>
+
+        {/* Account Balance Card */}
+        <div className="paypal-gradient rounded-xl p-6 text-white mb-8">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-blue-100 text-sm mb-2">PayPal balance</p>
+              <h3 className="text-3xl font-bold mb-4">${balance}</h3>
+              <div className="flex space-x-4">
+                <Button
+                  onClick={() => setShowSendModal(true)}
+                  className="bg-white text-blue-600 hover:bg-gray-100"
+                >
+                  Send
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border-white text-white hover:bg-white hover:text-blue-600"
+                >
+                  Request
+                </Button>
+              </div>
+            </div>
+            <div className="text-right">
+              <Wallet className="text-2xl text-blue-200" size={32} />
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => setShowSendModal(true)}>
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <div className="bg-blue-100 p-3 rounded-full">
+                  <Send className="text-blue-600" size={20} />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-900">Send Money</p>
+                  <p className="text-xs text-gray-500">To friends & family</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-md transition-shadow cursor-pointer">
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <div className="bg-green-100 p-3 rounded-full">
+                  <HandCoins className="text-green-600" size={20} />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-900">Request Money</p>
+                  <p className="text-xs text-gray-500">From anyone</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-md transition-shadow cursor-pointer">
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <div className="bg-yellow-100 p-3 rounded-full">
+                  <Plus className="text-yellow-600" size={20} />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-900">Add Money</p>
+                  <p className="text-xs text-gray-500">From bank account</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-md transition-shadow cursor-pointer">
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <div className="bg-purple-100 p-3 rounded-full">
+                  <University className="text-purple-600" size={20} />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-900">Withdraw</p>
+                  <p className="text-xs text-gray-500">To bank account</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Recent Activity */}
+        <Card>
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
+              <Button variant="link" className="text-blue-600 hover:text-blue-700 p-0">
+                See all
+              </Button>
+            </div>
+          </div>
+          
+          <div className="divide-y divide-gray-200">
+            {transactionsLoading ? (
+              <div className="space-y-4 p-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex items-center space-x-4">
+                    <Skeleton className="w-10 h-10 rounded-full" />
+                    <div className="flex-1">
+                      <Skeleton className="h-4 w-32 mb-2" />
+                      <Skeleton className="h-3 w-24" />
+                    </div>
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                ))}
+              </div>
+            ) : transactions && transactions.length > 0 ? (
+              transactions.slice(0, 5).map((transaction: any) => (
+                <TransactionItem key={transaction.id} transaction={transaction} />
+              ))
+            ) : (
+              <div className="px-6 py-8 text-center text-gray-500">
+                <p>No transactions yet</p>
+                <p className="text-sm">Send or request money to get started</p>
+              </div>
+            )}
+          </div>
+        </Card>
+      </main>
+
+      <MobileNav />
+      
+      {showSendModal && (
+        <SendMoneyModal onClose={() => setShowSendModal(false)} />
+      )}
+    </div>
+  );
+}
