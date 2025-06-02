@@ -98,7 +98,7 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
       type: "bank",
       bankName,
       accountNumber,
-      routingNumber,
+      iban,
       accountHolderName,
     });
   };
@@ -139,13 +139,13 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
           </div>
 
           <div>
-            <Label htmlFor="routingNumber">Routing Number</Label>
+            <Label htmlFor="iban">IBAN</Label>
             <Input
-              id="routingNumber"
+              id="iban"
               type="text"
-              placeholder="123456789"
-              value={routingNumber}
-              onChange={handleRoutingNumberChange}
+              placeholder="GB29NWBK60161331926819"
+              value={iban}
+              onChange={handleIbanChange}
               required
             />
           </div>
