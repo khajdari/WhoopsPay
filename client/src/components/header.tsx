@@ -6,7 +6,7 @@ import { Bell, ChevronDown, Menu } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 export function Header() {
-  const { user, logout } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
   const [location] = useLocation();
 
   const handleLogout = () => {

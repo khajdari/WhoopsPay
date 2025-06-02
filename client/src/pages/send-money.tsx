@@ -50,6 +50,15 @@ export default function SendMoney() {
     
     if (!recipient || !amount) {
       toast({
+        title: "Missing fields",
+        description: "Please fill in recipient and amount",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!recipient || !amount) {
+      toast({
         title: "Missing information",
         description: "Please fill in all required fields",
         variant: "destructive",

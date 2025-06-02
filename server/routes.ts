@@ -96,24 +96,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // WARNING: No validation of transaction limits or user permissions
       // Users can send any amount, even if they don't have sufficient balance
+      
+      // Ensure both users exist before creating transaction
+      const fromUser = await storage.getUser(transactionData.fromUserId);
+      const toUser = await storage.getUser(transactionData.toUserId);
+      
+      if (!fromUser) {
+        return res.status(400).json({ message: "Sender user not found" });
+      }
+      if (!toUser) {
+        return res.status(400).json({ message: "Recipient user not found" });
+      }
+      
       const transaction = await storage.createTransaction({
-        ...transactionData,
-        fromUserId: fromUserId,
+        fromUserId: transactionData.fromUserId,
+        toUserId: transactionData.toUserId,
+        amount: transactionData.amount,
+        description: transactionData.description || "",
+        status: "completed"
       });
 
       // Update balances without proper checks
       if (transactionData.fromUserId && transactionData.toUserId && transactionData.amount) {
-        const fromUser = await storage.getUser(transactionData.fromUserId);
-        const toUser = await storage.getUser(transactionData.toUserId);
+        const fromBalance = parseFloat(fromUser.balance || '0') - parseFloat(transactionData.amount);
+        const toBalance = parseFloat(toUser.balance || '0') + parseFloat(transactionData.amount);
         
-        if (fromUser && toUser) {
-          const fromBalance = parseFloat(fromUser.balance || '0') - parseFloat(transactionData.amount);
-          const toBalance = parseFloat(toUser.balance || '0') + parseFloat(transactionData.amount);
-          
-          // VULNERABLE: No checks for negative balances
-          await storage.updateUserBalance(transactionData.fromUserId, fromBalance.toString());
-          await storage.updateUserBalance(transactionData.toUserId, toBalance.toString());
-        }
+        // VULNERABLE: No checks for negative balances
+        await storage.updateUserBalance(transactionData.fromUserId, fromBalance.toString());
+        await storage.updateUserBalance(transactionData.toUserId, toBalance.toString());
       }
 
       res.json(transaction);
