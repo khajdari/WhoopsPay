@@ -1,12 +1,15 @@
 interface PaymentCardProps {
+  id?: number;
   type: 'card' | 'bank';
   cardNumber?: string;
   cardName?: string;
   bankName?: string;
   accountNumber?: string;
+  showDelete?: boolean;
+  onDelete?: (id: number) => void;
 }
 
-export function PaymentCard({ type, cardNumber, cardName, bankName, accountNumber }: PaymentCardProps) {
+export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountNumber, showDelete, onDelete }: PaymentCardProps) {
   if (type === 'card') {
     // Determine card brand based on first digit
     const getCardBrand = (number: string) => {
@@ -31,7 +34,15 @@ export function PaymentCard({ type, cardNumber, cardName, bankName, accountNumbe
     const maskedNumber = cardNumber ? `••••${cardNumber.slice(-4)}` : '••••';
 
     return (
-      <div className={`relative p-4 rounded-xl bg-gradient-to-br ${colors} text-white shadow-lg min-h-[120px] flex flex-col justify-between`}>
+      <div className={`relative p-4 rounded-xl bg-gradient-to-br ${colors} text-white shadow-lg min-h-[120px] flex flex-col justify-between group`}>
+        {showDelete && (
+          <button
+            onClick={() => id && onDelete?.(id)}
+            className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+          >
+            <span className="text-white text-xs">×</span>
+          </button>
+        )}
         <div className="flex justify-between items-start">
           <div>
             <div className="text-sm opacity-90">Debit Card</div>
@@ -55,7 +66,15 @@ export function PaymentCard({ type, cardNumber, cardName, bankName, accountNumbe
 
   // Bank account card
   return (
-    <div className="relative p-4 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-700 text-white shadow-lg min-h-[120px] flex flex-col justify-between">
+    <div className="relative p-4 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-700 text-white shadow-lg min-h-[120px] flex flex-col justify-between group">
+      {showDelete && (
+        <button
+          onClick={() => id && onDelete?.(id)}
+          className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+        >
+          <span className="text-white text-xs">×</span>
+        </button>
+      )}
       <div className="flex justify-between items-start">
         <div>
           <div className="text-sm opacity-90">Bank Account</div>

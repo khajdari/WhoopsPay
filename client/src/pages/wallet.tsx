@@ -1,4 +1,6 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
 import { MobileNav } from "@/components/mobile-nav";
@@ -14,6 +16,7 @@ import { useState } from "react";
 export default function Wallet() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [showBalance, setShowBalance] = useState(true);
   const [showSensitiveData, setShowSensitiveData] = useState(false);
   const [showAddCardModal, setShowAddCardModal] = useState(false);
@@ -33,6 +36,32 @@ export default function Wallet() {
     },
     enabled: !!user,
   });
+
+  const deletePaymentMethodMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest(`/api/payment-methods/${id}`, {
+        method: "DELETE",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/payment-methods"] });
+      toast({
+        title: "Payment method removed",
+        description: "Your payment method has been successfully removed.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to remove payment method",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleDeletePaymentMethod = (id: number) => {
+    deletePaymentMethodMutation.mutate(id);
+  };
 
   const balance = userProfile?.balance || "0.00";
 
