@@ -13,22 +13,22 @@
   --card-foreground: 20 14.3% 4.1%;
   --border: 20 5.9% 90%;
   --input: 20 5.9% 90%;
-  --primary: 207 90% 54%; /* PayPal Blue #0070ba */
-  --primary-foreground: 211 100% 99%;
+  --primary: 214 100% 37%; /* PayPal Blue #0070ba */
+  --primary-foreground: 0 0% 100%;
   --secondary: 60 4.8% 95.9%;
   --secondary-foreground: 24 9.8% 10%;
   --accent: 60 4.8% 95.9%;
   --accent-foreground: 24 9.8% 10%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 60 9.1% 97.8%;
-  --ring: 207 90% 54%; /* PayPal Blue */
+  --ring: 214 100% 37%; /* PayPal Blue */
   --radius: 0.5rem;
   
-  /* PayPal specific colors */
-  --paypal-blue: 207 90% 54%; /* #0070ba */
-  --paypal-darkblue: 231 76% 27%; /* #003087 */
+  /* PayPal official colors */
+  --paypal-blue: 214 100% 37%; /* #0070ba */
+  --paypal-darkblue: 225 100% 26%; /* #003087 */
   --paypal-lightblue: 197 100% 44%; /* #009cde */
-  --paypal-navy: 231 79% 31%; /* #142c8e */
+  --paypal-navy: 225 96% 35%; /* #142c8e */
   --paypal-gold: 45 100% 62%; /* #ffc439 */
   --paypal-orange: 24 100% 50%; /* #ff6900 */
 }

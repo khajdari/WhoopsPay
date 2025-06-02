@@ -27,7 +27,7 @@ export function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/">
-              <h1 className="text-2xl font-bold text-blue-600 cursor-pointer">
+              <h1 className="text-2xl font-bold paypal-blue cursor-pointer">
                 DefinitelyNotPayPal
               </h1>
             </Link>
@@ -40,8 +40,8 @@ export function Header() {
                 <a
                   className={`px-3 py-2 text-sm font-medium transition-colors ${
                     item.current
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-700 hover:text-blue-600"
+                      ? "paypal-blue border-b-2 border-paypal-blue"
+                      : "text-gray-700 hover:paypal-blue"
                   }`}
                 >
                   {item.name}

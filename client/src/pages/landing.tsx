@@ -14,9 +14,9 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">DefinitelyNotPayPal</h1>
+              <h1 className="text-2xl font-bold paypal-blue">DefinitelyNotPayPal</h1>
             </div>
-            <Button onClick={handleLogin} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={handleLogin} className="bg-paypal-blue hover:bg-paypal-darkblue text-white">
               Log In
             </Button>
           </div>
@@ -24,7 +24,7 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+      <section className="paypal-gradient text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
             The safer, easier way to pay and get paid
@@ -36,7 +36,7 @@ export default function Landing() {
             <Button 
               onClick={handleLogin}
               size="lg" 
-              className="bg-white text-blue-600 hover:bg-gray-100"
+              className="bg-white paypal-blue hover:bg-gray-100"
             >
               Sign Up for Free
             </Button>
@@ -44,7 +44,7 @@ export default function Landing() {
               onClick={handleLogin}
               size="lg" 
               variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-blue-600"
+              className="border-white text-white hover:bg-white hover:paypal-blue"
             >
               Log In
             </Button>
@@ -164,7 +164,7 @@ export default function Landing() {
           <Button 
             onClick={handleLogin}
             size="lg" 
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-paypal-blue hover:bg-paypal-darkblue text-white"
           >
             Get Started Now
           </Button>
