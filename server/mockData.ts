@@ -210,7 +210,7 @@ export async function seedMockData() {
       type: "bank",
       bankName: "Bank of America",
       accountNumber: "456789123",
-      routingNumber: "026009593",
+      iban: "US33BOFA0208000100003328",
       isDefault: false,
     });
 
