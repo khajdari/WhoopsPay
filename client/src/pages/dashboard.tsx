@@ -88,43 +88,7 @@ export default function Dashboard() {
 
 
 
-        {/* Recent Activity */}
-        <Card>
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
-              <Button variant="link" className="text-blue-600 hover:text-blue-700 p-0">
-                See all
-              </Button>
-            </div>
-          </div>
-          
-          <div className="divide-y divide-gray-200">
-            {transactionsLoading ? (
-              <div className="space-y-4 p-6">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center space-x-4">
-                    <Skeleton className="w-10 h-10 rounded-full" />
-                    <div className="flex-1">
-                      <Skeleton className="h-4 w-32 mb-2" />
-                      <Skeleton className="h-3 w-24" />
-                    </div>
-                    <Skeleton className="h-4 w-16" />
-                  </div>
-                ))}
-              </div>
-            ) : transactions && transactions.length > 0 ? (
-              transactions.slice(0, 5).map((transaction: any) => (
-                <TransactionItem key={transaction.id} transaction={transaction} />
-              ))
-            ) : (
-              <div className="px-6 py-8 text-center text-gray-500">
-                <p>No transactions yet</p>
-                <p className="text-sm">Send or request money to get started</p>
-              </div>
-            )}
-          </div>
-        </Card>
+
       </main>
 
       <MobileNav />
