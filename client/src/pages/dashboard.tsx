@@ -86,64 +86,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => setShowSendModal(true)}>
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <Send className="text-blue-600" size={20} />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-900">Send Money</p>
-                  <p className="text-xs text-gray-500">To friends & family</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="bg-green-100 p-3 rounded-full">
-                  <HandCoins className="text-green-600" size={20} />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-900">Request Money</p>
-                  <p className="text-xs text-gray-500">From anyone</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="bg-yellow-100 p-3 rounded-full">
-                  <Plus className="text-yellow-600" size={20} />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-900">Add Money</p>
-                  <p className="text-xs text-gray-500">From bank account</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="bg-purple-100 p-3 rounded-full">
-                  <University className="text-purple-600" size={20} />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-900">Withdraw</p>
-                  <p className="text-xs text-gray-500">To bank account</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
         {/* Recent Activity */}
         <Card>
