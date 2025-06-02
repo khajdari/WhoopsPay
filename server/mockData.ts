@@ -3,6 +3,8 @@ import { storage } from "./storage";
 // Mock data for testing vulnerabilities
 export async function seedMockData() {
   try {
+    console.log("Starting mock data seeding...");
+    
     // Create mock users with intentionally vulnerable data
     await storage.upsertUser({
       id: "mock_user_1",
@@ -44,12 +46,12 @@ export async function seedMockData() {
       password: "qwerty", // VULNERABLE: Common password
     });
 
-    // Create mock transactions with XSS payloads
+    // Create mock transactions between mock users
     await storage.createTransaction({
       fromUserId: "mock_user_1",
       toUserId: "mock_user_2", 
       amount: "150.00",
-      description: "Dinner split", // Normal transaction
+      description: "Dinner split",
       status: "completed",
     });
 
@@ -84,6 +86,42 @@ export async function seedMockData() {
       description: "Amazon.com purchase - Electronics",
       status: "completed",
     });
+
+    // Create transactions with your current authenticated user ID (43412562)
+    // These will show up in your transaction history for testing
+    await storage.createTransaction({
+      fromUserId: "43412562", // Your authenticated user ID
+      toUserId: "mock_user_1",
+      amount: "45.00",
+      description: "Coffee with Alice",
+      status: "completed",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "mock_user_2",
+      toUserId: "43412562", // Your authenticated user ID
+      amount: "120.75",
+      description: "<script>alert('XSS in your transactions!')</script>Dinner payment", // VULNERABLE: XSS
+      status: "completed",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "43412562", // Your authenticated user ID
+      toUserId: "mock_user_3",
+      amount: "85.50",
+      description: "Gas money",
+      status: "pending",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "mock_user_1",
+      toUserId: "43412562", // Your authenticated user ID
+      amount: "300.00",
+      description: "Rent split <img src=x onerror=alert('Stored XSS!')>", // VULNERABLE: XSS
+      status: "completed",
+    });
+
+    console.log("Mock transactions created including ones with authenticated user 43412562");
 
     // Create mock payment methods with unencrypted data
     await storage.addPaymentMethod({

@@ -245,6 +245,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Mock data overview route for testing
+  app.get('/api/mock-data', async (req, res) => {
+    try {
+      const users = await storage.getAllUsers();
+      const transactions = await storage.getAllTransactions();
+      res.json({
+        users: users.length,
+        transactions: transactions.length,
+        mockUsers: users.filter(u => u.id.startsWith('mock_')),
+        allTransactions: transactions
+      });
+    } catch (error) {
+      console.error("Error fetching mock data:", error);
+      res.status(500).json({ message: "Failed to fetch mock data" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
