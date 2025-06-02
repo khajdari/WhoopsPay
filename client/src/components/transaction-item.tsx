@@ -68,10 +68,9 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
               {getContactName()}
             </p>
             {/* VULNERABLE: Rendering user input without sanitization (XSS potential) */}
-            <p 
-              className="text-sm text-gray-500"
-              dangerouslySetInnerHTML={{ __html: transaction.description || 'No description' }}
-            />
+            <p className="text-sm text-gray-500">
+              {transaction.description || 'No description'}
+            </p>
             <p className="text-xs text-gray-400">
               {formatDistanceToNow(new Date(transaction.createdAt), { addSuffix: true })}
             </p>
