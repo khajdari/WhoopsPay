@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ArrowLeft, Edit2, Save } from "lucide-react";
@@ -23,7 +23,6 @@ export default function Profile() {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     email: user?.email || "",
-    profileImageUrl: user?.profileImageUrl || "",
   });
 
   const updateProfileMutation = useMutation({
@@ -57,7 +56,6 @@ export default function Profile() {
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       email: user?.email || "",
-      profileImageUrl: user?.profileImageUrl || "",
     });
     setIsEditing(false);
   };
@@ -115,12 +113,11 @@ export default function Profile() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center space-x-4">
-                <Avatar className="w-20 h-20">
-                  <AvatarImage src={user?.profileImageUrl || undefined} alt={user?.firstName || "User"} />
-                  <AvatarFallback className="text-lg">
+                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-blue-600 font-semibold text-xl">
                     {user?.firstName?.[0] || "U"}{user?.lastName?.[0] || ""}
-                  </AvatarFallback>
-                </Avatar>
+                  </span>
+                </div>
                 <div>
                   <h3 className="text-lg font-medium text-gray-900">
                     {user?.firstName} {user?.lastName}
@@ -162,16 +159,7 @@ export default function Profile() {
                   />
                 </div>
 
-                <div>
-                  <Label htmlFor="profileImageUrl">Profile Image URL</Label>
-                  <Input
-                    id="profileImageUrl"
-                    value={formData.profileImageUrl}
-                    onChange={(e) => setFormData(prev => ({ ...prev, profileImageUrl: e.target.value }))}
-                    disabled={!isEditing}
-                    placeholder="https://example.com/image.jpg"
-                  />
-                </div>
+
               </form>
             </CardContent>
           </Card>
