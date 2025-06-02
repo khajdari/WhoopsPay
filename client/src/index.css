@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 20 14.3% 4.1%;
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  --primary: 207 90% 54%; /* PayPal Blue #0070ba */
+  --primary-foreground: 211 100% 99%;
+  --secondary: 60 4.8% 95.9%;
+  --secondary-foreground: 24 9.8% 10%;
+  --accent: 60 4.8% 95.9%;
+  --accent-foreground: 24 9.8% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 207 90% 54%; /* PayPal Blue */
+  --radius: 0.5rem;
+  
+  /* PayPal specific colors */
+  --paypal-blue: 207 90% 54%; /* #0070ba */
+  --paypal-darkblue: 231 76% 27%; /* #003087 */
+  --paypal-lightblue: 197 100% 44%; /* #009cde */
+  --paypal-navy: 231 79% 31%; /* #142c8e */
+  --paypal-gold: 45 100% 62%; /* #ffc439 */
+  --paypal-orange: 24 100% 50%; /* #ff6900 */
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 240 4.9% 83.9%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+}
+
+@layer utilities {
+  .paypal-blue {
+    color: hsl(var(--paypal-blue));
+  }
+  
+  .bg-paypal-blue {
+    background-color: hsl(var(--paypal-blue));
+  }
+  
+  .paypal-darkblue {
+    color: hsl(var(--paypal-darkblue));
+  }
+  
+  .bg-paypal-darkblue {
+    background-color: hsl(var(--paypal-darkblue));
+  }
+  
+  .paypal-lightblue {
+    color: hsl(var(--paypal-lightblue));
+  }
+  
+  .bg-paypal-lightblue {
+    background-color: hsl(var(--paypal-lightblue));
+  }
+  
+  .paypal-navy {
+    color: hsl(var(--paypal-navy));
+  }
+  
+  .bg-paypal-navy {
+    background-color: hsl(var(--paypal-navy));
+  }
+  
+  .paypal-gold {
+    color: hsl(var(--paypal-gold));
+  }
+  
+  .bg-paypal-gold {
+    background-color: hsl(var(--paypal-gold));
+  }
+  
+  .paypal-orange {
+    color: hsl(var(--paypal-orange));
+  }
+  
+  .bg-paypal-orange {
+    background-color: hsl(var(--paypal-orange));
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .mobile-nav-spacing {
+    padding-bottom: 80px;
+  }
+}
+
+/* PayPal-style gradient backgrounds */
+.paypal-gradient {
+  background: linear-gradient(135deg, hsl(var(--paypal-blue)) 0%, hsl(var(--paypal-navy)) 100%);
+}
+
+.paypal-gradient-light {
+  background: linear-gradient(135deg, hsl(var(--paypal-lightblue)) 0%, hsl(var(--paypal-blue)) 100%);
+}
+
+/* Custom scrollbar for better UX */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--paypal-blue));
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--paypal-darkblue));
+}
