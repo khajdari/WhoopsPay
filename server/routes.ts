@@ -3,11 +3,15 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { insertTransactionSchema, insertPaymentMethodSchema } from "@shared/schema";
+import { seedMockData } from "./mockData";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
+
+  // Seed mock data for vulnerability testing
+  await seedMockData();
 
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {

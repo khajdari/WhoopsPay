@@ -27,10 +27,10 @@ export default function Landing() {
       <section className="paypal-gradient text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            The safer, easier way to pay and get paid
+            Send, spend, and receive money your way
           </h2>
           <p className="text-xl md:text-2xl mb-8 text-blue-100">
-            Join millions of people who trust DefinitelyNotPayPal for online payments
+            It's fast, free, and secure to send money to friends and family
           </p>
           <div className="space-x-4">
             <Button 
@@ -38,7 +38,7 @@ export default function Landing() {
               size="lg" 
               className="bg-white paypal-blue hover:bg-gray-100"
             >
-              Sign Up for Free
+              Sign Up
             </Button>
             <Button 
               onClick={handleLogin}
@@ -57,10 +57,10 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Why choose DefinitelyNotPayPal?
+              Send and receive money your way
             </h3>
             <p className="text-xl text-gray-600">
-              Fast, secure, and trusted by millions worldwide
+              Pay however you want. We make it simple and secure.
             </p>
           </div>
 
@@ -70,11 +70,11 @@ export default function Landing() {
                 <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                   <Shield className="w-6 h-6 text-blue-600" />
                 </div>
-                <CardTitle>Secure Protection</CardTitle>
+                <CardTitle>Purchase Protection</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Advanced encryption and fraud protection keep your information safe
+                  Shop with confidence knowing your eligible purchases are covered
                 </CardDescription>
               </CardContent>
             </Card>
