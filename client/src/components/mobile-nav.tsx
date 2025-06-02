@@ -19,8 +19,8 @@ export function MobileNav() {
           const Icon = item.icon;
           return (
             <Link key={item.name} href={item.href}>
-              <a
-                className={`flex flex-col items-center justify-center h-full transition-colors ${
+              <div
+                className={`flex flex-col items-center justify-center h-full transition-colors cursor-pointer ${
                   item.current
                     ? "paypal-blue"
                     : "text-gray-500 hover:paypal-blue"
@@ -28,7 +28,7 @@ export function MobileNav() {
               >
                 <Icon size={20} className="mb-1" />
                 <span className="text-xs">{item.name}</span>
-              </a>
+              </div>
             </Link>
           );
         })}
