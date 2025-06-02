@@ -10,6 +10,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   await seedMockData();
 
   // VULNERABLE: Local login for test users (no proper security)
+  // VULNERABLE: Signup endpoint (no input validation, allows duplicate emails)
+  app.post('/api/auth/signup', async (req, res) => {
+    try {
+      const { email, firstName, lastName, password } = req.body;
+      
+      // VULNERABLE: No input validation
+      // VULNERABLE: No password strength requirements
+      // VULNERABLE: Passwords stored in plain text
+      if (!email || !firstName || !lastName || !password) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+
+      // VULNERABLE: No check for existing email addresses
+      const newUser = {
+        id: email.split('@')[0], // VULNERABLE: Predictable user ID generation
+        email,
+        firstName,
+        lastName,
+        balance: "0.00"
+      };
+
+      await storage.upsertUser(newUser);
+
+      res.json({ 
+        success: true, 
+        message: "Account created successfully",
+        user: newUser
+      });
+    } catch (error) {
+      console.error("Signup error:", error);
+      res.status(500).json({ message: "Failed to create account" });
+    }
+  });
+
   app.post('/api/auth/local-login', async (req, res) => {
     try {
       const { username, password } = req.body;

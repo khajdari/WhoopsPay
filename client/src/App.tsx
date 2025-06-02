@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
 import Login from "@/pages/login";
+import Signup from "@/pages/signup";
 import Dashboard from "@/pages/dashboard";
 import SendMoney from "@/pages/send-money";
 import Transactions from "@/pages/transactions";
@@ -27,6 +28,7 @@ function Router() {
       {!isAuthenticated ? (
         <>
           <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
           <Route path="/" component={Landing} />
         </>
       ) : (
