@@ -64,7 +64,7 @@ export const paymentMethods = pgTable("payment_methods", {
   bankName: varchar("bank_name"), // Bank name for display
   cardName: varchar("card_name"), // Card holder name
   accountNumber: varchar("account_number"), // Vulnerable: not encrypted
-  routingNumber: varchar("routing_number"), // Vulnerable: not encrypted
+  iban: varchar("iban"), // Vulnerable: not encrypted
   cardNumber: varchar("card_number"), // Vulnerable: not encrypted
   expiryDate: varchar("expiry_date"), // Vulnerable: not encrypted
   cvv: varchar("cvv"), // Vulnerable: not encrypted

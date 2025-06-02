@@ -191,7 +191,7 @@ export async function seedMockData() {
       type: "bank",
       bankName: "Chase Bank",
       accountNumber: "987654321", // VULNERABLE: Unencrypted account
-      routingNumber: "021000021",
+      iban: "US64SVBKUS6S3300958879",
       isDefault: false,
     });
 
@@ -244,7 +244,7 @@ export async function seedMockData() {
         type: "bank",
         bankName: "Chase Bank",
         accountNumber: "123456782123",
-        routingNumber: "021000021",
+        iban: "US89370400440532013000",
         isDefault: false,
       });
     }
