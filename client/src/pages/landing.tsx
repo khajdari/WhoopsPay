@@ -14,7 +14,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold paypal-blue">DefinitelyNotPayPal</h1>
+              <h1 className="text-2xl font-bold paypal-blue">InsecurePay</h1>
             </div>
             <Button onClick={handleLogin} className="bg-paypal-blue hover:bg-paypal-darkblue text-white">
               Log In
@@ -159,7 +159,7 @@ export default function Landing() {
             Ready to get started?
           </h3>
           <p className="text-xl text-gray-600 mb-8">
-            Sign up for your free DefinitelyNotPayPal account today
+            Sign up for your free InsecurePay account today
           </p>
           <Button 
             onClick={handleLogin}
@@ -175,9 +175,9 @@ export default function Landing() {
       <footer className="bg-gray-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h4 className="text-2xl font-bold mb-4">DefinitelyNotPayPal</h4>
+            <h4 className="text-2xl font-bold mb-4">InsecurePay</h4>
             <p className="text-gray-400">
-              © 2024 DefinitelyNotPayPal. This is an educational project demonstrating web vulnerabilities.
+              © 2024 InsecurePay. This is an educational project demonstrating web vulnerabilities.
             </p>
             <p className="text-sm text-red-400 mt-2">
               ⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes only.
