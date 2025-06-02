@@ -12,6 +12,9 @@ export async function seedMockData() {
       firstName: "John",
       lastName: "Doe",
       profileImageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+      address: "123 Main Street, New York, NY 10001",
+      nationality: "American",
+      gender: "Male",
       balance: "1250.50",
 
       // VULNERABLE: Sensitive data stored unencrypted
@@ -27,6 +30,9 @@ export async function seedMockData() {
       firstName: "Mairy",
       lastName: "Doe",
       profileImageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
+      address: "456 Oak Avenue, Los Angeles, CA 90210",
+      nationality: "Canadian",
+      gender: "Female",
       balance: "875.25",
 
       ssn: "987-65-4321",
@@ -41,6 +47,9 @@ export async function seedMockData() {
       firstName: "Elisa",
       lastName: "Doe",
       profileImageUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
+      address: "789 Pine Road, Chicago, IL 60601",
+      nationality: "British",
+      gender: "Female",
       balance: "2150.00",
 
       ssn: "555-12-3456",
