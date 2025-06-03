@@ -29,7 +29,10 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
 
   const sendMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("POST", "/api/transactions", data);
+      console.log("In mutation function, data received:", data);
+      const result = await apiRequest("POST", "/api/transactions", data);
+      console.log("Mutation result:", result);
+      return result;
     },
     onSuccess: () => {
       const isRequest = transactionType === "request";
