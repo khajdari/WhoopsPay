@@ -37,14 +37,14 @@ export default function Landing() {
             <Button 
               onClick={handleSignup}
               size="lg" 
-              className="bg-white paypwned-blue"
+              className="bg-white text-paypwned-blue hover:bg-gray-100"
             >
               Sign Up
             </Button>
             <Button 
               onClick={handleLogin}
               size="lg" 
-              className="bg-white paypwned-blue"
+              className="bg-white text-paypwned-blue hover:bg-gray-100"
             >
               Log In
             </Button>
