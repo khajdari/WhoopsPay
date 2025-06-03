@@ -8,25 +8,25 @@ export function useAuth() {
   useEffect(() => {
     // Check localStorage for logged in user (VULNERABLE: insecure storage)
     try {
-      const storedUser = localStorage.getItem("payPwnd_user");
+      const storedUser = localStorage.getItem("payPwned_user");
       if (storedUser) {
         const userData = JSON.parse(storedUser);
         setUser(userData);
       }
     } catch (error) {
       console.error("Error parsing stored user data:", error);
-      localStorage.removeItem("payPwnd_user");
+      localStorage.removeItem("payPwned_user");
     }
     setIsLoading(false);
   }, []);
 
   const login = (userData: User) => {
-    localStorage.setItem("payPwnd_user", JSON.stringify(userData));
+    localStorage.setItem("payPwned_user", JSON.stringify(userData));
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("payPwnd_user");
+    localStorage.removeItem("payPwned_user");
     setUser(null);
     window.location.href = "/login";
   };
