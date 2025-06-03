@@ -8,13 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 export default function Transactions() {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const { data: transactions, isLoading } = useQuery({
     queryKey: ["/api/transactions"],
@@ -22,7 +24,8 @@ export default function Transactions() {
   });
 
   // VULNERABLE: Client-side filtering that could expose sensitive data
-  const filteredTransactions = transactions?.filter((transaction: any) => {
+  const transactionsList = Array.isArray(transactions) ? transactions : [];
+  const filteredTransactions = transactionsList.filter((transaction: any) => {
     if (filterType === "sent" && transaction.fromUserId !== user?.id) return false;
     if (filterType === "received" && transaction.toUserId !== user?.id) return false;
     if (searchQuery) {
@@ -35,6 +38,35 @@ export default function Transactions() {
     }
     return true;
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentTransactions = filteredTransactions.slice(startIndex, endIndex);
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Reset to page 1 when filters change
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = (value: string) => {
+    setFilterType(value);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -56,13 +88,13 @@ export default function Transactions() {
                   <Input
                     placeholder="Search transactions..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => handleSearchChange(e.target.value)}
                     className="pl-10"
                   />
                 </div>
               </div>
               <div className="sm:w-48">
-                <Select value={filterType} onValueChange={setFilterType}>
+                <Select value={filterType} onValueChange={handleFilterChange}>
                   <SelectTrigger>
                     <Filter className="w-4 h-4 mr-2" />
                     <SelectValue />
@@ -98,11 +130,49 @@ export default function Transactions() {
                 ))}
               </div>
             ) : filteredTransactions && filteredTransactions.length > 0 ? (
-              <div className="divide-y divide-gray-200">
-                {filteredTransactions.map((transaction: any) => (
-                  <TransactionItem key={transaction.id} transaction={transaction} />
-                ))}
-              </div>
+              <>
+                <div className="divide-y divide-gray-200">
+                  {currentTransactions.map((transaction: any) => (
+                    <TransactionItem key={transaction.id} transaction={transaction} />
+                  ))}
+                </div>
+                
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-gray-500">
+                        Showing {startIndex + 1}-{Math.min(endIndex, filteredTransactions.length)} of {filteredTransactions.length} transactions
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={goToPrevPage}
+                          disabled={currentPage === 1}
+                          className="flex items-center space-x-1"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                          <span>Previous</span>
+                        </Button>
+                        <span className="text-sm text-gray-500">
+                          Page {currentPage} of {totalPages}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={goToNextPage}
+                          disabled={currentPage === totalPages}
+                          className="flex items-center space-x-1"
+                        >
+                          <span>Next</span>
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="px-6 py-12 text-center text-gray-500">
                 <p className="text-lg font-medium">No transactions found</p>
