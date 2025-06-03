@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,75 +6,11 @@ import { Bell, Check, X, CreditCard, DollarSign, Shield } from "lucide-react";
 interface NotificationsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  notifications: any[];
-  markAllAsRead: () => void;
-  clearAll: () => void;
-  unreadCount: number;
+  onMarkAllRead: () => void;
+  onClearAll: () => void;
 }
 
 export function NotificationsModal({ open, onOpenChange, notifications, markAllAsRead, clearAll, unreadCount }: NotificationsModalProps) {
-    {
-      id: 1,
-      type: "payment",
-      title: "Payment Received",
-      message: "You received $50.00 from John Doe",
-      time: "2 minutes ago",
-      read: false,
-      icon: DollarSign,
-      color: "text-green-600 bg-green-100"
-    },
-    {
-      id: 2,
-      type: "security",
-      title: "Login from New Device",
-      message: "New login detected from Chrome on Windows",
-      time: "1 hour ago",
-      read: false,
-      icon: Shield,
-      color: "text-orange-600 bg-orange-100"
-    },
-    {
-      id: 3,
-      type: "payment",
-      title: "Payment Sent",
-      message: "You sent $25.00 to Coffee Shop Downtown",
-      time: "3 hours ago",
-      read: true,
-      icon: CreditCard,
-      color: "text-blue-600 bg-blue-100"
-    },
-    {
-      id: 4,
-      type: "payment",
-      title: "Money Request",
-      message: "Sarah requested $30.00 for dinner",
-      time: "1 day ago",
-      read: true,
-      icon: DollarSign,
-      color: "text-purple-600 bg-purple-100"
-    },
-    {
-      id: 5,
-      type: "security",
-      title: "Password Changed",
-      message: "Your password was successfully updated",
-      time: "2 days ago",
-      read: true,
-      icon: Shield,
-      color: "text-green-600 bg-green-100"
-    }
-  ]);
-
-  const unreadCount = notifications.filter(n => !n.read).length;
-
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(notification => ({ ...notification, read: true })));
-  };
-
-  const clearAll = () => {
-    setNotifications([]);
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
@@ -91,36 +26,41 @@ export function NotificationsModal({ open, onOpenChange, notifications, markAllA
           </DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-2 max-h-96 overflow-y-auto">
-          {notifications.length > 0 ? (
+        <div className="max-h-96 overflow-y-auto space-y-3">
+          {notifications.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <Bell className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+              <p>No notifications</p>
+            </div>
+          ) : (
             notifications.map((notification) => {
-              const Icon = notification.icon;
+              const IconComponent = notification.icon;
               return (
                 <div
                   key={notification.id}
-                  className={`p-4 rounded-lg border transition-colors ${
-                    notification.read 
-                      ? "bg-gray-50 border-gray-200" 
-                      : "bg-white border-blue-200"
+                  className={`p-3 rounded-lg border transition-colors ${
+                    notification.read
+                      ? "bg-gray-50 border-gray-200"
+                      : "bg-blue-50 border-blue-200"
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className={`rounded-full p-2 ${notification.color}`}>
-                      <Icon className="w-4 h-4" />
+                    <div className={`p-2 rounded-full ${notification.color}`}>
+                      <IconComponent className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-start justify-between">
                         <h4 className="text-sm font-medium text-gray-900">
                           {notification.title}
                         </h4>
                         {!notification.read && (
-                          <div className="w-2 h-2 bg-blue-600 rounded-full" />
+                          <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1.5" />
                         )}
                       </div>
                       <p className="text-sm text-gray-600 mt-1">
                         {notification.message}
                       </p>
-                      <p className="text-xs text-gray-500 mt-2">
+                      <p className="text-xs text-gray-400 mt-2">
                         {notification.time}
                       </p>
                     </div>
@@ -128,12 +68,6 @@ export function NotificationsModal({ open, onOpenChange, notifications, markAllA
                 </div>
               );
             })
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              <Bell className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p className="font-medium">No notifications</p>
-              <p className="text-sm mt-1">You're all caught up!</p>
-            </div>
           )}
         </div>
         
