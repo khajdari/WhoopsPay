@@ -254,10 +254,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Determine if this is a direct transfer or a request
-      console.log("Full request body:", JSON.stringify(transactionData, null, 2));
-      console.log("Transaction type received:", type);
-      const isRequest = type === "request";
-      console.log("Is request:", isRequest, "Status:", isRequest ? "pending" : "completed");
+      const isRequest = transactionData.type === "request";
       const status = isRequest ? "pending" : "completed";
       
       const transaction = await storage.createTransaction({
@@ -266,20 +263,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         amount: transactionData.amount,
         description: transactionData.description || "",
         status: status,
-        type: type || "transfer"
+        type: transactionData.type || "transfer"
       });
 
       if (isRequest) {
-        // For requests, only create notification for the recipient to approve/reject
+        // For money requests, create notification for recipient with approval/rejection options
         try {
           await storage.createNotification({
             userId: transactionData.toUserId,
-            type: "money_request",
+            type: "money_request", // This will trigger approve/reject buttons in UI
             title: "Money Request",
             message: `${fromUser.firstName} ${fromUser.lastName} is requesting $${transactionData.amount}`,
             read: false,
             transactionId: transaction.id
           });
+          console.log(`Money request notification created for user ${transactionData.toUserId}`);
         } catch (notificationError) {
           console.error("Error creating request notification:", notificationError);
         }
