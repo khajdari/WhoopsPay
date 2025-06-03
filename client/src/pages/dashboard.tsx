@@ -76,15 +76,15 @@ export default function Dashboard() {
             <div>
               <p className="text-blue-100 text-sm mb-2">PayPwned balance</p>
               <h3 className="text-3xl font-bold mb-4">${balance}</h3>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   onClick={() => setShowSendModal(true)}
-                  className="bg-white text-paypwned-blue hover:bg-gray-100"
+                  className="bg-white text-paypwned-blue hover:bg-gray-100 font-semibold px-6 py-3 min-w-[120px]"
                 >
                   Send
                 </Button>
                 <Button
-                  className="bg-white text-paypwned-blue hover:bg-gray-100"
+                  className="bg-white text-paypwned-blue hover:bg-gray-100 font-semibold px-6 py-3 min-w-[120px]"
                 >
                   Request
                 </Button>
