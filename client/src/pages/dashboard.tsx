@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Send, HandCoins, Plus, University, Wallet, CreditCard } from "lucide-react";
 import { useState } from "react";
+import { Link } from "wouter";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -106,9 +107,11 @@ export default function Dashboard() {
               <div className="px-6 py-4 border-b border-gray-200">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
-                  <Button variant="link" className="text-blue-600 hover:text-blue-700 p-0">
-                    See all
-                  </Button>
+                  <Link href="/transactions">
+                    <Button variant="link" className="text-blue-600 hover:text-blue-700 p-0">
+                      See all
+                    </Button>
+                  </Link>
                 </div>
               </div>
               
