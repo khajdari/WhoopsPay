@@ -10,7 +10,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
-import { CreditCard } from "lucide-react";
+import { CreditCard, AlertTriangle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const signupSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -88,6 +89,14 @@ export default function Signup() {
             </Link>
           </p>
         </div>
+
+        {/* Security Warning */}
+        <Alert className="border-amber-200 bg-amber-50">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <AlertDescription className="text-amber-700">
+            <strong>Educational Platform:</strong> This is a security training environment with intentional vulnerabilities.
+          </AlertDescription>
+        </Alert>
         
         <Card>
           <CardHeader>
