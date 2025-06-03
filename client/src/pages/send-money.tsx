@@ -13,6 +13,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { ArrowLeft, Send, DollarSign, CreditCard, Banknote } from "lucide-react";
 import { useLocation } from "wouter";
 import type { PaymentMethod } from "@shared/schema";
+import { useNotifications } from "@/hooks/useNotifications";
 
 export default function SendMoney() {
   const { user } = useAuth();
@@ -20,6 +21,7 @@ export default function SendMoney() {
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("send");
+  const { addTransactionNotification } = useNotifications();
   
   // Send Money
   const [sendRecipient, setSendRecipient] = useState("");
@@ -52,10 +54,10 @@ export default function SendMoney() {
 
   // Fetch user's payment methods
   const { data: paymentMethods = [] } = useQuery<PaymentMethod[]>({
-    queryKey: ["/api/payment-methods", user?.id],
+    queryKey: ["/api/payments", user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
-      const response = await fetch(`/api/payment-methods?userId=${user.id}`);
+      const response = await fetch(`/api/payments?userId=${user.id}`);
       if (!response.ok) throw new Error('Failed to fetch payment methods');
       return response.json();
     },
@@ -71,6 +73,8 @@ export default function SendMoney() {
         title: "Money sent successfully!",
         description: `$${sendAmount} has been sent to ${sendRecipient}`,
       });
+      // Add live notification
+      addTransactionNotification('sent', sendAmount, sendRecipient);
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
       setSendRecipient("");
@@ -95,6 +99,8 @@ export default function SendMoney() {
         title: "Request sent successfully!",
         description: `$${requestAmount} has been requested from ${requestFrom}`,
       });
+      // Add live notification for request
+      addTransactionNotification('sent', requestAmount, `request from ${requestFrom}`);
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
       setRequestFrom("");

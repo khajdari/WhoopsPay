@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useNotifications } from "@/hooks/useNotifications";
 import { X } from "lucide-react";
 
 interface SendMoneyModalProps {
@@ -34,6 +35,8 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
         title: "Money sent successfully!",
         description: `$${amount} has been sent to ${recipient}`,
       });
+      // Add live notification
+      addTransactionNotification('sent', amount, recipient);
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
       onClose();
