@@ -74,29 +74,27 @@ export default function Dashboard() {
         <div className="paypwned-gradient rounded-xl p-6 text-white mb-6">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-blue-100 text-sm mb-2">PayPwned balance</p>
+              <p className="text-blue-100 text-sm mb-2">PayPwned Balance</p>
               <h3 className="text-3xl font-bold">${balance}</h3>
             </div>
-            <div className="text-right">
+            <div className="text-right flex flex-col items-end">
+              <div className="flex gap-2 mb-3">
+                <button
+                  onClick={() => window.location.href = '/send'}
+                  className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
+                >
+                  Send
+                </button>
+                <button
+                  onClick={() => window.location.href = '/send'}
+                  className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
+                >
+                  Request
+                </button>
+              </div>
               <Wallet className="text-2xl text-blue-200" size={32} />
             </div>
           </div>
-        </div>
-
-        {/* Send/Request Buttons */}
-        <div className="flex justify-end gap-2 mb-6">
-          <button
-            onClick={() => window.location.href = '/send'}
-            className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
-          >
-            Send
-          </button>
-          <button
-            onClick={() => window.location.href = '/send'}
-            className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
-          >
-            Request
-          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
