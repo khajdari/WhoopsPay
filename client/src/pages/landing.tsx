@@ -177,7 +177,7 @@ export default function Landing() {
           <div className="text-center">
             <h4 className="text-2xl font-bold mb-4">PayPwned</h4>
             <p className="text-gray-400">
-              © 2024 PayPwned. This is an educational project demonstrating web vulnerabilities.
+              © 2025 PayPwned. An educational project developed as part of a postgraduate thesis on web application vulnerabilities.
             </p>
             <p className="text-sm text-red-400 mt-2">
               ⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes only.
