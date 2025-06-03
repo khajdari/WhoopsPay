@@ -678,6 +678,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Notification endpoints
+  app.get('/api/notifications', async (req: any, res) => {
+    try {
+      const userId = req.query.userId;
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      
+      const notifications = await storage.getUserNotifications(userId);
+      res.json(notifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
+  });
+
+  app.post('/api/notifications', async (req: any, res) => {
+    try {
+      const notification = await storage.createNotification(req.body);
+      res.json(notification);
+    } catch (error) {
+      console.error("Error creating notification:", error);
+      res.status(500).json({ message: "Failed to create notification" });
+    }
+  });
+
+  app.put('/api/notifications/:id/read', async (req: any, res) => {
+    try {
+      const notificationId = parseInt(req.params.id);
+      await storage.markNotificationAsRead(notificationId);
+      res.json({ message: "Notification marked as read" });
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      res.status(500).json({ message: "Failed to mark notification as read" });
+    }
+  });
+
+  app.put('/api/notifications/mark-all-read', async (req: any, res) => {
+    try {
+      const userId = req.body.userId;
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      
+      await storage.markAllNotificationsAsRead(userId);
+      res.json({ message: "All notifications marked as read" });
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+      res.status(500).json({ message: "Failed to mark all notifications as read" });
+    }
+  });
+
+  app.delete('/api/notifications', async (req: any, res) => {
+    try {
+      const userId = req.body.userId || req.query.userId;
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      
+      await storage.deleteAllNotifications(userId);
+      res.json({ message: "All notifications deleted" });
+    } catch (error) {
+      console.error("Error deleting notifications:", error);
+      res.status(500).json({ message: "Failed to delete notifications" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
