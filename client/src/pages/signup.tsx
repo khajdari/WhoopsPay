@@ -73,12 +73,12 @@ export default function Signup() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold paypwnd-blue mb-2">PayPwnd</h1>
+          <h1 className="text-3xl font-bold paypwned-blue mb-2">PayPwned</h1>
           <h2 className="text-2xl font-bold text-gray-900">Create your account</h2>
           <p className="mt-2 text-sm text-gray-600">
             Already have an account?{" "}
             <Link href="/login">
-              <a className="font-medium paypwnd-blue hover:text-blue-500">
+              <a className="font-medium paypwned-blue hover:text-blue-500">
                 Log in here
               </a>
             </Link>
@@ -89,7 +89,7 @@ export default function Signup() {
           <CardHeader>
             <CardTitle>Sign Up</CardTitle>
             <CardDescription>
-              Enter your information to create your PayPwnd account
+              Enter your information to create your PayPwned account
             </CardDescription>
           </CardHeader>
           <CardContent>

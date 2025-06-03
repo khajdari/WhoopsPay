@@ -18,14 +18,14 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold paypwnd-blue">PayPwnd</h1>
+              <h1 className="text-2xl font-bold paypwned-blue">PayPwned</h1>
             </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="paypwnd-gradient text-white py-20">
+      <section className="paypwned-gradient text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
             Send, spend, and receive money your way
@@ -37,14 +37,14 @@ export default function Landing() {
             <Button 
               onClick={handleSignup}
               size="lg" 
-              className="bg-white paypwnd-blue"
+              className="bg-white paypwned-blue"
             >
               Sign Up
             </Button>
             <Button 
               onClick={handleLogin}
               size="lg" 
-              className="bg-white paypwnd-blue"
+              className="bg-white paypwned-blue"
             >
               Log In
             </Button>
@@ -159,12 +159,12 @@ export default function Landing() {
             Ready to get started?
           </h3>
           <p className="text-xl text-gray-600 mb-8">
-            Sign up for your free PayPwnd account today
+            Sign up for your free PayPwned account today
           </p>
           <Button 
             onClick={handleSignup}
             size="lg" 
-            className="bg-paypwnd-blue text-white"
+            className="bg-paypwned-blue text-white"
           >
             Get Started Now
           </Button>
