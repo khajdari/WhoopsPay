@@ -7,10 +7,13 @@ import { Bell, Check, X, CreditCard, DollarSign, Shield } from "lucide-react";
 interface NotificationsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  notifications: any[];
+  markAllAsRead: () => void;
+  clearAll: () => void;
+  unreadCount: number;
 }
 
-export function NotificationsModal({ open, onOpenChange }: NotificationsModalProps) {
-  const [notifications, setNotifications] = useState([
+export function NotificationsModal({ open, onOpenChange, notifications, markAllAsRead, clearAll, unreadCount }: NotificationsModalProps) {
     {
       id: 1,
       type: "payment",
