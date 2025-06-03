@@ -4,10 +4,37 @@ import { storage } from "./storage";
 import { insertTransactionSchema, insertPaymentMethodSchema } from "@shared/schema";
 import { seedMockData } from "./mockData";
 import { z } from "zod";
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Seed mock data for vulnerability testing
   await seedMockData();
+
+  // Swagger configuration
+  const swaggerOptions = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'OopsPay API - Vulnerability Testing',
+        version: '1.0.0',
+        description: 'API documentation for OopsPay - Contains intentional security vulnerabilities for educational purposes',
+      },
+      servers: [
+        {
+          url: 'http://localhost:5000',
+          description: 'Development server',
+        },
+      ],
+    },
+    apis: ['./server/routes.ts'], // Path to the API docs
+  };
+
+  const specs = swaggerJsdoc(swaggerOptions);
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'OopsPay API Documentation'
+  }));
 
   // VULNERABLE: Local login for test users (no proper security)
   // VULNERABLE: Signup endpoint (no input validation, allows duplicate emails)
@@ -74,6 +101,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/users/search:
+   *   get:
+   *     summary: Search users (VULNERABLE - SQL Injection)
+   *     description: "🚨 VULNERABILITY: SQL Injection - Query parameter passed directly to database without sanitization"
+   *     tags: [Users]
+   *     parameters:
+   *       - in: query
+   *         name: q
+   *         schema:
+   *           type: string
+   *         description: Search query (vulnerable to SQL injection)
+   *         example: "' OR 1=1--"
+   *     responses:
+   *       200:
+   *         description: User search results (exposes sensitive data)
+   */
   // VULNERABLE: User search with SQL injection
   app.get('/api/users/search', async (req: any, res) => {
     try {
@@ -91,6 +136,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/admin/users:
+   *   get:
+   *     summary: Get all users (VULNERABLE - No Authentication)
+   *     description: "🚨 VULNERABILITY: Missing authentication and authorization checks. Exposes all user data including SSNs, passwords, and financial info"
+   *     tags: [Admin]
+   *     responses:
+   *       200:
+   *         description: All users with sensitive data exposed
+   */
   // VULNERABLE: Admin endpoint without proper access control
   app.get('/api/admin/users', async (req: any, res) => {
     try {
@@ -210,6 +266,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/payment-methods:
+   *   post:
+   *     summary: Add payment method (VULNERABLE - No Auth + Plain Text Storage)
+   *     description: "🚨 VULNERABILITIES: No authentication check, stores credit card numbers and CVV in plain text"
+   *     tags: [Payment Methods]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               userId:
+   *                 type: string
+   *               type:
+   *                 type: string
+   *                 enum: [card, bank]
+   *               cardNumber:
+   *                 type: string
+   *                 example: "4111-1111-1111-1111"
+   *               cvv:
+   *                 type: string
+   *                 example: "123"
+   *   get:
+   *     summary: Get payment methods (VULNERABLE - No Auth)
+   *     description: "🚨 VULNERABILITY: No authentication, can access any user's payment data"
+   *     tags: [Payment Methods]
+   *     parameters:
+   *       - in: query
+   *         name: userId
+   *         schema:
+   *           type: string
+   *         description: User ID (can access any user's data)
+   *         example: "jdoe"
+   */
   // Payment method endpoints
   app.post('/api/payment-methods', async (req: any, res) => {
     try {
