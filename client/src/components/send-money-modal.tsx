@@ -25,6 +25,7 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [transactionType, setTransactionType] = useState("transfer");
 
   const sendMoneyMutation = useMutation({
     mutationFn: async (data: any) => {

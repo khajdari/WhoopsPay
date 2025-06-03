@@ -52,7 +52,8 @@ export const transactions = pgTable("transactions", {
   toUserId: varchar("to_user_id").references(() => users.id),
   amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
   description: text("description"), // Vulnerable to XSS
-  status: varchar("status").default("completed"),
+  status: varchar("status").default("completed"), // "completed", "pending", "rejected"
+  type: varchar("type").default("transfer"), // "transfer", "request"
   // Vulnerable: no proper access control checks
   createdAt: timestamp("created_at").defaultNow(),
 });
