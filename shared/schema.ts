@@ -8,6 +8,7 @@ import {
   decimal,
   integer,
   boolean,
+  serial,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -82,6 +83,17 @@ export const userSessions = pgTable("user_sessions", {
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   expiresAt: timestamp("expires_at"),
+});
+
+// Notifications table for database-backed notifications
+export const notifications = pgTable("notifications", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  type: varchar("type").notNull(),
+  title: varchar("title").notNull(),
+  message: text("message").notNull(),
+  read: boolean("read").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Export schemas for validation
