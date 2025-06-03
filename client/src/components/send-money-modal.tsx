@@ -32,19 +32,27 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
       return await apiRequest("POST", "/api/transactions", data);
     },
     onSuccess: () => {
+      const isRequest = transactionType === "request";
       toast({
-        title: "Money sent successfully!",
-        description: `$${amount} has been sent to ${recipient}`,
+        title: isRequest ? "Money request sent!" : "Money sent successfully!",
+        description: isRequest 
+          ? `Request for $${amount} has been sent to ${recipient}` 
+          : `$${amount} has been sent to ${recipient}`,
       });
-      // Add live notification
-      addTransactionNotification('sent', amount, recipient);
+      
+      // Add live notification only for direct transfers
+      if (!isRequest) {
+        addTransactionNotification('sent', amount, recipient);
+      }
+      
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
+      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
       onClose();
     },
     onError: (error: Error) => {
       toast({
-        title: "Failed to send money",
+        title: transactionType === "request" ? "Failed to send request" : "Failed to send money",
         description: error.message,
         variant: "destructive",
       });
@@ -69,7 +77,7 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
       toUserId: recipient, // VULNERABLE: Direct user input
       amount: parseFloat(amount),
       description: note, // VULNERABLE: XSS potential
-      status: "completed",
+      type: transactionType,
     });
   };
 
@@ -81,9 +89,23 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Transaction Type */}
+          <div>
+            <Label htmlFor="type">Transaction Type</Label>
+            <Select value={transactionType} onValueChange={setTransactionType}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select transaction type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="transfer">Send Money</SelectItem>
+                <SelectItem value="request">Request Money</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Recipient - VULNERABLE */}
           <div>
-            <Label htmlFor="recipient">Send to</Label>
+            <Label htmlFor="recipient">{transactionType === "request" ? "Request from" : "Send to"}</Label>
             <Input
               id="recipient"
               type="text"
