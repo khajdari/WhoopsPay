@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
@@ -19,6 +19,7 @@ export default function SendMoney() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
+  const [activeTab, setActiveTab] = useState("send");
   
   // Send Money
   const [sendRecipient, setSendRecipient] = useState("");
@@ -28,6 +29,17 @@ export default function SendMoney() {
   // Request Money
   const [requestFrom, setRequestFrom] = useState("");
   const [requestAmount, setRequestAmount] = useState("");
+  
+  // Check URL parameters to set initial tab
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    if (mode === 'request') {
+      setActiveTab('request');
+    } else {
+      setActiveTab('send');
+    }
+  }, []);
   const [requestNote, setRequestNote] = useState("");
   
   // Add Money
@@ -225,7 +237,7 @@ export default function SendMoney() {
           </p>
         </div>
 
-        <Tabs defaultValue="send" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid grid-cols-4 w-full">
             <TabsTrigger value="send" className="flex items-center gap-2">
               <Send className="w-4 h-4" />
