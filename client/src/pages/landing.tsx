@@ -36,13 +36,13 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
               onClick={handleSignup}
-              className="paypal-btn-primary"
+              className="paypal-btn-base paypal-btn-primary"
             >
               Sign Up
             </button>
             <button 
               onClick={handleLogin}
-              className="paypal-btn-secondary"
+              className="paypal-btn-base paypal-btn-secondary"
             >
               Log In
             </button>
