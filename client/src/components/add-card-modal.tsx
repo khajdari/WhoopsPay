@@ -46,7 +46,7 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
         title: "Card added successfully!",
         description: "Your new card has been added to your account",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/payment-methods"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/payment-methods", user?.id] });
       onClose();
     },
     onError: (error: Error) => {
