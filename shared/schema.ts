@@ -110,3 +110,5 @@ export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
 export type PaymentMethod = typeof paymentMethods.$inferSelect;
 export type InsertPaymentMethod = z.infer<typeof insertPaymentMethodSchema>;
 export type UserSession = typeof userSessions.$inferSelect;
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;

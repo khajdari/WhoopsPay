@@ -439,11 +439,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
    *         required: true
    *         schema:
    *           type: integer
-   *         description: Payment method ID
+   *         description: Payment ID
    *         example: 203
    *     responses:
    *       200:
-   *         description: Payment method deleted (no ownership verification)
+   *         description: Payment deleted (no ownership verification)
    */
   // VULNERABLE: Insecure Direct Object Reference
   app.delete('/api/payments/:id', async (req: any, res) => {
@@ -453,10 +453,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // WARNING: No authentication or authorization checks
       // Any user can delete any payment method by guessing the ID
       await storage.deletePaymentMethod(paymentMethodId);
-      res.json({ message: "Payment method deleted successfully" });
+      res.json({ message: "Payment deleted successfully" });
     } catch (error) {
       console.error("Error deleting payment method:", error);
-      res.status(500).json({ message: "Failed to delete payment method" });
+      res.status(500).json({ message: "Failed to delete payment" });
     }
   });
 
