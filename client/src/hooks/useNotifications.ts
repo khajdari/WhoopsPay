@@ -12,57 +12,8 @@ interface Notification {
   color: string;
 }
 
-const initialNotifications: Notification[] = [];
-
 export function useNotifications() {
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
-  const [localNotifications, setLocalNotifications] = useState<Notification[]>([]);
-
-  // Fetch notifications from database
-  const { data: dbNotifications = [] } = useQuery({
-    queryKey: ["/api/notifications", user?.id],
-    queryFn: async () => {
-      if (!user?.id) return [];
-      const response = await fetch(`/api/notifications?userId=${user.id}`);
-      if (!response.ok) return [];
-      return response.json();
-    },
-    enabled: !!user?.id,
-  });
-
-  // Combine database and local notifications
-  const notifications = [...localNotifications, ...dbNotifications];
-  const unreadCount = notifications.filter(n => !n.read).length;
-
-  const createNotificationMutation = useMutation({
-    mutationFn: async (notification: any) => {
-      return await apiRequest("POST", "/api/notifications", notification);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
-    }
-  });
-
-  const markAllAsReadMutation = useMutation({
-    mutationFn: async () => {
-      return await apiRequest("PUT", "/api/notifications/mark-all-read", { userId: user?.id });
-    },
-    onSuccess: () => {
-      setLocalNotifications([]);
-      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
-    }
-  });
-
-  const clearAllMutation = useMutation({
-    mutationFn: async () => {
-      return await apiRequest("DELETE", "/api/notifications", { userId: user?.id });
-    },
-    onSuccess: () => {
-      setLocalNotifications([]);
-      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
-    }
-  });
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const addTransactionNotification = (type: 'sent' | 'received', amount: string, otherUser: string) => {
     const notification = type === 'sent' 
@@ -93,40 +44,38 @@ export function useNotifications() {
       ...notification,
       id: Date.now(),
     };
-    setLocalNotifications(prev => [newNotification, ...prev]);
+    setNotifications(prev => [newNotification, ...prev]);
+  };
 
-    // Also save to database if user is logged in
-    if (user?.id) {
-      createNotificationMutation.mutate({
-        userId: user.id,
-        type: notification.type,
-        title: notification.title,
-        message: notification.message,
-        read: false
-      });
-    }
+  const markAsRead = (id: number) => {
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === id 
+          ? { ...notification, read: true }
+          : notification
+      )
+    );
   };
 
   const markAllAsRead = () => {
-    setLocalNotifications(prev => prev.map(notification => ({ ...notification, read: true })));
-    if (user?.id) {
-      markAllAsReadMutation.mutate();
-    }
+    setNotifications(prev => 
+      prev.map(notification => ({ ...notification, read: true }))
+    );
   };
 
   const clearAll = () => {
-    setLocalNotifications([]);
-    if (user?.id) {
-      clearAllMutation.mutate();
-    }
+    setNotifications([]);
   };
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   return {
     notifications,
-    unreadCount,
+    addNotification,
+    addTransactionNotification,
+    markAsRead,
     markAllAsRead,
     clearAll,
-    addNotification,
-    addTransactionNotification
+    unreadCount,
   };
 }
