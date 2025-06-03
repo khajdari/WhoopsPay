@@ -27,8 +27,8 @@ export function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/">
-              <h1 className="text-2xl font-bold paypal-blue cursor-pointer">
-                OopsPay
+              <h1 className="text-2xl font-bold paypwned-blue cursor-pointer">
+                PayPwned
               </h1>
             </Link>
           </div>
@@ -40,8 +40,8 @@ export function Header() {
                 <span
                   className={`px-3 py-2 text-sm font-medium transition-colors cursor-pointer ${
                     item.current
-                      ? "paypal-blue border-b-2 border-paypal-blue"
-                      : "text-gray-700 hover:paypal-blue"
+                      ? "paypwned-blue border-b-2 border-paypwned-blue"
+                      : "text-gray-700 hover:paypwned-blue"
                   }`}
                 >
                   {item.name}

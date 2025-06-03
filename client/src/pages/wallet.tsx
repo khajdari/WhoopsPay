@@ -79,7 +79,7 @@ export default function Wallet() {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center">
                 <WalletIcon className="w-5 h-5 mr-2" />
-                OopsPay Balance
+                PayPwned Balance
               </CardTitle>
               <Button
                 variant="ghost"
@@ -102,7 +102,7 @@ export default function Wallet() {
                   <p className="text-sm text-gray-500 mt-1">Available balance</p>
                 </div>
                 <div className="space-x-2">
-                  <Button size="sm" className="bg-paypal-blue hover:bg-paypal-darkblue text-white">
+                  <Button size="sm" className="bg-paypwned-blue hover:bg-paypwned-darkblue text-white">
                     <Plus className="w-4 h-4 mr-1" />
                     Add Money
                   </Button>
