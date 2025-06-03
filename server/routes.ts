@@ -83,7 +83,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const testUsers = [
         { username: 'jdoe', password: 'pass', id: 'jdoe' },
         { username: 'mdoe', password: 'pass', id: 'mdoe' },
-        { username: 'edoe', password: 'pass', id: 'edoe' }
+        { username: 'edoe', password: 'pass', id: 'edoe' },
+        { username: 'admin', password: 'Admin', id: 'admin' }
       ];
       
       const user = testUsers.find(u => u.username === username && u.password === password);
