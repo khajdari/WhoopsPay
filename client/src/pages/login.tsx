@@ -51,8 +51,13 @@ export default function Login() {
       if (data.success) {
         // Store user data in localStorage (VULNERABLE: insecure storage)
         localStorage.setItem("payPwned_user", JSON.stringify(data.user));
-        // Force a complete page reload to ensure auth state updates
-        window.location.replace("/");
+        
+        // Redirect based on user role
+        if (data.user.isAdmin) {
+          window.location.replace("/administration");
+        } else {
+          window.location.replace("/");
+        }
       } else {
         setError(data.message || "Login failed");
       }
@@ -188,8 +193,22 @@ export default function Login() {
                     <div className="text-xs text-gray-500">Balance: $2,150.00</div>
                   </div>
                 </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start text-left border-red-200 bg-red-50"
+                  onClick={() => {
+                    form.setValue("username", "admin");
+                    form.setValue("password", "Admin");
+                  }}
+                >
+                  <div>
+                    <div className="font-medium text-red-700">Admin User (admin)</div>
+                    <div className="text-xs text-red-600">Password: "Admin" - Administration Panel Access</div>
+                  </div>
+                </Button>
               </div>
-              <p className="text-xs text-gray-500 mt-2">All test accounts use password: "pass"</p>
+              <p className="text-xs text-gray-500 mt-2">Regular test accounts use password: "pass"</p>
             </div>
           </CardContent>
         </Card>
