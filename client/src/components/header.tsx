@@ -17,7 +17,9 @@ export function Header() {
     logout();
   };
 
-  const navigation = [
+  const navigation = user?.isAdmin ? [
+    { name: "Administration", href: "/administration", current: location === "/administration" },
+  ] : [
     { name: "Summary", href: "/summary", current: location === "/" || location === "/summary" },
     { name: "Transfer", href: "/transfer", current: location === "/transfer" },
     { name: "Transactions", href: "/transactions", current: location === "/transactions" },

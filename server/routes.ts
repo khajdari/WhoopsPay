@@ -353,7 +353,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   /**
    * @swagger
-   * /api/payment-methods:
+   * /api/payments:
    *   post:
    *     summary: Add payment method (VULNERABLE - No Auth + Plain Text Storage)
    *     description: "🚨 VULNERABILITIES: No authentication check, stores credit card numbers and CVV in plain text"
@@ -388,8 +388,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
    *         description: User ID (can access any user's data)
    *         example: "jdoe"
    */
-  // Payment method endpoints
-  app.post('/api/payment-methods', async (req: any, res) => {
+  // Payment endpoints  
+  app.post('/api/payments', async (req: any, res) => {
     try {
       // VULNERABLE: No authentication check
       const { userId, accountHolderName, ...rest } = req.body;
@@ -411,7 +411,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/payment-methods', async (req: any, res) => {
+  app.get('/api/payments', async (req: any, res) => {
     try {
       // VULNERABLE: No authentication - exposes all payment methods
       const { userId } = req.query;
@@ -446,7 +446,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
    *         description: Payment method deleted (no ownership verification)
    */
   // VULNERABLE: Insecure Direct Object Reference
-  app.delete('/api/payment-methods/:id', async (req: any, res) => {
+  app.delete('/api/payments/:id', async (req: any, res) => {
     try {
       const paymentMethodId = parseInt(req.params.id);
       
