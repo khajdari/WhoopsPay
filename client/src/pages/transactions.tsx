@@ -187,21 +187,7 @@ export default function Transactions() {
           </CardContent>
         </Card>
 
-        {/* Vulnerability Notice */}
-        <Card className="mt-6 border-red-200 bg-red-50">
-          <CardContent className="pt-6">
-            <div className="flex items-start space-x-3">
-              <div className="text-red-600 text-sm">⚠️</div>
-              <div>
-                <h3 className="text-sm font-medium text-red-800">Security Notice</h3>
-                <p className="text-sm text-red-700 mt-1">
-                  This page demonstrates client-side filtering vulnerabilities and 
-                  potential data exposure through unfiltered transaction access.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+
       </main>
 
       <MobileNav />
