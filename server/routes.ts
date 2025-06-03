@@ -16,9 +16,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     definition: {
       openapi: '3.0.0',
       info: {
-        title: 'OopsPay API - Vulnerability Testing',
+        title: 'PayPwnd API - Vulnerability Testing',
         version: '1.0.0',
-        description: 'API documentation for OopsPay - Contains intentional security vulnerabilities for educational purposes',
+        description: 'API documentation for PayPwnd - Contains intentional security vulnerabilities for educational purposes',
       },
       servers: [
         {
@@ -33,7 +33,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const specs = swaggerJsdoc(swaggerOptions);
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
     customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'OopsPay API Documentation'
+    customSiteTitle: 'PayPwnd API Documentation'
   }));
 
   // VULNERABLE: Local login for test users (no proper security)
