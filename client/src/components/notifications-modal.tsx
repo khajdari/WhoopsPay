@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Bell, Check, X, CreditCard, DollarSign, Shield } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface NotificationsModalProps {
   open: boolean;
@@ -13,6 +16,50 @@ interface NotificationsModalProps {
 
 export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearAll }: NotificationsModalProps) {
   const { notifications, unreadCount, markAllAsRead, clearAll } = useNotifications();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  const approveRequestMutation = useMutation({
+    mutationFn: async (transactionId: number) => {
+      return await apiRequest("POST", `/api/transactions/${transactionId}/approve`, {});
+    },
+    onSuccess: () => {
+      toast({
+        title: "Request Approved",
+        description: "The money request has been approved and processed.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Failed to approve request",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const rejectRequestMutation = useMutation({
+    mutationFn: async (transactionId: number) => {
+      return await apiRequest("POST", `/api/transactions/${transactionId}/reject`, {});
+    },
+    onSuccess: () => {
+      toast({
+        title: "Request Rejected",
+        description: "The money request has been rejected.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Failed to reject request",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleMarkAllRead = () => {
     markAllAsRead();
