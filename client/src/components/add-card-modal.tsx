@@ -199,13 +199,13 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
             <Button type="button" variant="outline" className="flex-1" onClick={onClose}>
               Cancel
             </Button>
-            <Button
+            <button
               type="submit"
-              className="flex-1 bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
+              className="paypal-btn-primary flex-1"
               disabled={addCardMutation.isPending}
             >
               {addCardMutation.isPending ? "Adding..." : "Add Card"}
-            </Button>
+            </button>
           </div>
         </form>
       </DialogContent>

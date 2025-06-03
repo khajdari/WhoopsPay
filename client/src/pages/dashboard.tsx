@@ -77,17 +77,17 @@ export default function Dashboard() {
               <p className="text-blue-100 text-sm mb-2">PayPwned balance</p>
               <h3 className="text-3xl font-bold mb-4">${balance}</h3>
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button
+                <button
                   onClick={() => setShowSendModal(true)}
-                  className="bg-white text-paypwned-blue hover:bg-gray-100 font-semibold px-6 py-3 min-w-[120px]"
+                  className="paypal-btn-sm paypal-btn-secondary"
                 >
                   Send
-                </Button>
-                <Button
-                  className="bg-white text-paypwned-blue hover:bg-gray-100 font-semibold px-6 py-3 min-w-[120px]"
+                </button>
+                <button
+                  className="paypal-btn-sm paypal-btn-secondary"
                 >
                   Request
-                </Button>
+                </button>
               </div>
             </div>
             <div className="text-right">

@@ -36,13 +36,13 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
               onClick={handleSignup}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-12 py-4 text-lg rounded-lg transition-all duration-200 min-w-[180px] h-14 shadow-lg border border-blue-600 hover:border-blue-700"
+              className="paypal-btn-primary"
             >
               Sign Up
             </button>
             <button 
               onClick={handleLogin}
-              className="bg-white hover:bg-gray-50 text-blue-600 font-semibold px-12 py-4 text-lg rounded-lg transition-all duration-200 min-w-[180px] h-14 shadow-lg border-2 border-white"
+              className="paypal-btn-secondary"
             >
               Log In
             </button>

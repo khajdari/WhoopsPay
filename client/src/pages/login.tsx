@@ -141,13 +141,13 @@ export default function Login() {
                   </Alert>
                 )}
 
-                <Button 
+                <button 
                   type="submit" 
-                  className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
+                  className="paypal-btn-primary w-full"
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? "Signing in..." : "Sign in"}
-                </Button>
+                </button>
               </form>
             </Form>
 
