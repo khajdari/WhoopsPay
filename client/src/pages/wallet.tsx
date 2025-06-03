@@ -123,7 +123,7 @@ export default function Wallet() {
               <div className="flex space-x-2">
                 <Button 
                   size="sm" 
-                  className="bg-paypal-blue text-white"
+                  className="bg-paypwned-blue text-white"
                   onClick={() => setShowAddCardModal(true)}
                 >
                   <CreditCard className="w-4 h-4 mr-1" />
