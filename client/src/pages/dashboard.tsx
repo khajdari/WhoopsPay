@@ -71,7 +71,7 @@ export default function Dashboard() {
         </div>
 
         {/* Account Balance Card */}
-        <div className="paypal-gradient rounded-xl p-6 text-white mb-8">
+        <div className="paypwnd-gradient rounded-xl p-6 text-white mb-8">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-blue-100 text-sm mb-2">PayPwnd balance</p>
@@ -79,12 +79,12 @@ export default function Dashboard() {
               <div className="flex space-x-4">
                 <Button
                   onClick={() => setShowSendModal(true)}
-                  className="bg-white paypal-blue hover:bg-gray-100"
+                  className="bg-white paypwnd-blue hover:bg-gray-100"
                 >
                   Send
                 </Button>
                 <Button
-                  className="bg-white paypal-blue hover:bg-gray-100"
+                  className="bg-white paypwnd-blue hover:bg-gray-100"
                 >
                   Request
                 </Button>
