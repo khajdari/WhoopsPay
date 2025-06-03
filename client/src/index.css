@@ -114,6 +114,44 @@
   .bg-paypwned-orange {
     background-color: hsl(var(--paypwned-orange));
   }
+
+  /* PayPal-style Button Classes */
+  .paypal-btn {
+    @apply inline-flex items-center justify-center font-semibold text-lg rounded-lg transition-all duration-200 border-2 shadow-lg cursor-pointer;
+    min-height: 56px;
+    min-width: 200px;
+    padding: 12px 32px;
+  }
+
+  .paypal-btn-primary {
+    @apply paypal-btn bg-blue-600 hover:bg-blue-700 text-white border-blue-600 hover:border-blue-700;
+  }
+
+  .paypal-btn-secondary {
+    @apply paypal-btn bg-white hover:bg-gray-50 text-blue-600 border-white;
+  }
+
+  .paypal-btn-outline {
+    @apply paypal-btn bg-transparent hover:bg-blue-50 text-blue-600 border-blue-600;
+  }
+
+  .paypal-btn-sm {
+    @apply paypal-btn text-base;
+    min-height: 44px;
+    min-width: 140px;
+    padding: 8px 24px;
+  }
+
+  .paypal-btn-lg {
+    @apply paypal-btn text-xl;
+    min-height: 64px;
+    min-width: 240px;
+    padding: 16px 40px;
+  }
+
+  .paypal-btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
 }
 
 /* Mobile responsive adjustments */
