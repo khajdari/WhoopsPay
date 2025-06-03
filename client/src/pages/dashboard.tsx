@@ -73,13 +73,13 @@ export default function Dashboard() {
           </div>
           <div className="flex gap-2">
             <button
-              onClick={() => window.location.href = '/send'}
+              onClick={() => window.location.href = '/transfer'}
               className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
             >
               Send
             </button>
             <button
-              onClick={() => window.location.href = '/send'}
+              onClick={() => window.location.href = '/transfer'}
               className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
             >
               Request
