@@ -10,7 +10,7 @@ interface NotificationsModalProps {
 }
 
 export function NotificationsModal({ open, onOpenChange }: NotificationsModalProps) {
-  const [notifications] = useState([
+  const [notifications, setNotifications] = useState([
     {
       id: 1,
       type: "payment",
@@ -64,6 +64,14 @@ export function NotificationsModal({ open, onOpenChange }: NotificationsModalPro
   ]);
 
   const unreadCount = notifications.filter(n => !n.read).length;
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(notification => ({ ...notification, read: true })));
+  };
+
+  const clearAll = () => {
+    setNotifications([]);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -128,11 +136,21 @@ export function NotificationsModal({ open, onOpenChange }: NotificationsModalPro
         
         {notifications.length > 0 && (
           <div className="flex gap-2 pt-4 border-t">
-            <Button variant="outline" size="sm" className="flex-1">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex-1"
+              onClick={markAllAsRead}
+            >
               <Check className="w-4 h-4 mr-2" />
               Mark all as read
             </Button>
-            <Button variant="outline" size="sm" className="flex-1">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex-1"
+              onClick={clearAll}
+            >
               <X className="w-4 h-4 mr-2" />
               Clear all
             </Button>

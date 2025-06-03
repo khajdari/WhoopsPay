@@ -33,7 +33,9 @@ export default function Transactions() {
       return (
         transaction.description?.toLowerCase().includes(query) ||
         transaction.amount?.toString().includes(query) ||
-        transaction.status?.toLowerCase().includes(query)
+        transaction.status?.toLowerCase().includes(query) ||
+        transaction.fromUserId?.toLowerCase().includes(query) ||
+        transaction.toUserId?.toLowerCase().includes(query)
       );
     }
     return true;
@@ -86,7 +88,7 @@ export default function Transactions() {
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
-                    placeholder="Search transactions..."
+                    placeholder="Search by name or amount..."
                     value={searchQuery}
                     onChange={(e) => handleSearchChange(e.target.value)}
                     className="pl-10"

@@ -96,7 +96,7 @@ export function Header() {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <button 
-                    onClick={() => window.location.href = '/settings'}
+                    onClick={() => window.location.href = '/account'}
                     className="w-full text-left cursor-pointer"
                   >
                     Account
