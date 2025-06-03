@@ -1,3 +1,27 @@
+/**
+ * PayPwned Database Storage Layer - OWASP Vulnerability Training Platform
+ * 
+ * WARNING: This file contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (No authorization checks, IDOR vulnerabilities)
+ * - A02: Cryptographic Failures (Plain text sensitive data storage)
+ * - A03: Injection (SQL injection via raw queries and dynamic construction)
+ * - A04: Insecure Design (Missing business logic validation)
+ * - A05: Security Misconfiguration (Verbose error messages, default configurations)
+ * - A07: Identification and Authentication Failures (Weak session management)
+ * - A09: Security Logging and Monitoring Failures (Insufficient audit logging)
+ * 
+ * API Security Top 10 Vulnerabilities:
+ * - API1: Broken Object Level Authorization (Direct object access without checks)
+ * - API2: Broken User Authentication (Weak authentication mechanisms)
+ * - API3: Broken Object Property Level Authorization (Excessive data exposure)
+ * - API4: Unrestricted Resource Consumption (No rate limiting on database operations)
+ * - API5: Broken Function Level Authorization (Missing role-based access control)
+ * 
+ * NEVER use this code in production environments!
+ */
+
 import {
   users,
   transactions,
@@ -17,7 +41,15 @@ import {
 import { db } from "./db";
 import { eq, desc, sql, and } from "drizzle-orm";
 
-// Vulnerable storage interface - intentionally insecure for educational purposes
+/**
+ * Vulnerable storage interface - intentionally insecure for educational purposes
+ * 
+ * This interface demonstrates various OWASP vulnerabilities:
+ * - Missing access control checks
+ * - Direct object references without authorization
+ * - Excessive data exposure
+ * - Missing rate limiting and resource consumption controls
+ */
 export interface IStorage {
   // User operations (mandatory for Replit Auth)
   getUser(id: string): Promise<User | undefined>;

@@ -1,3 +1,26 @@
+/**
+ * PayPwned Database Schema - OWASP Security Training Platform
+ * 
+ * WARNING: This schema contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A02: Cryptographic Failures (Plain text storage of sensitive data)
+ * - A03: Injection (Vulnerable column types and lack of input validation)
+ * - A04: Insecure Design (Missing security constraints and proper relationships)
+ * - A05: Security Misconfiguration (Permissive table structures)
+ * - A07: Identification and Authentication Failures (Weak password storage)
+ * 
+ * Educational Vulnerabilities Include:
+ * - Plain text password storage (users.password)
+ * - Unencrypted sensitive data (SSN, bank accounts, credit cards)
+ * - Missing proper foreign key constraints
+ * - Excessive data exposure through unrestricted columns
+ * - No data classification or sensitivity markers
+ * - Vulnerable session storage design
+ * 
+ * NEVER use this schema in production environments!
+ */
+
 import {
   pgTable,
   text,
@@ -13,7 +36,10 @@ import {
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// Session storage table for Replit Auth
+/**
+ * Session storage table for Replit Auth
+ * VULNERABILITY: Sessions stored in database without proper encryption
+ */
 export const sessions = pgTable(
   "sessions",
   {
