@@ -101,15 +101,7 @@ export default function Wallet() {
                   </p>
                   <p className="text-sm text-gray-500 mt-1">Available balance</p>
                 </div>
-                <div className="space-x-2">
-                  <Button size="sm" className="bg-paypwned-blue hover:bg-paypwned-darkblue text-white">
-                    <Plus className="w-4 h-4 mr-1" />
-                    Add Money
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    Withdraw
-                  </Button>
-                </div>
+
               </div>
             )}
           </CardContent>
