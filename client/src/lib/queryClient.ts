@@ -12,10 +12,14 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
+  console.log("apiRequest called with:", { method, url, data });
+  const bodyString = data ? JSON.stringify(data) : undefined;
+  console.log("Request body string:", bodyString);
+  
   const res = await fetch(url, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
-    body: data ? JSON.stringify(data) : undefined,
+    body: bodyString,
     credentials: "include",
   });
 
