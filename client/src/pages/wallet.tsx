@@ -61,7 +61,7 @@ export default function Wallet() {
     deletePaymentMethodMutation.mutate(id);
   };
 
-  const balance = userProfile?.balance || "0.00";
+  const balance = (userProfile as any)?.balance || "0.00";
 
   return (
     <div className="min-h-screen bg-gray-50">
