@@ -18,6 +18,7 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { addTransactionNotification } = useNotifications();
   
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");

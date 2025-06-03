@@ -26,7 +26,7 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
 
   const addCardMutation = useMutation({
     mutationFn: async (data: any) => {
-      const response = await fetch("/api/payment-methods", {
+      const response = await fetch("/api/payments", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
         title: "Card added successfully!",
         description: "Your new card has been added to your account",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/payment-methods", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["/api/payments", user?.id] });
       onClose();
     },
     onError: (error: Error) => {
