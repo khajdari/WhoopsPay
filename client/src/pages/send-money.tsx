@@ -86,6 +86,30 @@ export default function SendMoney() {
     },
   });
 
+  const requestMoneyMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await apiRequest("POST", "/api/transactions", data);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Request sent successfully!",
+        description: `$${requestAmount} has been requested from ${requestFrom}`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
+      setRequestFrom("");
+      setRequestAmount("");
+      setRequestNote("");
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Failed to send request",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const addMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
       // VULNERABLE: No authentication check on add money endpoint
@@ -166,17 +190,13 @@ export default function SendMoney() {
     }
 
     // Create a money request transaction
-    sendMoneyMutation.mutate({
+    requestMoneyMutation.mutate({
       fromUserId: requestFrom,
       toUserId: user?.id,
       amount: parseFloat(requestAmount),
       description: `Money request: ${requestNote}`,
       status: "pending",
     });
-    
-    setRequestFrom("");
-    setRequestAmount("");
-    setRequestNote("");
   };
 
   const handleAddMoney = (e: React.FormEvent) => {
@@ -376,9 +396,9 @@ export default function SendMoney() {
                   <Button 
                     type="submit" 
                     className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
-                    disabled={sendMoneyMutation.isPending}
+                    disabled={requestMoneyMutation.isPending}
                   >
-                    {sendMoneyMutation.isPending ? "Requesting..." : "Request Money"}
+                    {requestMoneyMutation.isPending ? "Requesting..." : "Request Money"}
                   </Button>
                 </form>
               </CardContent>
