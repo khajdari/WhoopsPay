@@ -168,45 +168,7 @@ export default function Wallet() {
           </CardContent>
         </Card>
 
-        {/* Sensitive Data Exposure Demo */}
-        {userProfile && (
-          <Card className="border-red-200 bg-red-50">
-            <CardHeader>
-              <CardTitle className="text-red-800 flex items-center">
-                ⚠️ Vulnerability Demo: Sensitive Data Exposure
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-red-700">Show Sensitive Data:</span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowSensitiveData(!showSensitiveData)}
-                    className="border-red-300 text-red-700 hover:bg-red-100"
-                  >
-                    {showSensitiveData ? "Hide" : "Show"}
-                  </Button>
-                </div>
-                
-                {showSensitiveData && (
-                  <div className="space-y-2 text-sm">
-                    <p><span className="font-medium">SSN:</span> {userProfile.ssn || "Not provided"}</p>
-                    <p><span className="font-medium">Bank Account:</span> {userProfile.bankAccount || "Not provided"}</p>
-                    <p><span className="font-medium">Credit Card:</span> {userProfile.creditCard || "Not provided"}</p>
-                    <p><span className="font-medium">Raw Password:</span> {userProfile.password || "Not stored"}</p>
-                  </div>
-                )}
-                
-                <p className="text-xs text-red-600">
-                  This demonstrates how sensitive data can be exposed through vulnerable API endpoints
-                  without proper access controls and data masking.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+
       </main>
 
       <MobileNav />

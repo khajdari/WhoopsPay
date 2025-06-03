@@ -1,13 +1,16 @@
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { NotificationsModal } from "@/components/notifications-modal";
 import { Bell, ChevronDown, Menu, CreditCard } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 export function Header() {
   const { user, logout, isAuthenticated } = useAuth();
   const [location] = useLocation();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -55,8 +58,16 @@ export function Header() {
 
           {/* User Profile */}
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setShowNotifications(true)}
+              className="relative"
+            >
               <Bell className="h-5 w-5 text-gray-500" />
+              <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                2
+              </span>
             </Button>
             
             <DropdownMenu>
@@ -80,7 +91,7 @@ export function Header() {
                     onClick={() => window.location.href = '/profile'}
                     className="w-full text-left cursor-pointer"
                   >
-                    Profile Settings
+                    Profile
                   </button>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -88,7 +99,7 @@ export function Header() {
                     onClick={() => window.location.href = '/settings'}
                     className="w-full text-left cursor-pointer"
                   >
-                    Security
+                    Account
                   </button>
                 </DropdownMenuItem>
 
@@ -107,6 +118,11 @@ export function Header() {
           </div>
         </div>
       </div>
+      
+      <NotificationsModal 
+        open={showNotifications} 
+        onOpenChange={setShowNotifications} 
+      />
     </header>
   );
 }
