@@ -141,6 +141,8 @@
   .paypal-btn-primary:hover {
     background-color: #003087;
     border-color: #003087;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   }
 
   .paypal-btn-secondary {
@@ -151,6 +153,9 @@
 
   .paypal-btn-secondary:hover {
     background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   }
 
   .paypal-btn-sm {
