@@ -116,41 +116,53 @@
   }
 
   /* PayPal-style Button Classes */
-  .paypal-btn {
-    @apply inline-flex items-center justify-center font-semibold text-lg rounded-lg transition-all duration-200 border-2 shadow-lg cursor-pointer;
+  .paypal-btn-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 18px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: 2px solid;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
     min-height: 56px;
     min-width: 200px;
     padding: 12px 32px;
   }
 
   .paypal-btn-primary {
-    @apply paypal-btn bg-blue-600 hover:bg-blue-700 text-white border-blue-600 hover:border-blue-700;
+    background-color: #0070ba;
+    color: white;
+    border-color: #0070ba;
+  }
+
+  .paypal-btn-primary:hover {
+    background-color: #003087;
+    border-color: #003087;
   }
 
   .paypal-btn-secondary {
-    @apply paypal-btn bg-white hover:bg-gray-50 text-blue-600 border-white;
+    background-color: white;
+    color: #0070ba;
+    border-color: white;
   }
 
-  .paypal-btn-outline {
-    @apply paypal-btn bg-transparent hover:bg-blue-50 text-blue-600 border-blue-600;
+  .paypal-btn-secondary:hover {
+    background-color: #f8f9fa;
   }
 
   .paypal-btn-sm {
-    @apply paypal-btn text-base;
+    font-size: 16px;
     min-height: 44px;
     min-width: 140px;
     padding: 8px 24px;
   }
 
-  .paypal-btn-lg {
-    @apply paypal-btn text-xl;
-    min-height: 64px;
-    min-width: 240px;
-    padding: 16px 40px;
-  }
-
   .paypal-btn:disabled {
-    @apply opacity-50 cursor-not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
