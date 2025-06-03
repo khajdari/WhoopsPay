@@ -73,23 +73,20 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <div className="flex items-center justify-center space-x-2">
-            <CreditCard className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">PayPwned</h1>
-          </div>
-          <p className="text-gray-600 dark:text-gray-400">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold paypwned-blue mb-2">PayPwned</h1>
+          <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
+          <p className="mt-2 text-sm text-gray-600">
             The safer, easier way to send and receive money
           </p>
         </div>
 
         {/* Security Warning */}
-        <Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20">
-          <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-          <AlertDescription className="text-amber-700 dark:text-amber-300">
+        <Alert className="border-amber-200 bg-amber-50">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <AlertDescription className="text-amber-700">
             <strong>Educational Platform:</strong> This is a security training environment with intentional vulnerabilities.
           </AlertDescription>
         </Alert>
@@ -195,11 +192,11 @@ export default function Login() {
         </Card>
 
         {/* Footer */}
-        <div className="text-center text-sm text-gray-500 dark:text-gray-400 space-y-2">
+        <div className="text-center text-sm text-gray-500 space-y-2">
           <p>By signing in, you agree to our Terms of Service and Privacy Policy</p>
           <div>
-            <a href="/" className="text-blue-600 hover:text-blue-700 underline">
-              ← Back to Home
+            <a href="/" className="font-medium paypwned-blue hover:text-blue-500">
+              ← Back to home
             </a>
           </div>
         </div>
