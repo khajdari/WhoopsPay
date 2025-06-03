@@ -43,6 +43,13 @@ export interface IStorage {
   // Admin operations (vulnerable access control)
   getAllUsers(): Promise<User[]>; // Should require admin check
   deleteUser(userId: string): Promise<void>; // Should require admin check
+  
+  // Notification operations
+  createNotification(notification: InsertNotification): Promise<Notification>;
+  getUserNotifications(userId: string): Promise<Notification[]>;
+  markNotificationAsRead(id: number): Promise<void>;
+  markAllNotificationsAsRead(userId: string): Promise<void>;
+  deleteAllNotifications(userId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
