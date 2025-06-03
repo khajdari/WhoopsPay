@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Bell, Check, X, CreditCard, DollarSign, Shield } from "lucide-react";
+import { useNotifications } from "@/hooks/useNotifications";
 
 interface NotificationsModalProps {
   open: boolean;
@@ -12,38 +12,15 @@ interface NotificationsModalProps {
 }
 
 export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearAll }: NotificationsModalProps) {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: "payment",
-      title: "Payment Received",
-      message: "You received $50.00 from John Doe",
-      time: "2 minutes ago",
-      read: false,
-      icon: DollarSign,
-      color: "text-green-600 bg-green-100"
-    },
-    {
-      id: 2,
-      type: "security",
-      title: "Security Alert",
-      message: "New login detected from unknown device",
-      time: "1 hour ago",
-      read: false,
-      icon: Shield,
-      color: "text-red-600 bg-red-100"
-    }
-  ]);
-
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const { notifications, unreadCount, markAllAsRead, clearAll } = useNotifications();
 
   const handleMarkAllRead = () => {
-    setNotifications(prev => prev.map(notification => ({ ...notification, read: true })));
+    markAllAsRead();
     onMarkAllRead();
   };
 
   const handleClearAll = () => {
-    setNotifications([]);
+    clearAll();
     onClearAll();
   };
   return (
