@@ -3,11 +3,15 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertTransactionSchema, insertPaymentMethodSchema } from "@shared/schema";
 import { seedMockData } from "./mockData";
+import { requireAdmin, logStore, expressLogger } from "./adminMiddleware";
 import { z } from "zod";
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Add express logging middleware
+  app.use(expressLogger);
+  
   // Seed mock data for vulnerability testing
   await seedMockData();
 
@@ -625,6 +629,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching mock data:", error);
       res.status(500).json({ message: "Failed to fetch mock data" });
+    }
+  });
+
+  // Admin routes for administration panel
+  app.get('/api/admin/logs/express', async (req: any, res) => {
+    try {
+      // Simple authentication check - in production this would use proper session management
+      const userId = req.headers['user-id'] || req.query.userId;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+
+      const logs = logStore.getExpressLogs();
+      res.json({ logs });
+    } catch (error) {
+      console.error("Error fetching express logs:", error);
+      res.status(500).json({ error: "Failed to fetch express logs" });
+    }
+  });
+
+  app.get('/api/admin/logs/database', async (req: any, res) => {
+    try {
+      // Simple authentication check - in production this would use proper session management
+      const userId = req.headers['user-id'] || req.query.userId;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+
+      const logs = logStore.getDbLogs();
+      res.json({ logs });
+    } catch (error) {
+      console.error("Error fetching database logs:", error);
+      res.status(500).json({ error: "Failed to fetch database logs" });
     }
   });
 

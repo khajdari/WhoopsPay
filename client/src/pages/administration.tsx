@@ -32,8 +32,12 @@ export default function Administration() {
   // Fetch logs
   const fetchLogs = async () => {
     try {
-      const expressResponse = await fetch('/api/admin/logs/express');
-      const dbResponse = await fetch('/api/admin/logs/database');
+      const headers = {
+        'user-id': user?.id || '',
+      };
+      
+      const expressResponse = await fetch('/api/admin/logs/express', { headers });
+      const dbResponse = await fetch('/api/admin/logs/database', { headers });
       
       if (expressResponse.ok) {
         const expressData = await expressResponse.json();
