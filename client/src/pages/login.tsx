@@ -195,8 +195,13 @@ export default function Login() {
         </Card>
 
         {/* Footer */}
-        <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+        <div className="text-center text-sm text-gray-500 dark:text-gray-400 space-y-2">
           <p>By signing in, you agree to our Terms of Service and Privacy Policy</p>
+          <div>
+            <a href="/" className="text-blue-600 hover:text-blue-700 underline">
+              ← Back to Home
+            </a>
+          </div>
         </div>
       </div>
     </div>
