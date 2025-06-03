@@ -3,6 +3,7 @@ import {
   transactions,
   paymentMethods,
   userSessions,
+  notifications,
   type User,
   type UpsertUser,
   type Transaction,
@@ -10,6 +11,8 @@ import {
   type PaymentMethod,
   type InsertPaymentMethod,
   type UserSession,
+  type Notification,
+  type InsertNotification,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, and } from "drizzle-orm";
@@ -203,6 +206,43 @@ export class DatabaseStorage implements IStorage {
   async deleteUser(userId: string): Promise<void> {
     // WARNING: This should require admin privileges but doesn't check
     await db.delete(users).where(eq(users.id, userId));
+  }
+
+  // Notification operations
+  async createNotification(notification: InsertNotification): Promise<Notification> {
+    const [newNotification] = await db
+      .insert(notifications)
+      .values(notification)
+      .returning();
+    return newNotification;
+  }
+
+  async getUserNotifications(userId: string): Promise<Notification[]> {
+    return await db
+      .select()
+      .from(notifications)
+      .where(eq(notifications.userId, userId))
+      .orderBy(desc(notifications.createdAt));
+  }
+
+  async markNotificationAsRead(id: number): Promise<void> {
+    await db
+      .update(notifications)
+      .set({ read: true })
+      .where(eq(notifications.id, id));
+  }
+
+  async markAllNotificationsAsRead(userId: string): Promise<void> {
+    await db
+      .update(notifications)
+      .set({ read: true })
+      .where(eq(notifications.userId, userId));
+  }
+
+  async deleteAllNotifications(userId: string): Promise<void> {
+    await db
+      .delete(notifications)
+      .where(eq(notifications.userId, userId));
   }
 }
 
