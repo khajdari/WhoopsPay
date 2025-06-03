@@ -33,18 +33,18 @@ export default function Landing() {
           <p className="text-xl md:text-2xl mb-8 text-blue-100">
             It's fast, free, and secure to send money to friends and family
           </p>
-          <div className="space-x-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={handleSignup}
               size="lg" 
-              className="bg-white text-paypwned-blue hover:bg-gray-100"
+              className="bg-white text-paypwned-blue hover:bg-gray-100 font-semibold px-8 py-4 text-lg min-w-[150px]"
             >
               Sign Up
             </Button>
             <Button 
               onClick={handleLogin}
               size="lg" 
-              className="bg-white text-paypwned-blue hover:bg-gray-100"
+              className="bg-white text-paypwned-blue hover:bg-gray-100 font-semibold px-8 py-4 text-lg min-w-[150px]"
             >
               Log In
             </Button>
