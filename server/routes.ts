@@ -1,3 +1,26 @@
+/**
+ * PayPwned API Routes - OWASP Top 10 & API Security Training Platform
+ * 
+ * WARNING: This file contains intentional security vulnerabilities for educational purposes.
+ * These vulnerabilities demonstrate OWASP Top 10 and API Security Top 10 issues.
+ * 
+ * NEVER use this code in production environments!
+ * 
+ * Educational Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (IDOR, privilege escalation)
+ * - A02: Cryptographic Failures (plain text data storage)
+ * - A03: Injection (SQL injection vulnerabilities)
+ * - A04: Insecure Design (missing rate limiting, insufficient validation)
+ * - A05: Security Misconfiguration (verbose error messages)
+ * - A07: Identification and Authentication Failures (weak session management)
+ * - A09: Security Logging and Monitoring Failures (insufficient logging)
+ * - API1: Broken Object Level Authorization
+ * - API2: Broken User Authentication
+ * - API3: Broken Object Property Level Authorization
+ * - API4: Unrestricted Resource Consumption
+ * - API5: Broken Function Level Authorization
+ */
+
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
