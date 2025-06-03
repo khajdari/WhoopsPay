@@ -22,9 +22,9 @@ export default function Dashboard() {
   });
 
   const { data: paymentMethods, isLoading: paymentMethodsLoading } = useQuery({
-    queryKey: ["/api/payment-methods", user?.id],
+    queryKey: ["/api/payments", user?.id],
     queryFn: async () => {
-      const response = await fetch(`/api/payment-methods?userId=${user?.id}`);
+      const response = await fetch(`/api/payments?userId=${user?.id}`);
       if (!response.ok) throw new Error('Failed to fetch payment methods');
       return response.json();
     },

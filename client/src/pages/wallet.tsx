@@ -28,9 +28,9 @@ export default function Wallet() {
   });
 
   const { data: paymentMethods, isLoading: paymentMethodsLoading } = useQuery({
-    queryKey: ["/api/payment-methods", user?.id],
+    queryKey: ["/api/payments", user?.id],
     queryFn: async () => {
-      const response = await fetch(`/api/payment-methods?userId=${user?.id}`);
+      const response = await fetch(`/api/payments?userId=${user?.id}`);
       if (!response.ok) throw new Error('Failed to fetch payment methods');
       return response.json();
     },
@@ -39,10 +39,10 @@ export default function Wallet() {
 
   const deletePaymentMethodMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/payment-methods/${id}`);
+      await apiRequest("DELETE", `/api/payments/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/payment-methods", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["/api/payments", user?.id] });
       toast({
         title: "Payment method removed",
         description: "Your payment method has been successfully removed.",
