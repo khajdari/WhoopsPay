@@ -51,11 +51,28 @@ export async function seedMockData() {
       nationality: "British",
       gender: "Female",
       balance: "2150.00",
-
       ssn: "555-12-3456",
       bankAccount: "1111-2222-3333-4444",
       creditCard: "3782-8224-6310-005",
       password: "pass", // VULNERABLE: Common password
+    });
+
+    // Add admin user
+    await storage.upsertUser({
+      id: "admin", 
+      email: "admin@paypwned.com",
+      firstName: "Admin",
+      lastName: "User",
+      profileImageUrl: "",
+      address: "System Administrator",
+      nationality: "System",
+      gender: "System",
+      balance: "0.00",
+      ssn: "000-00-0000",
+      bankAccount: "0000000000",
+      creditCard: "0000-0000-0000-0000",
+      password: "Admin", // VULNERABLE: Plain text password
+      isAdmin: true,
     });
 
     // Create mock transactions between mock users
