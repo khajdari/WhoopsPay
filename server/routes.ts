@@ -160,6 +160,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/admin/users/{id}:
+   *   delete:
+   *     summary: Delete user (VULNERABLE - Admin Bypass)
+   *     description: "🚨 VULNERABILITY: Missing authentication and authorization - anyone can delete users"
+   *     tags: [Admin]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: User ID to delete
+   *         example: "jdoe"
+   *     responses:
+   *       200:
+   *         description: User deleted successfully
+   */
   // VULNERABLE: Admin delete endpoint without proper access control
   app.delete('/api/admin/users/:id', async (req: any, res) => {
     try {
@@ -175,6 +194,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/transactions:
+   *   post:
+   *     summary: Create transaction (VULNERABLE - No Balance Validation)
+   *     description: "🚨 VULNERABILITY: No authentication, no balance validation - users can send money they don't have"
+   *     tags: [Transactions]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               fromUserId:
+   *                 type: string
+   *                 example: "mdoe"
+   *               toUserId:
+   *                 type: string
+   *                 example: "jdoe"
+   *               amount:
+   *                 type: string
+   *                 example: "999999.99"
+   *               description:
+   *                 type: string
+   *                 example: "Test transfer"
+   *   get:
+   *     summary: Get all transactions (VULNERABLE - No Auth)
+   *     description: "🚨 VULNERABILITY: Returns all transactions without authentication"
+   *     tags: [Transactions]
+   */
   // Transaction endpoints
   app.post('/api/transactions', async (req: any, res) => {
     try {
@@ -234,6 +284,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/transactions/{id}:
+   *   get:
+   *     summary: Get transaction by ID (VULNERABLE - IDOR)
+   *     description: "🚨 VULNERABILITY: Insecure Direct Object Reference - no authorization checks, can access any transaction by guessing ID"
+   *     tags: [Transactions]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *         description: Transaction ID
+   *         example: 661
+   *     responses:
+   *       200:
+   *         description: Transaction details (accessible to anyone)
+   */
   // VULNERABLE: Insecure Direct Object Reference
   app.get('/api/transactions/:id', async (req: any, res) => {
     try {
@@ -254,6 +323,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/admin/transactions:
+   *   get:
+   *     summary: Get all transactions (VULNERABLE - Admin Bypass)
+   *     description: "🚨 VULNERABILITY: Missing authentication and authorization checks for admin endpoint"
+   *     tags: [Admin]
+   *     responses:
+   *       200:
+   *         description: All transactions in the system
+   */
   // VULNERABLE: Admin endpoint exposing all transactions
   app.get('/api/admin/transactions', async (req: any, res) => {
     try {
@@ -341,6 +421,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/payment-methods/{id}:
+   *   delete:
+   *     summary: Delete payment method (VULNERABLE - IDOR)
+   *     description: "🚨 VULNERABILITY: Insecure Direct Object Reference - can delete any user's payment method without authorization"
+   *     tags: [Payment Methods]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *         description: Payment method ID
+   *         example: 203
+   *     responses:
+   *       200:
+   *         description: Payment method deleted (no ownership verification)
+   */
   // VULNERABLE: Insecure Direct Object Reference
   app.delete('/api/payment-methods/:id', async (req: any, res) => {
     try {
@@ -356,6 +455,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/users/{id}/profile:
+   *   get:
+   *     summary: Get user profile (VULNERABLE - No Auth + Sensitive Data)
+   *     description: "🚨 VULNERABILITY: No authentication check, exposes SSN, bank accounts, credit cards, and passwords"
+   *     tags: [Users]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: User ID
+   *         example: "jdoe"
+   *     responses:
+   *       200:
+   *         description: User profile with sensitive data exposed
+   */
   // VULNERABLE: User profile endpoint exposing sensitive data
   app.get('/api/users/:id/profile', async (req: any, res) => {
     try {
