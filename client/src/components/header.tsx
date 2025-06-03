@@ -27,9 +27,12 @@ export function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/">
-              <h1 className="text-2xl font-bold paypwned-blue cursor-pointer">
-                PayPwned
-              </h1>
+              <div className="flex items-center space-x-2 cursor-pointer">
+                <CreditCard className="h-6 w-6 text-blue-600" />
+                <h1 className="text-2xl font-bold paypwned-blue">
+                  PayPwned
+                </h1>
+              </div>
             </Link>
           </div>
 
