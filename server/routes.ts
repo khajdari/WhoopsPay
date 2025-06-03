@@ -269,6 +269,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // VULNERABLE: No checks for negative balances
         await storage.updateUserBalance(transactionData.fromUserId, fromBalance.toString());
         await storage.updateUserBalance(transactionData.toUserId, toBalance.toString());
+
+        // Create notifications for both users
+        try {
+          // Notification for sender
+          await storage.createNotification({
+            userId: transactionData.fromUserId,
+            type: "payment",
+            title: "Payment Sent",
+            message: `You sent $${transactionData.amount} to ${toUser.firstName} ${toUser.lastName}`,
+            read: false
+          });
+
+          // Notification for receiver
+          await storage.createNotification({
+            userId: transactionData.toUserId,
+            type: "payment",
+            title: "Payment Received",
+            message: `You received $${transactionData.amount} from ${fromUser.firstName} ${fromUser.lastName}`,
+            read: false
+          });
+        } catch (notificationError) {
+          console.error("Error creating notifications:", notificationError);
+          // Continue without failing the transaction
+        }
       }
 
       res.json(transaction);
@@ -630,6 +654,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching mock data:", error);
       res.status(500).json({ message: "Failed to fetch mock data" });
+    }
+  });
+
+  // Notification endpoints
+  app.get('/api/notifications', async (req: any, res) => {
+    try {
+      const userId = req.query.userId;
+      if (!userId) {
+        return res.status(400).json({ message: "userId is required" });
+      }
+
+      const notifications = await storage.getUserNotifications(userId);
+      res.json(notifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
+  });
+
+  app.put('/api/notifications/mark-all-read', async (req: any, res) => {
+    try {
+      const { userId } = req.body;
+      if (!userId) {
+        return res.status(400).json({ message: "userId is required" });
+      }
+
+      await storage.markAllNotificationsAsRead(userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error marking notifications as read:", error);
+      res.status(500).json({ message: "Failed to mark notifications as read" });
+    }
+  });
+
+  app.delete('/api/notifications', async (req: any, res) => {
+    try {
+      const { userId } = req.body;
+      if (!userId) {
+        return res.status(400).json({ message: "userId is required" });
+      }
+
+      await storage.deleteAllNotifications(userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting notifications:", error);
+      res.status(500).json({ message: "Failed to delete notifications" });
     }
   });
 
