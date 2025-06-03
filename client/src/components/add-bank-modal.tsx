@@ -25,7 +25,7 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
 
   const addBankMutation = useMutation({
     mutationFn: async (data: any) => {
-      const response = await fetch("/api/payment-methods", {
+      const response = await fetch("/api/payments", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
         title: "Bank account added successfully!",
         description: "Your new bank account has been added to your account",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/payment-methods", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["/api/payments", user?.id] });
       onClose();
     },
     onError: (error: Error) => {
