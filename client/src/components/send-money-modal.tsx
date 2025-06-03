@@ -72,13 +72,15 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
     }
 
     // VULNERABLE: No input validation or sanitization
-    sendMoneyMutation.mutate({
+    const payload = {
       fromUserId: user?.id,
       toUserId: recipient, // VULNERABLE: Direct user input
       amount: parseFloat(amount),
       description: note, // VULNERABLE: XSS potential
       type: transactionType,
-    });
+    };
+    console.log("Sending transaction payload:", payload);
+    sendMoneyMutation.mutate(payload);
   };
 
   return (
