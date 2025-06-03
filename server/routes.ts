@@ -254,7 +254,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Determine if this is a direct transfer or a request
+      console.log("Transaction type received:", type);
       const isRequest = type === "request";
+      console.log("Is request:", isRequest, "Status:", isRequest ? "pending" : "completed");
       const status = isRequest ? "pending" : "completed";
       
       const transaction = await storage.createTransaction({
