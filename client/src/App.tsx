@@ -40,7 +40,7 @@ function Router() {
           <Route path="/money" component={Wallet} />
           <Route path="/admin" component={Admin} />
           <Route path="/profile" component={Profile} />
-          <Route path="/settings" component={Settings} />
+          <Route path="/account" component={Settings} />
         </>
       )}
       <Route component={NotFound} />

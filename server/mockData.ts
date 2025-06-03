@@ -26,8 +26,8 @@ export async function seedMockData() {
 
     await storage.upsertUser({
       id: "mdoe", 
-      email: "mairy.doe@email.com",
-      firstName: "Mairy",
+      email: "mary.doe@email.com",
+      firstName: "Mary",
       lastName: "Doe",
       profileImageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
       address: "456 Oak Avenue, Los Angeles, CA 90210",
