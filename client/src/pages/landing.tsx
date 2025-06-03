@@ -34,20 +34,18 @@ export default function Landing() {
             It's fast, free, and secure to send money to friends and family
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
+            <button 
               onClick={handleSignup}
-              size="lg" 
-              className="bg-white text-paypwned-blue hover:bg-gray-100 font-semibold px-8 py-4 text-lg min-w-[150px]"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-12 py-4 text-lg rounded-lg transition-all duration-200 min-w-[180px] h-14 shadow-lg border border-blue-600 hover:border-blue-700"
             >
               Sign Up
-            </Button>
-            <Button 
+            </button>
+            <button 
               onClick={handleLogin}
-              size="lg" 
-              className="bg-white text-paypwned-blue hover:bg-gray-100 font-semibold px-8 py-4 text-lg min-w-[150px]"
+              className="bg-white hover:bg-gray-50 text-blue-600 font-semibold px-12 py-4 text-lg rounded-lg transition-all duration-200 min-w-[180px] h-14 shadow-lg border-2 border-white"
             >
               Log In
-            </Button>
+            </button>
           </div>
         </div>
       </section>
