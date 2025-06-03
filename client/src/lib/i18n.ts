@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import { useState, useEffect, createContext, useContext, ReactNode, createElement } from 'react';
 
 export type Language = 'en-GB' | 'el-GR';
 
@@ -305,9 +305,5 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const value = { language, setLanguage, t };
 
-  return (
-    <I18nContext.Provider value={value}>
-      {children}
-    </I18nContext.Provider>
-  );
+  return createElement(I18nContext.Provider, { value }, children);
 }
