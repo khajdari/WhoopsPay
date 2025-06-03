@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +11,41 @@ interface NotificationsModalProps {
   onClearAll: () => void;
 }
 
-export function NotificationsModal({ open, onOpenChange, notifications, markAllAsRead, clearAll, unreadCount }: NotificationsModalProps) {
+export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearAll }: NotificationsModalProps) {
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: "payment",
+      title: "Payment Received",
+      message: "You received $50.00 from John Doe",
+      time: "2 minutes ago",
+      read: false,
+      icon: DollarSign,
+      color: "text-green-600 bg-green-100"
+    },
+    {
+      id: 2,
+      type: "security",
+      title: "Security Alert",
+      message: "New login detected from unknown device",
+      time: "1 hour ago",
+      read: false,
+      icon: Shield,
+      color: "text-red-600 bg-red-100"
+    }
+  ]);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const handleMarkAllRead = () => {
+    setNotifications(prev => prev.map(notification => ({ ...notification, read: true })));
+    onMarkAllRead();
+  };
+
+  const handleClearAll = () => {
+    setNotifications([]);
+    onClearAll();
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
@@ -77,7 +112,7 @@ export function NotificationsModal({ open, onOpenChange, notifications, markAllA
               variant="outline" 
               size="sm" 
               className="flex-1"
-              onClick={markAllAsRead}
+              onClick={handleMarkAllRead}
             >
               <Check className="w-4 h-4 mr-2" />
               Mark all as read
@@ -86,7 +121,7 @@ export function NotificationsModal({ open, onOpenChange, notifications, markAllA
               variant="outline" 
               size="sm" 
               className="flex-1"
-              onClick={clearAll}
+              onClick={handleClearAll}
             >
               <X className="w-4 h-4 mr-2" />
               Clear all
