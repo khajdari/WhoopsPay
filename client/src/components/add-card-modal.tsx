@@ -201,7 +201,7 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
             </Button>
             <Button
               type="submit"
-              className="flex-1 bg-paypal-blue text-white"
+              className="flex-1 bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
               disabled={addCardMutation.isPending}
             >
               {addCardMutation.isPending ? "Adding..." : "Add Card"}

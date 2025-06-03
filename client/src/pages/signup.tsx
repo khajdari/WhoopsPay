@@ -180,7 +180,7 @@ export default function Signup() {
                 
                 <Button
                   type="submit"
-                  className="w-full bg-paypal-blue hover:bg-paypal-darkblue text-white"
+                  className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
                   disabled={signupMutation.isPending}
                 >
                   {signupMutation.isPending ? "Creating Account..." : "Create Account"}

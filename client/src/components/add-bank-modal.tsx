@@ -175,7 +175,7 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
             </Button>
             <Button
               type="submit"
-              className="flex-1 bg-paypal-blue text-white"
+              className="flex-1 bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
               disabled={addBankMutation.isPending}
             >
               {addBankMutation.isPending ? "Adding..." : "Add Bank Account"}
