@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useNotifications } from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -12,7 +11,7 @@ export function Header() {
   const { user, logout, isAuthenticated } = useAuth();
   const [location] = useLocation();
   const [showNotifications, setShowNotifications] = useState(false);
-  const { unreadCount, notifications, markAllAsRead, clearAll } = useNotifications();
+  const [notificationCount, setNotificationCount] = useState(2);
 
   const handleLogout = () => {
     logout();
@@ -67,9 +66,9 @@ export function Header() {
               className="relative"
             >
               <Bell className="h-5 w-5 text-gray-500" />
-              {unreadCount > 0 && (
+              {notificationCount > 0 && (
                 <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  {unreadCount}
+                  {notificationCount}
                 </span>
               )}
             </Button>
@@ -126,10 +125,8 @@ export function Header() {
       <NotificationsModal 
         open={showNotifications} 
         onOpenChange={setShowNotifications}
-        notifications={notifications}
-        markAllAsRead={markAllAsRead}
-        clearAll={clearAll}
-        unreadCount={unreadCount}
+        onMarkAllRead={() => setNotificationCount(0)}
+        onClearAll={() => setNotificationCount(0)}
       />
     </header>
   );
