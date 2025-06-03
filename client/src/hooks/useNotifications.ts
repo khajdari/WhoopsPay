@@ -17,6 +17,30 @@ const initialNotifications: Notification[] = [];
 export function useNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
 
+  const addTransactionNotification = (type: 'sent' | 'received', amount: string, otherUser: string) => {
+    const notification = type === 'sent' 
+      ? {
+          type: "payment",
+          title: "Payment Sent",
+          message: `You sent $${amount} to ${otherUser}`,
+          time: "Just now",
+          read: false,
+          icon: DollarSign,
+          color: "text-blue-600 bg-blue-100"
+        }
+      : {
+          type: "payment", 
+          title: "Payment Received",
+          message: `You received $${amount} from ${otherUser}`,
+          time: "Just now",
+          read: false,
+          icon: DollarSign,
+          color: "text-green-600 bg-green-100"
+        };
+    
+    addNotification(notification);
+  };
+
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const markAllAsRead = () => {
@@ -40,6 +64,7 @@ export function useNotifications() {
     unreadCount,
     markAllAsRead,
     clearAll,
-    addNotification
+    addNotification,
+    addTransactionNotification
   };
 }
