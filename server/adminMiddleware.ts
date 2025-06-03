@@ -4,14 +4,19 @@ import { storage } from "./storage";
 // Admin middleware to check if user has admin privileges
 export const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Get user ID from session (assuming you have session-based auth)
-    const userId = (req as any).user?.id || req.headers['user-id'];
+    // Check if user is logged in via session
+    if (!(req as any).session?.user) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+
+    const sessionUser = (req as any).session.user;
+    const userId = sessionUser.id;
     
     if (!userId) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    // Get user from storage
+    // Get user from storage to check admin status
     const user = await storage.getUser(userId);
     
     if (!user) {
