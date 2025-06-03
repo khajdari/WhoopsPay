@@ -123,7 +123,7 @@ export default function Wallet() {
               <div className="flex space-x-2">
                 <Button 
                   size="sm" 
-                  className="bg-paypwned-blue text-white"
+                  className="bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
                   onClick={() => setShowAddCardModal(true)}
                 >
                   <CreditCard className="w-4 h-4 mr-1" />
@@ -131,7 +131,7 @@ export default function Wallet() {
                 </Button>
                 <Button 
                   size="sm" 
-                  variant="outline"
+                  className="bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
                   onClick={() => setShowAddBankModal(true)}
                 >
                   <University className="w-4 h-4 mr-1" />

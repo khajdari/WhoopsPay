@@ -45,7 +45,7 @@ export function AddBankModal({ onClose }: AddBankModalProps) {
         title: "Bank account added successfully!",
         description: "Your new bank account has been added to your account",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/payment-methods"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/payment-methods", user?.id] });
       onClose();
     },
     onError: (error: Error) => {
