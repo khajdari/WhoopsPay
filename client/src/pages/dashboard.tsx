@@ -71,20 +71,20 @@ export default function Dashboard() {
         </div>
 
         {/* Account Balance Card */}
-        <div className="paypwnd-gradient rounded-xl p-6 text-white mb-8">
+        <div className="paypwned-gradient rounded-xl p-6 text-white mb-8">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-blue-100 text-sm mb-2">PayPwnd balance</p>
+              <p className="text-blue-100 text-sm mb-2">PayPwned balance</p>
               <h3 className="text-3xl font-bold mb-4">${balance}</h3>
               <div className="flex space-x-4">
                 <Button
                   onClick={() => setShowSendModal(true)}
-                  className="bg-white paypwnd-blue hover:bg-gray-100"
+                  className="bg-white paypwned-blue hover:bg-gray-100"
                 >
                   Send
                 </Button>
                 <Button
-                  className="bg-white paypwnd-blue hover:bg-gray-100"
+                  className="bg-white paypwned-blue hover:bg-gray-100"
                 >
                   Request
                 </Button>
