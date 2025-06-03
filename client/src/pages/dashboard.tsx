@@ -55,7 +55,7 @@ export default function Dashboard() {
     );
   }
 
-  const balance = userProfile?.balance || "0.00";
+  const balance = (userProfile as any)?.balance || "0.00";
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -70,35 +70,21 @@ export default function Dashboard() {
           <p className="text-gray-600">Here's what's happening with your money.</p>
         </div>
 
-        {/* Account Balance Card */}
-        <div className="paypwned-gradient rounded-xl p-6 text-white mb-8">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-blue-100 text-sm mb-2">PayPwned balance</p>
-              <h3 className="text-3xl font-bold mb-4">${balance}</h3>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => setShowSendModal(true)}
-                  className="paypal-btn-sm paypal-btn-secondary"
-                >
-                  Send
-                </button>
-                <button
-                  className="paypal-btn-sm paypal-btn-secondary"
-                >
-                  Request
-                </button>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* PayPwned Balance Card */}
+          <div className="lg:col-span-2">
+            <div className="paypwned-gradient rounded-xl p-6 text-white mb-6">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-blue-100 text-sm mb-2">PayPwned balance</p>
+                  <h3 className="text-3xl font-bold">${balance}</h3>
+                </div>
+                <div className="text-right">
+                  <Wallet className="text-2xl text-blue-200" size={32} />
+                </div>
               </div>
             </div>
-            <div className="text-right">
-              <Wallet className="text-2xl text-blue-200" size={32} />
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Recent Activity */}
-          <div className="lg:col-span-2">
+            
             <Card>
               <div className="px-6 py-4 border-b border-gray-200">
                 <div className="flex justify-between items-center">
@@ -123,7 +109,7 @@ export default function Dashboard() {
                       </div>
                     ))}
                   </div>
-                ) : transactions && transactions.length > 0 ? (
+                ) : Array.isArray(transactions) && transactions.length > 0 ? (
                   transactions.slice(0, 5).map((transaction: any) => (
                     <TransactionItem key={transaction.id} transaction={transaction} />
                   ))
@@ -141,7 +127,23 @@ export default function Dashboard() {
           <div className="lg:col-span-1">
             <Card>
               <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-900">Payment Methods</h3>
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-medium text-gray-900">Payment Methods</h3>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => window.location.href = '/send'}
+                      className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
+                    >
+                      Send
+                    </button>
+                    <button
+                      onClick={() => window.location.href = '/send'}
+                      className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
+                    >
+                      Request
+                    </button>
+                  </div>
+                </div>
               </div>
               
               <div className="p-6 space-y-4">
