@@ -123,26 +123,27 @@ export default function Dashboard() {
             </Card>
           </div>
 
-          {/* Payment Methods Card */}
+          {/* Payment Methods Section */}
           <div className="lg:col-span-1">
-            <Card>
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-900 mb-3">Payment Methods</h3>
-                <div className="flex gap-2 justify-end">
-                  <button
-                    onClick={() => window.location.href = '/send'}
-                    className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
-                  >
-                    Send
-                  </button>
-                  <button
-                    onClick={() => window.location.href = '/send'}
-                    className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
-                  >
-                    Request
-                  </button>
-                </div>
+            <div className="mb-4">
+              <h3 className="text-lg font-medium text-gray-900 mb-3">Payment Methods</h3>
+              <div className="flex gap-2 justify-end">
+                <button
+                  onClick={() => window.location.href = '/send'}
+                  className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
+                >
+                  Send
+                </button>
+                <button
+                  onClick={() => window.location.href = '/send'}
+                  className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
+                >
+                  Request
+                </button>
               </div>
+            </div>
+            
+            <Card>
               
               <div className="p-6 space-y-4">
                 {paymentMethodsLoading ? (
