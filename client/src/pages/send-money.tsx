@@ -299,7 +299,7 @@ export default function SendMoney() {
 
                   <Button 
                     type="submit" 
-                    className="w-full"
+                    className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
                     disabled={sendMoneyMutation.isPending}
                   >
                     {sendMoneyMutation.isPending ? "Sending..." : "Send Money"}
@@ -363,7 +363,7 @@ export default function SendMoney() {
 
                   <Button 
                     type="submit" 
-                    className="w-full"
+                    className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
                     disabled={sendMoneyMutation.isPending}
                   >
                     {sendMoneyMutation.isPending ? "Requesting..." : "Request Money"}
@@ -421,7 +421,7 @@ export default function SendMoney() {
 
                   <Button 
                     type="submit" 
-                    className="w-full"
+                    className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
                     disabled={addMoneyMutation.isPending}
                   >
                     {addMoneyMutation.isPending ? "Adding..." : "Add Money"}
@@ -479,7 +479,7 @@ export default function SendMoney() {
 
                   <Button 
                     type="submit" 
-                    className="w-full"
+                    className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
                     disabled={withdrawMoneyMutation.isPending}
                   >
                     {withdrawMoneyMutation.isPending ? "Processing..." : "Withdraw Money"}
