@@ -234,10 +234,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/transactions', async (req: any, res) => {
     try {
       // VULNERABLE: No authentication check - anyone can create transactions
-      const { fromUserId, type } = req.body;
+      const transactionData = req.body;
+      const { fromUserId, type } = transactionData;
       
       // VULNERABLE: Insufficient input validation
-      const transactionData = req.body;
       
       // WARNING: No validation of transaction limits or user permissions
       // Users can send any amount, even if they don't have sufficient balance
