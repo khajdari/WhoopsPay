@@ -355,9 +355,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
    * @swagger
    * /api/payments:
    *   post:
-   *     summary: Add payment method (VULNERABLE - No Auth + Plain Text Storage)
+   *     summary: Add payment (VULNERABLE - No Auth + Plain Text Storage)
    *     description: "🚨 VULNERABILITIES: No authentication check, stores credit card numbers and CVV in plain text"
-   *     tags: [Payment Methods]
+   *     tags: [Payments]
    *     requestBody:
    *       required: true
    *       content:
@@ -377,9 +377,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
    *                 type: string
    *                 example: "123"
    *   get:
-   *     summary: Get payment methods (VULNERABLE - No Auth)
+   *     summary: Get payments (VULNERABLE - No Auth)
    *     description: "🚨 VULNERABILITY: No authentication, can access any user's payment data"
-   *     tags: [Payment Methods]
+   *     tags: [Payments]
    *     parameters:
    *       - in: query
    *         name: userId
@@ -428,11 +428,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   /**
    * @swagger
-   * /api/payment-methods/{id}:
+   * /api/payments/{id}:
    *   delete:
-   *     summary: Delete payment method (VULNERABLE - IDOR)
-   *     description: "🚨 VULNERABILITY: Insecure Direct Object Reference - can delete any user's payment method without authorization"
-   *     tags: [Payment Methods]
+   *     summary: Delete payment (VULNERABLE - IDOR)
+   *     description: "🚨 VULNERABILITY: Insecure Direct Object Reference - can delete any user's payment without authorization"
+   *     tags: [Payments]
    *     parameters:
    *       - in: path
    *         name: id
@@ -451,11 +451,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const paymentMethodId = parseInt(req.params.id);
       
       // WARNING: No authentication or authorization checks
-      // Any user can delete any payment method by guessing the ID
+      // Any user can delete any payment by guessing the ID
       await storage.deletePaymentMethod(paymentMethodId);
       res.json({ message: "Payment deleted successfully" });
     } catch (error) {
-      console.error("Error deleting payment method:", error);
+      console.error("Error deleting payment:", error);
       res.status(500).json({ message: "Failed to delete payment" });
     }
   });
