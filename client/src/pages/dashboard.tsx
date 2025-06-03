@@ -8,14 +8,12 @@ import { PaymentCard } from "@/components/payment-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Send, HandCoins, Plus, University, Wallet, CreditCard, ChevronLeft, ChevronRight } from "lucide-react";
+import { Send, HandCoins, Plus, University, Wallet, CreditCard } from "lucide-react";
 import { useState } from "react";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const [showSendModal, setShowSendModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
 
   const { data: transactions, isLoading: transactionsLoading } = useQuery({
     queryKey: ["/api/transactions"],
@@ -58,25 +56,6 @@ export default function Dashboard() {
   }
 
   const balance = (userProfile as any)?.balance || "0.00";
-
-  // Pagination logic
-  const transactionsList = Array.isArray(transactions) ? transactions : [];
-  const totalPages = Math.ceil(transactionsList.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentTransactions = transactionsList.slice(startIndex, endIndex);
-
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const goToPrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -147,45 +126,10 @@ export default function Dashboard() {
                       </div>
                     ))}
                   </div>
-                ) : transactionsList.length > 0 ? (
-                  <>
-                    {currentTransactions.map((transaction: any) => (
-                      <TransactionItem key={transaction.id} transaction={transaction} />
-                    ))}
-                    
-                    {/* Pagination Controls */}
-                    {totalPages > 1 && (
-                      <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
-                        <div className="flex items-center justify-between">
-                          <div className="text-sm text-gray-500">
-                            Page {currentPage} of {totalPages} ({transactionsList.length} total)
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={goToPrevPage}
-                              disabled={currentPage === 1}
-                              className="flex items-center space-x-1"
-                            >
-                              <ChevronLeft className="h-4 w-4" />
-                              <span>Previous</span>
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={goToNextPage}
-                              disabled={currentPage === totalPages}
-                              className="flex items-center space-x-1"
-                            >
-                              <span>Next</span>
-                              <ChevronRight className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </>
+                ) : Array.isArray(transactions) && transactions.length > 0 ? (
+                  transactions.slice(0, 5).map((transaction: any) => (
+                    <TransactionItem key={transaction.id} transaction={transaction} />
+                  ))
                 ) : (
                   <div className="px-6 py-8 text-center text-gray-500">
                     <p>No transactions yet</p>
