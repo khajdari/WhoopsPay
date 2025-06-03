@@ -29,7 +29,9 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
 
   const sendMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
-      console.log("In mutation function, data received:", data);
+      console.log("In mutation function, data received:", JSON.stringify(data, null, 2));
+      console.log("Data has type field:", 'type' in data);
+      console.log("Type value:", data.type);
       const result = await apiRequest("POST", "/api/transactions", data);
       console.log("Mutation result:", result);
       return result;
@@ -76,16 +78,28 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
 
     // VULNERABLE: No input validation or sanitization
     const isRequest = transactionType === "request";
-    const payload = {
-      fromUserId: user?.id,
-      toUserId: recipient, // VULNERABLE: Direct user input
-      amount: parseFloat(amount),
-      description: isRequest ? `Money request: ${note}` : note, // VULNERABLE: XSS potential
-      type: transactionType,
-      status: isRequest ? "pending" : "completed"
-    };
-    console.log("Sending transaction payload:", payload);
-    sendMoneyMutation.mutate(payload);
+    
+    if (isRequest) {
+      // Money request - send with explicit type and pending status
+      sendMoneyMutation.mutate({
+        fromUserId: user?.id,
+        toUserId: recipient,
+        amount: parseFloat(amount),
+        description: `Money request: ${note}`,
+        type: "request",
+        status: "pending"
+      });
+    } else {
+      // Direct transfer - send with transfer type and completed status
+      sendMoneyMutation.mutate({
+        fromUserId: user?.id,
+        toUserId: recipient,
+        amount: parseFloat(amount),
+        description: note,
+        type: "transfer",
+        status: "completed"
+      });
+    }
   };
 
   return (
