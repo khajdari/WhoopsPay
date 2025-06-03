@@ -39,7 +39,8 @@ export function useNotifications() {
         time: new Date(notif.createdAt).toLocaleString(),
         read: notif.read,
         icon: DollarSign,
-        color: notif.type === "payment" ? "text-green-600 bg-green-100" : "text-blue-600 bg-blue-100"
+        color: notif.type === "payment" ? "text-green-600 bg-green-100" : "text-blue-600 bg-blue-100",
+        transactionId: notif.transactionId
       }));
     },
     enabled: !!user?.id,

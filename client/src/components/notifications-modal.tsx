@@ -122,6 +122,31 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                       <p className="text-xs text-gray-400 mt-2">
                         {notification.time}
                       </p>
+                      
+                      {/* Money Request Action Buttons */}
+                      {notification.type === "money_request" && !notification.read && notification.transactionId && (
+                        <div className="flex gap-2 mt-3">
+                          <Button
+                            size="sm"
+                            onClick={() => approveRequestMutation.mutate(notification.transactionId)}
+                            disabled={approveRequestMutation.isPending}
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                          >
+                            <Check className="w-3 h-3 mr-1" />
+                            Approve
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => rejectRequestMutation.mutate(notification.transactionId)}
+                            disabled={rejectRequestMutation.isPending}
+                            className="border-red-300 text-red-600 hover:bg-red-50"
+                          >
+                            <X className="w-3 h-3 mr-1" />
+                            Reject
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
