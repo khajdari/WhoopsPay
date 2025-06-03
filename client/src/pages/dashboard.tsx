@@ -62,12 +62,28 @@ export default function Dashboard() {
       <Header />
       
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 mobile-nav-spacing">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Hi {user?.firstName || 'there'}
-          </h2>
-          <p className="text-gray-600">Here's what's happening with your money.</p>
+        {/* Welcome Section with Send/Request Buttons */}
+        <div className="mb-8 flex justify-between items-start">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Hi {user?.firstName || 'there'}
+            </h2>
+            <p className="text-gray-600">Here's what's happening with your money.</p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => window.location.href = '/send'}
+              className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
+            >
+              Send
+            </button>
+            <button
+              onClick={() => window.location.href = '/send'}
+              className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
+            >
+              Request
+            </button>
+          </div>
         </div>
 
         {/* PayPwned Balance Card */}
@@ -77,21 +93,7 @@ export default function Dashboard() {
               <p className="text-blue-100 text-sm mb-2">PayPwned Balance</p>
               <h3 className="text-3xl font-bold">${balance}</h3>
             </div>
-            <div className="text-right flex flex-col items-end">
-              <div className="flex gap-2 mb-3">
-                <button
-                  onClick={() => window.location.href = '/send'}
-                  className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
-                >
-                  Send
-                </button>
-                <button
-                  onClick={() => window.location.href = '/send'}
-                  className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
-                >
-                  Request
-                </button>
-              </div>
+            <div className="text-right">
               <Wallet className="text-2xl text-blue-200" size={32} />
             </div>
           </div>
