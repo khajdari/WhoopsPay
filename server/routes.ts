@@ -274,7 +274,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             type: "money_request",
             title: "Money Request",
             message: `${fromUser.firstName} ${fromUser.lastName} is requesting $${transactionData.amount}`,
-            read: false
+            read: false,
+            transactionId: transaction.id
           });
         } catch (notificationError) {
           console.error("Error creating request notification:", notificationError);
