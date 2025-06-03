@@ -164,7 +164,7 @@ export default function Landing() {
           <Button 
             onClick={handleSignup}
             size="lg" 
-            className="bg-paypal-blue text-white"
+            className="bg-paypwnd-blue text-white"
           >
             Get Started Now
           </Button>
@@ -175,9 +175,9 @@ export default function Landing() {
       <footer className="bg-gray-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h4 className="text-2xl font-bold mb-4">InsecurePay</h4>
+            <h4 className="text-2xl font-bold mb-4">PayPwnd</h4>
             <p className="text-gray-400">
-              © 2024 InsecurePay. This is an educational project demonstrating web vulnerabilities.
+              © 2024 PayPwnd. This is an educational project demonstrating web vulnerabilities.
             </p>
             <p className="text-sm text-red-400 mt-2">
               ⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes only.
