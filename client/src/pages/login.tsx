@@ -50,7 +50,7 @@ export default function Login() {
     onSuccess: (data: any) => {
       if (data.success) {
         // Store user data in localStorage (VULNERABLE: insecure storage)
-        localStorage.setItem("insecurePay_user", JSON.stringify(data.user));
+        localStorage.setItem("payPwned_user", JSON.stringify(data.user));
         // Force a page reload to update auth state
         window.location.href = "/";
       } else {
