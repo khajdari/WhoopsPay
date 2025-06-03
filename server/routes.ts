@@ -234,7 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/transactions', async (req: any, res) => {
     try {
       // VULNERABLE: No authentication check - anyone can create transactions
-      const { fromUserId } = req.body;
+      const { fromUserId, type } = req.body;
       
       // VULNERABLE: Insufficient input validation
       const transactionData = req.body;
@@ -252,46 +252,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!toUser) {
         return res.status(400).json({ message: "Recipient user not found" });
       }
+
+      // Determine if this is a direct transfer or a request
+      const isRequest = type === "request";
+      const status = isRequest ? "pending" : "completed";
       
       const transaction = await storage.createTransaction({
         fromUserId: transactionData.fromUserId,
         toUserId: transactionData.toUserId,
         amount: transactionData.amount,
         description: transactionData.description || "",
-        status: "completed"
+        status: status,
+        type: type || "transfer"
       });
 
-      // Update balances without proper checks
-      if (transactionData.fromUserId && transactionData.toUserId && transactionData.amount) {
-        const fromBalance = parseFloat(fromUser.balance || '0') - parseFloat(transactionData.amount);
-        const toBalance = parseFloat(toUser.balance || '0') + parseFloat(transactionData.amount);
-        
-        // VULNERABLE: No checks for negative balances
-        await storage.updateUserBalance(transactionData.fromUserId, fromBalance.toString());
-        await storage.updateUserBalance(transactionData.toUserId, toBalance.toString());
-
-        // Create notifications for both users
+      if (isRequest) {
+        // For requests, only create notification for the recipient to approve/reject
         try {
-          // Notification for sender
-          await storage.createNotification({
-            userId: transactionData.fromUserId,
-            type: "payment",
-            title: "Payment Sent",
-            message: `You sent $${transactionData.amount} to ${toUser.firstName} ${toUser.lastName}`,
-            read: false
-          });
-
-          // Notification for receiver
           await storage.createNotification({
             userId: transactionData.toUserId,
-            type: "payment",
-            title: "Payment Received",
-            message: `You received $${transactionData.amount} from ${fromUser.firstName} ${fromUser.lastName}`,
+            type: "money_request",
+            title: "Money Request",
+            message: `${fromUser.firstName} ${fromUser.lastName} is requesting $${transactionData.amount}`,
             read: false
           });
         } catch (notificationError) {
-          console.error("Error creating notifications:", notificationError);
-          // Continue without failing the transaction
+          console.error("Error creating request notification:", notificationError);
+        }
+      } else {
+        // For direct transfers, update balances and create notifications
+        if (transactionData.fromUserId && transactionData.toUserId && transactionData.amount) {
+          const fromBalance = parseFloat(fromUser.balance || '0') - parseFloat(transactionData.amount);
+          const toBalance = parseFloat(toUser.balance || '0') + parseFloat(transactionData.amount);
+          
+          // VULNERABLE: No checks for negative balances
+          await storage.updateUserBalance(transactionData.fromUserId, fromBalance.toString());
+          await storage.updateUserBalance(transactionData.toUserId, toBalance.toString());
+
+          // Create notifications for both users
+          try {
+            // Notification for sender
+            await storage.createNotification({
+              userId: transactionData.fromUserId,
+              type: "payment",
+              title: "Payment Sent",
+              message: `You sent $${transactionData.amount} to ${toUser.firstName} ${toUser.lastName}`,
+              read: false
+            });
+
+            // Notification for receiver
+            await storage.createNotification({
+              userId: transactionData.toUserId,
+              type: "payment",
+              title: "Payment Received",
+              message: `You received $${transactionData.amount} from ${fromUser.firstName} ${fromUser.lastName}`,
+              read: false
+            });
+          } catch (notificationError) {
+            console.error("Error creating notifications:", notificationError);
+            // Continue without failing the transaction
+          }
         }
       }
 
@@ -310,6 +330,116 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching transactions:", error);
       res.status(500).json({ message: "Failed to fetch transactions" });
+    }
+  });
+
+  app.get('/api/transactions/pending/:userId', async (req: any, res) => {
+    try {
+      const { userId } = req.params;
+      const pendingTransactions = await storage.getPendingTransactions(userId);
+      res.json(pendingTransactions);
+    } catch (error) {
+      console.error("Error fetching pending transactions:", error);
+      res.status(500).json({ message: "Failed to fetch pending transactions" });
+    }
+  });
+
+  app.post('/api/transactions/:transactionId/approve', async (req: any, res) => {
+    try {
+      const { transactionId } = req.params;
+      const transaction = await storage.getTransaction(parseInt(transactionId));
+
+      if (!transaction) {
+        return res.status(404).json({ message: "Transaction not found" });
+      }
+
+      if (transaction.status !== "pending") {
+        return res.status(400).json({ message: "Transaction is not pending" });
+      }
+
+      // Get users for balance update and notifications
+      const fromUser = await storage.getUser(transaction.fromUserId!);
+      const toUser = await storage.getUser(transaction.toUserId!);
+
+      if (!fromUser || !toUser) {
+        return res.status(400).json({ message: "User not found" });
+      }
+
+      // Update transaction status
+      await storage.updateTransactionStatus(parseInt(transactionId), "completed");
+
+      // Update balances (money flows from toUser to fromUser for requests)
+      const fromBalance = parseFloat(toUser.balance || '0') - parseFloat(transaction.amount);
+      const toBalance = parseFloat(fromUser.balance || '0') + parseFloat(transaction.amount);
+
+      await storage.updateUserBalance(transaction.toUserId!, fromBalance.toString());
+      await storage.updateUserBalance(transaction.fromUserId!, toBalance.toString());
+
+      // Create completion notifications
+      try {
+        await storage.createNotification({
+          userId: transaction.fromUserId!,
+          type: "payment",
+          title: "Request Approved",
+          message: `${toUser.firstName} ${toUser.lastName} approved your request for $${transaction.amount}`,
+          read: false
+        });
+
+        await storage.createNotification({
+          userId: transaction.toUserId!,
+          type: "payment",
+          title: "Payment Sent",
+          message: `You sent $${transaction.amount} to ${fromUser.firstName} ${fromUser.lastName}`,
+          read: false
+        });
+      } catch (notificationError) {
+        console.error("Error creating approval notifications:", notificationError);
+      }
+
+      res.json({ success: true, message: "Transaction approved" });
+    } catch (error) {
+      console.error("Error approving transaction:", error);
+      res.status(500).json({ message: "Failed to approve transaction" });
+    }
+  });
+
+  app.post('/api/transactions/:transactionId/reject', async (req: any, res) => {
+    try {
+      const { transactionId } = req.params;
+      const transaction = await storage.getTransaction(parseInt(transactionId));
+
+      if (!transaction) {
+        return res.status(404).json({ message: "Transaction not found" });
+      }
+
+      if (transaction.status !== "pending") {
+        return res.status(400).json({ message: "Transaction is not pending" });
+      }
+
+      // Get users for notifications
+      const fromUser = await storage.getUser(transaction.fromUserId!);
+      const toUser = await storage.getUser(transaction.toUserId!);
+
+      // Update transaction status
+      await storage.updateTransactionStatus(parseInt(transactionId), "rejected");
+
+      // Create rejection notification
+      try {
+        await storage.createNotification({
+          userId: transaction.fromUserId!,
+          type: "payment",
+          title: "Request Rejected",
+          message: `${toUser?.firstName} ${toUser?.lastName} rejected your request for $${transaction.amount}`,
+          read: false
+        });
+      } catch (notificationError) {
+        console.error("Error creating rejection notification:", notificationError);
+      }
+
+      res.json({ success: true, message: "Transaction rejected" });
+    } catch (error) {
+      console.error("Error rejecting transaction:", error);
+      res.status(500).json({ message: "Failed to reject transaction" });
     }
   });
 

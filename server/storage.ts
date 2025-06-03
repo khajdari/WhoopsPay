@@ -33,6 +33,8 @@ export interface IStorage {
   getUserTransactions(userId: string): Promise<Transaction[]>;
   getTransaction(id: number): Promise<Transaction | undefined>; // Vulnerable to IDOR
   getAllTransactions(): Promise<Transaction[]>; // Vulnerable: no access control
+  getPendingTransactions(userId: string): Promise<Transaction[]>;
+  updateTransactionStatus(transactionId: number, status: string): Promise<Transaction>;
   
   // Payment method operations
   addPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod>;
@@ -142,6 +144,21 @@ export class DatabaseStorage implements IStorage {
   async getAllTransactions(): Promise<Transaction[]> {
     // WARNING: This should require admin privileges
     return await db.select().from(transactions).orderBy(desc(transactions.createdAt));
+  }
+
+  async getPendingTransactions(userId: string): Promise<Transaction[]> {
+    return await db.select().from(transactions)
+      .where(and(eq(transactions.toUserId, userId), eq(transactions.status, "pending")))
+      .orderBy(desc(transactions.createdAt));
+  }
+
+  async updateTransactionStatus(transactionId: number, status: string): Promise<Transaction> {
+    const [transaction] = await db
+      .update(transactions)
+      .set({ status })
+      .where(eq(transactions.id, transactionId))
+      .returning();
+    return transaction;
   }
 
   // Payment method operations
