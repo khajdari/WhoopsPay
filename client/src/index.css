@@ -13,7 +13,7 @@
   --card-foreground: 20 14.3% 4.1%;
   --border: 20 5.9% 90%;
   --input: 20 5.9% 90%;
-  --primary: 214 100% 37%; /* PayPwnd Blue #0070ba */
+  --primary: 214 100% 37%; /* PayPwned Blue #0070ba */
   --primary-foreground: 0 0% 100%;
   --secondary: 60 4.8% 95.9%;
   --secondary-foreground: 24 9.8% 10%;
@@ -21,16 +21,16 @@
   --accent-foreground: 24 9.8% 10%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 60 9.1% 97.8%;
-  --ring: 214 100% 37%; /* PayPwnd Blue */
+  --ring: 214 100% 37%; /* PayPwned Blue */
   --radius: 0.5rem;
   
-  /* PayPwnd official colors */
-  --paypwnd-blue: 214 100% 37%; /* #0070ba */
-  --paypwnd-darkblue: 225 100% 26%; /* #003087 */
-  --paypwnd-lightblue: 197 100% 44%; /* #009cde */
-  --paypwnd-navy: 225 96% 35%; /* #142c8e */
-  --paypwnd-gold: 45 100% 62%; /* #ffc439 */
-  --paypwnd-orange: 24 100% 50%; /* #ff6900 */
+  /* PayPwned official colors */
+  --paypwned-blue: 214 100% 37%; /* #0070ba */
+  --paypwned-darkblue: 225 100% 26%; /* #003087 */
+  --paypwned-lightblue: 197 100% 44%; /* #009cde */
+  --paypwned-navy: 225 96% 35%; /* #142c8e */
+  --paypwned-gold: 45 100% 62%; /* #ffc439 */
+  --paypwned-orange: 24 100% 50%; /* #ff6900 */
 }
 
 .dark {
@@ -67,52 +67,52 @@
 }
 
 @layer utilities {
-  .paypwnd-blue {
-    color: hsl(var(--paypwnd-blue));
+  .paypwned-blue {
+    color: hsl(var(--paypwned-blue));
   }
   
-  .bg-paypwnd-blue {
-    background-color: hsl(var(--paypwnd-blue));
+  .bg-paypwned-blue {
+    background-color: hsl(var(--paypwned-blue));
   }
   
-  .paypwnd-darkblue {
-    color: hsl(var(--paypwnd-darkblue));
+  .paypwned-darkblue {
+    color: hsl(var(--paypwned-darkblue));
   }
   
-  .bg-paypwnd-darkblue {
-    background-color: hsl(var(--paypwnd-darkblue));
+  .bg-paypwned-darkblue {
+    background-color: hsl(var(--paypwned-darkblue));
   }
   
-  .paypwnd-lightblue {
-    color: hsl(var(--paypwnd-lightblue));
+  .paypwned-lightblue {
+    color: hsl(var(--paypwned-lightblue));
   }
   
-  .bg-paypwnd-lightblue {
-    background-color: hsl(var(--paypwnd-lightblue));
+  .bg-paypwned-lightblue {
+    background-color: hsl(var(--paypwned-lightblue));
   }
   
-  .paypwnd-navy {
-    color: hsl(var(--paypwnd-navy));
+  .paypwned-navy {
+    color: hsl(var(--paypwned-navy));
   }
   
-  .bg-paypwnd-navy {
-    background-color: hsl(var(--paypwnd-navy));
+  .bg-paypwned-navy {
+    background-color: hsl(var(--paypwned-navy));
   }
   
-  .paypwnd-gold {
-    color: hsl(var(--paypwnd-gold));
+  .paypwned-gold {
+    color: hsl(var(--paypwned-gold));
   }
   
-  .bg-paypwnd-gold {
-    background-color: hsl(var(--paypwnd-gold));
+  .bg-paypwned-gold {
+    background-color: hsl(var(--paypwned-gold));
   }
   
-  .paypwnd-orange {
-    color: hsl(var(--paypwnd-orange));
+  .paypwned-orange {
+    color: hsl(var(--paypwned-orange));
   }
   
-  .bg-paypwnd-orange {
-    background-color: hsl(var(--paypwnd-orange));
+  .bg-paypwned-orange {
+    background-color: hsl(var(--paypwned-orange));
   }
 }
 
@@ -123,13 +123,13 @@
   }
 }
 
-/* PayPwnd-style gradient backgrounds */
-.paypwnd-gradient {
-  background: linear-gradient(135deg, hsl(var(--paypwnd-blue)) 0%, hsl(var(--paypwnd-navy)) 100%);
+/* PayPwned-style gradient backgrounds */
+.paypwned-gradient {
+  background: linear-gradient(135deg, hsl(var(--paypwned-blue)) 0%, hsl(var(--paypwned-navy)) 100%);
 }
 
-.paypwnd-gradient-light {
-  background: linear-gradient(135deg, hsl(var(--paypwnd-lightblue)) 0%, hsl(var(--paypwnd-blue)) 100%);
+.paypwned-gradient-light {
+  background: linear-gradient(135deg, hsl(var(--paypwned-lightblue)) 0%, hsl(var(--paypwned-blue)) 100%);
 }
 
 /* Custom scrollbar for better UX */
@@ -143,10 +143,10 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: hsl(var(--paypwnd-blue));
+  background: hsl(var(--paypwned-blue));
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--paypwnd-darkblue));
+  background: hsl(var(--paypwned-darkblue));
 }
