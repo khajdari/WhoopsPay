@@ -126,8 +126,7 @@ export default function Dashboard() {
           {/* Payment Methods Section */}
           <div className="lg:col-span-1">
             <div className="mb-4">
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Payment Methods</h3>
-              <div className="flex gap-2 justify-end">
+              <div className="flex gap-2 justify-end mb-4">
                 <button
                   onClick={() => window.location.href = '/send'}
                   className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
@@ -141,6 +140,7 @@ export default function Dashboard() {
                   Request
                 </button>
               </div>
+              <h3 className="text-lg font-medium text-gray-900">Payment Methods</h3>
             </div>
             
             <Card>
