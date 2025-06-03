@@ -127,22 +127,20 @@ export default function Dashboard() {
           <div className="lg:col-span-1">
             <Card>
               <div className="px-6 py-4 border-b border-gray-200">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium text-gray-900">Payment Methods</h3>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => window.location.href = '/send'}
-                      className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
-                    >
-                      Send
-                    </button>
-                    <button
-                      onClick={() => window.location.href = '/send'}
-                      className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
-                    >
-                      Request
-                    </button>
-                  </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-3">Payment Methods</h3>
+                <div className="flex gap-2 justify-end">
+                  <button
+                    onClick={() => window.location.href = '/send'}
+                    className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
+                  >
+                    Send
+                  </button>
+                  <button
+                    onClick={() => window.location.href = '/send'}
+                    className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
+                  >
+                    Request
+                  </button>
                 </div>
               </div>
               
