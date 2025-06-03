@@ -5,10 +5,10 @@ export function MobileNav() {
   const [location] = useLocation();
 
   const navigation = [
-    { name: "Home", href: "/", icon: Home, current: location === "/" },
-    { name: "Send", href: "/send", icon: Send, current: location === "/send" },
-    { name: "Activity", href: "/transactions", icon: List, current: location === "/transactions" },
-    { name: "Wallet", href: "/wallet", icon: WalletIcon, current: location === "/wallet" },
+    { name: "Summary", href: "/summary", icon: Home, current: location === "/" || location === "/summary" },
+    { name: "Transfer", href: "/transfer", icon: Send, current: location === "/transfer" },
+    { name: "Transactions", href: "/transactions", icon: List, current: location === "/transactions" },
+    { name: "Money", href: "/money", icon: WalletIcon, current: location === "/money" },
     { name: "Account", href: "/account", icon: User, current: location === "/account" },
   ];
 

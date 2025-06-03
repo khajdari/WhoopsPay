@@ -14,10 +14,10 @@ export function Header() {
   };
 
   const navigation = [
-    { name: "Home", href: "/", current: location === "/" },
-    { name: "Send & Request", href: "/send", current: location === "/send" },
-    { name: "Activity", href: "/transactions", current: location === "/transactions" },
-    { name: "Wallet", href: "/wallet", current: location === "/wallet" },
+    { name: "Summary", href: "/summary", current: location === "/" || location === "/summary" },
+    { name: "Transfer", href: "/transfer", current: location === "/transfer" },
+    { name: "Transactions", href: "/transactions", current: location === "/transactions" },
+    { name: "Money", href: "/money", current: location === "/money" },
   ];
 
   return (
@@ -26,7 +26,7 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/">
+            <Link href="/summary">
               <div className="flex items-center space-x-2 cursor-pointer">
                 <CreditCard className="h-6 w-6 text-blue-600" />
                 <h1 className="text-2xl font-bold paypwned-blue">
