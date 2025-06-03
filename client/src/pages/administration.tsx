@@ -20,7 +20,7 @@ export default function Administration() {
 
   // Check if user is admin
   useEffect(() => {
-    if (!user?.isAdmin) {
+    if (user && !user.isAdmin) {
       toast({
         title: "Access Denied",
         description: "You don't have permission to access this page",
