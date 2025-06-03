@@ -151,36 +151,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-gray-100 py-16">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h3 className="text-3xl font-bold text-gray-900 mb-4">
-            Ready to get started?
-          </h3>
-          <p className="text-xl text-gray-600 mb-8">
-            Sign up for your free PayPwned account today
-          </p>
-          <Button 
-            onClick={handleSignup}
-            size="lg" 
-            className="bg-paypwned-blue text-white"
-          >
-            Get Started Now
-          </Button>
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h4 className="text-2xl font-bold mb-4">PayPwned</h4>
-            <p className="text-gray-400">
-              © 2025 PayPwned. An educational project developed as part of a postgraduate thesis on web application vulnerabilities.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
