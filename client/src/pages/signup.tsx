@@ -10,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
+import { CreditCard } from "lucide-react";
 
 const signupSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -73,7 +74,10 @@ export default function Signup() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold paypwned-blue mb-2">PayPwned</h1>
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <CreditCard className="h-8 w-8 text-blue-600" />
+            <h1 className="text-3xl font-bold paypwned-blue">PayPwned</h1>
+          </div>
           <h2 className="text-2xl font-bold text-gray-900">Create your account</h2>
           <p className="mt-2 text-sm text-gray-600">
             Already have an account?{" "}
