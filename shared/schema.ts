@@ -22,17 +22,12 @@
  */
 
 import {
-  pgTable,
+  sqliteTable,
   text,
-  varchar,
-  timestamp,
-  jsonb,
-  index,
-  decimal,
   integer,
-  boolean,
-  serial,
-} from "drizzle-orm/pg-core";
+  real,
+  index,
+} from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -40,91 +35,88 @@ import { z } from "zod";
  * Session storage table for Replit Auth
  * VULNERABILITY: Sessions stored in database without proper encryption
  */
-export const sessions = pgTable(
+export const sessions = sqliteTable(
   "sessions",
   {
-    sid: varchar("sid").primaryKey(),
-    sess: jsonb("sess").notNull(),
-    expire: timestamp("expire").notNull(),
+    sid: text("sid").primaryKey(),
+    sess: text("sess").notNull(),
+    expire: integer("expire").notNull(),
   },
-  (table) => [index("IDX_session_expire").on(table.expire)],
+  (table) => ({
+    expireIdx: index("IDX_session_expire").on(table.expire),
+  }),
 );
 
 // User storage table with vulnerable design
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().notNull(),
-  email: varchar("email").unique(),
-  firstName: varchar("first_name"),
-  lastName: varchar("last_name"),
-  profileImageUrl: varchar("profile_image_url"),
-  address: varchar("address"),
-  nationality: varchar("nationality"), 
-  gender: varchar("gender"),
-  balance: decimal("balance", { precision: 10, scale: 2 }).default("0.00"),
-  // Vulnerable: storing sensitive data without encryption
-  ssn: varchar("ssn"), // Social Security Number - should be encrypted
-  bankAccount: varchar("bank_account"), // Bank account - should be encrypted
-  creditCard: varchar("credit_card"), // Credit card - should be encrypted
-  password: varchar("password"), // Vulnerable: plain text password storage
-  isAdmin: boolean("is_admin").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+export const users = sqliteTable("users", {
+  id: text("id").primaryKey().notNull(),
+  email: text("email"),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  profileImageUrl: text("profile_image_url"),
+  createdAt: integer("created_at"),
+  updatedAt: integer("updated_at"),
+  // VULNERABILITY: Plain text password storage
+  password: text("password"),
+  // VULNERABILITY: Unencrypted sensitive personal data
+  ssn: text("ssn"),
+  phone: text("phone"),
+  address: text("address"),
+  balance: real("balance"),
+  // VULNERABILITY: Weak role management
+  isAdmin: integer("is_admin"),
 });
 
-// Transactions table with vulnerable access controls
-export const transactions = pgTable("transactions", {
-  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  fromUserId: varchar("from_user_id").references(() => users.id),
-  toUserId: varchar("to_user_id").references(() => users.id),
-  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
-  description: text("description"), // Vulnerable to XSS
-  status: varchar("status").default("completed"), // "completed", "pending", "rejected"
-  type: varchar("type").default("transfer"), // "transfer", "request"
-  // Vulnerable: no proper access control checks
-  createdAt: timestamp("created_at").defaultNow(),
+// Transaction table with security flaws
+export const transactions = sqliteTable("transactions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  fromUserId: text("from_user_id").notNull(),
+  toUserId: text("to_user_id").notNull(),
+  amount: real("amount").notNull(),
+  description: text("description"),
+  status: text("status"),
+  type: text("type"),
+  createdAt: integer("created_at"),
 });
 
-// Payment methods with insecure storage
-export const paymentMethods = pgTable("payment_methods", {
-  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  userId: varchar("user_id").references(() => users.id),
-  type: varchar("type"), // bank, card
-  bankName: varchar("bank_name"), // Bank name for display
-  cardName: varchar("card_name"), // Card holder name
-  accountNumber: varchar("account_number"), // Vulnerable: not encrypted
-  iban: varchar("iban"), // Vulnerable: not encrypted
-  cardNumber: varchar("card_number"), // Vulnerable: not encrypted
-  expiryDate: varchar("expiry_date"), // Vulnerable: not encrypted
-  cvv: varchar("cvv"), // Vulnerable: not encrypted
-  isDefault: boolean("is_default").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
+// Payment methods with exposed sensitive data
+export const paymentMethods = sqliteTable("payment_methods", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id").notNull(),
+  type: text("type").notNull(), // 'card' or 'bank'
+  // VULNERABILITY: Unencrypted payment data
+  cardNumber: text("card_number"),
+  cardName: text("card_name"),
+  bankName: text("bank_name"),
+  accountNumber: text("account_number"),
+  iban: text("iban"),
+  isDefault: integer("is_default"),
+  createdAt: integer("created_at"),
 });
 
-// User sessions for tracking (vulnerable implementation)
-export const userSessions = pgTable("user_sessions", {
-  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  userId: varchar("user_id").references(() => users.id),
-  sessionToken: varchar("session_token"), // Vulnerable: predictable tokens
-  ipAddress: varchar("ip_address"),
+// Vulnerable session tracking
+export const userSessions = sqliteTable("user_sessions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id").notNull(),
+  sessionToken: text("session_token").notNull(),
+  ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-  expiresAt: timestamp("expires_at"),
+  isActive: integer("is_active"),
+  createdAt: integer("created_at"),
+  expiresAt: integer("expires_at"),
 });
 
-// Notifications table for database-backed notifications
-export const notifications = pgTable("notifications", {
-  id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  type: varchar("type").notNull(),
-  title: varchar("title").notNull(),
+// Notifications table
+export const notifications = sqliteTable("notifications", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id").notNull(),
+  title: text("title").notNull(),
   message: text("message").notNull(),
-  read: boolean("read").default(false).notNull(),
-  transactionId: integer("transaction_id").references(() => transactions.id),
-  createdAt: timestamp("created_at").defaultNow(),
+  type: text("type"),
+  isRead: integer("is_read"),
+  createdAt: integer("created_at"),
 });
 
-// Export schemas for validation
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -141,7 +133,6 @@ export const insertPaymentMethodSchema = createInsertSchema(paymentMethods).omit
   createdAt: true,
 });
 
-// Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
