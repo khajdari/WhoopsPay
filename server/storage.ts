@@ -38,17 +38,126 @@ import {
   type Notification,
   type InsertNotification,
 } from "@shared/schema";
-import { db } from "./db";
-import { eq, desc, sql, and } from "drizzle-orm";
+
+// In-memory storage for demonstration
+const mockUsers = new Map<string, User>();
+const mockTransactions: Transaction[] = [];
+const mockPaymentMethods: PaymentMethod[] = [];
+const mockNotifications: Notification[] = [];
+const mockSessions: UserSession[] = [];
+
+// Initialize with demo data
+const demoUser: User = {
+  id: "jdoe",
+  email: "john.doe@example.com",
+  firstName: "John",
+  lastName: "Doe",
+  profileImageUrl: null,
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  password: "password123",
+  ssn: "123-45-6789",
+  phone: "+1234567890",
+  address: "123 Main St, City, State",
+  balance: 2500.75,
+  isAdmin: 0
+};
+
+const adminUser: User = {
+  id: "admin",
+  email: "admin@example.com",
+  firstName: "Admin",
+  lastName: "User",
+  profileImageUrl: null,
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  password: "admin123",
+  ssn: "987-65-4321",
+  phone: "+9876543210",
+  address: "456 Admin Ave, City, State",
+  balance: 10000.00,
+  isAdmin: 1
+};
+
+mockUsers.set("jdoe", demoUser);
+mockUsers.set("admin", adminUser);
+
+// Demo transactions
+mockTransactions.push(
+  {
+    id: 1,
+    fromUserId: "jdoe",
+    toUserId: "admin",
+    amount: 150.00,
+    description: "Payment for services",
+    status: "completed",
+    type: "transfer",
+    createdAt: Date.now() - 86400000
+  },
+  {
+    id: 2,
+    fromUserId: "admin",
+    toUserId: "jdoe",
+    amount: 500.00,
+    description: "Refund",
+    status: "pending",
+    type: "request",
+    createdAt: Date.now() - 3600000
+  }
+);
+
+// Demo payment methods
+mockPaymentMethods.push(
+  {
+    id: 1,
+    userId: "jdoe",
+    type: "card",
+    cardNumber: "4111111111111111",
+    cardName: "John Doe",
+    bankName: null,
+    accountNumber: null,
+    iban: null,
+    isDefault: 1,
+    createdAt: Date.now()
+  },
+  {
+    id: 2,
+    userId: "jdoe",
+    type: "bank",
+    cardNumber: null,
+    cardName: null,
+    bankName: "First National Bank",
+    accountNumber: "123456789",
+    iban: "GB33BUKB20201555555555",
+    isDefault: 0,
+    createdAt: Date.now()
+  }
+);
+
+// Demo notifications
+mockNotifications.push(
+  {
+    id: 1,
+    userId: "jdoe",
+    title: "Payment Received",
+    message: "You received $500.00 from Admin User",
+    type: "payment",
+    isRead: 0,
+    createdAt: Date.now() - 1800000
+  },
+  {
+    id: 2,
+    userId: "jdoe",
+    title: "Money Request",
+    message: "Admin User is requesting $500.00",
+    type: "request",
+    isRead: 0,
+    createdAt: Date.now() - 900000
+  }
+);
 
 /**
  * Vulnerable storage interface - intentionally insecure for educational purposes
- * 
- * This interface demonstrates various OWASP vulnerabilities:
- * - Missing access control checks
- * - Direct object references without authorization
- * - Excessive data exposure
- * - Missing rate limiting and resource consumption controls
  */
 export interface IStorage {
   // User operations (mandatory for Replit Auth)
@@ -57,29 +166,29 @@ export interface IStorage {
   
   // Vulnerable user operations
   getUserByEmail(email: string): Promise<User | undefined>;
-  searchUsers(query: string): Promise<User[]>; // Vulnerable to SQL injection
+  searchUsers(query: string): Promise<User[]>;
   updateUserBalance(userId: string, amount: string): Promise<void>;
   
   // Transaction operations
   createTransaction(transaction: InsertTransaction): Promise<Transaction>;
   getUserTransactions(userId: string): Promise<Transaction[]>;
-  getTransaction(id: number): Promise<Transaction | undefined>; // Vulnerable to IDOR
-  getAllTransactions(): Promise<Transaction[]>; // Vulnerable: no access control
+  getTransaction(id: number): Promise<Transaction | undefined>;
+  getAllTransactions(): Promise<Transaction[]>;
   getPendingTransactions(userId: string): Promise<Transaction[]>;
   updateTransactionStatus(transactionId: number, status: string): Promise<Transaction>;
   
   // Payment method operations
   addPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod>;
   getUserPaymentMethods(userId: string): Promise<PaymentMethod[]>;
-  deletePaymentMethod(id: number): Promise<void>; // Vulnerable to IDOR
+  deletePaymentMethod(id: number): Promise<void>;
   
-  // Session operations (vulnerable)
+  // Session operations
   createUserSession(userId: string, sessionToken: string, ipAddress: string, userAgent: string): Promise<UserSession>;
   validateSession(sessionToken: string): Promise<UserSession | undefined>;
   
-  // Admin operations (vulnerable access control)
-  getAllUsers(): Promise<User[]>; // Should require admin check
-  deleteUser(userId: string): Promise<void>; // Should require admin check
+  // Admin operations
+  getAllUsers(): Promise<User[]>;
+  deleteUser(userId: string): Promise<void>;
   
   // Notification operations
   createNotification(notification: InsertNotification): Promise<Notification>;
@@ -90,208 +199,169 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  // User operations
   async getUser(id: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user;
+    return mockUsers.get(id);
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
-    const [user] = await db
-      .insert(users)
-      .values(userData)
-      .onConflictDoUpdate({
-        target: users.id,
-        set: {
-          ...userData,
-          updatedAt: new Date(),
-        },
-      })
-      .returning();
+    const now = Date.now();
+    const user: User = {
+      ...userData,
+      id: userData.id || 'user1',
+      createdAt: now,
+      updatedAt: now,
+      balance: userData.balance || 1000,
+      isAdmin: userData.isAdmin || 0,
+    };
+    mockUsers.set(user.id, user);
     return user;
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.email, email));
-    return user;
+    for (const user of mockUsers.values()) {
+      if (user.email === email) {
+        return user;
+      }
+    }
+    return undefined;
   }
 
-  // VULNERABLE: SQL Injection vulnerability
   async searchUsers(query: string): Promise<User[]> {
-    // WARNING: This is intentionally vulnerable to SQL injection
-    // In a real app, this would use parameterized queries
-    const rawQuery = sql.raw(`
-      SELECT * FROM users 
-      WHERE first_name ILIKE '%${query}%' 
-      OR last_name ILIKE '%${query}%' 
-      OR email ILIKE '%${query}%'
-    `);
-    
-    try {
-      const result = await db.execute(rawQuery);
-      return result.rows as User[];
-    } catch (error) {
-      console.error("Search error:", error);
-      return [];
+    const results: User[] = [];
+    for (const user of mockUsers.values()) {
+      if (user.firstName?.includes(query) || user.lastName?.includes(query) || user.email?.includes(query)) {
+        results.push(user);
+      }
     }
+    return results;
   }
 
   async updateUserBalance(userId: string, amount: string): Promise<void> {
-    await db
-      .update(users)
-      .set({ balance: amount })
-      .where(eq(users.id, userId));
+    const user = mockUsers.get(userId);
+    if (user) {
+      user.balance = parseFloat(amount);
+      mockUsers.set(userId, user);
+    }
   }
 
-  // Transaction operations
   async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
-    const [newTransaction] = await db
-      .insert(transactions)
-      .values(transaction)
-      .returning();
+    const newTransaction: Transaction = {
+      id: mockTransactions.length + 1,
+      ...transaction,
+      createdAt: Date.now(),
+    };
+    mockTransactions.push(newTransaction);
     return newTransaction;
   }
 
   async getUserTransactions(userId: string): Promise<Transaction[]> {
-    return await db
-      .select()
-      .from(transactions)
-      .where(
-        sql`${transactions.fromUserId} = ${userId} OR ${transactions.toUserId} = ${userId}`
-      )
-      .orderBy(desc(transactions.createdAt));
+    return mockTransactions.filter(t => t.fromUserId === userId || t.toUserId === userId);
   }
 
-  // VULNERABLE: Insecure Direct Object Reference
   async getTransaction(id: number): Promise<Transaction | undefined> {
-    // WARNING: No authorization check - any user can access any transaction
-    const [transaction] = await db
-      .select()
-      .from(transactions)
-      .where(eq(transactions.id, id));
-    return transaction;
+    return mockTransactions.find(t => t.id === id);
   }
 
-  // VULNERABLE: Missing access control
   async getAllTransactions(): Promise<Transaction[]> {
-    // WARNING: This should require admin privileges
-    return await db.select().from(transactions).orderBy(desc(transactions.createdAt));
+    return [...mockTransactions];
   }
 
   async getPendingTransactions(userId: string): Promise<Transaction[]> {
-    return await db.select().from(transactions)
-      .where(and(eq(transactions.toUserId, userId), eq(transactions.status, "pending")))
-      .orderBy(desc(transactions.createdAt));
+    return mockTransactions.filter(t => t.status === 'pending' && (t.fromUserId === userId || t.toUserId === userId));
   }
 
   async updateTransactionStatus(transactionId: number, status: string): Promise<Transaction> {
-    const [transaction] = await db
-      .update(transactions)
-      .set({ status })
-      .where(eq(transactions.id, transactionId))
-      .returning();
+    const transaction = mockTransactions.find(t => t.id === transactionId);
+    if (!transaction) {
+      throw new Error('Transaction not found');
+    }
+    transaction.status = status;
     return transaction;
   }
 
-  // Payment method operations
   async addPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod> {
-    const [newPaymentMethod] = await db
-      .insert(paymentMethods)
-      .values(paymentMethod)
-      .returning();
+    const newPaymentMethod: PaymentMethod = {
+      id: mockPaymentMethods.length + 1,
+      ...paymentMethod,
+      createdAt: Date.now(),
+    };
+    mockPaymentMethods.push(newPaymentMethod);
     return newPaymentMethod;
   }
 
   async getUserPaymentMethods(userId: string): Promise<PaymentMethod[]> {
-    return await db
-      .select()
-      .from(paymentMethods)
-      .where(eq(paymentMethods.userId, userId));
+    return mockPaymentMethods.filter(pm => pm.userId === userId);
   }
 
-  // VULNERABLE: Insecure Direct Object Reference
   async deletePaymentMethod(id: number): Promise<void> {
-    // WARNING: No ownership verification - any user can delete any payment method
-    await db.delete(paymentMethods).where(eq(paymentMethods.id, id));
+    const index = mockPaymentMethods.findIndex(pm => pm.id === id);
+    if (index > -1) {
+      mockPaymentMethods.splice(index, 1);
+    }
   }
 
-  // Session operations (vulnerable implementation)
   async createUserSession(userId: string, sessionToken: string, ipAddress: string, userAgent: string): Promise<UserSession> {
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 24); // 24 hour expiry
-
-    const [session] = await db
-      .insert(userSessions)
-      .values({
-        userId,
-        sessionToken,
-        ipAddress,
-        userAgent,
-        expiresAt,
-      })
-      .returning();
+    const session: UserSession = {
+      id: mockSessions.length + 1,
+      userId,
+      sessionToken,
+      ipAddress,
+      userAgent,
+      isActive: 1,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
+    };
+    mockSessions.push(session);
     return session;
   }
 
   async validateSession(sessionToken: string): Promise<UserSession | undefined> {
-    const [session] = await db
-      .select()
-      .from(userSessions)
-      .where(
-        and(
-          eq(userSessions.sessionToken, sessionToken),
-          eq(userSessions.isActive, true)
-        )
-      );
-    return session;
+    return mockSessions.find(s => s.sessionToken === sessionToken && s.isActive === 1);
   }
 
-  // VULNERABLE: Admin operations without proper access control
   async getAllUsers(): Promise<User[]> {
-    // WARNING: This should require admin privileges but doesn't check
-    return await db.select().from(users);
+    return Array.from(mockUsers.values());
   }
 
   async deleteUser(userId: string): Promise<void> {
-    // WARNING: This should require admin privileges but doesn't check
-    await db.delete(users).where(eq(users.id, userId));
+    mockUsers.delete(userId);
   }
 
-  // Notification operations
   async createNotification(notification: InsertNotification): Promise<Notification> {
-    const [newNotification] = await db
-      .insert(notifications)
-      .values(notification)
-      .returning();
+    const newNotification: Notification = {
+      id: mockNotifications.length + 1,
+      ...notification,
+      createdAt: Date.now(),
+    };
+    mockNotifications.push(newNotification);
     return newNotification;
   }
 
   async getUserNotifications(userId: string): Promise<Notification[]> {
-    return await db
-      .select()
-      .from(notifications)
-      .where(eq(notifications.userId, userId))
-      .orderBy(desc(notifications.createdAt));
+    return mockNotifications.filter(n => n.userId === userId);
   }
 
   async markNotificationAsRead(id: number): Promise<void> {
-    await db
-      .update(notifications)
-      .set({ read: true })
-      .where(eq(notifications.id, id));
+    const notification = mockNotifications.find(n => n.id === id);
+    if (notification) {
+      notification.isRead = 1;
+    }
   }
 
   async markAllNotificationsAsRead(userId: string): Promise<void> {
-    await db
-      .update(notifications)
-      .set({ read: true })
-      .where(eq(notifications.userId, userId));
+    mockNotifications.forEach(n => {
+      if (n.userId === userId) {
+        n.isRead = 1;
+      }
+    });
   }
 
   async deleteAllNotifications(userId: string): Promise<void> {
-    await db
-      .delete(notifications)
-      .where(eq(notifications.userId, userId));
+    for (let i = mockNotifications.length - 1; i >= 0; i--) {
+      if (mockNotifications[i].userId === userId) {
+        mockNotifications.splice(i, 1);
+      }
+    }
   }
 }
 
