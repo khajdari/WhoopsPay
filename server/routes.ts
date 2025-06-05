@@ -1002,6 +1002,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // External Payment Processing (Juice Shop Integration)
+  app.post('/api/external/payment', isAuthenticated, async (req: any, res) => {
+    try {
+      const { amount, description, source, returnUrl, cancelUrl } = req.body;
+      const userId = req.user?.id;
+
+      if (!userId) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+
+      if (!amount || !description) {
+        return res.status(400).json({ message: "Amount and description are required" });
+      }
+
+      // Create external payment transaction
+      const transaction = await storage.createTransaction({
+        fromUserId: userId,
+        toUserId: "system",
+        amount: parseFloat(amount),
+        description,
+        status: "completed",
+        type: "external_payment",
+        externalOrderId: `ext_${Date.now()}`,
+        externalSource: source || "external",
+        returnUrl,
+        cancelUrl,
+        externalMetadata: JSON.stringify({ processedAt: Date.now() })
+      });
+
+      // Create notification for successful payment
+      await storage.createNotification({
+        userId,
+        title: "External Payment Processed",
+        message: `Payment of $${amount} for ${description} has been processed successfully.`,
+        type: "payment",
+        isRead: 0
+      });
+
+      logStore.addExpressLog(`[${new Date().toISOString()}] External payment processed: $${amount} for user ${userId}`);
+
+      res.json({
+        success: true,
+        transactionId: transaction.id,
+        amount,
+        description,
+        status: "completed"
+      });
+    } catch (error) {
+      console.error("Error processing external payment:", error);
+      res.status(500).json({ message: "Failed to process external payment" });
+    }
+  });
+
   // Notification endpoints
   app.get('/api/notifications', async (req: any, res) => {
     try {

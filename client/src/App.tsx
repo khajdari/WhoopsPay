@@ -19,6 +19,8 @@ import Administration from "@/pages/administration";
 import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
 import ExternalPayment from "@/pages/ExternalPayment";
+import JuiceShop from "@/pages/juice-shop";
+import ExternalPaymentRedirect from "@/pages/external-payment-redirect";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -48,6 +50,8 @@ function Router() {
           <Route path="/account" component={Settings} />
         </>
       )}
+      <Route path="/juice-shop" component={JuiceShop} />
+      <Route path="/external-payment-redirect" component={ExternalPaymentRedirect} />
       <Route path="/external-payment/:transactionId" component={ExternalPayment} />
       <Route component={NotFound} />
     </Switch>
