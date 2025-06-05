@@ -189,7 +189,7 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
             </Button>
             <Button
               type="submit"
-              className="flex-1 bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
+              className="flex-1 bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
               disabled={sendMoneyMutation.isPending}
             >
               {sendMoneyMutation.isPending ? "Sending..." : "Send Money"}

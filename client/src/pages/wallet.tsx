@@ -79,7 +79,7 @@ export default function Wallet() {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center">
                 <WalletIcon className="w-5 h-5 mr-2" />
-                PayPwned Balance
+                WhoopsPay Balance
               </CardTitle>
               <Button
                 variant="ghost"
