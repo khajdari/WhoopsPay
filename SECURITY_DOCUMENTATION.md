@@ -298,6 +298,6 @@ Each OWASP category should be tested with specific scenarios:
 
 ## Conclusion
 
-PayPwned serves as a comprehensive educational platform for understanding web application security. By intentionally implementing common vulnerabilities, it provides a safe environment for learning and practicing security assessment techniques.
+WhoopsPay serves as a comprehensive educational platform for understanding web application security. By intentionally implementing common vulnerabilities, it provides a safe environment for learning and practicing security assessment techniques.
 
 Remember: **This code is for educational purposes only. Never use these patterns in production applications.**

@@ -333,7 +333,7 @@ curl -X POST https://whoopspay.replit.app/api/external/payment/123/approve \
 
 - Check browser developer tools for network requests
 - Verify API responses and status codes
-- Monitor PayPwned logs for error messages
+- Monitor WhoopsPay logs for error messages
 - Test with different user accounts and scenarios
 
 ## Educational Value
