@@ -20,6 +20,7 @@ import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
 import ExternalPayment from "@/pages/ExternalPayment";
 import PaymentProcessing from "@/pages/payment-processing";
+import { RedirectHandler } from "@/components/RedirectHandler";
 
 
 function Router() {
@@ -65,6 +66,7 @@ function App() {
       <I18nProvider>
         <TooltipProvider>
           <Toaster />
+          <RedirectHandler />
           <Router />
         </TooltipProvider>
       </I18nProvider>

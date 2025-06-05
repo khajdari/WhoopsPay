@@ -143,7 +143,9 @@ export default function ExternalPayment() {
       });
       setTimeout(() => {
         const currentUrl = window.location.pathname + window.location.search;
-        window.location.href = `/login?redirect=payment&from=${encodeURIComponent(currentUrl)}`;
+        // Store the return URL in sessionStorage so we can redirect back after login
+        sessionStorage.setItem('redirectAfterLogin', currentUrl);
+        window.location.href = "/api/login";
       }, 500);
       return;
     }
