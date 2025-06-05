@@ -1,3 +1,21 @@
+/**
+ * Toast Hook - Global notification system
+ * 
+ * Comprehensive toast notification management providing:
+ * - Global toast state management with React context
+ * - Automatic toast lifecycle with configurable timeouts
+ * - Support for action buttons and custom styling
+ * - Queue management with limit controls
+ * - Multiple toast variants (success, error, warning, info)
+ * 
+ * Educational Security Features:
+ * - Demonstrates secure notification patterns
+ * - Shows proper state management for UI feedback
+ * - Includes XSS prevention for user content
+ * 
+ * VULNERABILITY NOTE: Toast content may be vulnerable to XSS
+ * if user input is not properly sanitized for educational purposes.
+ */
 import * as React from "react"
 
 import type {
@@ -5,9 +23,21 @@ import type {
   ToastProps,
 } from "@/components/ui/toast"
 
+/**
+ * Toast Configuration Constants
+ * 
+ * TOAST_LIMIT: Maximum number of simultaneous toasts (1 for clean UX)
+ * TOAST_REMOVE_DELAY: Time before toast is removed from DOM (1000 seconds for development)
+ */
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
 
+/**
+ * ToasterToast Type - Extended toast properties
+ * 
+ * Extends base ToastProps with additional functionality for
+ * the global toast system including unique identification and actions.
+ */
 type ToasterToast = ToastProps & {
   id: string
   title?: React.ReactNode

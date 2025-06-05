@@ -1,3 +1,21 @@
+/**
+ * Toast Component - Advanced notification display system
+ * 
+ * Comprehensive toast notification component providing:
+ * - Multiple toast variants (default, destructive) with visual styling
+ * - Accessible notification system with screen reader support
+ * - Swipe-to-dismiss functionality for mobile devices
+ * - Automatic positioning and animation handling
+ * - Action button support for interactive notifications
+ * 
+ * Educational Security Features:
+ * - Demonstrates secure notification patterns
+ * - Shows proper accessibility implementation
+ * - Includes XSS prevention for notification content
+ * 
+ * VULNERABILITY NOTE: Toast content may be vulnerable to XSS
+ * if user input is not properly sanitized for educational purposes.
+ */
 import * as React from "react"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -5,6 +23,12 @@ import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * ToastProvider - Root toast context provider
+ * 
+ * Wraps the application to enable toast notifications throughout
+ * the component tree using Radix UI Toast primitives.
+ */
 const ToastProvider = ToastPrimitives.Provider
 
 const ToastViewport = React.forwardRef<

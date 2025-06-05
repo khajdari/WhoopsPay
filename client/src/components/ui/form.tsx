@@ -1,3 +1,21 @@
+/**
+ * Form Component - Comprehensive form management system
+ * 
+ * Advanced form component library providing:
+ * - React Hook Form integration with TypeScript support
+ * - Automatic field validation and error handling
+ * - Accessible form structure with proper labeling
+ * - Context-based field state management
+ * - Consistent styling across all form elements
+ * 
+ * Educational Security Features:
+ * - Demonstrates proper form validation patterns
+ * - Shows secure form state management
+ * - Includes accessibility best practices for forms
+ * 
+ * VULNERABILITY NOTE: Form validation may be intentionally bypassed
+ * for educational security training purposes.
+ */
 "use client"
 
 import * as React from "react"
@@ -15,6 +33,12 @@ import {
 import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
 
+/**
+ * Form Provider - Root form context provider
+ * 
+ * Uses React Hook Form's FormProvider to share form state
+ * across all nested form components.
+ */
 const Form = FormProvider
 
 type FormFieldContextValue<
