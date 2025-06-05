@@ -1294,10 +1294,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
         })
       });
 
-      // Direct redirect to login with payment parameters to skip processing page
-      const loginUrl = `/login?redirect=payment&transactionId=${transaction.id}&amount=${amount}&description=${encodeURIComponent(description as string)}&returnUrl=${encodeURIComponent(returnUrl as string)}&cancelUrl=${encodeURIComponent(cancelUrl as string)}`;
+      // Send HTML page that redirects to processing page
+      const processingUrl = `/juice-shop/payment-processing?transactionId=${transaction.id}&amount=${amount}&description=${encodeURIComponent(description as string)}&returnUrl=${encodeURIComponent(returnUrl as string)}&cancelUrl=${encodeURIComponent(cancelUrl as string)}`;
       
-      res.redirect(loginUrl);
+      res.send(`<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting...</title>
+  <meta http-equiv="refresh" content="1;url=${processingUrl}">
+  <style>
+    body { 
+      margin: 0; 
+      padding: 50px; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: linear-gradient(135deg, #ff7b7b 0%, #667eea 50%, #764ba2 100%); 
+      color: white; 
+      text-align: center; 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .spinner { 
+      border: 5px solid rgba(255,255,255,0.2); 
+      border-top: 5px solid #ffeb3b; 
+      border-radius: 50%; 
+      width: 50px; 
+      height: 50px; 
+      animation: spin 0.8s linear infinite; 
+      margin: 30px auto; 
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <h2>🧃 Juice Shop Payment Gateway</h2>
+  <div class="spinner"></div>
+  <p>Connecting to WhoopsPay secure payment system...</p>
+  <script>
+    setTimeout(function() {
+      window.location.href = "${processingUrl}";
+    }, 1000);
+  </script>
+</body>
+</html>`);
 
     } catch (error) {
       console.error("External payment error:", error);
