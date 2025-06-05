@@ -108,10 +108,12 @@ export default function Login() {
         
         // If we have the original URL, redirect back to it
         if (externalPaymentData.originalUrl) {
-          window.location.href = decodeURIComponent(externalPaymentData.originalUrl);
+          console.log('Redirecting to payment page:', externalPaymentData.originalUrl);
+          window.location.href = externalPaymentData.originalUrl;
           return;
         } else {
           // Fallback to showing modal for legacy flow
+          console.log('Showing payment modal as fallback');
           setShowExternalPaymentModal(true);
           return;
         }
