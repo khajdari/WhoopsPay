@@ -1,4 +1,4 @@
-# OWASP Juice Shop + PayPwned Integration Deployment Guide
+# OWASP Juice Shop + WhoopsPay Integration Deployment Guide
 
 ## Repository: https://github.com/khajdari/juice-shop
 
@@ -8,17 +8,17 @@
 
 **File: `frontend/src/app/payment/payment.component.ts`**
 - Replace existing payment component with the code from `juice-shop-payment-component.ts`
-- Adds PayPwned payment option alongside existing credit card payment
+- Adds WhoopsPay payment option alongside existing credit card payment
 
 **File: `frontend/src/app/payment/payment.component.html`**
 - Replace existing template with the code from `juice-shop-payment-template.html`
-- Adds PayPwned UI components and styling
+- Adds WhoopsPay UI components and styling
 
 ### 2. Backend Routes
 
 **File: `routes/payment.js`** (new file)
 - Add the code from `juice-shop-backend-routes.js`
-- Creates PayPwned integration endpoints
+- Creates WhoopsPay integration endpoints
 
 **File: `app.js`** (modify existing)
 ```javascript
@@ -35,7 +35,7 @@ app.use('/api/payment', require('./routes/payment'))
 ### 4. Configuration
 
 **File: `config/default.yml`** (modify existing)
-- Add PayPwned configuration from `juice-shop-configuration.yml`
+- Add WhoopsPay configuration from `juice-shop-configuration.yml`
 
 **File: `.env`** (modify existing)
 ```

@@ -42,7 +42,7 @@ export default function Signup() {
     onSuccess: () => {
       toast({
         title: "Registration successful",
-        description: "Welcome to PayPwned!",
+        description: "Welcome to WhoopsPay!",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       window.location.href = "/";
@@ -70,7 +70,7 @@ export default function Signup() {
             </div>
           </div>
           <CardTitle className="text-2xl font-bold text-gray-900">Create Account</CardTitle>
-          <CardDescription>Join PayPwned - Secure Payment Platform</CardDescription>
+          <CardDescription>Join WhoopsPay - Secure Payment Platform</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">

@@ -156,7 +156,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-400">
-              © 2025 PayPwned. An educational project developed as part of a postgraduate thesis on web application vulnerabilities.
+              © 2025 WhoopsPay. An educational project developed as part of a postgraduate thesis on web application vulnerabilities.
             </p>
           </div>
         </div>
