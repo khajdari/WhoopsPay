@@ -1,3 +1,21 @@
+/**
+ * Notifications Modal - Real-time notification center interface
+ * 
+ * Comprehensive notification management modal providing:
+ * - Real-time notification display with categorization
+ * - Money request approval and rejection controls
+ * - Transaction notification history with timestamps
+ * - Bulk operations for notification management
+ * - Unread notification tracking and badges
+ * 
+ * Educational Security Features:
+ * - Demonstrates notification security patterns
+ * - Shows proper authorization for transaction actions
+ * - Includes real-time data synchronization
+ * 
+ * VULNERABILITY NOTE: Notification access may lack proper user
+ * authorization checks for educational security training purposes.
+ */
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +25,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
+/**
+ * NotificationsModalProps Interface - Component properties
+ * 
+ * @property open - Modal visibility state
+ * @property onOpenChange - Callback function to toggle modal visibility
+ * @property onMarkAllRead - Callback function to mark all notifications as read
+ * @property onClearAll - Callback function to clear all notifications
+ */
 interface NotificationsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -14,6 +40,17 @@ interface NotificationsModalProps {
   onClearAll: () => void;
 }
 
+/**
+ * NotificationsModal Component - Notification management center
+ * 
+ * Modal component that provides comprehensive notification management
+ * including transaction approvals and real-time updates. Features include:
+ * - Notification list with categorization and timestamps
+ * - Money request approval/rejection workflows
+ * - Bulk notification management operations
+ * - Real-time notification synchronization
+ * - Unread count tracking and display
+ */
 export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearAll }: NotificationsModalProps) {
   const { notifications, unreadCount, markAllAsRead, clearAll } = useNotifications();
   const queryClient = useQueryClient();
