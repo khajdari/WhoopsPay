@@ -337,7 +337,7 @@ export default function SendMoney() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
+                    className="w-full bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                     disabled={sendMoneyMutation.isPending}
                   >
                     {sendMoneyMutation.isPending ? "Sending..." : "Send Money"}
@@ -401,7 +401,7 @@ export default function SendMoney() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
+                    className="w-full bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                     disabled={requestMoneyMutation.isPending}
                   >
                     {requestMoneyMutation.isPending ? "Requesting..." : "Request Money"}
@@ -459,7 +459,7 @@ export default function SendMoney() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
+                    className="w-full bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                     disabled={addMoneyMutation.isPending}
                   >
                     {addMoneyMutation.isPending ? "Adding..." : "Add Money"}
@@ -517,7 +517,7 @@ export default function SendMoney() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
+                    className="w-full bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                     disabled={withdrawMoneyMutation.isPending}
                   >
                     {withdrawMoneyMutation.isPending ? "Processing..." : "Withdraw Money"}
