@@ -1,10 +1,10 @@
-# PayPwned - Cybersecurity Training Platform
+# WhoopsPay - Cybersecurity Training Platform
 
 A comprehensive cybersecurity training and financial management platform that combines interactive security learning with intelligent financial tools. Built for educational purposes to demonstrate OWASP Top 10 and API Security vulnerabilities.
 
 ## 🎯 Purpose
 
-PayPwned is designed as an **educational cybersecurity training platform** for penetration testing and security research. It intentionally contains vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10 for learning purposes.
+WhoopsPay is designed as an **educational cybersecurity training platform** for penetration testing and security research. It intentionally contains vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10 for learning purposes.
 
 ## ⚠️ Security Notice
 
@@ -78,8 +78,8 @@ PayPwned is designed as an **educational cybersecurity training platform** for p
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/paypwned.git
-cd paypwned
+git clone https://github.com/yourusername/whoopspay.git
+cd whoopspay
 ```
 
 2. Install dependencies:
@@ -94,7 +94,7 @@ cp .env.example .env
 
 Edit `.env` with your database and configuration details:
 ```env
-DATABASE_URL=postgresql://username:password@localhost:5432/paypwned
+DATABASE_URL=postgresql://username:password@localhost:5432/whoopspay
 SESSION_SECRET=your-session-secret-key
 NODE_ENV=development
 PORT=5000
@@ -205,7 +205,7 @@ npm run type-check   # Run TypeScript checks
 ## 📁 Project Structure
 
 ```
-paypwned/
+whoopspay/
 ├── client/                 # Frontend React application
 │   ├── src/
 │   │   ├── components/     # Reusable UI components
