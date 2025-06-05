@@ -1627,21 +1627,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 
                 // Shorter delay to show loading animation
                 setTimeout(() => {
-                    console.log('Redirecting to payment...');
+                    console.log('Redirecting to payment processing...');
                     const paymentId = Date.now();
                     const returnUrl = encodeURIComponent("/juice-shop?success=1");
                     const cancelUrl = encodeURIComponent("/juice-shop?cancelled=1");
-                    const url = "/external-payment/" + paymentId + "?amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
+                    const url = "/juice-shop/payment-processing?transactionId=" + paymentId + "&amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
                     console.log('Redirecting to:', url);
                     window.location.href = url;
                 }, 800);
             } else {
                 console.error('Loading div not found');
-                // Fallback - direct redirect
+                // Fallback - direct redirect to processing page
                 const paymentId = Date.now();
                 const returnUrl = encodeURIComponent("/juice-shop?success=1");
                 const cancelUrl = encodeURIComponent("/juice-shop?cancelled=1");
-                const url = "/external-payment/" + paymentId + "?amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
+                const url = "/juice-shop/payment-processing?transactionId=" + paymentId + "&amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
                 window.location.href = url;
             }
         }
