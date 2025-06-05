@@ -415,18 +415,18 @@ app.get('/', (req, res) => {
                 cartTotal.textContent = 'Total: $0.00';
                 checkoutBtn.disabled = true;
             } else {
-                cartItems.innerHTML = cart.map(item => \`
+                cartItems.innerHTML = cart.map(item => `
                     <div class="cart-item">
-                        <span>\${item.name} x\${item.quantity}</span>
+                        <span>${item.name} x${item.quantity}</span>
                         <span>
-                            $\${(item.price * item.quantity).toFixed(2)}
-                            <button class="remove-btn" onclick="removeFromCart(\${item.id})">Remove</button>
+                            $${(item.price * item.quantity).toFixed(2)}
+                            <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
                         </span>
                     </div>
-                \`).join('');
+                `).join('');
                 
                 const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                cartTotal.textContent = \`Total: $\${total.toFixed(2)}\`;
+                cartTotal.textContent = `Total: $${total.toFixed(2)}`;
                 checkoutBtn.disabled = false;
             }
         }
@@ -472,6 +472,6 @@ app.get('/', (req, res) => {
 
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(\`Juice Shop server running on port \${PORT}\`);
-  console.log(\`Visit: http://localhost:\${PORT}\`);
+  console.log(`Juice Shop server running on port ${PORT}`);
+  console.log(`Visit: http://localhost:${PORT}`);
 });
