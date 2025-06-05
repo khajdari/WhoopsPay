@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
+import { CreditCard } from "lucide-react";
 
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -64,10 +65,9 @@ export default function Signup() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4">
-            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-xl">P</span>
-            </div>
+          <div className="mx-auto mb-4 flex items-center justify-center space-x-2">
+            <CreditCard className="h-8 w-8 text-blue-600" />
+            <h1 className="text-3xl font-bold whoopspay-blue">WhoopsPay</h1>
           </div>
           <CardTitle className="text-2xl font-bold text-gray-900">Create Account</CardTitle>
           <CardDescription>Join WhoopsPay - Secure Payment Platform</CardDescription>
