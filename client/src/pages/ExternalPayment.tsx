@@ -1,3 +1,10 @@
+/**
+ * External Payment Component - Third-party payment approval interface
+ * 
+ * Handles payment confirmation flow for external integrations like Juice Shop.
+ * Provides secure payment approval interface with user authentication checks.
+ * Manages transaction approval/rejection and redirects back to source application.
+ */
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -11,17 +18,23 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 
+/**
+ * ExternalTransaction Interface - Structure for external payment data
+ * 
+ * Defines the shape of transaction objects from external sources.
+ * Includes metadata for return URLs and source application tracking.
+ */
 interface ExternalTransaction {
-  id: number;
-  amount: number;
-  description: string;
-  status: string;
-  externalOrderId?: string;
-  externalSource?: string;
-  returnUrl?: string;
-  cancelUrl?: string;
-  externalMetadata?: string;
-  createdAt: number;
+  id: number; // Unique transaction identifier
+  amount: number; // Payment amount in base currency
+  description: string; // Transaction description
+  status: string; // Current transaction status
+  externalOrderId?: string; // External application order ID
+  externalSource?: string; // Source application name
+  returnUrl?: string; // Success redirect URL
+  cancelUrl?: string; // Cancellation redirect URL
+  externalMetadata?: string; // Additional metadata from source
+  createdAt: number; // Transaction creation timestamp
 }
 
 export default function ExternalPayment() {
