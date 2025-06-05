@@ -1,6 +1,35 @@
+/**
+ * Not Found Page - 404 error handling interface
+ * 
+ * Error page displayed when users navigate to non-existent routes:
+ * - Clear error messaging with visual indicators
+ * - User-friendly explanation of the situation
+ * - Centered layout with consistent branding
+ * - Accessible design with proper contrast
+ * - Development-friendly error information
+ * 
+ * Educational Security Features:
+ * - Demonstrates proper error page design
+ * - Shows secure error handling patterns
+ * - Includes user experience considerations
+ * 
+ * VULNERABILITY NOTE: May expose routing information
+ * for educational security training purposes.
+ */
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 
+/**
+ * NotFound Component - 404 error page interface
+ * 
+ * Handles navigation to non-existent routes with user-friendly
+ * error presentation. Features include:
+ * - Clear 404 error messaging with visual icon
+ * - Developer-friendly debugging information
+ * - Centered card layout for focused attention
+ * - Consistent styling with application theme
+ * - Accessible design with proper semantic structure
+ */
 export default function NotFound() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">

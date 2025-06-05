@@ -1,3 +1,21 @@
+/**
+ * Administration Page - Enhanced administrative controls and system monitoring
+ * 
+ * Advanced administrative interface providing comprehensive system oversight:
+ * - Real-time server and database log monitoring
+ * - Administrative authentication and access control
+ * - System health monitoring and refresh capabilities
+ * - Tabbed interface for organized administration tasks
+ * - Auto-refresh functionality for live system monitoring
+ * 
+ * Educational Security Features:
+ * - Demonstrates proper administrative access control
+ * - Shows secure logging and monitoring practices
+ * - Includes administrative privilege verification
+ * 
+ * VULNERABILITY NOTE: May contain intentional access control weaknesses
+ * for educational security training purposes.
+ */
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
@@ -11,6 +29,17 @@ import { Shield, Database, FileText, Settings, AlertTriangle, RefreshCw } from "
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+/**
+ * Administration Component - System administration interface
+ * 
+ * Main administrative dashboard that provides system management capabilities.
+ * Features include:
+ * - Live server and database log streaming
+ * - Administrative privilege verification
+ * - Real-time system monitoring and refresh controls
+ * - Organized tabbed interface for different admin functions
+ * - Authentication-based access control
+ */
 export default function Administration() {
   const { user } = useAuth();
   const { toast } = useToast();

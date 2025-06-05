@@ -1,3 +1,21 @@
+/**
+ * Login Page - User authentication interface with external payment integration
+ * 
+ * Comprehensive authentication page providing:
+ * - Username/password login form with validation
+ * - External payment request handling from integrated applications
+ * - Automatic redirection after successful authentication
+ * - Payment modal integration for cross-platform transactions
+ * - Session management and authentication state tracking
+ * 
+ * Educational Security Features:
+ * - Demonstrates authentication form patterns
+ * - Shows external payment integration vulnerabilities
+ * - Includes session handling and redirect logic
+ * 
+ * VULNERABILITY NOTE: Authentication may lack proper rate limiting
+ * and password complexity requirements for educational purposes.
+ */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -14,13 +32,36 @@ import { CreditCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ExternalPaymentModal } from "@/components/external-payment-modal";
 
+/**
+ * Login Form Validation Schema - Input validation rules
+ * 
+ * Defines validation requirements for user authentication:
+ * - Username: Required field with minimum length
+ * - Password: Required field with basic validation
+ * 
+ * VULNERABILITY NOTE: Lacks proper password complexity requirements.
+ */
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
 });
 
+/**
+ * LoginForm Type - Form data structure
+ */
 type LoginForm = z.infer<typeof loginSchema>;
 
+/**
+ * Login Component - Authentication interface with payment integration
+ * 
+ * Main login page that handles user authentication and external payment
+ * requests from integrated applications. Features include:
+ * - Form-based authentication with validation
+ * - External payment request detection and handling
+ * - Payment modal integration for cross-platform flows
+ * - Automatic redirection after successful login
+ * - Session management and state synchronization
+ */
 export default function Login() {
   const { toast } = useToast();
   const queryClient = useQueryClient();

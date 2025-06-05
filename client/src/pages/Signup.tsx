@@ -1,3 +1,21 @@
+/**
+ * Signup Page - User registration interface
+ * 
+ * Comprehensive user registration page providing:
+ * - Multi-field registration form with validation
+ * - Real-time form validation and error handling
+ * - Account creation with automatic authentication
+ * - Welcome messaging and redirect to main application
+ * - Integration with authentication system
+ * 
+ * Educational Security Features:
+ * - Demonstrates user registration patterns
+ * - Shows form validation and input sanitization
+ * - Includes basic password requirements
+ * 
+ * VULNERABILITY NOTE: Registration may lack proper email verification
+ * and advanced security measures for educational purposes.
+ */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,6 +29,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { CreditCard } from "lucide-react";
 
+/**
+ * Registration Form Validation Schema - Input validation rules
+ * 
+ * Defines validation requirements for user registration:
+ * - Username: Minimum 3 characters
+ * - Email: Valid email format
+ * - Password: Minimum 6 characters
+ * - First/Last Name: Required fields
+ * 
+ * VULNERABILITY NOTE: Basic validation without advanced security checks.
+ */
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Invalid email address"),
@@ -19,8 +48,22 @@ const registerSchema = z.object({
   lastName: z.string().min(1, "Last name is required"),
 });
 
+/**
+ * RegisterForm Type - Form data structure
+ */
 type RegisterForm = z.infer<typeof registerSchema>;
 
+/**
+ * Signup Component - User registration interface
+ * 
+ * Main registration page that handles new user account creation.
+ * Features include:
+ * - Comprehensive registration form with validation
+ * - Real-time input validation and error display
+ * - Account creation with automatic login
+ * - Success messaging and application redirect
+ * - Integration with authentication system
+ */
 export default function Signup() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
