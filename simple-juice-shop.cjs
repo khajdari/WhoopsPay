@@ -46,10 +46,11 @@ app.get('/api/products', (req, res) => {
 app.post('/api/payment/initiate', (req, res) => {
   const { items, total } = req.body;
   const paymentId = Date.now();
-  const returnUrl = "http://localhost:3001/?payment=success&id=" + paymentId;
-  const cancelUrl = "http://localhost:3001/?payment=cancelled&id=" + paymentId;
+  const baseUrl = "https://f6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev";
+  const returnUrl = baseUrl + ":3001/?payment=success&id=" + paymentId;
+  const cancelUrl = baseUrl + ":3001/?payment=cancelled&id=" + paymentId;
   
-  const whoopsPayUrl = "http://localhost:5000/external-payment/" + paymentId + 
+  const whoopsPayUrl = baseUrl + "/external-payment/" + paymentId + 
     "?amount=" + total + 
     "&description=Juice Shop Order" +
     "&returnUrl=" + encodeURIComponent(returnUrl) + 
