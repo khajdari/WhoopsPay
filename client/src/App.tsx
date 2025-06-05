@@ -17,6 +17,7 @@ import Admin from "@/pages/admin";
 import Administration from "@/pages/administration";
 import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
+import ExternalPayment from "@/pages/ExternalPayment";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -46,6 +47,7 @@ function Router() {
           <Route path="/account" component={Settings} />
         </>
       )}
+      <Route path="/external-payment/:transactionId" component={ExternalPayment} />
       <Route component={NotFound} />
     </Switch>
   );
