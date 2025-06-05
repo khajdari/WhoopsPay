@@ -1213,6 +1213,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Juice Shop Integration Route - Simple version to avoid template literal issues
+  app.get('/juice-shop', (req, res) => {
+    res.send(`
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OWASP Juice Shop</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; margin: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 40px; color: white; }
+        .header h1 { font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .product { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .product-emoji { font-size: 4rem; text-align: center; margin-bottom: 15px; }
+        .product-name { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; color: #2c3e50; }
+        .product-price { font-size: 1.8rem; font-weight: bold; color: #27ae60; margin-bottom: 15px; }
+        .buy-btn { background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-size: 1.1rem; font-weight: bold; width: 100%; }
+        .buy-btn:hover { background: linear-gradient(45deg, #2980b9, #3498db); transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧃 OWASP Juice Shop</h1>
+            <p>Probably the most modern and sophisticated insecure web application</p>
+        </div>
+        <div class="products">
+            <div class="product">
+                <div class="product-emoji">🍎</div>
+                <div class="product-name">Apple Pomace</div>
+                <div class="product-price">$0.89</div>
+                <button class="buy-btn" onclick="buyProduct('Apple Pomace', 0.89)">Pay with WhoopsPay</button>
+            </div>
+            <div class="product">
+                <div class="product-emoji">🥤</div>
+                <div class="product-name">Green Smoothie</div>
+                <div class="product-price">$1.99</div>
+                <button class="buy-btn" onclick="buyProduct('Green Smoothie', 1.99)">Pay with WhoopsPay</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function buyProduct(name, price) {
+            const paymentId = Date.now();
+            const returnUrl = encodeURIComponent(window.location.origin + "/juice-shop?success=1");
+            const cancelUrl = encodeURIComponent(window.location.origin + "/juice-shop?cancelled=1");
+            const url = "/external-payment/" + paymentId + "?amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
+            window.location.href = url;
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success')) {
+            alert('Payment successful! Thank you for your purchase.');
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } else if (urlParams.get('cancelled')) {
+            alert('Payment was cancelled.');
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    </script>
+</body>
+</html>
+    `);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
