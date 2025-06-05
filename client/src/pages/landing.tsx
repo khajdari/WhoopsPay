@@ -19,14 +19,14 @@ export default function Landing() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <CreditCard className="h-6 w-6 text-blue-600" />
-              <h1 className="text-2xl font-bold paypwned-blue">PayPwned</h1>
+              <h1 className="text-2xl font-bold whoopspay-blue">WhoopsPay</h1>
             </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="paypwned-gradient text-white py-20">
+      <section className="whoopspay-gradient text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
             Send, spend, and receive money your way
