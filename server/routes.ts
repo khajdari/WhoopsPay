@@ -163,8 +163,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         `transactionId=${transactionId}&` +
         `amount=${total}&` +
         `description=Juice Shop Purchase&` +
-        `returnUrl=http://localhost:3000/?payment=success&` +
-        `cancelUrl=http://localhost:3000/?payment=cancelled`;
+        `returnUrl=http://localhost:3001/?payment=success&` +
+        `cancelUrl=http://localhost:3001/?payment=cancelled`;
       
       logStore.addExpressLog(`[JUICE-SHOP] Payment initiation for amount: $${total}, transaction: ${transactionId}`);
       
