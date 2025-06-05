@@ -1,3 +1,21 @@
+/**
+ * Transaction History Page - Financial transaction management and analysis
+ * 
+ * Comprehensive transaction viewing interface providing:
+ * - Complete transaction history with search and filtering
+ * - Real-time pagination and data management
+ * - Advanced filtering by transaction type and status
+ * - Mobile-responsive transaction display
+ * - Detailed transaction information with security context
+ * 
+ * Educational Security Features:
+ * - Demonstrates client-side data filtering vulnerabilities
+ * - Shows improper access control through visible data exposure
+ * - Includes pagination without proper authorization checks
+ * 
+ * VULNERABILITY NOTE: Client-side filtering exposes all transaction
+ * data for educational security training purposes.
+ */
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
@@ -11,19 +29,59 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
+/**
+ * Transactions Component - Financial history management interface
+ * 
+ * Main transactions page providing comprehensive transaction viewing
+ * and management capabilities. Features include:
+ * - Search functionality across transaction fields
+ * - Type-based filtering (sent, received, all)
+ * - Paginated display with navigation controls
+ * - Real-time transaction data synchronization
+ * - Mobile-optimized transaction list display
+ */
 export default function Transactions() {
   const { user } = useAuth();
+  
+  /**
+   * Transaction Filter State - Search and pagination controls
+   * 
+   * State management for transaction filtering and display:
+   * - searchQuery: Text search across transaction fields
+   * - filterType: Transaction direction filter (all, sent, received)
+   * - currentPage: Current pagination page number
+   * - itemsPerPage: Number of transactions per page
+   */
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  /**
+   * Transactions Query - Fetch all transaction data
+   * 
+   * Retrieves complete transaction history for the authenticated user.
+   * 
+   * VULNERABILITY NOTE: Fetches all transactions without server-side
+   * filtering for educational security training purposes.
+   */
   const { data: transactions, isLoading } = useQuery({
     queryKey: ["/api/transactions"],
     enabled: !!user,
   });
 
-  // VULNERABLE: Client-side filtering that could expose sensitive data
+  /**
+   * Client-Side Transaction Filtering - VULNERABLE IMPLEMENTATION
+   * 
+   * Filters transactions based on user input and filter criteria.
+   * This implementation exposes potential security issues:
+   * - All transaction data loaded to client
+   * - No server-side access control validation
+   * - Potential data exposure through filtering logic
+   * 
+   * VULNERABILITY NOTE: Client-side filtering exposes sensitive
+   * transaction data for educational security training.
+   */
   const transactionsList = Array.isArray(transactions) ? transactions : [];
   const filteredTransactions = transactionsList.filter((transaction: any) => {
     if (filterType === "sent" && transaction.fromUserId !== user?.id) return false;
@@ -41,30 +99,62 @@ export default function Transactions() {
     return true;
   });
 
-  // Pagination logic
+  /**
+   * Pagination Logic - Calculate page boundaries and current data slice
+   * 
+   * Handles pagination calculations for transaction display including
+   * total pages, current slice boundaries, and data extraction.
+   */
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentTransactions = filteredTransactions.slice(startIndex, endIndex);
 
+  /**
+   * Next Page Navigation - Move to next page if available
+   * 
+   * Handles forward pagination navigation with boundary checking
+   * to prevent navigation beyond available pages.
+   */
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
 
+  /**
+   * Previous Page Navigation - Move to previous page if available
+   * 
+   * Handles backward pagination navigation with boundary checking
+   * to prevent navigation below page 1.
+   */
   const goToPrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
   };
 
-  // Reset to page 1 when filters change
+  /**
+   * Search Change Handler - Update search query and reset pagination
+   * 
+   * Handles search input changes and resets pagination to page 1
+   * to ensure users see filtered results from the beginning.
+   * 
+   * @param value - New search query string
+   */
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
     setCurrentPage(1);
   };
 
+  /**
+   * Filter Change Handler - Update filter type and reset pagination
+   * 
+   * Handles filter type changes and resets pagination to page 1
+   * to ensure users see filtered results from the beginning.
+   * 
+   * @param value - New filter type (all, sent, received)
+   */
   const handleFilterChange = (value: string) => {
     setFilterType(value);
     setCurrentPage(1);

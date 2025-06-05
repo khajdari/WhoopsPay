@@ -1,3 +1,20 @@
+/**
+ * User Profile Management Page - Personal information and account settings
+ * 
+ * Provides comprehensive user profile management functionality including:
+ * - View and edit personal information (name, email, address, etc.)
+ * - Secure profile update with server-side validation
+ * - Real-time form state management and error handling
+ * - Navigation integration with authentication context
+ * 
+ * Educational Security Features:
+ * - Demonstrates proper form validation and user input handling
+ * - Shows secure API communication for profile updates
+ * - Includes error boundary handling for failed operations
+ * 
+ * VULNERABILITY NOTE: Profile updates may expose sensitive information
+ * through verbose error messages for educational purposes.
+ */
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,13 +29,31 @@ import { apiRequest } from "@/lib/queryClient";
 import { ArrowLeft, Edit2, Save } from "lucide-react";
 import { useLocation } from "wouter";
 
+/**
+ * Profile Component - User account management interface
+ * 
+ * Main profile page component that handles user account information
+ * display and editing. Features include:
+ * - Toggle between view and edit modes
+ * - Form state management for profile updates
+ * - Server communication for data persistence
+ * - Toast notifications for user feedback
+ * - Navigation controls for user experience
+ */
 export default function Profile() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
+  // Component state management
   const [isEditing, setIsEditing] = useState(false);
   
+  /**
+   * Form Data State - User profile information
+   * 
+   * Manages the editable form state for user profile updates.
+   * Initialized with current user data or empty strings as fallbacks.
+   */
   const [formData, setFormData] = useState({
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
@@ -28,6 +63,18 @@ export default function Profile() {
     gender: user?.gender || "",
   });
 
+  /**
+   * Profile Update Mutation - Server communication for profile changes
+   * 
+   * Handles API communication for updating user profile information.
+   * Features:
+   * - Optimistic UI updates through cache invalidation
+   * - Toast notifications for user feedback
+   * - Error handling with descriptive messages
+   * 
+   * VULNERABILITY NOTE: Profile updates may expose user data through
+   * verbose error messages for educational purposes.
+   */
   const updateProfileMutation = useMutation({
     mutationFn: async (data: any) => {
       return await apiRequest("PUT", `/api/users/${user?.id}/profile`, data);
@@ -49,11 +96,25 @@ export default function Profile() {
     },
   });
 
+  /**
+   * Form Submit Handler - Process profile update submission
+   * 
+   * Handles form submission for profile updates by preventing default
+   * browser behavior and triggering the mutation with current form data.
+   * 
+   * @param e - React form event object
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updateProfileMutation.mutate(formData);
   };
 
+  /**
+   * Cancel Edit Handler - Reset form state and exit edit mode
+   * 
+   * Restores form data to original user values and exits edit mode.
+   * Provides user with ability to discard unsaved changes.
+   */
   const handleCancel = () => {
     setFormData({
       firstName: user?.firstName || "",

@@ -1,3 +1,20 @@
+/**
+ * User Settings Page - Account security and preference management
+ * 
+ * Provides comprehensive user settings management including:
+ * - Password change functionality with current password verification
+ * - Security settings and account preferences
+ * - Form validation and secure password handling
+ * - Toast notifications for user feedback
+ * 
+ * Educational Security Features:
+ * - Demonstrates password change workflow
+ * - Shows secure form handling for sensitive operations
+ * - Includes client-side validation patterns
+ * 
+ * VULNERABILITY NOTE: Password changes may expose authentication
+ * details through verbose error messages for educational purposes.
+ */
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,16 +28,48 @@ import { apiRequest } from "@/lib/queryClient";
 import { ArrowLeft, Shield } from "lucide-react";
 import { useLocation } from "wouter";
 
+/**
+ * Settings Component - User account settings management interface
+ * 
+ * Main settings page component that handles user account security
+ * and preferences. Features include:
+ * - Password change form with validation
+ * - Security settings management
+ * - Form state management for password updates
+ * - Server communication for security changes
+ * - Navigation controls for user experience
+ */
 export default function Settings() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
   
+  /**
+   * Password Form State - Manages password change form fields
+   * 
+   * State variables for handling secure password updates:
+   * - currentPassword: User's existing password for verification
+   * - newPassword: New password to be set
+   * - confirmPassword: Confirmation of new password for validation
+   */
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  /**
+   * Password Change Mutation - Server communication for password updates
+   * 
+   * Handles secure password change operations with proper validation.
+   * Features:
+   * - Current password verification before update
+   * - Toast notifications for user feedback
+   * - Form reset on successful change
+   * - Error handling with descriptive messages
+   * 
+   * VULNERABILITY NOTE: Password changes may expose authentication
+   * details through verbose error messages for educational purposes.
+   */
   const changePasswordMutation = useMutation({
     mutationFn: async (data: any) => {
       return await apiRequest("PUT", "/api/auth/change-password", data);
@@ -43,8 +92,14 @@ export default function Settings() {
     },
   });
 
-
-
+  /**
+   * Password Change Handler - Process password change form submission
+   * 
+   * Handles form submission for password changes with client-side validation.
+   * Validates password confirmation match before sending to server.
+   * 
+   * @param e - React form event object
+   */
   const handlePasswordChange = (e: React.FormEvent) => {
     e.preventDefault();
     

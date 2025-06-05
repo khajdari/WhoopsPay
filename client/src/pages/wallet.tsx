@@ -1,3 +1,21 @@
+/**
+ * Digital Wallet Management Page - Payment methods and balance overview
+ * 
+ * Comprehensive wallet interface providing:
+ * - User balance display with privacy toggle
+ * - Payment method management (cards and bank accounts)
+ * - Add/remove payment methods with real-time updates
+ * - Secure data display with optional masking
+ * - Mobile-responsive design with navigation
+ * 
+ * Educational Security Features:
+ * - Demonstrates secure payment data handling
+ * - Shows client-side data masking techniques
+ * - Includes proper state management for sensitive information
+ * 
+ * VULNERABILITY NOTE: Payment method data may be exposed through
+ * client-side storage for educational security training.
+ */
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -13,20 +31,56 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Wallet as WalletIcon, CreditCard, University, Plus, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
+/**
+ * Wallet Component - Digital payment management interface
+ * 
+ * Main wallet page providing comprehensive payment method management.
+ * Features include:
+ * - Balance visibility controls with privacy settings
+ * - Payment method CRUD operations
+ * - Real-time data synchronization
+ * - Secure display of sensitive payment information
+ * - Modal-based add/edit functionality
+ */
 export default function Wallet() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  
+  /**
+   * Wallet State Management - Privacy and modal controls
+   * 
+   * State variables controlling wallet interface behavior:
+   * - showBalance: Toggle for balance visibility privacy
+   * - showSensitiveData: Toggle for payment method data masking
+   * - showAddCardModal: Controls credit card addition modal
+   * - showAddBankModal: Controls bank account addition modal
+   */
   const [showBalance, setShowBalance] = useState(true);
   const [showSensitiveData, setShowSensitiveData] = useState(false);
   const [showAddCardModal, setShowAddCardModal] = useState(false);
   const [showAddBankModal, setShowAddBankModal] = useState(false);
 
+  /**
+   * User Profile Query - Fetch user balance and profile data
+   * 
+   * Retrieves comprehensive user profile information including
+   * account balance for display in the wallet interface.
+   */
   const { data: userProfile, isLoading: profileLoading } = useQuery({
     queryKey: [`/api/users/${user?.id}/profile`],
     enabled: !!user,
   });
 
+  /**
+   * Payment Methods Query - Fetch user's payment methods
+   * 
+   * Retrieves all payment methods (cards and bank accounts) associated
+   * with the current user for display and management operations.
+   * 
+   * VULNERABILITY NOTE: Payment data is fetched without proper
+   * server-side filtering for educational purposes.
+   */
   const { data: paymentMethods, isLoading: paymentMethodsLoading } = useQuery({
     queryKey: ["/api/payments", user?.id],
     queryFn: async () => {
@@ -37,6 +91,18 @@ export default function Wallet() {
     enabled: !!user,
   });
 
+  /**
+   * Delete Payment Method Mutation - Remove payment methods
+   * 
+   * Handles secure deletion of payment methods with proper cleanup.
+   * Features:
+   * - Cache invalidation for real-time UI updates
+   * - Toast notifications for user feedback
+   * - Error handling with descriptive messages
+   * 
+   * VULNERABILITY NOTE: Deletion may not properly verify ownership
+   * for educational security training.
+   */
   const deletePaymentMethodMutation = useMutation({
     mutationFn: async (id: number) => {
       await apiRequest("DELETE", `/api/payments/${id}`);
@@ -57,10 +123,24 @@ export default function Wallet() {
     },
   });
 
+  /**
+   * Delete Payment Handler - Process payment method removal
+   * 
+   * Initiates payment method deletion by triggering the mutation
+   * with the specified payment method ID.
+   * 
+   * @param id - Payment method ID to delete
+   */
   const handleDeletePaymentMethod = (id: number) => {
     deletePaymentMethodMutation.mutate(id);
   };
 
+  /**
+   * Balance Extraction - Get user's current balance
+   * 
+   * Extracts user balance from profile data with fallback to "0.00"
+   * for display in the wallet interface.
+   */
   const balance = (userProfile as any)?.balance || "0.00";
 
   return (
