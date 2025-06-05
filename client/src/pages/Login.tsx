@@ -35,13 +35,25 @@ export default function Login() {
     mutationFn: async (data: LoginForm) => {
       return await apiRequest("/api/login", "POST", data);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         title: "Login successful",
         description: "Welcome back to WhoopsPay!",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
-      window.location.href = "/";
+      
+      // Fetch user data to check if admin
+      try {
+        const user = await apiRequest("/api/auth/user", "GET");
+        if (user && user.isAdmin) {
+          window.location.href = "/administration";
+        } else {
+          window.location.href = "/";
+        }
+      } catch (error) {
+        // Fallback to home page if user fetch fails
+        window.location.href = "/";
+      }
     },
     onError: (error: Error) => {
       toast({
