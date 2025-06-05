@@ -1251,8 +1251,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         })
       });
 
-      // Redirect to Juice Shop payment processing page
-      res.redirect(`/juice-shop/payment-processing?transactionId=${transaction.id}&amount=${amount}&description=${encodeURIComponent(description as string)}&returnUrl=${encodeURIComponent(returnUrl as string)}&cancelUrl=${encodeURIComponent(cancelUrl as string)}`);
+      // Send HTML page that redirects to processing page
+      res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Redirecting to Payment...</title>
+          <meta http-equiv="refresh" content="0;url=/juice-shop/payment-processing?transactionId=${transaction.id}&amount=${amount}&description=${encodeURIComponent(description as string)}&returnUrl=${encodeURIComponent(returnUrl as string)}&cancelUrl=${encodeURIComponent(cancelUrl as string)}">
+        </head>
+        <body>
+          <script>
+            window.location.href = "/juice-shop/payment-processing?transactionId=${transaction.id}&amount=${amount}&description=${encodeURIComponent(description as string)}&returnUrl=${encodeURIComponent(returnUrl as string)}&cancelUrl=${encodeURIComponent(cancelUrl as string)}";
+          </script>
+          <p>Redirecting to payment processing...</p>
+        </body>
+        </html>
+      `);
 
     } catch (error) {
       console.error("External payment error:", error);
