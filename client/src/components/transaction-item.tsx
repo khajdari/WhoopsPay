@@ -1,9 +1,32 @@
 
+/**
+ * Transaction Item Component - Individual transaction display unit
+ * 
+ * Renders individual transaction entries with comprehensive information:
+ * - Transaction direction indicators (incoming/outgoing)
+ * - Amount formatting with proper currency display
+ * - Contact name resolution and display
+ * - Transaction category icons and visual cues
+ * - Status badges and timestamp information
+ * 
+ * Educational Security Features:
+ * - Demonstrates client-side data exposure patterns
+ * - Shows transaction information handling
+ * - Includes user identification logic
+ * 
+ * VULNERABILITY NOTE: User information may be exposed through
+ * client-side logic for educational security training purposes.
+ */
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { ArrowUpRight, ArrowDownLeft, ShoppingCart, University, Play, Music, Car, Coffee, Smartphone } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
+/**
+ * TransactionItemProps Interface - Component properties
+ * 
+ * @property transaction - Transaction data object with all necessary information
+ */
 interface TransactionItemProps {
   transaction: {
     id: number;
@@ -16,6 +39,17 @@ interface TransactionItemProps {
   };
 }
 
+/**
+ * TransactionItem Component - Individual transaction display
+ * 
+ * Component that renders individual transaction entries with proper
+ * formatting and visual indicators. Features include:
+ * - Transaction direction detection and display
+ * - Amount formatting with currency symbols
+ * - Contact name resolution and masking
+ * - Category-based icon selection
+ * - Status and timestamp display
+ */
 export function TransactionItem({ transaction }: TransactionItemProps) {
   const { user } = useAuth();
   

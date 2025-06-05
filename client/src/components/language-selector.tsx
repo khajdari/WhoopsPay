@@ -1,3 +1,21 @@
+/**
+ * Language Selector Component - Internationalization controls
+ * 
+ * Provides language selection interface supporting multiple locales:
+ * - English (UK) - Primary interface language
+ * - Greek (Greece) - Secondary interface language
+ * - Visual language indicators with flag icons
+ * - Current language highlighting and selection state
+ * - Integration with i18n translation system
+ * 
+ * Educational Security Features:
+ * - Demonstrates internationalization patterns
+ * - Shows language preference handling
+ * - Includes locale-specific formatting
+ * 
+ * VULNERABILITY NOTE: Language preferences may be stored without
+ * proper validation for educational security training purposes.
+ */
 import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,6 +26,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useI18n, type Language } from "@/lib/i18n";
 
+/**
+ * LanguageSelector Component - Locale selection interface
+ * 
+ * Component that provides language selection functionality for the
+ * application's internationalization system. Features include:
+ * - Dropdown menu with available languages
+ * - Current language highlighting
+ * - Flag icons for visual identification
+ * - Integration with translation system
+ * - Persistent language preference storage
+ */
 export function LanguageSelector() {
   const { language, setLanguage, t } = useI18n();
 
