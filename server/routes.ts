@@ -1251,8 +1251,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         })
       });
 
-      // Redirect to WhoopsPay login/payment flow
-      res.redirect(`/?payment=${transaction.id}&amount=${amount}&description=${encodeURIComponent(description as string)}&returnUrl=${encodeURIComponent(returnUrl as string)}&cancelUrl=${encodeURIComponent(cancelUrl as string)}`);
+      // Redirect to Juice Shop payment processing page
+      res.redirect(`/juice-shop/payment-processing?transactionId=${transaction.id}&amount=${amount}&description=${encodeURIComponent(description as string)}&returnUrl=${encodeURIComponent(returnUrl as string)}&cancelUrl=${encodeURIComponent(cancelUrl as string)}`);
 
     } catch (error) {
       console.error("External payment error:", error);
@@ -1267,6 +1267,185 @@ export async function registerRoutes(app: Express): Promise<Server> {
         </html>
       `);
     }
+  });
+
+  // Juice Shop Payment Processing Page
+  app.get('/juice-shop/payment-processing', (req, res) => {
+    const { transactionId, amount, description, returnUrl, cancelUrl } = req.query;
+    
+    res.send(`
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processing Payment - OWASP Juice Shop</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .processing-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 60px 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+        .juice-shop-logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .processing-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .processing-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        .spinner-container {
+            margin: 30px 0;
+        }
+        .spinner {
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid #fff;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1.5s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .payment-details {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+        .payment-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            border-radius: 4px;
+            animation: progress 3s ease-in-out;
+            width: 0%;
+        }
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .countdown {
+            font-size: 1.1rem;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+        .redirect-info {
+            font-size: 0.9rem;
+            margin-top: 15px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="processing-container">
+        <div class="juice-shop-logo">🧃</div>
+        <div class="processing-title">Processing Payment</div>
+        <div class="processing-subtitle">OWASP Juice Shop</div>
+        
+        <div class="spinner-container">
+            <div class="spinner"></div>
+        </div>
+        
+        <div class="payment-details">
+            <div class="payment-item">
+                <span>Item:</span>
+                <span>${decodeURIComponent(description || 'Product')}</span>
+            </div>
+            <div class="payment-item">
+                <span>Amount:</span>
+                <span class="payment-amount">$${amount || '0.00'}</span>
+            </div>
+            <div class="payment-item">
+                <span>Transaction ID:</span>
+                <span>#${transactionId || 'N/A'}</span>
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <div class="countdown">
+            Redirecting to WhoopsPay in <span id="countdown">3</span> seconds...
+        </div>
+        
+        <div class="redirect-info">
+            You will be redirected to WhoopsPay to complete your secure payment
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 3;
+        const countdownElement = document.getElementById('countdown');
+        
+        const countdown = setInterval(() => {
+            timeLeft--;
+            countdownElement.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                
+                // Redirect to WhoopsPay login with payment parameters
+                const loginUrl = "/login?redirect=payment&transactionId=${transactionId}&amount=${amount}&description=${encodeURIComponent(description || '')}&returnUrl=${encodeURIComponent(returnUrl || '')}&cancelUrl=${encodeURIComponent(cancelUrl || '')}";
+                window.location.href = loginUrl;
+            }
+        }, 1000);
+        
+        // Fallback redirect in case JavaScript fails
+        setTimeout(() => {
+            const loginUrl = "/login?redirect=payment&transactionId=${transactionId}&amount=${amount}&description=${encodeURIComponent(description || '')}&returnUrl=${encodeURIComponent(returnUrl || '')}&cancelUrl=${encodeURIComponent(cancelUrl || '')}";
+            window.location.href = loginUrl;
+        }, 3500);
+    </script>
+</body>
+</html>
+    `);
   });
 
   // Juice Shop Integration Route - Simple version to avoid template literal issues
@@ -1289,8 +1468,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .buy-btn { background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-size: 1.1rem; font-weight: bold; width: 100%; transition: all 0.3s ease; }
         .buy-btn:hover { background: linear-gradient(45deg, #2980b9, #3498db); transform: scale(1.05); }
         .buy-btn:disabled { background: #ccc; cursor: not-allowed; }
-        .loading { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
-        .loading.active { display: flex; }
+        .loading { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.9); 
+            z-index: 99999; 
+            justify-content: center; 
+            align-items: center; 
+            flex-direction: column; 
+        }
+        .loading.active { 
+            display: flex !important; 
+        }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-text { color: white; font-size: 1.2rem; font-weight: bold; }
