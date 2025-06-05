@@ -52,7 +52,7 @@ function Router() {
         </>
       )}
 
-      <Route path="/juice-shop/payment-processing" component={PaymentProcessing} />
+      <Route path="/payment-processing" component={PaymentProcessing} />
       <Route path="/external-payment/:transactionId" component={ExternalPayment} />
       <Route component={NotFound} />
     </Switch>

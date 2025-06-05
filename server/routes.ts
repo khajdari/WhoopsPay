@@ -127,6 +127,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== JUICE SHOP INTEGRATION ROUTES =====
+  
+  /**
+   * @swagger
+   * /api/payment/initiate:
+   *   post:
+   *     summary: Juice Shop payment initiation endpoint
+   *     description: "Endpoint called by Juice Shop to initiate WhoopsPay payments"
+   *     tags: [Juice Shop Integration]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               items:
+   *                 type: array
+   *               total:
+   *                 type: number
+   *     responses:
+   *       200:
+   *         description: Redirect URL for payment processing
+   */
+  app.post("/api/payment/initiate", async (req, res) => {
+    try {
+      const { items, total } = req.body;
+      
+      // Generate transaction ID for Juice Shop order
+      const transactionId = `juice-shop-${Date.now()}`;
+      
+      // Create redirect URL to payment processing page
+      const redirectUrl = `http://localhost:5000/payment-processing?` +
+        `transactionId=${transactionId}&` +
+        `amount=${total}&` +
+        `description=Juice Shop Purchase&` +
+        `returnUrl=http://localhost:3000/?payment=success&` +
+        `cancelUrl=http://localhost:3000/?payment=cancelled`;
+      
+      logStore.addExpressLog(`[JUICE-SHOP] Payment initiation for amount: $${total}, transaction: ${transactionId}`);
+      
+      res.json({
+        success: true,
+        redirectUrl: redirectUrl,
+        transactionId: transactionId
+      });
+    } catch (error) {
+      console.error('Juice Shop payment initiation error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Payment initiation failed'
+      });
+    }
+  });
+
   // ===== EXTERNAL PAYMENT INTEGRATION ROUTES =====
   
   /**
