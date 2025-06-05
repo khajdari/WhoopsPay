@@ -372,19 +372,19 @@ app.get('/', (req, res) => {
         
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
-            grid.innerHTML = products.map(product => \`
-                <div class="product-card \${!product.inStock ? 'out-of-stock' : ''}">
-                    <div class="product-emoji">\${product.image}</div>
-                    <div class="product-name">\${product.name}</div>
-                    <div class="product-description">\${product.description}</div>
-                    <div class="product-price">$\${product.price.toFixed(2)}</div>
+            grid.innerHTML = products.map(product => `
+                <div class="product-card ${!product.inStock ? 'out-of-stock' : ''}">
+                    <div class="product-emoji">${product.image}</div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-description">${product.description}</div>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
                     <button class="add-to-cart-btn" 
-                            onclick="addToCart(\${product.id})" 
-                            \${!product.inStock ? 'disabled' : ''}>
-                        \${!product.inStock ? 'Out of Stock' : 'Add to Cart'}
+                            onclick="addToCart(${product.id})" 
+                            ${!product.inStock ? 'disabled' : ''}>
+                        ${!product.inStock ? 'Out of Stock' : 'Add to Cart'}
                     </button>
                 </div>
-            \`).join('');
+            `).join('');
         }
         
         function addToCart(productId) {
