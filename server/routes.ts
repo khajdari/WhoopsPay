@@ -90,6 +90,123 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Login endpoint
+  app.post('/api/login', async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required" });
+      }
+
+      // Demo users for testing (using bcrypt hashed passwords)
+      const bcrypt = require('bcrypt');
+      const demoUsers = [
+        { 
+          id: 'jdoe', 
+          username: 'jdoe', 
+          passwordHash: await bcrypt.hash('password123', 10),
+          email: 'john.doe@example.com',
+          firstName: 'John',
+          lastName: 'Doe',
+          balance: 2500.75,
+          isAdmin: 0
+        },
+        { 
+          id: 'admin', 
+          username: 'admin', 
+          passwordHash: await bcrypt.hash('admin123', 10),
+          email: 'admin@example.com',
+          firstName: 'Admin',
+          lastName: 'User',
+          balance: 10000.00,
+          isAdmin: 1
+        }
+      ];
+      
+      const user = demoUsers.find(u => u.username === username);
+      if (!user || !await bcrypt.compare(password, user.passwordHash)) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // Set session
+      req.session.userId = user.id;
+      
+      res.json({ 
+        success: true, 
+        message: "Login successful",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          balance: user.balance,
+          isAdmin: user.isAdmin
+        }
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Login failed" });
+    }
+  });
+
+  // Register endpoint
+  app.post('/api/register', async (req, res) => {
+    try {
+      const { username, email, password, firstName, lastName } = req.body;
+      
+      if (!username || !email || !password || !firstName || !lastName) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+
+      const bcrypt = require('bcrypt');
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
+      const newUser = {
+        id: username,
+        email,
+        firstName,
+        lastName,
+        password: hashedPassword,
+        balance: 100.00,
+        isAdmin: 0,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+
+      await storage.upsertUser(newUser);
+
+      // Set session
+      req.session.userId = newUser.id;
+      
+      res.json({ 
+        success: true, 
+        message: "Registration successful",
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          balance: newUser.balance,
+          isAdmin: newUser.isAdmin
+        }
+      });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ message: "Registration failed" });
+    }
+  });
+
+  // Logout endpoint
+  app.post('/api/logout', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Could not log out" });
+      }
+      res.json({ success: true, message: "Logged out successfully" });
+    });
+  });
+
   /**
    * @swagger
    * /api/users/search:
