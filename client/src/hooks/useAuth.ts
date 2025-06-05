@@ -1,41 +1,14 @@
-import { useState, useEffect } from "react";
-import { User } from "@shared/schema";
+import { useQuery } from "@tanstack/react-query";
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Check localStorage for logged in user (VULNERABLE: insecure storage)
-    try {
-      const storedUser = localStorage.getItem("payPwned_user");
-      if (storedUser) {
-        const userData = JSON.parse(storedUser);
-        setUser(userData);
-      }
-    } catch (error) {
-      console.error("Error parsing stored user data:", error);
-      localStorage.removeItem("payPwned_user");
-    }
-    setIsLoading(false);
-  }, []);
-
-  const login = (userData: User) => {
-    localStorage.setItem("payPwned_user", JSON.stringify(userData));
-    setUser(userData);
-  };
-
-  const logout = () => {
-    localStorage.removeItem("payPwned_user");
-    setUser(null);
-    window.location.href = "/";
-  };
+  const { data: user, isLoading } = useQuery({
+    queryKey: ["/api/auth/user"],
+    retry: false,
+  });
 
   return {
     user,
     isLoading,
     isAuthenticated: !!user,
-    login,
-    logout,
   };
 }
