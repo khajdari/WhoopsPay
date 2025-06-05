@@ -178,13 +178,13 @@
   }
 }
 
-/* PayPwned-style gradient backgrounds */
-.paypwned-gradient {
-  background: linear-gradient(135deg, hsl(var(--paypwned-blue)) 0%, hsl(var(--paypwned-navy)) 100%);
+/* WhoopsPay-style gradient backgrounds */
+.whoopspay-gradient {
+  background: linear-gradient(135deg, hsl(var(--whoopspay-blue)) 0%, hsl(var(--whoopspay-navy)) 100%);
 }
 
-.paypwned-gradient-light {
-  background: linear-gradient(135deg, hsl(var(--paypwned-lightblue)) 0%, hsl(var(--paypwned-blue)) 100%);
+.whoopspay-gradient-light {
+  background: linear-gradient(135deg, hsl(var(--whoopspay-lightblue)) 0%, hsl(var(--whoopspay-blue)) 100%);
 }
 
 /* Custom scrollbar for better UX */
@@ -198,10 +198,10 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: hsl(var(--paypwned-blue));
+  background: hsl(var(--whoopspay-blue));
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--paypwned-darkblue));
+  background: hsl(var(--whoopspay-darkblue));
 }
