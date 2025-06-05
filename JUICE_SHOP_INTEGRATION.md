@@ -166,15 +166,15 @@ app.post('/api/checkout/paypwned', async (req, res) => {
   }
 });
 
-// Handle return from PayPwned
-app.get('/api/checkout/paypwned/return', async (req, res) => {
+// Handle return from WhoopsPay
+app.get('/api/checkout/whoopspay/return', async (req, res) => {
   try {
     const { orderId, status, transactionId } = req.query;
     
     if (status === 'success') {
-      // Verify payment with PayPwned
+      // Verify payment with WhoopsPay
       const verificationResponse = await fetch(
-        `https://paypwned.replit.app/api/external/payment/${transactionId}/status`
+        `https://whoopspay.replit.app/api/external/payment/${transactionId}/status`
       );
       const verification = await verificationResponse.json();
       
