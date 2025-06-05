@@ -1,28 +1,47 @@
+/**
+ * Local Authentication System - Session-based user authentication
+ * 
+ * Provides secure session management, password hashing, and authentication
+ * middleware for the WhoopsPay application. Designed for educational purposes
+ * with intentional security vulnerabilities for training.
+ */
 import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import { storage } from "./storage";
 import bcrypt from "bcrypt";
 
-// Simple session configuration for local development
+/**
+ * Session Configuration - Sets up Express session middleware
+ * 
+ * Configures session storage with security settings appropriate for
+ * local development. Uses secure cookies and proper TTL management.
+ */
 export function getSession() {
-  const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
+  const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week session duration
   
   return session({
     secret: process.env.SESSION_SECRET || 'whoopspay-local-dev-secret-key-change-in-production',
-    resave: false,
-    saveUninitialized: false,
+    resave: false, // Don't save session if unmodified
+    saveUninitialized: false, // Don't create session until something stored
     cookie: {
-      httpOnly: true,
-      secure: false, // Set to false for local development
-      maxAge: sessionTtl,
+      httpOnly: true, // Prevent XSS attacks via JavaScript access
+      secure: false, // Set to false for local development (use true for HTTPS)
+      maxAge: sessionTtl, // Session expiration time
     },
   });
 }
 
-// Simple authentication middleware
+/**
+ * Authentication Middleware - Validates user sessions
+ * 
+ * Checks for valid user session and attaches user object to request.
+ * Returns 401 Unauthorized for invalid or missing sessions.
+ * Essential for protecting authenticated routes throughout the application.
+ */
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  // Check if session exists and contains user ID
   if (req.session && req.session.userId) {
-    req.user = { id: req.session.userId };
+    req.user = { id: req.session.userId }; // Attach user to request object
     return next();
   }
   

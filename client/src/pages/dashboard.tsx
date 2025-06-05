@@ -1,3 +1,10 @@
+/**
+ * Dashboard Page - Main user interface for WhoopsPay
+ * 
+ * Central hub displaying user financial overview, recent transactions,
+ * payment methods, and quick action buttons. Provides comprehensive
+ * financial management interface with real-time data updates.
+ */
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
@@ -12,9 +19,20 @@ import { Send, HandCoins, Plus, University, Wallet, CreditCard, Users, Shield, A
 import { useState } from "react";
 import { Link } from "wouter";
 
+/**
+ * Dashboard Component - Main authenticated user landing page
+ * 
+ * Features:
+ * - Account balance and financial overview
+ * - Recent transaction history with visual indicators
+ * - Payment method management with interactive cards
+ * - Quick action buttons for common operations
+ * - Security status indicators and admin access
+ * - Responsive design with mobile navigation
+ */
 export default function Dashboard() {
-  const { user } = useAuth();
-  const [showSendModal, setShowSendModal] = useState(false);
+  const { user } = useAuth(); // Current authenticated user data
+  const [showSendModal, setShowSendModal] = useState(false); // Send money modal state
 
   const { data: transactions, isLoading: transactionsLoading } = useQuery({
     queryKey: ["/api/transactions"],
