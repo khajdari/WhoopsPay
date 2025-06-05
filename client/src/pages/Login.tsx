@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { CreditCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ExternalPaymentModal } from "@/components/external-payment-modal";
@@ -24,6 +24,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function Login() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
   const [showExternalPaymentModal, setShowExternalPaymentModal] = useState(false);
   const [externalPaymentData, setExternalPaymentData] = useState<any>(null);
 
@@ -88,13 +89,13 @@ export default function Login() {
       try {
         const user = await apiRequest("/api/auth/user", "GET");
         if (user && (user as any).isAdmin) {
-          window.location.href = "/administration";
+          setLocation("/administration");
         } else {
-          window.location.href = "/dashboard";
+          setLocation("/dashboard");
         }
       } catch (error) {
         // Fallback to dashboard page if user fetch fails
-        window.location.href = "/dashboard";
+        setLocation("/dashboard");
       }
     },
     onError: (error: Error) => {
@@ -205,6 +206,22 @@ export default function Login() {
                 <div className="flex flex-col items-start">
                   <span className="font-medium">Admin User</span>
                   <span className="text-xs text-gray-500">Username: admin | Password: admin123</span>
+                </div>
+              </Button>
+              
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full text-left justify-start"
+                onClick={() => {
+                  loginForm.setValue("username", "moderator");
+                  loginForm.setValue("password", "mod123");
+                }}
+              >
+                <div className="flex flex-col items-start">
+                  <span className="font-medium">Moderator User</span>
+                  <span className="text-xs text-gray-500">Username: moderator | Password: mod123</span>
                 </div>
               </Button>
             </div>
