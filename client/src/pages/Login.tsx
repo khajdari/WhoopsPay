@@ -56,12 +56,15 @@ export default function Login() {
           originalUrl: from
         };
       } else if (transactionId && amount) {
+        // Direct payment parameters in login URL
         paymentData = {
           transactionId,
           amount,
           description,
           returnUrl,
-          cancelUrl
+          cancelUrl,
+          // Create the payment URL to redirect to after login
+          originalUrl: `/external-payment/${transactionId}?amount=${amount}&description=${encodeURIComponent(description || '')}&returnUrl=${encodeURIComponent(returnUrl || '')}&cancelUrl=${encodeURIComponent(cancelUrl || '')}`
         };
       }
       
