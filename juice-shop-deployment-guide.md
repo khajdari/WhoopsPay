@@ -52,7 +52,7 @@ cd juice-shop
 npm install
 ```
 
-### Step 2: Add PayPwned Integration Files
+### Step 2: Add WhoopsPay Integration Files
 1. Copy `juice-shop-payment-component.ts` content to `frontend/src/app/payment/payment.component.ts`
 2. Copy `juice-shop-payment-template.html` content to `frontend/src/app/payment/payment.component.html`
 3. Create `routes/payment.js` with content from `juice-shop-backend-routes.js`
@@ -83,9 +83,9 @@ ALTER TABLE Orders ADD COLUMN paymentStatus VARCHAR(50) DEFAULT 'pending';
 
 ### Step 5: Configure Environment
 ```bash
-# Add PayPwned configuration to .env
-echo "PAYPWNED_URL=https://paypwned.replit.app" >> .env
-echo "PAYPWNED_ENABLED=true" >> .env
+# Add WhoopsPay configuration to .env
+echo "WHOOPSPAY_URL=https://whoopspay.replit.app" >> .env
+echo "WHOOPSPAY_ENABLED=true" >> .env
 ```
 
 ### Step 6: Update Application Routes
@@ -120,11 +120,11 @@ npm start
 
 ### 2. API Testing
 ```bash
-# Test PayPwned connectivity
-curl https://paypwned.replit.app/api/external/payment/17/status
+# Test WhoopsPay connectivity
+curl https://whoopspay.replit.app/api/external/payment/17/status
 
-# Test Juice Shop PayPwned endpoint
-curl -X POST http://localhost:3000/api/payment/paypwned/initiate \
+# Test Juice Shop WhoopsPay endpoint
+curl -X POST http://localhost:3000/api/payment/whoopspay/initiate \
   -H "Content-Type: application/json" \
   -d '{
     "basketId": 1,
@@ -138,14 +138,14 @@ curl -X POST http://localhost:3000/api/payment/paypwned/initiate \
 
 ### Development Environment
 ```env
-PAYPWNED_URL=http://localhost:5000
-PAYPWNED_ENABLED=true
+WHOOPSPAY_URL=http://localhost:5000
+WHOOPSPAY_ENABLED=true
 ```
 
 ### Production Environment
 ```env
-PAYPWNED_URL=https://your-paypwned-domain.com
-PAYPWNED_ENABLED=true
+WHOOPSPAY_URL=https://your-whoopspay-domain.com
+WHOOPSPAY_ENABLED=true
 ```
 
 ## Security Considerations
@@ -163,17 +163,17 @@ This integration demonstrates educational security vulnerabilities:
 ### Common Issues
 
 1. **CORS Errors**
-   - Ensure PayPwned allows requests from Juice Shop domain
+   - Ensure WhoopsPay allows requests from Juice Shop domain
    - Configure proper CORS headers
 
 2. **Database Migration Fails**
    - Check SQLite database permissions
    - Manually add columns if migration fails
 
-3. **PayPwned Connectivity Issues**
-   - Verify PAYPWNED_URL is correct
+3. **WhoopsPay Connectivity Issues**
+   - Verify WHOOPSPAY_URL is correct
    - Check network connectivity
-   - Ensure PayPwned service is running
+   - Ensure WhoopsPay service is running
 
 4. **Frontend Build Errors**
    - Run `npm install` in frontend directory
@@ -187,30 +187,30 @@ npm run start:dev
 # Check database structure
 sqlite3 data/juiceshop.sqlite ".schema Orders"
 
-# Test PayPwned API
-curl -I https://paypwned.replit.app/api/external/payment/initiate
+# Test WhoopsPay API
+curl -I https://whoopspay.replit.app/api/external/payment/initiate
 ```
 
 ## Git Commands for Deployment
 
 ```bash
 # Create feature branch
-git checkout -b feature/paypwned-integration
+git checkout -b feature/whoopspay-integration
 
 # Add all integration files
 git add .
 
 # Commit changes
-git commit -m "Add PayPwned payment integration
+git commit -m "Add WhoopsPay payment integration
 
-- Added PayPwned payment option to checkout
+- Added WhoopsPay payment option to checkout
 - Implemented cross-platform payment flow
 - Added external payment API endpoints
 - Created payment verification system
 - Educational security vulnerability demonstration"
 
 # Push to your repository
-git push origin feature/paypwned-integration
+git push origin feature/whoopspay-integration
 
 # Create pull request on GitHub
 # Merge to main branch when ready
