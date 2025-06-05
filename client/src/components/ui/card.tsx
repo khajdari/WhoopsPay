@@ -1,7 +1,30 @@
+/**
+ * Card Component - Flexible container component system
+ * 
+ * Comprehensive card component library providing:
+ * - Main card container with consistent styling
+ * - Card header for titles and descriptions
+ * - Card content area for main information
+ * - Card footer for actions and secondary content
+ * - Responsive design with shadow and border styling
+ * 
+ * Educational Security Features:
+ * - Demonstrates component composition patterns
+ * - Shows proper HTML semantic structure
+ * - Includes accessible content organization
+ * 
+ * Built with forwardRef for proper DOM access and styling flexibility.
+ */
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Card Component - Main container element
+ * 
+ * Primary card container with consistent border, background, and shadow styling.
+ * Supports all standard div attributes and custom className overrides.
+ */
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
