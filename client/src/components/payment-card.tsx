@@ -132,77 +132,94 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
     );
   }
 
-  // Bank savings account design - redesigned with increased height
+  // Bank cheque design
   return (
     <div className="flex justify-center">
       <div 
-        className="relative w-96 h-72 cursor-pointer group"
+        className="relative w-96 h-56 cursor-pointer group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className={`relative w-full h-full transition-all duration-500 transform ${isHovered ? 'scale-105' : ''}`}>
-          <div className="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 shadow-2xl border border-emerald-500/30">
-            {/* Bank passbook binding */}
-            <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-b from-emerald-500 to-emerald-800 rounded-l-2xl border-r border-emerald-400/30"></div>
+        <div className={`relative w-full h-full transition-all duration-300 transform ${isHovered ? 'scale-105' : ''}`}>
+          <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden">
             
-            {/* Inner decorative borders */}
-            <div className="absolute inset-4 border border-emerald-400/20 rounded-xl"></div>
-            <div className="absolute inset-6 border border-emerald-400/10 rounded-lg"></div>
+            {/* Cheque security pattern background */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute top-0 left-0 w-full h-full" 
+                   style={{
+                     backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, #3b82f6 10px, #3b82f6 11px)`,
+                   }}>
+              </div>
+            </div>
             
             {showDelete && (
               <button
                 onClick={() => id && onDelete?.(id)}
-                className="absolute top-4 right-4 w-8 h-8 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
               >
-                <span className="text-white text-sm">×</span>
+                <span className="text-white text-xs">×</span>
               </button>
             )}
             
-            <div className="p-8 h-full flex flex-col justify-between text-emerald-50">
-              {/* Header */}
-              <div className="text-center space-y-2">
-                <Building2 className="w-12 h-12 mx-auto text-emerald-200" />
-                <div className="text-xl font-bold text-emerald-100 tracking-wide">SAVINGS ACCOUNT</div>
-                <div className="text-sm opacity-90 uppercase tracking-wider font-medium">
+            {/* Cheque header */}
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <div className="text-xs font-bold text-blue-800 uppercase tracking-wider">
                   {bankName || 'First National Bank'}
                 </div>
+                <div className="text-xs text-gray-600">Savings Account</div>
               </div>
-              
-              {/* Account details - with more generous spacing */}
-              <div className="bg-emerald-700/40 p-6 rounded-xl border border-emerald-400/20 backdrop-blur-sm mx-2">
-                <div className="space-y-5">
-                  <div className="text-center">
-                    <div className="text-xs opacity-80 uppercase tracking-wider mb-3">Account Number</div>
-                    <div className="font-mono text-xl tracking-wider font-semibold break-all px-2">
-                      {accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••1234'}
-                    </div>
-                  </div>
-                  {iban && (
-                    <div className="text-center border-t border-emerald-400/20 pt-4">
-                      <div className="text-xs opacity-80 uppercase tracking-wider mb-3">IBAN</div>
-                      <div className="font-mono text-sm tracking-wide opacity-90 break-all px-2">
-                        {iban.slice(0, 8)}••••••••
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              {/* Footer */}
-              <div className="text-center space-y-2">
-                <div className="text-xs opacity-70 font-medium">Established 1952</div>
-                <div className="text-xs opacity-70">Member FDIC • Equal Housing Lender</div>
-                <div className="flex justify-center items-center space-x-2 mt-3">
-                  <div className="w-2 h-2 bg-emerald-300 rounded-full opacity-60"></div>
-                  <div className="text-xs opacity-60 font-mono">Secured by 256-bit SSL</div>
-                  <div className="w-2 h-2 bg-emerald-300 rounded-full opacity-60"></div>
+              <div className="text-right">
+                <div className="text-xs text-gray-500">Account #</div>
+                <div className="font-mono text-sm font-bold text-blue-800">
+                  {accountNumber ? accountNumber.slice(-4) : '1234'}
                 </div>
               </div>
             </div>
             
-            {/* Decorative corner elements */}
-            <div className="absolute top-4 right-4 w-6 h-6 border-2 border-emerald-300/30 rounded-full"></div>
-            <div className="absolute top-5 right-5 w-4 h-4 border border-emerald-300/20 rounded-full"></div>
+            {/* Cheque number and routing info */}
+            <div className="border-t border-blue-200 pt-2 mb-4">
+              <div className="flex justify-between text-xs text-gray-600">
+                <span>Routing: 123456789</span>
+                <span>Check #: 001</span>
+              </div>
+            </div>
+            
+            {/* Main account details */}
+            <div className="bg-white/50 border border-blue-200 rounded p-3 mb-3">
+              <div className="flex justify-between items-center">
+                <div>
+                  <div className="text-xs text-gray-500 mb-1">Account Holder</div>
+                  <div className="font-semibold text-sm text-gray-800">John Doe</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs text-gray-500 mb-1">Balance</div>
+                  <div className="font-mono text-lg font-bold text-green-600">$2,450.75</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* IBAN section */}
+            {iban && (
+              <div className="border-t border-blue-200 pt-2">
+                <div className="text-xs text-gray-500 mb-1">IBAN</div>
+                <div className="font-mono text-xs text-gray-700">
+                  {iban.slice(0, 8)}••••••••
+                </div>
+              </div>
+            )}
+            
+            {/* Security features */}
+            <div className="absolute bottom-2 left-4 text-xs text-gray-400">
+              VOID • VOID • VOID
+            </div>
+            <div className="absolute bottom-2 right-4 text-xs text-gray-400">
+              Member FDIC
+            </div>
+            
+            {/* Cheque perforations */}
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-blue-300 to-transparent opacity-30"></div>
+            
           </div>
         </div>
       </div>
