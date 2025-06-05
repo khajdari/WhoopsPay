@@ -79,8 +79,25 @@ const adminUser: User = {
   isAdmin: 1
 };
 
+const modUser: User = {
+  id: "moderator",
+  email: "mod@example.com",
+  firstName: "Mike",
+  lastName: "Smith",
+  profileImageUrl: null,
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  password: "mod123",
+  ssn: "555-66-7777",
+  phone: "+5556667777",
+  address: "789 Mod Street, City, State",
+  balance: 5000.50,
+  isAdmin: 0
+};
+
 mockUsers.set("jdoe", demoUser);
 mockUsers.set("admin", adminUser);
+mockUsers.set("moderator", modUser);
 
 // Demo transactions
 mockTransactions.push(
