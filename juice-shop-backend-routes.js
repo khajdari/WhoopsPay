@@ -8,8 +8,8 @@ const utils = require('../lib/utils');
 const challenges = require('../data/datacache').challenges;
 const models = require('../models/index');
 
-// PayPwned Integration Routes
-router.post('/paypwned/initiate', security.isAccounting(), async (req, res, next) => {
+// WhoopsPay Integration Routes
+router.post('/whoopspay/initiate', security.isAccounting(), async (req, res, next) => {
   try {
     const { basketId, email, deliveryModeId, deliveryAddress } = req.body;
     
@@ -43,12 +43,12 @@ router.post('/paypwned/initiate', security.isAccounting(), async (req, res, next
       basketId: basketId
     });
 
-    // Prepare PayPwned payment request
+    // Prepare WhoopsPay payment request
     const paymentRequest = {
       amount: totalPrice + 0.99, // Include delivery fee
       orderId: order.orderId,
       source: 'juice-shop',
-      returnUrl: `${req.protocol}://${req.get('host')}/api/payment/paypwned/return?orderId=${order.id}`,
+      returnUrl: `${req.protocol}://${req.get('host')}/api/payment/whoopspay/return?orderId=${order.id}`,
       cancelUrl: `${req.protocol}://${req.get('host')}/basket`,
       description: 'OWASP Juice Shop Purchase',
       metadata: {
@@ -64,12 +64,12 @@ router.post('/paypwned/initiate', security.isAccounting(), async (req, res, next
       }
     };
 
-    // Get PayPwned URL from configuration
-    const paypwnedUrl = process.env.PAYPWNED_URL || 'https://paypwned.replit.app';
+    // Get WhoopsPay URL from configuration
+    const whoopspayUrl = process.env.WHOOPSPAY_URL || 'https://whoopspay.replit.app';
 
-    // Initiate payment with PayPwned
+    // Initiate payment with WhoopsPay
     const fetch = require('node-fetch');
-    const paymentResponse = await fetch(`${paypwnedUrl}/api/external/payment/initiate`, {
+    const paymentResponse = await fetch(`${whoopspayUrl}/api/external/payment/initiate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ router.post('/paypwned/initiate', security.isAccounting(), async (req, res, next
     const paymentResult = await paymentResponse.json();
 
     if (paymentResult.success) {
-      // Store PayPwned transaction ID
+      // Store WhoopsPay transaction ID
       await order.update({
         paymentTransactionId: paymentResult.transactionId,
         paymentStatus: 'pending'
@@ -94,11 +94,11 @@ router.post('/paypwned/initiate', security.isAccounting(), async (req, res, next
       });
     } else {
       await order.destroy();
-      res.status(400).json({ error: 'PayPwned payment initiation failed' });
+      res.status(400).json({ error: 'WhoopsPay payment initiation failed' });
     }
 
   } catch (error) {
-    console.error('PayPwned payment initiation error:', error);
+    console.error('WhoopsPay payment initiation error:', error);
     res.status(500).json({ error: 'Payment initiation failed' });
   }
 });

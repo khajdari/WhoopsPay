@@ -4,29 +4,29 @@
 application:
   # Existing configuration...
   
-  # PayPwned Integration Configuration
-  paypwnedUrl: 'https://paypwned.replit.app'
-  paypwnedEnabled: true
+  # WhoopsPay Integration Configuration
+  whoopspayUrl: 'https://whoopspay.replit.app'
+  whoopspayEnabled: true
   
   # Payment methods configuration
   paymentMethods:
     creditCard:
       enabled: true
-    paypwned:
+    whoopspay:
       enabled: true
-      name: 'PayPwned'
+      name: 'WhoopsPay'
       description: 'Secure External Payment Platform'
       icon: 'security'
       
 # Environment Variables (.env file additions)
 # Add these to your .env file:
 
-# PayPwned Integration
-PAYPWNED_URL=https://paypwned.replit.app
-PAYPWNED_ENABLED=true
+# WhoopsPay Integration
+WHOOPSPAY_URL=https://whoopspay.replit.app
+WHOOPSPAY_ENABLED=true
 
 # For development
-# PAYPWNED_URL=http://localhost:5000
+# WHOOPSPAY_URL=http://localhost:5000
 
 # Production deployment
-# PAYPWNED_URL=https://your-paypwned-domain.com
+# WHOOPSPAY_URL=https://your-whoopspay-domain.com
