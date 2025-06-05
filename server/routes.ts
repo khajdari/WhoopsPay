@@ -64,7 +64,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const specs = swaggerJsdoc(swaggerOptions);
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
     customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'PayPwned API Documentation'
+    customSiteTitle: 'WhoopsPay API Documentation'
   }));
 
   // User authentication endpoint

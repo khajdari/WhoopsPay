@@ -50,8 +50,8 @@ export function Header() {
                 <span
                   className={`px-3 py-2 text-sm font-medium transition-colors cursor-pointer ${
                     item.current
-                      ? "paypwned-blue border-b-2 border-paypwned-blue"
-                      : "text-gray-700 hover:paypwned-blue"
+                      ? "whoopspay-blue border-b-2 border-whoopspay-blue"
+                      : "text-gray-700 hover:whoopspay-blue"
                   }`}
                 >
                   {item.name}

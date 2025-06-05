@@ -60,7 +60,7 @@ export async function seedMockData() {
     // Add admin user
     await storage.upsertUser({
       id: "admin", 
-      email: "admin@paypwned.com",
+      email: "admin@whoopspay.com",
       firstName: "Admin",
       lastName: "User",
       profileImageUrl: "",

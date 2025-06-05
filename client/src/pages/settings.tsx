@@ -137,7 +137,7 @@ export default function Settings() {
                 
                 <Button 
                   type="submit" 
-                  className="bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
+                  className="bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                   disabled={changePasswordMutation.isPending || !currentPassword || !newPassword || !confirmPassword}
                 >
                   Update Password

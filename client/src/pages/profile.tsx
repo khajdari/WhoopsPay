@@ -108,7 +108,7 @@ export default function Profile() {
                   </Button>
                   <Button
                     size="sm"
-                    className="bg-paypwned-blue hover:bg-paypwned-darkblue text-white"
+                    className="bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                     onClick={handleSubmit}
                     disabled={updateProfileMutation.isPending}
                   >
