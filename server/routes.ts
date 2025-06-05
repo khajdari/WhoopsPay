@@ -1,5 +1,5 @@
 /**
- * PayPwned API Routes - OWASP Top 10 & API Security Training Platform
+ * WhoopsPay API Routes - OWASP Top 10 & API Security Training Platform
  * 
  * WARNING: This file contains intentional security vulnerabilities for educational purposes.
  * These vulnerabilities demonstrate OWASP Top 10 and API Security Top 10 issues.

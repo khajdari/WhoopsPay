@@ -1,5 +1,5 @@
 /**
- * PayPwned Database Storage Layer - OWASP Vulnerability Training Platform
+ * WhoopsPay Database Storage Layer - OWASP Vulnerability Training Platform
  * 
  * WARNING: This file contains intentional security vulnerabilities for educational purposes.
  * 

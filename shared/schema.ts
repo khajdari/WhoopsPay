@@ -1,5 +1,5 @@
 /**
- * PayPwned Database Schema - OWASP Security Training Platform
+ * WhoopsPay Database Schema - OWASP Security Training Platform
  * 
  * WARNING: This schema contains intentional security vulnerabilities for educational purposes.
  * 
