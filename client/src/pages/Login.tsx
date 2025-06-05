@@ -30,8 +30,26 @@ export default function Login() {
   // Check for external payment request on component mount
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const isExternal = urlParams.get('external');
+    const redirect = urlParams.get('redirect');
+    const transactionId = urlParams.get('transactionId');
+    const amount = urlParams.get('amount');
+    const description = urlParams.get('description');
+    const returnUrl = urlParams.get('returnUrl');
+    const cancelUrl = urlParams.get('cancelUrl');
     
+    if (redirect === 'payment' && transactionId && amount) {
+      const paymentData = {
+        transactionId,
+        amount,
+        description,
+        returnUrl,
+        cancelUrl
+      };
+      setExternalPaymentData(paymentData);
+    }
+    
+    // Legacy external payment check
+    const isExternal = urlParams.get('external');
     if (isExternal) {
       const paymentData = sessionStorage.getItem('externalPayment');
       if (paymentData) {
