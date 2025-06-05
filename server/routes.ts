@@ -1258,6 +1258,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 <html>
 <head>
   <title>Redirecting...</title>
+  <meta http-equiv="refresh" content="2;url=${processingUrl}">
   <style>
     body { 
       margin: 0; 
@@ -1290,13 +1291,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   <div class="spinner"></div>
   <p>Connecting to WhoopsPay secure payment system...</p>
   <script>
-    (function() {
+    setTimeout(function() {
       try {
+        console.log('Redirecting to processing page...');
         window.location.replace("${processingUrl}");
       } catch(e) {
+        console.log('Fallback redirect...');
         window.location.href = "${processingUrl}";
       }
-    })();
+    }, 1500);
   </script>
 </body>
 </html>`);
