@@ -35,7 +35,7 @@ export default function ExternalPayment() {
   const { data: transaction, isLoading, error } = useQuery<ExternalTransaction>({
     queryKey: [`/api/external/payment/${transactionId}/status`],
     enabled: !!transactionId,
-    refetchInterval: transaction?.status === "external_pending" ? 5000 : false,
+    refetchInterval: 5000,
   });
 
   // Approve payment mutation
@@ -86,9 +86,13 @@ export default function ExternalPayment() {
   // Reject payment mutation
   const rejectMutation = useMutation({
     mutationFn: async () => {
-      return await apiRequest(`/api/external/payment/${transactionId}/reject`, {
+      const response = await fetch(`/api/external/payment/${transactionId}/reject`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+      return await response.json();
     },
     onSuccess: (data) => {
       toast({
