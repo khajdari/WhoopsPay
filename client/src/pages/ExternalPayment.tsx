@@ -32,13 +32,15 @@ export default function ExternalPayment() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Fetch transaction details
-  const { data: transaction, isLoading, error, refetch } = useQuery<ExternalTransaction>({
+  const { data: response, isLoading, error, refetch } = useQuery({
     queryKey: [`/api/external/payment/${transactionId}/status`],
     enabled: !!transactionId,
-    refetchInterval: (data) => {
-      return data?.status === "external_pending" ? 5000 : false;
+    refetchInterval: (data: any) => {
+      return data?.transaction?.status === "external_pending" ? 5000 : false;
     },
   });
+
+  const transaction = response?.transaction;
 
   // Approve payment mutation
   const approveMutation = useMutation({

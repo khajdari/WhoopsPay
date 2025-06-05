@@ -239,7 +239,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         description: description || `External payment from ${source}`,
         status: "external_pending",
         type: "external_payment",
-        createdAt: Date.now(),
         externalOrderId: orderId,
         externalSource: source,
         returnUrl: returnUrl,

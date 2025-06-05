@@ -32,6 +32,8 @@ export default function PaymentProcessing() {
     const initializePayment = async () => {
       if (transactionId && amount) {
         try {
+          console.log('Creating transaction with params:', { transactionId, amount, description });
+          
           const response = await fetch("/api/external/payment/initiate", {
             method: "POST",
             headers: {
@@ -48,26 +50,34 @@ export default function PaymentProcessing() {
           });
           
           if (!response.ok) {
-            throw new Error('Failed to create transaction');
+            const errorText = await response.text();
+            console.error('Transaction creation failed:', response.status, errorText);
+            throw new Error(`Failed to create transaction: ${response.status}`);
           }
           
           const result = await response.json();
-          console.log('Transaction created:', result);
+          console.log('Transaction created successfully:', result);
           
           // Use the actual transaction ID from the server response
           if (result.transactionId) {
             actualTransactionId = result.transactionId.toString();
+            console.log('Using transaction ID:', actualTransactionId);
           }
         } catch (error) {
           console.error('Failed to create external transaction:', error);
+          // Fallback to original transaction ID if API call fails
+          actualTransactionId = transactionId;
         }
       }
 
       // Start countdown timer after transaction is created
+      console.log('Starting countdown timer, will redirect to:', `/external-payment/${actualTransactionId}`);
+      
       const timer = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(timer);
+            console.log('Redirecting to external payment page:', actualTransactionId);
             setLocation(`/external-payment/${actualTransactionId}`);
             return 0;
           }
@@ -78,11 +88,14 @@ export default function PaymentProcessing() {
       return timer;
     };
 
-    const timer = initializePayment();
+    let timer: any;
+    initializePayment().then(t => {
+      timer = t;
+    });
     
     return () => {
-      if (timer instanceof Promise) {
-        timer.then(t => clearInterval(t));
+      if (timer) {
+        clearInterval(timer);
       }
     };
   }, [setLocation]);
