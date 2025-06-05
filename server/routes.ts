@@ -1522,7 +1522,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             left: 0; 
             width: 100%; 
             height: 100%; 
-            background: rgba(0,0,0,0.9); 
+            background: linear-gradient(135deg, #ff7b7b 0%, #667eea 50%, #764ba2 100%); 
             z-index: 99999; 
             justify-content: center; 
             align-items: center; 
@@ -1531,9 +1531,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .loading.active { 
             display: flex !important; 
         }
-        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        .spinner { 
+            border: 5px solid rgba(255,255,255,0.2); 
+            border-top: 5px solid #ffeb3b; 
+            border-radius: 50%; 
+            width: 50px; 
+            height: 50px; 
+            animation: spin 0.8s linear infinite; 
+            margin: 0 auto 20px; 
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .loading-text { color: white; font-size: 1.2rem; font-weight: bold; }
+        .loading-text { color: white; font-size: 1.4rem; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -1580,8 +1589,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 setTimeout(() => {
                     console.log('Redirecting to payment...');
                     const paymentId = Date.now();
-                    const returnUrl = encodeURIComponent(window.location.origin + "/juice-shop?success=1");
-                    const cancelUrl = encodeURIComponent(window.location.origin + "/juice-shop?cancelled=1");
+                    const returnUrl = encodeURIComponent("/juice-shop?success=1");
+                    const cancelUrl = encodeURIComponent("/juice-shop?cancelled=1");
                     const url = "/external-payment/" + paymentId + "?amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
                     console.log('Redirecting to:', url);
                     window.location.href = url;
@@ -1590,8 +1599,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 console.error('Loading div not found');
                 // Fallback - direct redirect
                 const paymentId = Date.now();
-                const returnUrl = encodeURIComponent(window.location.origin + "/juice-shop?success=1");
-                const cancelUrl = encodeURIComponent(window.location.origin + "/juice-shop?cancelled=1");
+                const returnUrl = encodeURIComponent("/juice-shop?success=1");
+                const cancelUrl = encodeURIComponent("/juice-shop?cancelled=1");
                 const url = "/external-payment/" + paymentId + "?amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
                 window.location.href = url;
             }
