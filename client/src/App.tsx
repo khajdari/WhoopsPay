@@ -19,6 +19,7 @@ import Administration from "@/pages/administration";
 import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
 import ExternalPayment from "@/pages/ExternalPayment";
+import PaymentProcessing from "@/pages/payment-processing";
 
 
 function Router() {
@@ -51,6 +52,7 @@ function Router() {
         </>
       )}
 
+      <Route path="/juice-shop/payment-processing" component={PaymentProcessing} />
       <Route path="/external-payment/:transactionId" component={ExternalPayment} />
       <Route component={NotFound} />
     </Switch>
