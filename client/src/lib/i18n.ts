@@ -1,12 +1,46 @@
+/**
+ * Internationalization (i18n) System - Multi-language support for WhoopsPay
+ * 
+ * Provides comprehensive internationalization capabilities supporting UK English
+ * and Greek languages. Includes React context for global language state,
+ * translation utilities, and localStorage persistence for user preferences.
+ * 
+ * Features:
+ * - Type-safe translation keys with TypeScript support
+ * - React Context API for global language state management
+ * - Browser localStorage persistence for user language preferences
+ * - Comprehensive translation coverage for all UI elements
+ * - Fallback support to UK English for missing translations
+ */
 import { useState, useEffect, createContext, useContext, ReactNode, createElement } from 'react';
 
+/**
+ * Supported Language Types - Available language options
+ * 
+ * Defines the available languages for the WhoopsPay application:
+ * - 'en-GB': UK English (primary language)
+ * - 'el-GR': Greek (secondary language for localization)
+ */
 export type Language = 'en-GB' | 'el-GR';
 
+/**
+ * Translation Key Structure - Bilingual string mapping
+ * 
+ * Defines the structure for translation entries, ensuring each
+ * translatable string has versions in both supported languages.
+ */
 interface TranslationKey {
   'en-GB': string;
   'el-GR': string;
 }
 
+/**
+ * Translation Schema - Complete mapping of all translatable strings
+ * 
+ * Comprehensive interface defining all translation keys used throughout
+ * the WhoopsPay application. Organized by functional categories for
+ * maintainability and easy reference.
+ */
 interface Translations {
   // Navigation
   dashboard: TranslationKey;
@@ -273,14 +307,53 @@ const translations: Translations = {
   }
 };
 
+/**
+ * I18n Context Type - React context interface for language management
+ * 
+ * Defines the shape of the internationalization context providing:
+ * - Current language state
+ * - Language switching functionality  
+ * - Translation function for retrieving localized strings
+ */
 interface I18nContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: keyof Translations) => string;
 }
 
+/**
+ * I18n React Context - Global language state container
+ * 
+ * Creates the React context for sharing internationalization state
+ * across the entire component tree without prop drilling.
+ */
 const I18nContext = createContext<I18nContextType | null>(null);
 
+/**
+ * useI18n Hook - Access internationalization functionality
+ * 
+ * Custom React hook providing access to language state and translation
+ * functions. Must be used within an I18nProvider component tree.
+ * 
+ * @returns Object containing current language, setLanguage function, and t() translator
+ * @throws Error if used outside of I18nProvider
+ * 
+ * @example
+ * ```typescript
+ * function MyComponent() {
+ *   const { language, setLanguage, t } = useI18n();
+ *   
+ *   return (
+ *     <div>
+ *       <h1>{t('dashboard')}</h1>
+ *       <button onClick={() => setLanguage('el-GR')}>
+ *         Switch to Greek
+ *       </button>
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
 export const useI18n = () => {
   const context = useContext(I18nContext);
   if (!context) {
@@ -289,16 +362,56 @@ export const useI18n = () => {
   return context;
 };
 
+/**
+ * I18nProvider Component - Internationalization context provider
+ * 
+ * Root provider component that manages global language state and provides
+ * translation functionality to all child components. Handles:
+ * - Language state management with localStorage persistence
+ * - Translation function with fallback support
+ * - Context value distribution throughout component tree
+ * 
+ * Features:
+ * - Automatic localStorage synchronization for user preferences
+ * - Fallback to UK English for missing translations
+ * - Type-safe translation key validation
+ * 
+ * @param children - React children to wrap with i18n context
+ * 
+ * @example
+ * ```typescript
+ * function App() {
+ *   return (
+ *     <I18nProvider>
+ *       <Router>
+ *         <Routes />
+ *       </Router>
+ *     </I18nProvider>
+ *   );
+ * }
+ * ```
+ */
 export function I18nProvider({ children }: { children: ReactNode }) {
+  // Initialize language from localStorage with fallback to UK English
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem('paypal-language');
     return (saved as Language) || 'en-GB';
   });
 
+  // Persist language changes to localStorage
   useEffect(() => {
     localStorage.setItem('paypal-language', language);
   }, [language]);
 
+  /**
+   * Translation Function - Retrieve localized strings
+   * 
+   * Looks up translation keys in the current language with automatic
+   * fallback to UK English for missing translations.
+   * 
+   * @param key - Translation key from the Translations interface
+   * @returns Localized string in current language or UK English fallback
+   */
   const t = (key: keyof Translations): string => {
     return translations[key][language] || translations[key]['en-GB'];
   };
