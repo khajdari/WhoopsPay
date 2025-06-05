@@ -36,11 +36,9 @@ export async function setupAuth(app: Express) {
   // Login endpoint
   app.post('/api/login', async (req, res) => {
     try {
-      console.log("Login request body:", req.body);
       const { username, password } = req.body;
       
       if (!username || !password) {
-        console.log("Missing credentials:", { username: !!username, password: !!password });
         return res.status(400).json({ message: "Username and password required" });
       }
 
