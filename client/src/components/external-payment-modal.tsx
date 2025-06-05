@@ -1,3 +1,22 @@
+/**
+ * External Payment Modal - Cross-platform payment processing interface
+ * 
+ * Comprehensive payment gateway modal for handling external payments from
+ * integrated applications (Juice Shop). Features include:
+ * - Transaction approval and rejection workflows
+ * - Payment amount and description display
+ * - Security verification and user confirmation
+ * - Return URL handling for cross-platform navigation
+ * - Real-time payment status updates
+ * 
+ * Educational Security Features:
+ * - Demonstrates cross-origin payment integration
+ * - Shows payment verification patterns
+ * - Includes proper transaction state management
+ * 
+ * VULNERABILITY NOTE: Payment verification may lack proper authorization
+ * checks for educational security training purposes.
+ */
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -7,6 +26,13 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
+/**
+ * ExternalPaymentModalProps Interface - Component properties
+ * 
+ * @property isOpen - Modal visibility state
+ * @property onClose - Callback function to close the modal
+ * @property paymentData - Payment transaction information including amount, description, and URLs
+ */
 interface ExternalPaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -20,6 +46,17 @@ interface ExternalPaymentModalProps {
   } | null;
 }
 
+/**
+ * ExternalPaymentModal Component - Cross-platform payment processing
+ * 
+ * Modal component that handles external payment requests from integrated
+ * applications. Features include:
+ * - Payment information display and verification
+ * - Approve/reject transaction controls
+ * - Return URL navigation for cross-platform flow
+ * - Real-time payment processing feedback
+ * - Security confirmation workflows
+ */
 export function ExternalPaymentModal({ isOpen, onClose, paymentData }: ExternalPaymentModalProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();

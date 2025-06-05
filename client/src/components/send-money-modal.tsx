@@ -1,3 +1,21 @@
+/**
+ * Send Money Modal - Financial transaction creation interface
+ * 
+ * Comprehensive money transfer modal providing:
+ * - Recipient selection and amount specification
+ * - Payment method selection and validation
+ * - Transaction type configuration (transfer/request)
+ * - Real-time transaction processing and feedback
+ * - Integration with notification system
+ * 
+ * Educational Security Features:
+ * - Demonstrates transaction security patterns
+ * - Shows input validation for financial operations
+ * - Includes proper authorization checks
+ * 
+ * VULNERABILITY NOTE: Transaction data may be exposed through
+ * verbose logging for educational security training purposes.
+ */
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,10 +29,26 @@ import { apiRequest } from "@/lib/queryClient";
 import { useNotifications } from "@/hooks/useNotifications";
 import { X } from "lucide-react";
 
+/**
+ * SendMoneyModalProps Interface - Component properties
+ * 
+ * @property onClose - Callback function to close the modal
+ */
 interface SendMoneyModalProps {
   onClose: () => void;
 }
 
+/**
+ * SendMoneyModal Component - Money transfer interface
+ * 
+ * Modal component that handles the complete workflow for sending
+ * money between users. Features include:
+ * - Transaction form management with validation
+ * - Payment method selection and processing
+ * - Real-time transaction status updates
+ * - Integration with notification system
+ * - Cache invalidation for immediate UI updates
+ */
 export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
   const { user } = useAuth();
   const { toast } = useToast();

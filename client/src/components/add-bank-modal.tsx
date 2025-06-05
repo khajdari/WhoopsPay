@@ -1,3 +1,21 @@
+/**
+ * Add Bank Account Modal - Banking payment method creation interface
+ * 
+ * Modal component for adding new bank account payment methods including:
+ * - Bank name and account number input
+ * - IBAN and account holder information
+ * - Form validation and submission handling
+ * - Integration with banking payment system
+ * - Real-time error handling and user feedback
+ * 
+ * Educational Security Features:
+ * - Demonstrates banking data collection patterns
+ * - Shows secure form handling for financial information
+ * - Includes proper validation for banking credentials
+ * 
+ * VULNERABILITY NOTE: Banking information may be stored without
+ * proper encryption for educational security training purposes.
+ */
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,10 +27,26 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { University } from "lucide-react";
 
+/**
+ * AddBankModalProps Interface - Component properties
+ * 
+ * @property onClose - Callback function to close the modal
+ */
 interface AddBankModalProps {
   onClose: () => void;
 }
 
+/**
+ * AddBankModal Component - Bank account addition interface
+ * 
+ * Modal component that handles the complete workflow for adding
+ * new bank account payment methods to user accounts. Features include:
+ * - Form state management for banking details
+ * - IBAN validation and account verification
+ * - Server communication for account storage
+ * - Cache invalidation for immediate UI updates
+ * - Toast notifications for user feedback
+ */
 export function AddBankModal({ onClose }: AddBankModalProps) {
   const { user } = useAuth();
   const { toast } = useToast();

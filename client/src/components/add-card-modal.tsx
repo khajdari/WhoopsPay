@@ -1,3 +1,21 @@
+/**
+ * Add Credit Card Modal - Payment method creation interface
+ * 
+ * Modal component for adding new credit card payment methods including:
+ * - Card number input with validation
+ * - Cardholder name and bank information
+ * - Expiry date and CVV security fields
+ * - Real-time form validation and submission
+ * - Integration with payment method management system
+ * 
+ * Educational Security Features:
+ * - Demonstrates client-side payment data handling
+ * - Shows form validation patterns for sensitive data
+ * - Includes proper error handling for payment operations
+ * 
+ * VULNERABILITY NOTE: Payment card data may be transmitted without
+ * proper encryption for educational security training purposes.
+ */
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,10 +27,26 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { CreditCard } from "lucide-react";
 
+/**
+ * AddCardModalProps Interface - Component properties
+ * 
+ * @property onClose - Callback function to close the modal
+ */
 interface AddCardModalProps {
   onClose: () => void;
 }
 
+/**
+ * AddCardModal Component - Credit card addition interface
+ * 
+ * Modal component that handles the complete workflow for adding
+ * new credit card payment methods to user accounts. Features include:
+ * - Form state management for card details
+ * - Real-time validation and error handling
+ * - Server communication for card storage
+ * - Cache invalidation for immediate UI updates
+ * - Toast notifications for user feedback
+ */
 export function AddCardModal({ onClose }: AddCardModalProps) {
   const { user } = useAuth();
   const { toast } = useToast();
