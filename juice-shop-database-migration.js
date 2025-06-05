@@ -4,7 +4,7 @@
 ALTER TABLE Orders ADD COLUMN paymentTransactionId VARCHAR(255);
 ALTER TABLE Orders ADD COLUMN paymentStatus VARCHAR(50) DEFAULT 'pending';
 
--- Or create a new migration file: migrations/YYYYMMDDHHMMSS-add-paypwned-fields.js
+-- Or create a new migration file: migrations/YYYYMMDDHHMMSS-add-whoopspay-fields.js
 
 'use strict';
 

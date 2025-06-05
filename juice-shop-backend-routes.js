@@ -149,13 +149,13 @@ router.get('/whoopspay/return', async (req, res, next) => {
     }
 
   } catch (error) {
-    console.error('PayPwned return handling error:', error);
+    console.error('WhoopsPay return handling error:', error);
     res.redirect('/basket?error=true');
   }
 });
 
 // Get payment status
-router.get('/paypwned/status/:orderId', async (req, res, next) => {
+router.get('/whoopspay/status/:orderId', async (req, res, next) => {
   try {
     const { orderId } = req.params;
     
