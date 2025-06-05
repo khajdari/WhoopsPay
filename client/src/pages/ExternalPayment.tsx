@@ -223,7 +223,7 @@ export default function ExternalPayment() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Shield className="h-8 w-8 text-blue-600" />
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">PayPwned</h1>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">WhoopsPay</h1>
             </div>
             <p className="text-gray-600 dark:text-gray-400">Secure Payment Authorization</p>
           </div>

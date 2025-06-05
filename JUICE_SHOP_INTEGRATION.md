@@ -1,15 +1,15 @@
-# OWASP Juice Shop + PayPwned Integration Guide
+# OWASP Juice Shop + WhoopsPay Integration Guide
 
 ## Overview
 
-This integration allows OWASP Juice Shop users to complete their checkout process through PayPwned's payment system. Users are redirected from Juice Shop to PayPwned for payment approval/rejection, then returned to Juice Shop with the final result.
+This integration allows OWASP Juice Shop users to complete their checkout process through WhoopsPay's payment system. Users are redirected from Juice Shop to WhoopsPay for payment approval/rejection, then returned to Juice Shop with the final result.
 
 ## Integration Flow
 
 ```
-1. Juice Shop Checkout → PayPwned Payment Request
-2. User redirected to PayPwned authentication
-3. User approves/rejects payment in PayPwned
+1. Juice Shop Checkout → WhoopsPay Payment Request
+2. User redirected to WhoopsPay authentication
+3. User approves/rejects payment in WhoopsPay
 4. User redirected back to Juice Shop with result
 ```
 
@@ -38,7 +38,7 @@ This integration allows OWASP Juice Shop users to complete their checkout proces
 ```json
 {
   "success": true,
-  "paymentUrl": "https://paypwned.replit.app/external-payment/123",
+  "paymentUrl": "https://whoopspay.replit.app/external-payment/123",
   "transactionId": 123,
   "status": "pending"
 }
@@ -88,7 +88,7 @@ export class CheckoutService {
       }
     };
 
-    const response = await fetch('https://paypwned.replit.app/api/external/payment/initiate', {
+    const response = await fetch('https://whoopspay.replit.app/api/external/payment/initiate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export class CheckoutService {
     const result = await response.json();
     
     if (result.success) {
-      // Redirect to PayPwned for payment approval
+      // Redirect to WhoopsPay for payment approval
       window.location.href = result.paymentUrl;
       return result.transactionId;
     }
