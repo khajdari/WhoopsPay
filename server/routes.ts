@@ -27,6 +27,7 @@ import { storage } from "./storage";
 import { insertTransactionSchema, insertPaymentMethodSchema } from "@shared/schema";
 import { seedMockData } from "./mockData";
 import { requireAdmin, logStore, expressLogger } from "./adminMiddleware";
+import { isAuthenticated } from "./replitAuth";
 import { z } from "zod";
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -163,6 +164,233 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Search failed" });
     }
   });
+
+  // ===== EXTERNAL PAYMENT INTEGRATION ROUTES =====
+  
+  /**
+   * @swagger
+   * /api/external/payment/initiate:
+   *   post:
+   *     summary: Initiate external payment (VULNERABLE - Weak Validation)
+   *     description: "🚨 VULNERABILITY: Insufficient input validation, generic user assignment, exposed internal IDs"
+   *     tags: [External Payments]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               amount:
+   *                 type: number
+   *                 example: 29.99
+   *               orderId:
+   *                 type: string
+   *                 example: "juice-shop-order-12345"
+   *               source:
+   *                 type: string
+   *                 example: "juice-shop"
+   *               returnUrl:
+   *                 type: string
+   *                 example: "http://localhost:3000/basket#/order-completion"
+   *               cancelUrl:
+   *                 type: string
+   *                 example: "http://localhost:3000/basket"
+   *               description:
+   *                 type: string
+   *                 example: "OWASP Juice Shop Purchase"
+   *     responses:
+   *       200:
+   *         description: Payment initiation successful
+   *       400:
+   *         description: Invalid request data
+   */
+  app.post("/api/external/payment/initiate", async (req, res) => {
+    try {
+      const { amount, orderId, source, returnUrl, cancelUrl, description, metadata } = req.body;
+
+      // VULNERABILITY: Insufficient input validation
+      if (!amount || amount <= 0) {
+        return res.status(400).json({ error: "Invalid amount" });
+      }
+
+      // Create pending transaction for external payment
+      const transaction = await storage.createTransaction({
+        fromUserId: "external", // VULNERABILITY: Using generic user for external payments
+        toUserId: "merchant", // VULNERABILITY: Fixed merchant ID
+        amount: parseFloat(amount),
+        description: description || `External payment from ${source}`,
+        status: "external_pending",
+        type: "external_payment",
+        createdAt: Date.now(),
+        externalOrderId: orderId,
+        externalSource: source,
+        returnUrl: returnUrl,
+        cancelUrl: cancelUrl,
+        externalMetadata: metadata ? JSON.stringify(metadata) : null,
+      });
+
+      // VULNERABILITY: Exposing internal transaction ID in URL
+      const paymentUrl = `${req.protocol}://${req.get('host')}/external-payment/${transaction.id}`;
+      
+      res.json({
+        success: true,
+        paymentUrl,
+        transactionId: transaction.id,
+        status: "pending"
+      });
+      
+    } catch (error) {
+      console.error("External payment initiation error:", error);
+      res.status(500).json({ error: "Failed to initiate payment" });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/external/payment/{transactionId}/approve:
+   *   post:
+   *     summary: Approve external payment (VULNERABLE - Missing Authorization)
+   *     description: "🚨 VULNERABILITY: Any authenticated user can approve payments, missing CSRF protection"
+   *     tags: [External Payments]
+   *     parameters:
+   *       - in: path
+   *         name: transactionId
+   *         required: true
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: Payment approved
+   *       404:
+   *         description: Transaction not found
+   */
+  app.post("/api/external/payment/:transactionId/approve", isAuthenticated, async (req: any, res) => {
+    try {
+      const { transactionId } = req.params;
+      const userId = req.user?.claims?.sub;
+
+      const transaction = await storage.getTransaction(parseInt(transactionId));
+      if (!transaction) {
+        return res.status(404).json({ error: "Transaction not found" });
+      }
+
+      // VULNERABILITY: No authorization check - any authenticated user can approve
+      if (transaction.status !== "external_pending") {
+        return res.status(400).json({ error: "Transaction cannot be approved" });
+      }
+
+      const updatedTransaction = await storage.updateTransactionStatus(
+        parseInt(transactionId), 
+        "completed"
+      );
+
+      // VULNERABILITY: Automatic redirect without user consent
+      res.json({
+        success: true,
+        transaction: updatedTransaction,
+        redirectUrl: transaction.returnUrl,
+        message: "Payment approved successfully"
+      });
+
+    } catch (error) {
+      console.error("Payment approval error:", error);
+      res.status(500).json({ error: "Failed to approve payment" });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/external/payment/{transactionId}/reject:
+   *   post:
+   *     summary: Reject external payment (VULNERABLE - Missing Rate Limiting)
+   *     description: "🚨 VULNERABILITY: No rate limiting for rejection attempts"
+   *     tags: [External Payments]
+   *     parameters:
+   *       - in: path
+   *         name: transactionId
+   *         required: true
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: Payment rejected
+   *       404:
+   *         description: Transaction not found
+   */
+  app.post("/api/external/payment/:transactionId/reject", isAuthenticated, async (req: any, res) => {
+    try {
+      const { transactionId } = req.params;
+      
+      const transaction = await storage.getTransaction(parseInt(transactionId));
+      if (!transaction) {
+        return res.status(404).json({ error: "Transaction not found" });
+      }
+
+      if (transaction.status !== "external_pending") {
+        return res.status(400).json({ error: "Transaction cannot be rejected" });
+      }
+
+      const updatedTransaction = await storage.updateTransactionStatus(
+        parseInt(transactionId), 
+        "rejected"
+      );
+
+      res.json({
+        success: true,
+        transaction: updatedTransaction,
+        redirectUrl: transaction.cancelUrl,
+        message: "Payment rejected"
+      });
+
+    } catch (error) {
+      console.error("Payment rejection error:", error);
+      res.status(500).json({ error: "Failed to reject payment" });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/external/payment/{transactionId}/status:
+   *   get:
+   *     summary: Get external payment status (VULNERABLE - Data Exposure)
+   *     description: "🚨 VULNERABILITY: Exposing sensitive transaction data without authentication"
+   *     tags: [External Payments]
+   *     parameters:
+   *       - in: path
+   *         name: transactionId
+   *         required: true
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: Transaction status with full data exposure
+   *       404:
+   *         description: Transaction not found
+   */
+  app.get("/api/external/payment/:transactionId/status", async (req, res) => {
+    try {
+      const { transactionId } = req.params;
+      
+      const transaction = await storage.getTransaction(parseInt(transactionId));
+      if (!transaction) {
+        return res.status(404).json({ error: "Transaction not found" });
+      }
+
+      // VULNERABILITY: Returning full transaction object with sensitive data
+      res.json({
+        success: true,
+        transaction,
+        status: transaction.status
+      });
+
+    } catch (error) {
+      console.error("Status check error:", error);
+      res.status(500).json({ error: "Failed to get transaction status" });
+    }
+  });
+
+  // ===== ADMIN ROUTES =====
 
   /**
    * @swagger

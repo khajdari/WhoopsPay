@@ -77,6 +77,12 @@ export const transactions = sqliteTable("transactions", {
   status: text("status"),
   type: text("type"),
   createdAt: integer("created_at"),
+  // External payment integration fields
+  externalOrderId: text("external_order_id"),
+  externalSource: text("external_source"), // 'juice-shop', 'external-api', etc.
+  returnUrl: text("return_url"),
+  cancelUrl: text("cancel_url"),
+  externalMetadata: text("external_metadata"), // JSON string for extra data
 });
 
 // Payment methods with exposed sensitive data
