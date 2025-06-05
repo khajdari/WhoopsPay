@@ -27,7 +27,7 @@ import { storage } from "./storage";
 import { insertTransactionSchema, insertPaymentMethodSchema } from "@shared/schema";
 import { seedMockData } from "./mockData";
 import { requireAdmin, logStore, expressLogger } from "./adminMiddleware";
-import { isAuthenticated } from "./replitAuth";
+import { isAuthenticated, setupAuth } from "./localAuth";
 import { z } from "zod";
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
