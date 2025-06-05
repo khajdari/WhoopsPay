@@ -1,6 +1,35 @@
+/**
+ * Mobile Navigation Component - Bottom tab navigation for mobile devices
+ * 
+ * Provides mobile-optimized navigation with fixed bottom positioning:
+ * - Five-tab layout with summary, transfer, transactions, money, and account
+ * - Icon-based navigation with text labels
+ * - Current location highlighting and visual feedback
+ * - Responsive design optimized for touch interaction
+ * - PayPal-style blue theming for active states
+ * 
+ * Educational Security Features:
+ * - Demonstrates mobile navigation patterns
+ * - Shows proper touch target sizing
+ * - Includes accessible navigation structure
+ * 
+ * VULNERABILITY NOTE: Navigation state may expose user session
+ * information for educational security training purposes.
+ */
 import { Home, Send, List, Wallet as WalletIcon, User } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
+/**
+ * MobileNav Component - Touch-optimized mobile navigation
+ * 
+ * Component that provides bottom tab navigation for mobile devices.
+ * Features include:
+ * - Fixed bottom positioning for easy thumb access
+ * - Five-tab grid layout with equal spacing
+ * - Current location detection and highlighting
+ * - Icon and text label combinations
+ * - PayPal-inspired color theming
+ */
 export function MobileNav() {
   const [location] = useLocation();
 
