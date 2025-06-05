@@ -132,11 +132,11 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
     );
   }
 
-  // Bank savings account design - redesigned to be symmetric and proper
+  // Bank savings account design - redesigned with increased height
   return (
     <div className="flex justify-center">
       <div 
-        className="relative w-96 h-56 cursor-pointer group"
+        className="relative w-96 h-72 cursor-pointer group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -146,13 +146,13 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-b from-emerald-500 to-emerald-800 rounded-l-2xl border-r border-emerald-400/30"></div>
             
             {/* Inner decorative borders */}
-            <div className="absolute inset-3 border border-emerald-400/20 rounded-xl"></div>
+            <div className="absolute inset-4 border border-emerald-400/20 rounded-xl"></div>
             <div className="absolute inset-6 border border-emerald-400/10 rounded-lg"></div>
             
             {showDelete && (
               <button
                 onClick={() => id && onDelete?.(id)}
-                className="absolute top-3 right-3 w-7 h-7 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                className="absolute top-4 right-4 w-8 h-8 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
               >
                 <span className="text-white text-sm">×</span>
               </button>
@@ -160,25 +160,27 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             
             <div className="p-8 h-full flex flex-col justify-between text-emerald-50">
               {/* Header */}
-              <div className="text-center">
-                <Building2 className="w-10 h-10 mx-auto mb-3 text-emerald-200" />
+              <div className="text-center space-y-2">
+                <Building2 className="w-12 h-12 mx-auto text-emerald-200" />
                 <div className="text-xl font-bold text-emerald-100 tracking-wide">SAVINGS ACCOUNT</div>
-                <div className="text-sm opacity-90 uppercase tracking-wider font-medium">{bankName || 'First National Bank'}</div>
+                <div className="text-sm opacity-90 uppercase tracking-wider font-medium">
+                  {bankName || 'First National Bank'}
+                </div>
               </div>
               
-              {/* Account details */}
-              <div className="bg-emerald-700/40 p-4 rounded-xl border border-emerald-400/20 backdrop-blur-sm">
-                <div className="space-y-3">
+              {/* Account details - with more generous spacing */}
+              <div className="bg-emerald-700/40 p-6 rounded-xl border border-emerald-400/20 backdrop-blur-sm mx-2">
+                <div className="space-y-5">
                   <div className="text-center">
-                    <div className="text-xs opacity-80 uppercase tracking-wider mb-1">Account Number</div>
-                    <div className="font-mono text-lg tracking-wider font-semibold truncate">
+                    <div className="text-xs opacity-80 uppercase tracking-wider mb-3">Account Number</div>
+                    <div className="font-mono text-xl tracking-wider font-semibold break-all px-2">
                       {accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••1234'}
                     </div>
                   </div>
                   {iban && (
-                    <div className="text-center border-t border-emerald-400/20 pt-2">
-                      <div className="text-xs opacity-80 uppercase tracking-wider mb-1">IBAN</div>
-                      <div className="font-mono text-xs tracking-wide opacity-90 truncate">
+                    <div className="text-center border-t border-emerald-400/20 pt-4">
+                      <div className="text-xs opacity-80 uppercase tracking-wider mb-3">IBAN</div>
+                      <div className="font-mono text-sm tracking-wide opacity-90 break-all px-2">
                         {iban.slice(0, 8)}••••••••
                       </div>
                     </div>
@@ -187,10 +189,10 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               </div>
               
               {/* Footer */}
-              <div className="text-center space-y-1">
+              <div className="text-center space-y-2">
                 <div className="text-xs opacity-70 font-medium">Established 1952</div>
                 <div className="text-xs opacity-70">Member FDIC • Equal Housing Lender</div>
-                <div className="flex justify-center items-center space-x-2 mt-2">
+                <div className="flex justify-center items-center space-x-2 mt-3">
                   <div className="w-2 h-2 bg-emerald-300 rounded-full opacity-60"></div>
                   <div className="text-xs opacity-60 font-mono">Secured by 256-bit SSL</div>
                   <div className="w-2 h-2 bg-emerald-300 rounded-full opacity-60"></div>
@@ -198,9 +200,9 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               </div>
             </div>
             
-            {/* Decorative corner element */}
-            <div className="absolute top-3 right-3 w-6 h-6 border-2 border-emerald-300/30 rounded-full"></div>
-            <div className="absolute top-4 right-4 w-4 h-4 border border-emerald-300/20 rounded-full"></div>
+            {/* Decorative corner elements */}
+            <div className="absolute top-4 right-4 w-6 h-6 border-2 border-emerald-300/30 rounded-full"></div>
+            <div className="absolute top-5 right-5 w-4 h-4 border border-emerald-300/20 rounded-full"></div>
           </div>
         </div>
       </div>
