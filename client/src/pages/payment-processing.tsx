@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function PaymentProcessing() {
   const [, setLocation] = useLocation();
@@ -14,14 +15,33 @@ export default function PaymentProcessing() {
     const returnUrl = urlParams.get('returnUrl');
     const cancelUrl = urlParams.get('cancelUrl');
 
+    // Create external transaction in database
+    const createTransaction = async () => {
+      try {
+        await apiRequest("/api/external/payment", "POST", {
+          externalOrderId: transactionId,
+          amount: parseFloat(amount || '0'),
+          description: description || 'External payment',
+          returnUrl: returnUrl || '',
+          cancelUrl: cancelUrl || '',
+          externalSource: 'juice-shop'
+        });
+      } catch (error) {
+        console.error('Failed to create external transaction:', error);
+      }
+    };
+
+    if (transactionId && amount) {
+      createTransaction();
+    }
+
     // Countdown timer
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          // Redirect to external payment page with parameters
-          const redirectUrl = `/external-payment/${transactionId}?amount=${amount}&description=${encodeURIComponent(description || '')}&returnUrl=${encodeURIComponent(returnUrl || '')}&cancelUrl=${encodeURIComponent(cancelUrl || '')}`;
-          setLocation(redirectUrl);
+          // Redirect to external payment page
+          setLocation(`/external-payment/${transactionId}`);
           return 0;
         }
         return prev - 1;
