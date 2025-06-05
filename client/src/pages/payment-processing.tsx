@@ -18,14 +18,27 @@ export default function PaymentProcessing() {
     // Create external transaction in database
     const createTransaction = async () => {
       try {
-        await apiRequest("/api/external/payment", "POST", {
-          externalOrderId: transactionId,
-          amount: parseFloat(amount || '0'),
-          description: description || 'External payment',
-          returnUrl: returnUrl || '',
-          cancelUrl: cancelUrl || '',
-          externalSource: 'juice-shop'
+        const response = await fetch("/api/external/payment/initiate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: parseFloat(amount || '0'),
+            orderId: transactionId,
+            source: 'juice-shop',
+            description: description || 'External payment',
+            returnUrl: returnUrl || '',
+            cancelUrl: cancelUrl || ''
+          })
         });
+        
+        if (!response.ok) {
+          throw new Error('Failed to create transaction');
+        }
+        
+        const result = await response.json();
+        console.log('Transaction created:', result);
       } catch (error) {
         console.error('Failed to create external transaction:', error);
       }
