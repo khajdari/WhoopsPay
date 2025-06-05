@@ -11,6 +11,8 @@ import { apiRequest } from "@/lib/queryClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { CreditCard } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ExternalPaymentModal } from "@/components/external-payment-modal";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -22,6 +24,21 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function Login() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [showExternalPaymentModal, setShowExternalPaymentModal] = useState(false);
+  const [externalPaymentData, setExternalPaymentData] = useState<any>(null);
+
+  // Check for external payment request on component mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isExternal = urlParams.get('external');
+    
+    if (isExternal) {
+      const paymentData = sessionStorage.getItem('externalPayment');
+      if (paymentData) {
+        setExternalPaymentData(JSON.parse(paymentData));
+      }
+    }
+  }, []);
 
   const loginForm = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -42,10 +59,16 @@ export default function Login() {
       });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       
-      // Fetch user data to check if admin
+      // Check if this is an external payment flow
+      if (externalPaymentData) {
+        setShowExternalPaymentModal(true);
+        return;
+      }
+      
+      // Normal login flow - check if admin
       try {
         const user = await apiRequest("/api/auth/user", "GET");
-        if (user && user.isAdmin) {
+        if (user && (user as any).isAdmin) {
           window.location.href = "/administration";
         } else {
           window.location.href = "/summary";
@@ -142,6 +165,13 @@ export default function Login() {
           </div>
         </CardContent>
       </Card>
+
+      {/* External Payment Modal */}
+      <ExternalPaymentModal 
+        isOpen={showExternalPaymentModal}
+        onClose={() => setShowExternalPaymentModal(false)}
+        paymentData={externalPaymentData}
+      />
     </div>
   );
 }
