@@ -37,7 +37,7 @@ export default function Login() {
     onSuccess: () => {
       toast({
         title: "Login successful",
-        description: "Welcome back to PayPwned!",
+        description: "Welcome back to WhoopsPay!",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       window.location.href = "/";
@@ -65,7 +65,7 @@ export default function Login() {
             </div>
           </div>
           <CardTitle className="text-2xl font-bold text-gray-900">Sign In</CardTitle>
-          <CardDescription>Welcome back to PayPwned</CardDescription>
+          <CardDescription>Welcome back to WhoopsPay</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="mb-4">

@@ -13,7 +13,7 @@
   --card-foreground: 20 14.3% 4.1%;
   --border: 20 5.9% 90%;
   --input: 20 5.9% 90%;
-  --primary: 214 100% 37%; /* PayPwned Blue #0070ba */
+  --primary: 214 100% 37%; /* WhoopsPay Blue #0070ba */
   --primary-foreground: 0 0% 100%;
   --secondary: 60 4.8% 95.9%;
   --secondary-foreground: 24 9.8% 10%;
@@ -21,16 +21,16 @@
   --accent-foreground: 24 9.8% 10%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 60 9.1% 97.8%;
-  --ring: 214 100% 37%; /* PayPwned Blue */
+  --ring: 214 100% 37%; /* WhoopsPay Blue */
   --radius: 0.5rem;
   
-  /* PayPwned official colors */
-  --paypwned-blue: 214 100% 37%; /* #0070ba */
-  --paypwned-darkblue: 225 100% 26%; /* #003087 */
-  --paypwned-lightblue: 197 100% 44%; /* #009cde */
-  --paypwned-navy: 225 96% 35%; /* #142c8e */
-  --paypwned-gold: 45 100% 62%; /* #ffc439 */
-  --paypwned-orange: 24 100% 50%; /* #ff6900 */
+  /* WhoopsPay official colors */
+  --whoopspay-blue: 214 100% 37%; /* #0070ba */
+  --whoopspay-darkblue: 225 100% 26%; /* #003087 */
+  --whoopspay-lightblue: 197 100% 44%; /* #009cde */
+  --whoopspay-navy: 225 96% 35%; /* #142c8e */
+  --whoopspay-gold: 45 100% 62%; /* #ffc439 */
+  --whoopspay-orange: 24 100% 50%; /* #ff6900 */
 }
 
 .dark {
@@ -67,52 +67,52 @@
 }
 
 @layer utilities {
-  .paypwned-blue {
-    color: hsl(var(--paypwned-blue));
+  .whoopspay-blue {
+    color: hsl(var(--whoopspay-blue));
   }
   
-  .bg-paypwned-blue {
-    background-color: hsl(var(--paypwned-blue));
+  .bg-whoopspay-blue {
+    background-color: hsl(var(--whoopspay-blue));
   }
   
-  .paypwned-darkblue {
-    color: hsl(var(--paypwned-darkblue));
+  .whoopspay-darkblue {
+    color: hsl(var(--whoopspay-darkblue));
   }
   
-  .bg-paypwned-darkblue {
-    background-color: hsl(var(--paypwned-darkblue));
+  .bg-whoopspay-darkblue {
+    background-color: hsl(var(--whoopspay-darkblue));
   }
   
-  .paypwned-lightblue {
-    color: hsl(var(--paypwned-lightblue));
+  .whoopspay-lightblue {
+    color: hsl(var(--whoopspay-lightblue));
   }
   
-  .bg-paypwned-lightblue {
-    background-color: hsl(var(--paypwned-lightblue));
+  .bg-whoopspay-lightblue {
+    background-color: hsl(var(--whoopspay-lightblue));
   }
   
-  .paypwned-navy {
-    color: hsl(var(--paypwned-navy));
+  .whoopspay-navy {
+    color: hsl(var(--whoopspay-navy));
   }
   
-  .bg-paypwned-navy {
-    background-color: hsl(var(--paypwned-navy));
+  .bg-whoopspay-navy {
+    background-color: hsl(var(--whoopspay-navy));
   }
   
-  .paypwned-gold {
-    color: hsl(var(--paypwned-gold));
+  .whoopspay-gold {
+    color: hsl(var(--whoopspay-gold));
   }
   
-  .bg-paypwned-gold {
-    background-color: hsl(var(--paypwned-gold));
+  .bg-whoopspay-gold {
+    background-color: hsl(var(--whoopspay-gold));
   }
   
-  .paypwned-orange {
-    color: hsl(var(--paypwned-orange));
+  .whoopspay-orange {
+    color: hsl(var(--whoopspay-orange));
   }
   
-  .bg-paypwned-orange {
-    background-color: hsl(var(--paypwned-orange));
+  .bg-whoopspay-orange {
+    background-color: hsl(var(--whoopspay-orange));
   }
 
   /* PayPal-style Button Classes */
