@@ -1289,8 +1289,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .buy-btn { background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-size: 1.1rem; font-weight: bold; width: 100%; transition: all 0.3s ease; }
         .buy-btn:hover { background: linear-gradient(45deg, #2980b9, #3498db); transform: scale(1.05); }
         .buy-btn:disabled { background: #ccc; cursor: not-allowed; }
-        .loading { display: none; text-align: center; margin-top: 20px; }
-        .loading.active { display: block; }
+        .loading { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
+        .loading.active { display: flex; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-text { color: white; font-size: 1.2rem; font-weight: bold; }
@@ -1324,22 +1324,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     </div>
     <script>
         function buyProduct(name, price) {
-            // Show loading animation
+            console.log('buyProduct called with:', name, price);
+            
+            // Show loading animation immediately
             const loadingDiv = document.getElementById('loadingDiv');
             const buttons = document.querySelectorAll('.buy-btn');
             
-            // Disable all buttons and show loading
-            buttons.forEach(btn => btn.disabled = true);
-            loadingDiv.classList.add('active');
-            
-            // Small delay to show loading animation
-            setTimeout(() => {
+            if (loadingDiv) {
+                console.log('Showing loading animation');
+                // Disable all buttons and show loading
+                buttons.forEach(btn => btn.disabled = true);
+                loadingDiv.classList.add('active');
+                
+                // Shorter delay to show loading animation
+                setTimeout(() => {
+                    console.log('Redirecting to payment...');
+                    const paymentId = Date.now();
+                    const returnUrl = encodeURIComponent(window.location.origin + "/juice-shop?success=1");
+                    const cancelUrl = encodeURIComponent(window.location.origin + "/juice-shop?cancelled=1");
+                    const url = "/external-payment/" + paymentId + "?amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
+                    console.log('Redirecting to:', url);
+                    window.location.href = url;
+                }, 800);
+            } else {
+                console.error('Loading div not found');
+                // Fallback - direct redirect
                 const paymentId = Date.now();
                 const returnUrl = encodeURIComponent(window.location.origin + "/juice-shop?success=1");
                 const cancelUrl = encodeURIComponent(window.location.origin + "/juice-shop?cancelled=1");
                 const url = "/external-payment/" + paymentId + "?amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
                 window.location.href = url;
-            }, 1500);
+            }
         }
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('success')) {
