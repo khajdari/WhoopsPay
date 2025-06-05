@@ -162,58 +162,45 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             )}
             
             {/* Cheque header */}
-            <div className="flex justify-between items-start mb-3">
+            <div className="flex justify-between items-start mb-4">
               <div>
-                <div className="text-xs font-bold text-blue-800 uppercase tracking-wider">
+                <div className="text-sm font-bold text-blue-800 uppercase tracking-wider">
                   {bankName || 'First National Bank'}
                 </div>
                 <div className="text-xs text-gray-600">Savings Account</div>
               </div>
               <div className="text-right">
-                <div className="text-xs text-gray-500">Account #</div>
-                <div className="font-mono text-sm font-bold text-blue-800">
-                  {accountNumber ? accountNumber.slice(-4) : '1234'}
-                </div>
+                <div className="text-xs text-gray-500">Routing</div>
+                <div className="font-mono text-xs font-bold text-blue-800">123456789</div>
               </div>
             </div>
             
-            {/* Cheque number and routing info */}
-            <div className="border-t border-blue-200 pt-2 mb-4">
-              <div className="flex justify-between text-xs text-gray-600">
-                <span>Routing: 123456789</span>
-                <span>Check #: 001</span>
-              </div>
+            {/* Account holder */}
+            <div className="mb-4">
+              <div className="text-xs text-gray-500 mb-1">Account Holder</div>
+              <div className="font-semibold text-base text-gray-800">John Doe</div>
             </div>
             
-            {/* Main account details */}
-            <div className="bg-white/50 border border-blue-200 rounded p-3 mb-3">
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="text-xs text-gray-500 mb-1">Account Holder</div>
-                  <div className="font-semibold text-sm text-gray-800">John Doe</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs text-gray-500 mb-1">Balance</div>
-                  <div className="font-mono text-lg font-bold text-green-600">$2,450.75</div>
-                </div>
+            {/* Account number */}
+            <div className="bg-white/50 border border-blue-200 rounded p-3 mb-4">
+              <div className="text-xs text-gray-500 mb-2">Account Number</div>
+              <div className="font-mono text-lg font-bold text-blue-800">
+                {accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••1234'}
               </div>
             </div>
             
             {/* IBAN section */}
             {iban && (
-              <div className="border-t border-blue-200 pt-2">
+              <div className="mb-4">
                 <div className="text-xs text-gray-500 mb-1">IBAN</div>
-                <div className="font-mono text-xs text-gray-700">
+                <div className="font-mono text-sm text-gray-700">
                   {iban.slice(0, 8)}••••••••
                 </div>
               </div>
             )}
             
-            {/* Security features */}
-            <div className="absolute bottom-2 left-4 text-xs text-gray-400">
-              VOID • VOID • VOID
-            </div>
-            <div className="absolute bottom-2 right-4 text-xs text-gray-400">
+            {/* Bottom info */}
+            <div className="absolute bottom-2 right-4 text-xs text-gray-500">
               Member FDIC
             </div>
             
