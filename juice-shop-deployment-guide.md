@@ -39,8 +39,8 @@ app.use('/api/payment', require('./routes/payment'))
 
 **File: `.env`** (modify existing)
 ```
-PAYPWNED_URL=https://paypwned.replit.app
-PAYPWNED_ENABLED=true
+WHOOPSPAY_URL=https://whoopspay.replit.app
+WHOOPSPAY_ENABLED=true
 ```
 
 ## Step-by-Step Deployment Instructions
@@ -112,9 +112,9 @@ npm start
 ### 1. Complete Purchase Flow
 1. Add items to basket in Juice Shop
 2. Go to checkout
-3. Select "PayPwned" payment method
-4. Complete order - should redirect to PayPwned
-5. Login to PayPwned if not authenticated
+3. Select "WhoopsPay" payment method
+4. Complete order - should redirect to WhoopsPay
+5. Login to WhoopsPay if not authenticated
 6. Approve or reject payment
 7. Verify redirect back to Juice Shop with result
 
