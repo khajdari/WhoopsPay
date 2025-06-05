@@ -242,17 +242,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Transaction cannot be approved" });
       }
 
+      // Get the paying user (current authenticated user)
+      const payingUser = await storage.getUser(userId);
+      if (!payingUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Check if user has sufficient balance
+      const transactionAmount = transaction.amount;
+      if (payingUser.balance < transactionAmount) {
+        return res.status(400).json({ 
+          error: "Insufficient balance", 
+          currentBalance: payingUser.balance,
+          requiredAmount: transactionAmount 
+        });
+      }
+
+      // CRITICAL: Actually transfer money between accounts
+      // Deduct from paying user's balance
+      await storage.updateUserBalance(userId, (payingUser.balance - transactionAmount).toString());
+      
+      // Add to merchant/recipient account (toUserId from transaction)
+      const recipient = await storage.getUser(transaction.toUserId);
+      if (recipient && transaction.toUserId !== "merchant") {
+        await storage.updateUserBalance(
+          transaction.toUserId, 
+          (recipient.balance + transactionAmount).toString()
+        );
+      }
+
+      // Update transaction status to completed
       const updatedTransaction = await storage.updateTransactionStatus(
         parseInt(transactionId), 
         "completed"
       );
+
+      // Create notification for successful payment
+      await storage.createNotification({
+        userId,
+        title: "Payment Completed",
+        message: `Payment of $${transactionAmount} for ${transaction.description} has been successfully processed. Your new balance is $${(payingUser.balance - transactionAmount).toFixed(2)}.`,
+        type: "payment",
+        isRead: 0
+      });
+
+      logStore.addExpressLog(`[${new Date().toISOString()}] Payment completed: $${transactionAmount} transferred from user ${userId} (new balance: $${(payingUser.balance - transactionAmount).toFixed(2)})`);
 
       // VULNERABILITY: Automatic redirect without user consent
       res.json({
         success: true,
         transaction: updatedTransaction,
         redirectUrl: transaction.returnUrl,
-        message: "Payment approved successfully"
+        message: "Payment approved successfully",
+        balanceAfter: (payingUser.balance - transactionAmount).toFixed(2),
+        amountTransferred: transactionAmount
       });
 
     } catch (error) {

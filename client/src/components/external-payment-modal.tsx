@@ -11,9 +11,10 @@ interface ExternalPaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
   paymentData: {
+    transactionId?: string;
     amount: string;
     description: string;
-    source: string;
+    source?: string;
     returnUrl: string;
     cancelUrl: string;
   } | null;
@@ -25,7 +26,16 @@ export function ExternalPaymentModal({ isOpen, onClose, paymentData }: ExternalP
 
   const processPaymentMutation = useMutation({
     mutationFn: async (action: 'approve' | 'cancel') => {
-      if (action === 'approve') {
+      if (action === 'approve' && paymentData?.transactionId) {
+        // Complete the existing transaction
+        return await apiRequest(`/api/external/payment/${paymentData.transactionId}/approve`, "POST", {
+          amount: paymentData?.amount,
+          description: paymentData?.description,
+          returnUrl: paymentData?.returnUrl,
+          cancelUrl: paymentData?.cancelUrl
+        });
+      } else if (action === 'approve') {
+        // Create new transaction for legacy flow
         return await apiRequest("/api/external/payment", "POST", {
           amount: paymentData?.amount,
           description: paymentData?.description,
