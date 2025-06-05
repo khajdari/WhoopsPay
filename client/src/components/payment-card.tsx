@@ -75,9 +75,6 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
                 <CreditCard className="w-8 h-8 mb-2 opacity-80" />
                 <div className="text-xs opacity-70 uppercase tracking-wider">Debit Card</div>
               </div>
-              <div className="text-right">
-                <div className="text-lg font-bold tracking-wider">{brand}</div>
-              </div>
             </div>
 
             <div className="flex-1 flex items-center">
@@ -120,7 +117,6 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
                 24/7 Customer Service<br/>
                 1-800-BANK-123
               </div>
-              <div className="text-lg font-bold">{brand}</div>
             </div>
           </div>
         </div>
@@ -158,18 +154,19 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               <div className="text-sm opacity-80 uppercase tracking-wider">{bankName || 'First National Bank'}</div>
             </div>
             
-            <div className="space-y-3 bg-amber-800/50 p-4 rounded-md border border-amber-600/30">
-              <div>
+            <div className="bg-amber-800/50 p-4 rounded-md border border-amber-600/30">
+              <div className="mb-3">
                 <div className="text-xs opacity-70 uppercase tracking-wider mb-1">Account Number</div>
                 <div className="font-mono text-lg tracking-wider">{accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••1234'}</div>
               </div>
-              {iban && (
-                <div>
-                  <div className="text-xs opacity-70 uppercase tracking-wider mb-1">IBAN</div>
-                  <div className="font-mono text-sm tracking-wide">{iban.slice(0, 8)}••••••••</div>
-                </div>
-              )}
             </div>
+            
+            {iban && (
+              <div className="bg-amber-700/40 p-3 rounded-md border border-amber-600/20 -mt-2">
+                <div className="text-xs opacity-70 uppercase tracking-wider mb-1">IBAN</div>
+                <div className="font-mono text-sm tracking-wide">{iban.slice(0, 8)}••••••••</div>
+              </div>
+            )}
             
             <div className="text-center">
               <div className="text-xs opacity-60 italic">Est. 1952</div>
