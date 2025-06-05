@@ -140,7 +140,8 @@ export default function ExternalPayment() {
         variant: "destructive",
       });
       setTimeout(() => {
-        window.location.href = "/api/login";
+        const currentUrl = window.location.pathname + window.location.search;
+        window.location.href = `/login?redirect=payment&from=${encodeURIComponent(currentUrl)}`;
       }, 500);
       return;
     }

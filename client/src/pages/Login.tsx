@@ -38,15 +38,36 @@ export default function Login() {
     const returnUrl = urlParams.get('returnUrl');
     const cancelUrl = urlParams.get('cancelUrl');
     
-    if (redirect === 'payment' && transactionId && amount) {
-      const paymentData = {
-        transactionId,
-        amount,
-        description,
-        returnUrl,
-        cancelUrl
-      };
-      setExternalPaymentData(paymentData);
+    const from = urlParams.get('from');
+    
+    if (redirect === 'payment') {
+      let paymentData;
+      
+      if (from) {
+        // Extract payment data from the 'from' URL
+        const fromUrl = decodeURIComponent(from);
+        const fromParams = new URLSearchParams(fromUrl.split('?')[1] || '');
+        paymentData = {
+          transactionId: fromUrl.split('/').pop()?.split('?')[0] || '',
+          amount: fromParams.get('amount'),
+          description: fromParams.get('description'),
+          returnUrl: fromParams.get('returnUrl'),
+          cancelUrl: fromParams.get('cancelUrl'),
+          originalUrl: from
+        };
+      } else if (transactionId && amount) {
+        paymentData = {
+          transactionId,
+          amount,
+          description,
+          returnUrl,
+          cancelUrl
+        };
+      }
+      
+      if (paymentData) {
+        setExternalPaymentData(paymentData);
+      }
     }
     
     // Legacy external payment check
@@ -81,8 +102,16 @@ export default function Login() {
       // Check if this is an external payment flow
       if (externalPaymentData) {
         console.log('External payment data detected:', externalPaymentData);
-        setShowExternalPaymentModal(true);
-        return;
+        
+        // If we have the original URL, redirect back to it
+        if (externalPaymentData.originalUrl) {
+          window.location.href = decodeURIComponent(externalPaymentData.originalUrl);
+          return;
+        } else {
+          // Fallback to showing modal for legacy flow
+          setShowExternalPaymentModal(true);
+          return;
+        }
       }
       
       // Normal login flow - check if admin
