@@ -10,46 +10,56 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { CreditCard } from "lucide-react";
 
-const loginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(1, "Password is required"),
+const signupSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
 });
 
-type LoginFormData = z.infer<typeof loginSchema>;
+type SignupFormData = z.infer<typeof signupSchema>;
 
-export default function Login() {
+export default function Signup() {
   const { toast } = useToast();
 
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       username: "",
+      email: "",
       password: "",
+      firstName: "",
+      lastName: "",
     },
   });
 
-  const loginMutation = useMutation({
-    mutationFn: async (data: LoginFormData) => {
-      const response = await apiRequest("/api/login", {
+  const signupMutation = useMutation({
+    mutationFn: async (data: SignupFormData) => {
+      const response = await apiRequest("/api/register", {
         method: "POST",
         body: JSON.stringify(data),
       });
       return response;
     },
     onSuccess: () => {
-      window.location.href = "/";
+      toast({
+        title: "Account created successfully",
+        description: "You can now log in with your credentials",
+      });
+      window.location.href = "/login";
     },
     onError: (error: Error) => {
       toast({
-        title: "Login failed",
+        title: "Signup failed",
         description: error.message,
         variant: "destructive",
       });
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    loginMutation.mutate(data);
+  const onSubmit = (data: SignupFormData) => {
+    signupMutation.mutate(data);
   };
 
   return (
@@ -66,18 +76,48 @@ export default function Login() {
         </div>
       </header>
 
-      {/* Login Form */}
+      {/* Signup Form */}
       <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl">Create Account</CardTitle>
             <CardDescription>
-              Sign in to your account to continue
+              Join PayPwned to start sending money securely
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>First Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="First name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Last Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Last name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
                 <FormField
                   control={form.control}
                   name="username"
@@ -85,7 +125,21 @@ export default function Login() {
                     <FormItem>
                       <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your username" {...field} />
+                        <Input placeholder="Choose a username" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder="Enter your email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -99,7 +153,7 @@ export default function Login() {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Enter your password" {...field} />
+                        <Input type="password" placeholder="Choose a password" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -109,28 +163,20 @@ export default function Login() {
                 <Button 
                   type="submit" 
                   className="w-full paypal-btn-base paypal-btn-primary" 
-                  disabled={loginMutation.isPending}
+                  disabled={signupMutation.isPending}
                 >
-                  {loginMutation.isPending ? "Signing In..." : "Sign In"}
+                  {signupMutation.isPending ? "Creating Account..." : "Create Account"}
                 </Button>
               </form>
             </Form>
 
             <div className="mt-6 text-center">
               <a 
-                href="/signup" 
+                href="/login" 
                 className="text-blue-600 hover:text-blue-500 text-sm"
               >
-                Don't have an account? Sign up
+                Already have an account? Sign in
               </a>
-            </div>
-
-            <div className="mt-4 p-3 bg-gray-100 rounded-md">
-              <p className="text-sm text-gray-600 mb-2">Demo Accounts:</p>
-              <div className="text-xs text-gray-500 space-y-1">
-                <div>User: jdoe / password123</div>
-                <div>Admin: admin / admin123</div>
-              </div>
             </div>
           </CardContent>
         </Card>
