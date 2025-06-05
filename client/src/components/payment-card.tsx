@@ -1,20 +1,33 @@
 import { useState } from "react";
 import { CreditCard, Building2 } from "lucide-react";
 
+/**
+ * PaymentCard Component - Interactive payment method display
+ * 
+ * Renders either a credit card with 3D flip animation or a bank cheque design.
+ * Features hover effects, brand detection, and optional delete functionality.
+ * Maintains consistent 320px x 192px dimensions for all payment types.
+ */
 interface PaymentCardProps {
-  id?: number;
-  type: 'card' | 'bank';
-  cardNumber?: string;
-  cardName?: string;
-  bankName?: string;
-  accountNumber?: string;
-  iban?: string;
-  showDelete?: boolean;
-  onDelete?: (id: number) => void;
+  id?: number; // Unique identifier for payment method
+  type: 'card' | 'bank'; // Visual style type
+  cardNumber?: string; // Credit card number (auto-masked)
+  cardName?: string; // Cardholder name
+  bankName?: string; // Bank name for accounts
+  accountNumber?: string; // Account number (auto-masked)
+  iban?: string; // International bank account number
+  showDelete?: boolean; // Enable delete functionality
+  onDelete?: (id: number) => void; // Delete callback handler
 }
 
+/**
+ * Main PaymentCard component with interactive features
+ * Handles both credit card and bank account display formats
+ */
 export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountNumber, iban, showDelete, onDelete }: PaymentCardProps) {
+  // State for card flip animation (credit cards only)
   const [isFlipped, setIsFlipped] = useState(false);
+  // State for hover effects and animations
   const [isHovered, setIsHovered] = useState(false);
 
   if (type === 'card') {
