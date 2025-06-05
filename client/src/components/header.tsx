@@ -36,8 +36,8 @@ export function Header() {
             <Link href="/summary">
               <div className="flex items-center space-x-2 cursor-pointer">
                 <CreditCard className="h-6 w-6 text-blue-600" />
-                <h1 className="text-2xl font-bold paypwned-blue">
-                  PayPwned
+                <h1 className="text-2xl font-bold whoopspay-blue">
+                  WhoopsPay
                 </h1>
               </div>
             </Link>
