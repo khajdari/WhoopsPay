@@ -129,7 +129,7 @@ app.post('/api/checkout/paypwned', async (req, res) => {
       status: 'pending_payment'
     });
     
-    // Initiate PayPwned payment
+    // Initiate WhoopsPay payment
     const paymentRequest = {
       amount: totalPrice,
       orderId: order.id,
@@ -139,7 +139,7 @@ app.post('/api/checkout/paypwned', async (req, res) => {
       description: 'OWASP Juice Shop Purchase'
     };
     
-    const paymentResponse = await fetch('https://paypwned.replit.app/api/external/payment/initiate', {
+    const paymentResponse = await fetch('https://whoopspay.replit.app/api/external/payment/initiate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(paymentRequest)
@@ -205,16 +205,16 @@ app.get('/api/checkout/paypwned/return', async (req, res) => {
 
 ## Frontend UI Integration
 
-### Add PayPwned Payment Option
+### Add WhoopsPay Payment Option
 
 ```html
 <!-- In your checkout form -->
 <div class="payment-methods">
   <div class="payment-option">
-    <input type="radio" id="paypwned" name="paymentMethod" value="paypwned">
-    <label for="paypwned">
-      <img src="/assets/paypwned-logo.png" alt="PayPwned">
-      Pay with PayPwned
+    <input type="radio" id="whoopspay" name="paymentMethod" value="whoopspay">
+    <label for="whoopspay">
+      <img src="/assets/whoopspay-logo.png" alt="WhoopsPay">
+      Pay with WhoopsPay
       <span class="security-badge">🔒 Secure External Payment</span>
     </label>
   </div>
@@ -236,11 +236,11 @@ app.get('/api/checkout/paypwned/return', async (req, res) => {
 proceedWithPayment() {
   const selectedMethod = this.getSelectedPaymentMethod();
   
-  if (selectedMethod === 'paypwned') {
-    this.checkoutService.initiatePayPwnedPayment(this.orderData)
+  if (selectedMethod === 'whoopspay') {
+    this.checkoutService.initiateWhoopsPayPayment(this.orderData)
       .then(transactionId => {
-        // User will be redirected to PayPwned
-        console.log('Redirecting to PayPwned for payment approval');
+        // User will be redirected to WhoopsPay
+        console.log('Redirecting to WhoopsPay for payment approval');
       })
       .catch(error => {
         this.showError('Payment initiation failed. Please try again.');
@@ -280,12 +280,12 @@ proceedWithPayment() {
 ### Manual Testing Steps:
 
 1. **Start OWASP Juice Shop** (typically on `http://localhost:3000`)
-2. **Start PayPwned** (on your Replit deployment)
+2. **Start WhoopsPay** (on your Replit deployment)
 3. **Add items to Juice Shop basket**
-4. **Select PayPwned payment method**
+4. **Select WhoopsPay payment method**
 5. **Complete checkout process**
-6. **Verify redirect to PayPwned**
-7. **Login to PayPwned if not authenticated**
+6. **Verify redirect to WhoopsPay**
+7. **Login to WhoopsPay if not authenticated**
 8. **Approve or reject the payment**
 9. **Verify redirect back to Juice Shop**
 10. **Check order status in Juice Shop**
@@ -294,7 +294,7 @@ proceedWithPayment() {
 
 ```bash
 # 1. Initiate payment
-curl -X POST https://paypwned.replit.app/api/external/payment/initiate \
+curl -X POST https://whoopspay.replit.app/api/external/payment/initiate \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 29.99,
@@ -306,10 +306,10 @@ curl -X POST https://paypwned.replit.app/api/external/payment/initiate \
   }'
 
 # 2. Check payment status
-curl https://paypwned.replit.app/api/external/payment/123/status
+curl https://whoopspay.replit.app/api/external/payment/123/status
 
 # 3. Simulate payment approval (requires authentication)
-curl -X POST https://paypwned.replit.app/api/external/payment/123/approve \
+curl -X POST https://whoopspay.replit.app/api/external/payment/123/approve \
   -H "Content-Type: application/json" \
   -H "Cookie: connect.sid=your-session-cookie"
 ```
