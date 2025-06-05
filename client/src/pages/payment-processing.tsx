@@ -39,6 +39,11 @@ export default function PaymentProcessing() {
         
         const result = await response.json();
         console.log('Transaction created:', result);
+        
+        // Store the actual transaction ID from the response
+        if (result.transactionId) {
+          sessionStorage.setItem('actualTransactionId', result.transactionId.toString());
+        }
       } catch (error) {
         console.error('Failed to create external transaction:', error);
       }
@@ -53,8 +58,9 @@ export default function PaymentProcessing() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          // Redirect to external payment page
-          setLocation(`/external-payment/${transactionId}`);
+          // Use the actual transaction ID from the server response, fallback to original
+          const actualTransactionId = sessionStorage.getItem('actualTransactionId') || transactionId;
+          setLocation(`/external-payment/${actualTransactionId}`);
           return 0;
         }
         return prev - 1;
