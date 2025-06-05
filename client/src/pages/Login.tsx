@@ -79,6 +79,7 @@ export default function Login() {
       
       // Check if this is an external payment flow
       if (externalPaymentData) {
+        console.log('External payment data detected:', externalPaymentData);
         setShowExternalPaymentModal(true);
         return;
       }
@@ -89,11 +90,11 @@ export default function Login() {
         if (user && (user as any).isAdmin) {
           window.location.href = "/administration";
         } else {
-          window.location.href = "/summary";
+          window.location.href = "/dashboard";
         }
       } catch (error) {
-        // Fallback to summary page if user fetch fails
-        window.location.href = "/summary";
+        // Fallback to dashboard page if user fetch fails
+        window.location.href = "/dashboard";
       }
     },
     onError: (error: Error) => {
