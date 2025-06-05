@@ -167,18 +167,18 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               </div>
               
               {/* Account details */}
-              <div className="bg-emerald-700/40 p-5 rounded-xl border border-emerald-400/20 backdrop-blur-sm">
-                <div className="space-y-4">
+              <div className="bg-emerald-700/40 p-4 rounded-xl border border-emerald-400/20 backdrop-blur-sm">
+                <div className="space-y-3">
                   <div className="text-center">
-                    <div className="text-xs opacity-80 uppercase tracking-wider mb-2">Account Number</div>
-                    <div className="font-mono text-2xl tracking-wider font-semibold">
+                    <div className="text-xs opacity-80 uppercase tracking-wider mb-1">Account Number</div>
+                    <div className="font-mono text-lg tracking-wider font-semibold truncate">
                       {accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••1234'}
                     </div>
                   </div>
                   {iban && (
-                    <div className="text-center border-t border-emerald-400/20 pt-3">
-                      <div className="text-xs opacity-80 uppercase tracking-wider mb-2">IBAN</div>
-                      <div className="font-mono text-sm tracking-wide opacity-90">
+                    <div className="text-center border-t border-emerald-400/20 pt-2">
+                      <div className="text-xs opacity-80 uppercase tracking-wider mb-1">IBAN</div>
+                      <div className="font-mono text-xs tracking-wide opacity-90 truncate">
                         {iban.slice(0, 8)}••••••••
                       </div>
                     </div>
