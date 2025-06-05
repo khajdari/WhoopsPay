@@ -1262,27 +1262,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     body { 
       margin: 0; 
       padding: 50px; 
-      font-family: Arial, sans-serif; 
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: linear-gradient(135deg, #ff7b7b 0%, #667eea 50%, #764ba2 100%); 
       color: white; 
       text-align: center; 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     .spinner { 
-      border: 4px solid rgba(255,255,255,0.3); 
-      border-top: 4px solid white; 
+      border: 5px solid rgba(255,255,255,0.2); 
+      border-top: 5px solid #ffeb3b; 
       border-radius: 50%; 
-      width: 40px; 
-      height: 40px; 
-      animation: spin 1s linear infinite; 
-      margin: 20px auto; 
+      width: 50px; 
+      height: 50px; 
+      animation: spin 0.8s linear infinite; 
+      margin: 30px auto; 
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-  <h2>🧃 Juice Shop</h2>
+  <h2>🧃 Juice Shop Payment Gateway</h2>
   <div class="spinner"></div>
-  <p>Processing your payment request...</p>
+  <p>Connecting to WhoopsPay secure payment system...</p>
   <script>
     (function() {
       try {
