@@ -48,11 +48,11 @@ export default function Login() {
         if (user && user.isAdmin) {
           window.location.href = "/administration";
         } else {
-          window.location.href = "/";
+          window.location.href = "/summary";
         }
       } catch (error) {
-        // Fallback to home page if user fetch fails
-        window.location.href = "/";
+        // Fallback to summary page if user fetch fails
+        window.location.href = "/summary";
       }
     },
     onError: (error: Error) => {
