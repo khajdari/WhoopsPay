@@ -14,7 +14,7 @@ import { ConfigurationService } from '../Services/configuration.service';
 export class PaymentComponent {
   public paymentMethods = [
     { id: 'card', name: 'Credit Card', icon: 'credit_card' },
-    { id: 'paypwned', name: 'PayPwned', icon: 'security', description: 'Secure External Payment' }
+    { id: 'whoopspay', name: 'WhoopsPay', icon: 'security', description: 'Secure External Payment' }
   ];
   
   public selectedPaymentMethod = 'card';
@@ -31,8 +31,8 @@ export class PaymentComponent {
     this.isProcessing = true;
     
     try {
-      if (this.selectedPaymentMethod === 'paypwned') {
-        await this.processPayPwnedPayment();
+      if (this.selectedPaymentMethod === 'whoopspay') {
+        await this.processWhoopsPayPayment();
       } else {
         await this.processStandardPayment();
       }
@@ -42,7 +42,7 @@ export class PaymentComponent {
     }
   }
 
-  private async processPayPwnedPayment() {
+  private async processWhoopsPayPayment() {
     const basket = this.dialogData.basket;
     const totalPrice = basket.Products.reduce((total: number, product: any) => 
       total + (product.price * product.quantity), 0);
@@ -61,24 +61,24 @@ export class PaymentComponent {
       }
     };
 
-    // Get PayPwned URL from configuration
+    // Get WhoopsPay URL from configuration
     const config = await this.configurationService.getApplicationConfiguration().toPromise();
-    const paypwnedUrl = config.application.paypwnedUrl || 'https://paypwned.replit.app';
+    const whoopspayUrl = config.application.whoopspayUrl || 'https://whoopspay.replit.app';
 
     const response = await this.http.post(
-      `${paypwnedUrl}/api/external/payment/initiate`,
+      `${whoopspayUrl}/api/external/payment/initiate`,
       paymentRequest
     ).toPromise() as any;
 
     if (response.success) {
       // Store transaction ID for verification
-      localStorage.setItem('paypwned_transaction_id', response.transactionId);
+      localStorage.setItem('whoopspay_transaction_id', response.transactionId);
       localStorage.setItem('juice_shop_basket_id', basket.id);
       
-      // Redirect to PayPwned
+      // Redirect to WhoopsPay
       window.location.href = response.paymentUrl;
     } else {
-      throw new Error('PayPwned payment initiation failed');
+      throw new Error('WhoopsPay payment initiation failed');
     }
   }
 

@@ -103,8 +103,8 @@ router.post('/whoopspay/initiate', security.isAccounting(), async (req, res, nex
   }
 });
 
-// Handle return from PayPwned
-router.get('/paypwned/return', async (req, res, next) => {
+// Handle return from WhoopsPay
+router.get('/whoopspay/return', async (req, res, next) => {
   try {
     const { orderId, status, transactionId } = req.query;
 
@@ -114,12 +114,12 @@ router.get('/paypwned/return', async (req, res, next) => {
     }
 
     if (status === 'success') {
-      // Verify payment with PayPwned
-      const paypwnedUrl = process.env.PAYPWNED_URL || 'https://paypwned.replit.app';
+      // Verify payment with WhoopsPay
+      const whoopspayUrl = process.env.WHOOPSPAY_URL || 'https://whoopspay.replit.app';
       const fetch = require('node-fetch');
       
       const verificationResponse = await fetch(
-        `${paypwnedUrl}/api/external/payment/${transactionId}/status`
+        `${whoopspayUrl}/api/external/payment/${transactionId}/status`
       );
       const verification = await verificationResponse.json();
 
