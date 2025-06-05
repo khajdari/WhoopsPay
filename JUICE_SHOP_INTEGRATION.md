@@ -1,348 +1,154 @@
-# OWASP Juice Shop + WhoopsPay Integration Guide
+# OWASP Juice Shop Integration with WhoopsPay
 
-## Overview
+This document explains how to run and test the complete integration between WhoopsPay (main application) and the separate OWASP Juice Shop application.
 
-This integration allows OWASP Juice Shop users to complete their checkout process through WhoopsPay's payment system. Users are redirected from Juice Shop to WhoopsPay for payment approval/rejection, then returned to Juice Shop with the final result.
+## Architecture Overview
+
+The integration consists of two separate applications:
+
+1. **WhoopsPay** (Main Application) - Port 5000
+   - Payment processing platform
+   - User authentication and management
+   - External payment processing API
+
+2. **OWASP Juice Shop** (Separate Application) - Port 3001
+   - E-commerce storefront
+   - Product catalog and shopping cart
+   - Integration with WhoopsPay for payments
+
+## Running Both Applications
+
+### Step 1: Start WhoopsPay (Main Application)
+```bash
+# In the root directory
+npm run dev
+```
+This starts WhoopsPay on http://localhost:5000
+
+### Step 2: Start Juice Shop (Separate Application)
+```bash
+# In a new terminal, navigate to juice-shop directory
+cd juice-shop
+npm run dev
+```
+This starts:
+- Juice Shop backend server on port 3001
+- Juice Shop frontend on port 3001 (served by Vite)
 
 ## Integration Flow
 
-```
-1. Juice Shop Checkout → WhoopsPay Payment Request
-2. User redirected to WhoopsPay authentication
-3. User approves/rejects payment in WhoopsPay
-4. User redirected back to Juice Shop with result
-```
+### Payment Processing Flow
+1. User browses products on Juice Shop (http://localhost:3001)
+2. User adds items to shopping cart
+3. User clicks "Pay with WhoopsPay" button
+4. User is redirected to WhoopsPay external payment flow
+5. User logs into WhoopsPay (if not already authenticated)
+6. User sees payment confirmation modal with transaction details
+7. User approves or cancels the payment
+8. User is redirected back to Juice Shop with payment status
 
-## API Endpoints
+### API Integration Points
 
-### 1. Initiate Payment (From Juice Shop)
+#### Juice Shop → WhoopsPay
+- **Payment Initiation**: Juice Shop calls its own `/api/payment/initiate` endpoint
+- **Redirect**: User is redirected to WhoopsPay external payment URL
+- **Return**: User returns to Juice Shop with payment status
 
-**POST** `/api/external/payment/initiate`
-
-```json
-{
-  "amount": 29.99,
-  "orderId": "juice-shop-order-12345",
-  "source": "juice-shop",
-  "returnUrl": "http://localhost:3000/basket#/order-completion",
-  "cancelUrl": "http://localhost:3000/basket",
-  "description": "OWASP Juice Shop Purchase",
-  "metadata": {
-    "items": ["Apple Juice", "Orange Juice"],
-    "customer": "user@example.com"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "paymentUrl": "https://whoopspay.replit.app/external-payment/123",
-  "transactionId": 123,
-  "status": "pending"
-}
-```
-
-### 2. Payment Status Check
-
-**GET** `/api/external/payment/{transactionId}/status`
-
-**Response:**
-```json
-{
-  "success": true,
-  "transaction": {
-    "id": 123,
-    "status": "external_pending|completed|rejected",
-    "amount": 29.99,
-    "externalOrderId": "juice-shop-order-12345"
-  }
-}
-```
-
-### 3. User Payment Actions (Authenticated)
-
-**POST** `/api/external/payment/{transactionId}/approve`
-**POST** `/api/external/payment/{transactionId}/reject`
-
-## Juice Shop Integration Code
-
-### Frontend Integration (Angular/TypeScript)
-
-```typescript
-// In your checkout service
-export class CheckoutService {
-  
-  async initiatePayPwnedPayment(orderData: any): Promise<string> {
-    const paymentRequest = {
-      amount: orderData.totalPrice,
-      orderId: orderData.id,
-      source: 'juice-shop',
-      returnUrl: `${window.location.origin}/basket#/order-completion`,
-      cancelUrl: `${window.location.origin}/basket`,
-      description: 'OWASP Juice Shop Purchase',
-      metadata: {
-        items: orderData.products.map(p => p.name),
-        customer: orderData.email
-      }
-    };
-
-    const response = await fetch('https://whoopspay.replit.app/api/external/payment/initiate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(paymentRequest)
-    });
-
-    const result = await response.json();
-    
-    if (result.success) {
-      // Redirect to WhoopsPay for payment approval
-      window.location.href = result.paymentUrl;
-      return result.transactionId;
-    }
-    
-    throw new Error('Failed to initiate payment');
-  }
-}
-```
-
-### Backend Integration (Node.js/Express)
-
-```javascript
-// In your checkout routes
-app.post('/api/checkout/paypwned', async (req, res) => {
-  try {
-    const { basketId, email } = req.body;
-    
-    // Get basket details
-    const basket = await getBasket(basketId);
-    const totalPrice = calculateTotal(basket.items);
-    
-    // Create order
-    const order = await createOrder({
-      basketId,
-      email,
-      totalPrice,
-      status: 'pending_payment'
-    });
-    
-    // Initiate WhoopsPay payment
-    const paymentRequest = {
-      amount: totalPrice,
-      orderId: order.id,
-      source: 'juice-shop',
-      returnUrl: `${process.env.BASE_URL}/basket#/order-completion?orderId=${order.id}`,
-      cancelUrl: `${process.env.BASE_URL}/basket`,
-      description: 'OWASP Juice Shop Purchase'
-    };
-    
-    const paymentResponse = await fetch('https://whoopspay.replit.app/api/external/payment/initiate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(paymentRequest)
-    });
-    
-    const paymentResult = await paymentResponse.json();
-    
-    if (paymentResult.success) {
-      // Store transaction ID for later verification
-      await updateOrder(order.id, { 
-        paymentTransactionId: paymentResult.transactionId 
-      });
-      
-      res.json({
-        success: true,
-        paymentUrl: paymentResult.paymentUrl
-      });
-    } else {
-      res.status(400).json({ error: 'Payment initiation failed' });
-    }
-    
-  } catch (error) {
-    res.status(500).json({ error: 'Checkout failed' });
-  }
-});
-
-// Handle return from WhoopsPay
-app.get('/api/checkout/whoopspay/return', async (req, res) => {
-  try {
-    const { orderId, status, transactionId } = req.query;
-    
-    if (status === 'success') {
-      // Verify payment with WhoopsPay
-      const verificationResponse = await fetch(
-        `https://whoopspay.replit.app/api/external/payment/${transactionId}/status`
-      );
-      const verification = await verificationResponse.json();
-      
-      if (verification.transaction.status === 'completed') {
-        await updateOrder(orderId, { 
-          status: 'completed',
-          paymentStatus: 'paid'
-        });
-        
-        res.redirect(`/basket#/order-completion?success=true&orderId=${orderId}`);
-      } else {
-        res.redirect(`/basket#/order-completion?success=false&error=payment_verification_failed`);
-      }
-    } else {
-      await updateOrder(orderId, { 
-        status: 'cancelled',
-        paymentStatus: 'cancelled'
-      });
-      
-      res.redirect(`/basket?cancelled=true`);
-    }
-    
-  } catch (error) {
-    res.redirect(`/basket?error=true`);
-  }
-});
-```
-
-## Frontend UI Integration
-
-### Add WhoopsPay Payment Option
-
-```html
-<!-- In your checkout form -->
-<div class="payment-methods">
-  <div class="payment-option">
-    <input type="radio" id="whoopspay" name="paymentMethod" value="whoopspay">
-    <label for="whoopspay">
-      <img src="/assets/whoopspay-logo.png" alt="WhoopsPay">
-      Pay with WhoopsPay
-      <span class="security-badge">🔒 Secure External Payment</span>
-    </label>
-  </div>
-  
-  <!-- Other payment methods -->
-  <div class="payment-option">
-    <input type="radio" id="credit-card" name="paymentMethod" value="card">
-    <label for="credit-card">Credit Card</label>
-  </div>
-</div>
-
-<button (click)="proceedWithPayment()" class="checkout-btn">
-  Complete Purchase
-</button>
-```
-
-```typescript
-// In your component
-proceedWithPayment() {
-  const selectedMethod = this.getSelectedPaymentMethod();
-  
-  if (selectedMethod === 'whoopspay') {
-    this.checkoutService.initiateWhoopsPayPayment(this.orderData)
-      .then(transactionId => {
-        // User will be redirected to WhoopsPay
-        console.log('Redirecting to WhoopsPay for payment approval');
-      })
-      .catch(error => {
-        this.showError('Payment initiation failed. Please try again.');
-      });
-  } else {
-    // Handle other payment methods
-    this.processStandardPayment();
-  }
-}
-```
-
-## Security Considerations (Educational Vulnerabilities)
-
-⚠️ **WARNING: This integration contains intentional security vulnerabilities for educational purposes**
-
-### Demonstrated Vulnerabilities:
-
-1. **Missing CSRF Protection**: External payment endpoints lack CSRF tokens
-2. **Insufficient Authorization**: Any authenticated user can approve payments
-3. **Data Exposure**: Full transaction details exposed without proper access control
-4. **No Rate Limiting**: Payment approval/rejection endpoints lack rate limiting
-5. **Weak Validation**: Minimal input validation on payment initiation
-6. **Information Disclosure**: Verbose error messages reveal system internals
-
-### Production Security Recommendations:
-
-- Implement proper CSRF protection
-- Add role-based access control for payment approvals
-- Use secure redirect URL validation
-- Implement comprehensive input validation
-- Add rate limiting and fraud detection
-- Use minimal data exposure principles
-- Implement proper audit logging
+#### WhoopsPay External Payment API
+- `POST /api/external/payment` - Process external payments
+- Handles payment confirmation and transaction recording
+- Creates notifications for successful payments
 
 ## Testing the Integration
 
-### Manual Testing Steps:
+### Test Scenario 1: Successful Payment
+1. Open Juice Shop: http://localhost:3001
+2. Add "Apple Pomace" to cart (it's in stock)
+3. Click "Pay with WhoopsPay"
+4. You'll be redirected to WhoopsPay
+5. Log in with demo credentials:
+   - Username: `demo@whoopspay.com`
+   - Password: `demo123`
+6. Approve the payment in the confirmation modal
+7. You'll be redirected back to Juice Shop with success message
 
-1. **Start OWASP Juice Shop** (typically on `http://localhost:3000`)
-2. **Start WhoopsPay** (on your Replit deployment)
-3. **Add items to Juice Shop basket**
-4. **Select WhoopsPay payment method**
-5. **Complete checkout process**
-6. **Verify redirect to WhoopsPay**
-7. **Login to WhoopsPay if not authenticated**
-8. **Approve or reject the payment**
-9. **Verify redirect back to Juice Shop**
-10. **Check order status in Juice Shop**
+### Test Scenario 2: Payment Cancellation
+1. Follow steps 1-5 from above
+2. Cancel the payment in the confirmation modal
+3. You'll be redirected back to Juice Shop with cancellation message
 
-### API Testing with cURL:
+### Test Scenario 3: Admin User Flow
+1. Log in as admin:
+   - Username: `admin@whoopspay.com`
+   - Password: `admin123`
+2. Process payment and verify transaction appears in admin dashboard
 
-```bash
-# 1. Initiate payment
-curl -X POST https://whoopspay.replit.app/api/external/payment/initiate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "amount": 29.99,
-    "orderId": "test-order-123",
-    "source": "juice-shop",
-    "returnUrl": "http://localhost:3000/success",
-    "cancelUrl": "http://localhost:3000/cancel",
-    "description": "Test Purchase"
-  }'
+## File Structure
 
-# 2. Check payment status
-curl https://whoopspay.replit.app/api/external/payment/123/status
-
-# 3. Simulate payment approval (requires authentication)
-curl -X POST https://whoopspay.replit.app/api/external/payment/123/approve \
-  -H "Content-Type: application/json" \
-  -H "Cookie: connect.sid=your-session-cookie"
+```
+juice-shop/
+├── package.json              # Separate dependencies
+├── vite.config.ts            # Vite configuration for port 3001
+├── tsconfig.json             # TypeScript configuration
+├── server/
+│   └── index.ts              # Express server with product catalog
+└── client/
+    ├── index.html            # Juice Shop HTML entry point
+    ├── src/
+    │   ├── main.tsx          # React entry point
+    │   ├── App.tsx           # Main Juice Shop component
+    │   └── index.css         # Juice Shop styling
 ```
 
-## URL Examples
+## Key Features
 
-- **WhoopsPay Payment Page**: `https://whoopspay.replit.app/external-payment/123`
-- **Juice Shop Return URL**: `http://localhost:3000/basket#/order-completion?status=success&transactionId=123`
-- **Juice Shop Cancel URL**: `http://localhost:3000/basket?status=cancelled&transactionId=123`
+### Juice Shop Application
+- Product catalog with Apple Pomace, Carrot Juice, Green Smoothie
+- Shopping cart functionality
+- Stock management (some items out of stock)
+- Payment status handling (success/cancelled/error)
+- Responsive design with gradient background
+
+### WhoopsPay Integration
+- External payment processing API
+- Payment confirmation modal
+- Transaction recording and notifications
+- Return URL handling with status parameters
+- Cross-origin request handling (CORS configured)
+
+## Security Considerations
+
+This integration demonstrates several OWASP vulnerabilities for educational purposes:
+- Open redirects in payment flow
+- Insufficient input validation
+- Missing CSRF protection
+- Verbose error messages
+- Unencrypted sensitive data transmission
+
+**WARNING**: This is for educational/training purposes only. Never use in production.
 
 ## Troubleshooting
 
-### Common Issues:
+### Common Issues
 
-1. **CORS Errors**: Ensure PayPwned allows requests from Juice Shop domain
-2. **Authentication Redirects**: Users may need to log in to PayPwned first
-3. **URL Validation**: Check that return/cancel URLs are properly formatted
-4. **Transaction Status**: Verify transaction status before completing orders
+1. **Port Conflicts**: Ensure ports 5000 and 3001 are available
+2. **CORS Errors**: Both applications are configured to allow cross-origin requests
+3. **Payment Redirect Issues**: Check that return URLs are properly encoded
+4. **Database Issues**: WhoopsPay uses SQLite, ensure write permissions
 
-### Debugging Tips:
+### Logs
 
-- Check browser developer tools for network requests
-- Verify API responses and status codes
-- Monitor WhoopsPay logs for error messages
-- Test with different user accounts and scenarios
+- **WhoopsPay Logs**: Check terminal running main application
+- **Juice Shop Logs**: Check terminal in juice-shop directory
+- **Browser Console**: Check for frontend errors
 
-## Educational Value
+## Development
 
-This integration demonstrates:
-- Cross-platform payment processing
-- OAuth-like redirect flows
-- API security vulnerabilities
-- Real-world e-commerce payment patterns
-- Security testing scenarios for penetration testers
+### Adding New Products
+Edit `juice-shop/server/index.ts` and modify the `products` array.
 
-Perfect for cybersecurity education and vulnerability assessment training.
+### Modifying Payment Flow
+Edit the payment initiation logic in `juice-shop/client/src/App.tsx` and the WhoopsPay external payment API in the main application's `server/routes.ts`.
+
+### Styling Changes
+Modify `juice-shop/client/src/index.css` for Juice Shop styling or the main application's CSS for WhoopsPay styling.
