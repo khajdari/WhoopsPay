@@ -1213,6 +1213,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // External Payment Route for Juice Shop Integration
+  app.get('/external-payment/:transactionId', async (req, res) => {
+    try {
+      const { transactionId } = req.params;
+      const { amount, description, returnUrl, cancelUrl } = req.query;
+
+      if (!amount || !description) {
+        return res.status(400).send(`
+          <html>
+            <head><title>Payment Error</title></head>
+            <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 100px;">
+              <h2>Payment Error</h2>
+              <p>Missing required payment parameters.</p>
+              <a href="/juice-shop">Return to Juice Shop</a>
+            </body>
+          </html>
+        `);
+      }
+
+      // Create a temporary transaction for external payment
+      const transaction = await storage.createTransaction({
+        fromUserId: "external",
+        toUserId: "juice-shop", 
+        amount: parseFloat(amount as string),
+        description: description as string,
+        status: "pending",
+        type: "external",
+        externalOrderId: transactionId,
+        externalSource: "juice-shop",
+        returnUrl: returnUrl as string,
+        cancelUrl: cancelUrl as string,
+        externalMetadata: JSON.stringify({ 
+          transactionId,
+          source: "juice-shop",
+          timestamp: Date.now()
+        })
+      });
+
+      // Redirect to WhoopsPay login/payment flow
+      res.redirect(`/?payment=${transaction.id}&amount=${amount}&description=${encodeURIComponent(description as string)}&returnUrl=${encodeURIComponent(returnUrl as string)}&cancelUrl=${encodeURIComponent(cancelUrl as string)}`);
+
+    } catch (error) {
+      console.error("External payment error:", error);
+      res.status(500).send(`
+        <html>
+          <head><title>Payment Error</title></head>
+          <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 100px;">
+            <h2>Payment Error</h2>
+            <p>Unable to process payment request.</p>
+            <a href="/juice-shop">Return to Juice Shop</a>
+          </body>
+        </html>
+      `);
+    }
+  });
+
   // Juice Shop Integration Route - Simple version to avoid template literal issues
   app.get('/juice-shop', (req, res) => {
     res.send(`
@@ -1230,8 +1286,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .product-emoji { font-size: 4rem; text-align: center; margin-bottom: 15px; }
         .product-name { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; color: #2c3e50; }
         .product-price { font-size: 1.8rem; font-weight: bold; color: #27ae60; margin-bottom: 15px; }
-        .buy-btn { background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-size: 1.1rem; font-weight: bold; width: 100%; }
+        .buy-btn { background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-size: 1.1rem; font-weight: bold; width: 100%; transition: all 0.3s ease; }
         .buy-btn:hover { background: linear-gradient(45deg, #2980b9, #3498db); transform: scale(1.05); }
+        .buy-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .loading { display: none; text-align: center; margin-top: 20px; }
+        .loading.active { display: block; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { color: white; font-size: 1.2rem; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -1254,14 +1316,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 <button class="buy-btn" onclick="buyProduct('Green Smoothie', 1.99)">Pay with WhoopsPay</button>
             </div>
         </div>
+        <div class="loading" id="loadingDiv">
+            <div class="spinner"></div>
+            <div class="loading-text">Redirecting to WhoopsPay...</div>
+            <div style="color: white; margin-top: 10px; font-size: 1rem;">Please wait while we securely process your payment</div>
+        </div>
     </div>
     <script>
         function buyProduct(name, price) {
-            const paymentId = Date.now();
-            const returnUrl = encodeURIComponent(window.location.origin + "/juice-shop?success=1");
-            const cancelUrl = encodeURIComponent(window.location.origin + "/juice-shop?cancelled=1");
-            const url = "/external-payment/" + paymentId + "?amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
-            window.location.href = url;
+            // Show loading animation
+            const loadingDiv = document.getElementById('loadingDiv');
+            const buttons = document.querySelectorAll('.buy-btn');
+            
+            // Disable all buttons and show loading
+            buttons.forEach(btn => btn.disabled = true);
+            loadingDiv.classList.add('active');
+            
+            // Small delay to show loading animation
+            setTimeout(() => {
+                const paymentId = Date.now();
+                const returnUrl = encodeURIComponent(window.location.origin + "/juice-shop?success=1");
+                const cancelUrl = encodeURIComponent(window.location.origin + "/juice-shop?cancelled=1");
+                const url = "/external-payment/" + paymentId + "?amount=" + price + "&description=" + encodeURIComponent(name) + "&returnUrl=" + returnUrl + "&cancelUrl=" + cancelUrl;
+                window.location.href = url;
+            }, 1500);
         }
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('success')) {
