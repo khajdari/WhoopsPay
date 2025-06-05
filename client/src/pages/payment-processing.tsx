@@ -7,6 +7,9 @@ export default function PaymentProcessing() {
   const [countdown, setCountdown] = useState(3);
 
   useEffect(() => {
+    console.log('PaymentProcessing page loaded');
+    console.log('Current URL:', window.location.href);
+    
     // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const transactionId = urlParams.get('transactionId');
@@ -14,6 +17,14 @@ export default function PaymentProcessing() {
     const description = urlParams.get('description');
     const returnUrl = urlParams.get('returnUrl');
     const cancelUrl = urlParams.get('cancelUrl');
+    
+    console.log('URL Parameters:', {
+      transactionId,
+      amount,
+      description,
+      returnUrl,
+      cancelUrl
+    });
 
     let actualTransactionId = transactionId;
 
