@@ -36,21 +36,64 @@ export async function setupAuth(app: Express) {
   // Login endpoint
   app.post('/api/login', async (req, res) => {
     try {
+      console.log("Login request body:", req.body);
       const { username, password } = req.body;
       
       if (!username || !password) {
+        console.log("Missing credentials:", { username: !!username, password: !!password });
         return res.status(400).json({ message: "Username and password required" });
       }
 
-      // Get user by username (treating username as email for compatibility)
+      // Demo users for local development
+      const demoUsers = [
+        {
+          id: 'jdoe',
+          username: 'jdoe',
+          email: 'john.doe@example.com',
+          firstName: 'John',
+          lastName: 'Doe',
+          password: 'password123',
+          balance: 2500.75,
+          isAdmin: 0
+        },
+        {
+          id: 'admin',
+          username: 'admin',
+          email: 'admin@example.com',
+          firstName: 'Admin',
+          lastName: 'User',
+          password: 'admin123',
+          balance: 10000.00,
+          isAdmin: 1
+        }
+      ];
+
+      // Check demo users first
+      const demoUser = demoUsers.find(u => u.username === username && u.password === password);
+      if (demoUser) {
+        req.session.userId = demoUser.id;
+        
+        return res.json({ 
+          message: "Login successful",
+          user: {
+            id: demoUser.id,
+            email: demoUser.email,
+            firstName: demoUser.firstName,
+            lastName: demoUser.lastName,
+            balance: demoUser.balance,
+            isAdmin: demoUser.isAdmin
+          }
+        });
+      }
+
+      // Try database users
       const user = await storage.getUserByEmail(username);
       
       if (!user) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      // For educational purposes, we'll use simple password comparison
-      // In production, use proper password hashing
+      // Check password
       const isValidPassword = user.password === password || 
                              await bcrypt.compare(password, user.password || '');
       
@@ -68,6 +111,7 @@ export async function setupAuth(app: Express) {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
+          balance: user.balance,
           isAdmin: user.isAdmin
         }
       });
