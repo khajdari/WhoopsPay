@@ -1,258 +1,208 @@
-# WhoopsPay - Cybersecurity Training Platform
+# WhoopsPay & OWASP Juice Shop Integration Platform
 
-A comprehensive cybersecurity training and financial management platform that combines interactive security learning with intelligent financial tools. Built for educational purposes to demonstrate OWASP Top 10 and API Security vulnerabilities.
+## Overview
 
-## 🎯 Purpose
+WhoopsPay is an advanced cybersecurity training and financial management platform that integrates with OWASP Juice Shop to provide a comprehensive, hands-on learning environment for security professionals. The platform demonstrates OWASP Top 10 and API Security Top 10 vulnerabilities through intentionally vulnerable payment processing systems.
 
-WhoopsPay is designed as an **educational cybersecurity training platform** for penetration testing and security research. It intentionally contains vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10 for learning purposes.
+## Architecture
 
-## ⚠️ Security Notice
+### System Components
 
-**This application contains intentional security vulnerabilities for educational purposes only.**
-- Do NOT use in production environments
-- Only deploy in isolated, controlled environments
-- Intended for cybersecurity training and research
-
-## 🌟 Features
-
-### Core Financial Platform
-- User authentication and profile management
-- Money transfer and request system
-- Transaction history and management
-- Digital wallet functionality
-- Payment method management
-- Real-time notifications
-
-### Security Training Features
-- OWASP Top 10 vulnerability demonstrations
-- API Security vulnerability examples
-- SQL injection scenarios
-- Cross-site scripting (XSS) examples
-- Insecure direct object references
-- Authentication bypass scenarios
-- Data exposure vulnerabilities
-
-### Technical Features
-- React.js frontend with TypeScript
-- Express.js backend with Node.js
-- PostgreSQL database with Drizzle ORM
-- Real-time notifications system
-- Internationalization (English UK, Greek)
-- Responsive design with Tailwind CSS
-- Admin panel for system management
-
-## 🚀 Technology Stack
-
-### Frontend
-- React 18 with TypeScript
-- Vite for build tooling
-- Tailwind CSS for styling
-- Shadcn/ui component library
-- TanStack Query for data fetching
-- Wouter for routing
-- Framer Motion for animations
-
-### Backend
-- Node.js with Express.js
-- TypeScript
-- Drizzle ORM
-- PostgreSQL database
-- Passport.js for authentication
-- Express sessions
-- WebSocket support
-
-### Development Tools
-- ESLint and Prettier
-- Hot module replacement
-- TypeScript strict mode
-- Automatic database migrations
-
-## 📦 Installation
-
-### Prerequisites
-- Node.js 18+ 
-- PostgreSQL 13+
-- Git
-
-### Setup
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/whoopspay.git
-cd whoopspay
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Juice Shop    │◄──►│   WhoopsPay     │◄──►│   PostgreSQL    │
+│  (Port 3001)    │    │  (Port 5000)    │    │   Database      │
+│                 │    │                 │    │                 │
+│ - Product Catalog│    │ - Payment APIs  │    │ - User Data     │
+│ - Shopping Cart │    │ - Auth System   │    │ - Transactions  │
+│ - Checkout Flow │    │ - Admin Panel   │    │ - Payment Methods│
+└─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-2. Install dependencies:
-```bash
-npm install
+### Integration Flow
+
+1. **Product Selection**: Users browse and select products in Juice Shop
+2. **Checkout Initiation**: Juice Shop calls WhoopsPay payment API
+3. **Payment Processing**: WhoopsPay creates transaction and redirects user
+4. **Authentication**: User authenticates with WhoopsPay credentials
+5. **Payment Approval**: User approves or rejects payment via modal interface
+6. **Return to Shop**: User is redirected back to Juice Shop with payment status
+
+### Technology Stack
+
+#### Frontend
+- **React 18** with TypeScript
+- **Vite** for development and build tooling
+- **Tailwind CSS** with shadcn/ui components
+- **TanStack Query** for state management
+- **Wouter** for client-side routing
+
+#### Backend
+- **Express.js** with TypeScript
+- **Drizzle ORM** for database operations
+- **PostgreSQL** for data persistence
+- **Session-based authentication**
+- **RESTful API** design
+
+#### Security Features (Educational)
+- **Intentional OWASP Top 10 vulnerabilities**
+- **API Security Top 10 demonstrations**
+- **SQL injection examples**
+- **Authentication bypass scenarios**
+- **Privilege escalation demonstrations**
+
+## API Integration Points
+
+### Payment Initiation
+```
+POST /api/external/payment/initiate
+Content-Type: application/json
+
+{
+  "amount": 1.99,
+  "orderId": "JS-12345",
+  "source": "juice-shop",
+  "description": "Apple Juice x1",
+  "returnUrl": "http://localhost:3001/payment-success",
+  "cancelUrl": "http://localhost:3001/payment-cancel"
+}
 ```
 
-3. Set up environment variables:
-```bash
-cp .env.example .env
+### Payment Status Check
+```
+GET /api/external/payment/{transactionId}/status
+
+Response:
+{
+  "success": true,
+  "transaction": {
+    "id": 18,
+    "amount": 1.99,
+    "status": "external_pending",
+    "description": "Apple Juice x1"
+  }
+}
 ```
 
-Edit `.env` with your database and configuration details:
-```env
-DATABASE_URL=postgresql://username:password@localhost:5432/whoopspay
-SESSION_SECRET=your-session-secret-key
-NODE_ENV=development
-PORT=5000
+### Payment Approval/Rejection
+```
+POST /api/external/payment/{transactionId}/approve
+POST /api/external/payment/{transactionId}/reject
 ```
 
-4. Set up the database:
-```bash
-npm run db:push
-```
+## User Roles & Credentials
 
-5. Start the development server:
-```bash
-npm run dev
-```
+### Demo Accounts
+- **Regular User**: `jdoe` / `password123`
+- **Administrator**: `admin` / `admin123`
+- **Moderator**: `moderator` / `mod123`
 
-The application will be available at `http://localhost:5000`
+### Role Permissions
+- **Users**: Basic payment operations, transaction history
+- **Moderators**: User management, transaction monitoring
+- **Administrators**: Full system access, vulnerability configuration
 
-## 🗃️ Database Schema
-
-The application uses the following main tables:
-- `users` - User accounts and profiles
-- `transactions` - Money transfers and requests
-- `payment_methods` - User payment methods
-- `notifications` - System notifications
-- `user_sessions` - Session management
-- `sessions` - Express session storage
-
-## 🌐 Internationalization
-
-The platform supports multiple languages:
-- English (UK) - Default
-- Greek (Ελληνικά)
-
-Language switching is available in the header navigation.
-
-## 🛡️ Vulnerability Categories
+## Educational Vulnerabilities
 
 ### OWASP Top 10 (2021)
-1. **A01 - Broken Access Control**
-   - Insecure direct object references
-   - Missing function level access control
+1. **A01: Broken Access Control** - Direct object references, privilege escalation
+2. **A02: Cryptographic Failures** - Plain text sensitive data storage
+3. **A03: Injection** - SQL injection in search and filter functions
+4. **A04: Insecure Design** - Missing business logic validation
+5. **A05: Security Misconfiguration** - Verbose error messages
+6. **A07: Identification and Authentication Failures** - Weak session management
+7. **A09: Security Logging and Monitoring Failures** - Insufficient audit logging
 
-2. **A02 - Cryptographic Failures**
-   - Plain text password storage
-   - Unencrypted sensitive data
+### API Security Top 10
+1. **API1: Broken Object Level Authorization** - Access other users' data
+2. **API2: Broken User Authentication** - JWT manipulation vulnerabilities
+3. **API3: Broken Object Property Level Authorization** - Excessive data exposure
+4. **API4: Unrestricted Resource Consumption** - No rate limiting
+5. **API5: Broken Function Level Authorization** - Admin function access
 
-3. **A03 - Injection**
-   - SQL injection vulnerabilities
-   - NoSQL injection examples
+## Features
 
-4. **A04 - Insecure Design**
-   - Missing rate limiting
-   - Insufficient business logic validation
+### Core Functionality
+- **Multi-language Support** (English, Greek)
+- **Real-time Transaction Processing**
+- **Interactive Payment Approval System**
+- **Comprehensive Admin Dashboard**
+- **API Documentation** with Swagger/OpenAPI
+- **Cross-platform Integration**
 
-5. **A05 - Security Misconfiguration**
-   - Default configurations
-   - Verbose error messages
+### Security Training Features
+- **Vulnerability Scenarios** with guided exploitation
+- **Security Testing Environment**
+- **Real-time Logging** and monitoring
+- **Educational Documentation**
+- **Hands-on Learning Modules**
 
-6. **A06 - Vulnerable Components**
-   - Outdated dependencies
-   - Known vulnerable packages
-
-7. **A07 - Authentication Failures**
-   - Weak password policies
-   - Session management flaws
-
-8. **A08 - Software Integrity Failures**
-   - Unsigned updates
-   - Insecure CI/CD pipelines
-
-9. **A09 - Logging Failures**
-   - Insufficient logging
-   - Log injection vulnerabilities
-
-10. **A10 - Server-Side Request Forgery**
-    - SSRF vulnerabilities
-    - Internal network access
-
-### OWASP API Security Top 10
-- API1 - Broken Object Level Authorization
-- API2 - Broken User Authentication
-- API3 - Broken Object Property Level Authorization
-- API4 - Unrestricted Resource Consumption
-- API5 - Broken Function Level Authorization
-- API6 - Unrestricted Access to Sensitive Business Flows
-- API7 - Server Side Request Forgery
-- API8 - Security Misconfiguration
-- API9 - Improper Inventory Management
-- API10 - Unsafe Consumption of APIs
-
-## 🔧 Available Scripts
-
-```bash
-# Development
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-
-# Database
-npm run db:push      # Push schema changes to database
-npm run db:studio    # Open Drizzle Studio
-
-# Code Quality
-npm run lint         # Run ESLint
-npm run type-check   # Run TypeScript checks
-```
-
-## 📁 Project Structure
+## File Structure
 
 ```
-whoopspay/
-├── client/                 # Frontend React application
+├── client/                 # React frontend application
 │   ├── src/
 │   │   ├── components/     # Reusable UI components
 │   │   ├── pages/          # Application pages
 │   │   ├── hooks/          # Custom React hooks
-│   │   ├── lib/            # Utility libraries
-│   │   └── App.tsx         # Main application component
-├── server/                 # Backend Express application
+│   │   └── lib/            # Utility functions
+├── server/                 # Express backend application
 │   ├── routes.ts           # API route definitions
 │   ├── storage.ts          # Database operations
-│   ├── db.ts              # Database connection
-│   └── index.ts           # Server entry point
-├── shared/                 # Shared code between client/server
-│   └── schema.ts          # Database schema definitions
-└── README.md
+│   ├── localAuth.ts        # Authentication logic
+│   └── adminMiddleware.ts  # Admin functionality
+├── shared/                 # Shared types and schemas
+│   └── schema.ts           # Database schema definitions
+├── juice-shop/             # Juice Shop integration
+├── start-juice-shop.cjs    # Juice Shop server startup
+└── simple-juice-shop.js    # Standalone Juice Shop implementation
 ```
 
-## 🎓 Educational Use
+## Development Workflow
 
-This platform is designed for:
-- Cybersecurity training courses
-- Penetration testing practice
-- Security awareness training
-- Academic research
-- Vulnerability assessment learning
+### Starting the Application
+1. **WhoopsPay Server**: `npm run dev` (Port 5000)
+2. **Juice Shop Server**: `node start-juice-shop.cjs` (Port 3001)
+3. **Database**: PostgreSQL (configured via environment variables)
 
-## 🤝 Contributing
+### Testing the Integration
+1. Navigate to Juice Shop: `http://localhost:3001`
+2. Add products to cart
+3. Click "Pay with WhoopsPay"
+4. Complete authentication flow
+5. Approve/reject payment
+6. Verify return to Juice Shop
 
-This is an educational project. Contributions that add new vulnerability examples or improve the learning experience are welcome.
+## Security Considerations
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+⚠️ **WARNING**: This platform contains intentional security vulnerabilities for educational purposes only. **NEVER** deploy this system in a production environment.
 
-## 📄 License
+### Educational Use Only
+- Designed for cybersecurity training
+- Contains deliberately insecure code
+- Should only be used in isolated environments
+- All vulnerabilities are documented and intentional
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Safe Testing Environment
+- Use only on local development machines
+- Ensure proper network isolation
+- Regular security awareness training
+- Proper incident response procedures
 
-## ⚠️ Disclaimer
+## Support & Documentation
 
-This software is provided for educational and research purposes only. The authors are not responsible for any misuse or damage caused by this software. Users must comply with all applicable laws and regulations.
+### Additional Resources
+- **SECURITY_DOCUMENTATION.md** - Detailed vulnerability explanations
+- **DEPLOYMENT.md** - Production deployment guidelines
+- **JUICE_SHOP_INTEGRATION.md** - Integration technical details
+- **LOCAL_SETUP.md** - Local development setup guide
 
-## 🆘 Support
-
-For educational use and questions about the vulnerabilities demonstrated, please open an issue in the GitHub repository.
+### API Documentation
+- Swagger UI available at: `http://localhost:5000/api-docs`
+- Interactive API testing interface
+- Complete endpoint documentation
+- Authentication flow examples
 
 ---
 
-**Remember: This is a deliberately vulnerable application for educational purposes. Never use in production!**
+**Disclaimer**: This software is provided for educational purposes only. The developers are not responsible for any misuse of the intentionally vulnerable code contained within this platform.
