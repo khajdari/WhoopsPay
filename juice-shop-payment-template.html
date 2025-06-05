@@ -1,5 +1,5 @@
 <!-- File: frontend/src/app/payment/payment.component.html -->
-<!-- Add PayPwned payment option to your existing payment template -->
+<!-- Add WhoopsPay payment option to your existing payment template -->
 
 <mat-card class="payment-container">
   <mat-card-header>
@@ -17,12 +17,12 @@
         </div>
       </mat-radio-button>
       
-      <!-- PayPwned Payment -->
-      <mat-radio-button value="paypwned" class="payment-option paypwned-option">
+      <!-- WhoopsPay Payment -->
+      <mat-radio-button value="whoopspay" class="payment-option whoopspay-option">
         <div class="payment-method-content">
           <mat-icon>security</mat-icon>
           <div class="payment-details">
-            <span class="payment-name">PayPwned</span>
+            <span class="payment-name">WhoopsPay</span>
             <span class="payment-description">Secure External Payment</span>
             <mat-chip class="security-badge">🔒 Educational Security Platform</mat-chip>
           </div>
@@ -36,14 +36,14 @@
       <!-- Existing credit card form fields -->
     </div>
 
-    <div class="payment-details-section" *ngIf="selectedPaymentMethod === 'paypwned'">
-      <mat-card class="paypwned-info">
+    <div class="payment-details-section" *ngIf="selectedPaymentMethod === 'whoopspay'">
+      <mat-card class="whoopspay-info">
         <mat-card-content>
           <div class="info-section">
             <mat-icon class="info-icon">info</mat-icon>
             <div>
-              <h4>PayPwned Integration</h4>
-              <p>You will be redirected to PayPwned to complete your payment securely. 
+              <h4>WhoopsPay Integration</h4>
+              <p>You will be redirected to WhoopsPay to complete your payment securely. 
                  This demonstrates cross-platform payment integration for educational purposes.</p>
             </div>
           </div>
@@ -69,8 +69,8 @@
             (click)="processPayment()" 
             [disabled]="isProcessing">
       <mat-icon *ngIf="isProcessing">hourglass_empty</mat-icon>
-      <span *ngIf="!isProcessing && selectedPaymentMethod === 'paypwned'">
-        Continue to PayPwned
+      <span *ngIf="!isProcessing && selectedPaymentMethod === 'whoopspay'">
+        Continue to WhoopsPay
       </span>
       <span *ngIf="!isProcessing && selectedPaymentMethod === 'card'">
         Complete Payment
@@ -118,7 +118,7 @@
   gap: 12px;
 }
 
-.paypwned-option .payment-details {
+.whoopspay-option .payment-details {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -142,7 +142,7 @@
   color: white;
 }
 
-.paypwned-info {
+.whoopspay-info {
   margin-top: 16px;
   background-color: #f8f9fa;
 }
