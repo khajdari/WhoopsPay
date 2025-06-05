@@ -56,7 +56,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
           >
             {/* Front of card */}
             <div 
-              className={`absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br ${colors} text-white shadow-2xl p-6 flex flex-col justify-between transform ${isHovered ? 'scale-105' : ''} transition-transform duration-300`}
+              className={`absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br ${colors} text-white shadow-2xl p-4 flex flex-col justify-between transform ${isHovered ? 'scale-105' : ''} transition-transform duration-300`}
               style={{ backfaceVisibility: 'hidden' }}
             >
               {showDelete && (
@@ -65,50 +65,50 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
                     e.stopPropagation();
                     id && onDelete?.(id);
                   }}
-                  className="absolute top-3 right-3 w-7 h-7 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                  className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
                 >
-                  <span className="text-white text-sm">×</span>
+                  <span className="text-white text-xs">×</span>
                 </button>
               )}
               
               <div className="flex justify-between items-start">
                 <div className="flex flex-col">
-                  <CreditCard className="w-8 h-8 mb-2 opacity-80" />
+                  <CreditCard className="w-6 h-6 mb-1 opacity-80" />
                   <div className="text-xs opacity-70 uppercase tracking-wider">Debit Card</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-lg font-bold tracking-wide">{brand}</div>
+                  <div className="text-sm font-bold tracking-wide">{brand}</div>
                 </div>
               </div>
 
               <div className="flex-1 flex items-center justify-center">
-                <div className="font-mono text-2xl tracking-widest text-center">{maskedNumber}</div>
+                <div className="font-mono text-lg tracking-widest text-center">{maskedNumber}</div>
               </div>
 
               <div className="flex justify-between items-end">
                 <div>
                   <div className="text-xs opacity-70 uppercase tracking-wider mb-1">Card Holder</div>
-                  <div className="text-lg font-semibold uppercase tracking-wide">{cardName || 'John Doe'}</div>
+                  <div className="text-sm font-semibold uppercase tracking-wide">{cardName || 'John Doe'}</div>
                 </div>
                 <div className="text-right">
                   <div className="text-xs opacity-70 uppercase tracking-wider mb-1">Valid Thru</div>
-                  <div className="text-sm font-mono">12/28</div>
+                  <div className="text-xs font-mono">12/28</div>
                 </div>
               </div>
             </div>
 
             {/* Back of card */}
             <div 
-              className={`absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br ${colors} text-white shadow-2xl p-6 flex flex-col justify-between`}
+              className={`absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br ${colors} text-white shadow-2xl p-4 flex flex-col justify-between`}
               style={{
                 backfaceVisibility: 'hidden',
                 transform: 'rotateY(180deg)'
               }}
             >
-              <div className="w-full h-12 bg-black mt-4 rounded-sm"></div>
+              <div className="w-full h-8 bg-black mt-2 rounded-sm"></div>
               
-              <div className="flex-1 flex flex-col justify-center space-y-4">
-                <div className="w-full h-8 bg-white rounded-sm relative">
+              <div className="flex-1 flex flex-col justify-center space-y-3">
+                <div className="w-full h-6 bg-white rounded-sm relative">
                   <div className="absolute right-2 top-1 text-black text-xs font-mono">CVV: 123</div>
                 </div>
                 <div className="text-xs opacity-70 text-center">
@@ -162,9 +162,9 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             )}
             
             {/* Cheque header */}
-            <div className="flex justify-between items-start mb-4">
+            <div className="flex justify-between items-start mb-3">
               <div>
-                <div className="text-sm font-bold text-blue-800 uppercase tracking-wider">
+                <div className="text-xs font-bold text-blue-800 uppercase tracking-wider">
                   {bankName || 'First National Bank'}
                 </div>
                 <div className="text-xs text-gray-600">Savings Account</div>
@@ -176,31 +176,31 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             </div>
             
             {/* Account holder */}
-            <div className="mb-4">
+            <div className="mb-3">
               <div className="text-xs text-gray-500 mb-1">Account Holder</div>
-              <div className="font-semibold text-base text-gray-800">John Doe</div>
+              <div className="font-semibold text-sm text-gray-800">John Doe</div>
             </div>
             
             {/* Account number */}
-            <div className="bg-white/50 border border-blue-200 rounded p-3 mb-4">
-              <div className="text-xs text-gray-500 mb-2">Account Number</div>
-              <div className="font-mono text-lg font-bold text-blue-800">
+            <div className="bg-white/50 border border-blue-200 rounded p-2 mb-3">
+              <div className="text-xs text-gray-500 mb-1">Account Number</div>
+              <div className="font-mono text-sm font-bold text-blue-800">
                 {accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••1234'}
               </div>
             </div>
             
             {/* IBAN section */}
             {iban && (
-              <div className="mb-4">
+              <div className="mb-3">
                 <div className="text-xs text-gray-500 mb-1">IBAN</div>
-                <div className="font-mono text-sm text-gray-700">
+                <div className="font-mono text-xs text-gray-700">
                   {iban.slice(0, 8)}••••••••
                 </div>
               </div>
             )}
             
             {/* Bottom info */}
-            <div className="absolute bottom-2 right-4 text-xs text-gray-500">
+            <div className="absolute bottom-2 right-3 text-xs text-gray-500">
               Member FDIC
             </div>
             
