@@ -172,6 +172,44 @@ export default function Login() {
             </Button>
           </form>
 
+          {/* Demo Accounts Section */}
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg border">
+            <h3 className="text-sm font-medium text-gray-700 mb-3">Demo Accounts (Click to auto-fill)</h3>
+            <div className="space-y-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full text-left justify-start"
+                onClick={() => {
+                  loginForm.setValue("username", "jdoe");
+                  loginForm.setValue("password", "password123");
+                }}
+              >
+                <div className="flex flex-col items-start">
+                  <span className="font-medium">Regular User</span>
+                  <span className="text-xs text-gray-500">Username: jdoe | Password: password123</span>
+                </div>
+              </Button>
+              
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full text-left justify-start"
+                onClick={() => {
+                  loginForm.setValue("username", "admin");
+                  loginForm.setValue("password", "admin123");
+                }}
+              >
+                <div className="flex flex-col items-start">
+                  <span className="font-medium">Admin User</span>
+                  <span className="text-xs text-gray-500">Username: admin | Password: admin123</span>
+                </div>
+              </Button>
+            </div>
+          </div>
+
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
