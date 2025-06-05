@@ -15,59 +15,65 @@ export default function PaymentProcessing() {
     const returnUrl = urlParams.get('returnUrl');
     const cancelUrl = urlParams.get('cancelUrl');
 
-    // Create external transaction in database
-    const createTransaction = async () => {
-      try {
-        const response = await fetch("/api/external/payment/initiate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            amount: parseFloat(amount || '0'),
-            orderId: transactionId,
-            source: 'juice-shop',
-            description: description || 'External payment',
-            returnUrl: returnUrl || '',
-            cancelUrl: cancelUrl || ''
-          })
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to create transaction');
+    let actualTransactionId = transactionId;
+
+    // Create external transaction in database and wait for completion
+    const initializePayment = async () => {
+      if (transactionId && amount) {
+        try {
+          const response = await fetch("/api/external/payment/initiate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              amount: parseFloat(amount || '0'),
+              orderId: transactionId,
+              source: 'juice-shop',
+              description: description || 'External payment',
+              returnUrl: returnUrl || '',
+              cancelUrl: cancelUrl || ''
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to create transaction');
+          }
+          
+          const result = await response.json();
+          console.log('Transaction created:', result);
+          
+          // Use the actual transaction ID from the server response
+          if (result.transactionId) {
+            actualTransactionId = result.transactionId.toString();
+          }
+        } catch (error) {
+          console.error('Failed to create external transaction:', error);
         }
-        
-        const result = await response.json();
-        console.log('Transaction created:', result);
-        
-        // Store the actual transaction ID from the response
-        if (result.transactionId) {
-          sessionStorage.setItem('actualTransactionId', result.transactionId.toString());
-        }
-      } catch (error) {
-        console.error('Failed to create external transaction:', error);
       }
+
+      // Start countdown timer after transaction is created
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setLocation(`/external-payment/${actualTransactionId}`);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return timer;
     };
 
-    if (transactionId && amount) {
-      createTransaction();
-    }
-
-    // Countdown timer
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          // Use the actual transaction ID from the server response, fallback to original
-          const actualTransactionId = sessionStorage.getItem('actualTransactionId') || transactionId;
-          setLocation(`/external-payment/${actualTransactionId}`);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
+    const timer = initializePayment();
+    
+    return () => {
+      if (timer instanceof Promise) {
+        timer.then(t => clearInterval(t));
+      }
+    };
   }, [setLocation]);
 
   return (
