@@ -1,3 +1,21 @@
+/**
+ * Send Money Page - Comprehensive financial transaction interface
+ * 
+ * Multi-functional money management page providing:
+ * - Send money to other users with payment method selection
+ * - Request money from other users with notification system
+ * - Add money to account using various funding sources
+ * - Real-time transaction processing and status updates
+ * - Payment method integration and management
+ * 
+ * Educational Security Features:
+ * - Demonstrates financial transaction processing
+ * - Shows payment method validation patterns
+ * - Includes transaction notification systems
+ * 
+ * VULNERABILITY NOTE: May contain intentional transaction security
+ * weaknesses for educational security training purposes.
+ */
 import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -15,6 +33,17 @@ import { useLocation } from "wouter";
 import type { PaymentMethod } from "@shared/schema";
 import { useNotifications } from "@/hooks/useNotifications";
 
+/**
+ * SendMoney Component - Financial transaction management interface
+ * 
+ * Comprehensive money management page with tabbed interface for different
+ * transaction types. Features include:
+ * - Send money with recipient selection and payment methods
+ * - Request money with notification and tracking system
+ * - Add money using various funding sources
+ * - Real-time transaction processing and validation
+ * - Integration with notification and payment systems
+ */
 export default function SendMoney() {
   const { user } = useAuth();
   const { toast } = useToast();

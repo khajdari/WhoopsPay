@@ -1,7 +1,36 @@
+/**
+ * Payment Processing Page - External payment transaction handler
+ * 
+ * Handles external payment processing and transaction completion:
+ * - Processes URL parameters for payment initialization
+ * - Creates external transactions in the database
+ * - Manages payment flow completion and redirects
+ * - Provides countdown feedback during processing
+ * - Handles payment success and failure scenarios
+ * 
+ * Educational Security Features:
+ * - Demonstrates external payment processing patterns
+ * - Shows URL parameter handling vulnerabilities
+ * - Includes transaction state management
+ * 
+ * VULNERABILITY NOTE: May expose payment processing logic
+ * for educational security training purposes.
+ */
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 
+/**
+ * PaymentProcessing Component - External payment handler
+ * 
+ * Processes external payment requests and manages transaction lifecycle.
+ * Features include:
+ * - URL parameter extraction for payment data
+ * - External transaction creation and tracking
+ * - Payment flow completion and status management
+ * - Countdown timer for user feedback
+ * - Automatic redirection to authentication flow
+ */
 export default function PaymentProcessing() {
   const [, setLocation] = useLocation();
   const [countdown, setCountdown] = useState(3);
