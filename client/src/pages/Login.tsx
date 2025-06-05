@@ -63,8 +63,8 @@ export default function Login() {
           description,
           returnUrl,
           cancelUrl,
-          // Create the payment URL to redirect to after login
-          originalUrl: `/external-payment/${transactionId}?amount=${amount}&description=${encodeURIComponent(description || '')}&returnUrl=${encodeURIComponent(returnUrl || '')}&cancelUrl=${encodeURIComponent(cancelUrl || '')}`
+          // Create the payment URL to redirect to after login (without returnUrl to prevent redirect back to Juice Shop)
+          originalUrl: `/external-payment/${transactionId}`
         };
       }
       
