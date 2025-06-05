@@ -1,3 +1,10 @@
+/**
+ * Header Component - Main navigation and user interface bar
+ * 
+ * Provides top-level navigation, user account management, notifications,
+ * and authentication controls. Displays user information and quick access
+ * to key application features with responsive design.
+ */
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
@@ -8,12 +15,27 @@ import { NotificationsModal } from "@/components/notifications-modal";
 import { Bell, ChevronDown, Menu, CreditCard } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
+/**
+ * Header Component - Application navigation and user controls
+ * 
+ * Features:
+ * - User authentication status display with avatar
+ * - Notification bell with unread count badge
+ * - User dropdown menu with profile and settings
+ * - Admin panel access for privileged users
+ * - Logout functionality with session termination
+ * - Responsive layout with mobile considerations
+ * - Current location awareness for navigation highlighting
+ */
 export function Header() {
-  const { user, logout, isAuthenticated } = useAuth();
-  const { unreadCount, markAllAsRead, clearAll } = useNotifications();
-  const [location] = useLocation();
-  const [showNotifications, setShowNotifications] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth(); // Authentication state and controls
+  const { unreadCount, markAllAsRead, clearAll } = useNotifications(); // Notification management
+  const [location] = useLocation(); // Current page location
+  const [showNotifications, setShowNotifications] = useState(false); // Notification modal state
 
+  /**
+   * Handle user logout - Terminates session and redirects
+   */
   const handleLogout = () => {
     logout();
   };
