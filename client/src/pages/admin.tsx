@@ -1,3 +1,21 @@
+/**
+ * Admin Page - Administrative dashboard with intentional vulnerabilities
+ * 
+ * Comprehensive administrative interface demonstrating security vulnerabilities:
+ * - Unrestricted access to all user data and transactions
+ * - Sensitive information display without proper authorization
+ * - Client-side data filtering exposing all records
+ * - Toggle controls for showing/hiding sensitive information
+ * - Transaction monitoring and user management capabilities
+ * 
+ * Educational Security Features:
+ * - Demonstrates broken access control vulnerabilities
+ * - Shows improper data exposure patterns
+ * - Includes client-side security bypass examples
+ * 
+ * VULNERABILITY NOTE: This page intentionally lacks proper access control
+ * and exposes sensitive data for educational security training purposes.
+ */
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,6 +23,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 
+/**
+ * Admin Component - Administrative dashboard interface
+ * 
+ * Main administrative page that provides system oversight capabilities.
+ * Features include:
+ * - Complete user database access and display
+ * - Transaction history monitoring across all users
+ * - Sensitive data visibility controls
+ * - Vulnerable data exposure patterns for training
+ * - Real-time data synchronization and updates
+ */
 export default function Admin() {
   const [showSensitive, setShowSensitive] = useState(false);
 

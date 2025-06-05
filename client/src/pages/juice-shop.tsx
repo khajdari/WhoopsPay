@@ -1,8 +1,32 @@
+/**
+ * Juice Shop Page - OWASP Juice Shop integration interface
+ * 
+ * Simulates external e-commerce application demonstrating cross-platform payment integration:
+ * - Shopping cart functionality with quantity management
+ * - Product display with pricing and descriptions
+ * - WhoopsPay payment integration for checkout
+ * - Session-based payment data transfer
+ * - Order total calculation and management
+ * 
+ * Educational Security Features:
+ * - Demonstrates external application payment flows
+ * - Shows cross-site payment integration vulnerabilities
+ * - Includes session storage security patterns
+ * 
+ * VULNERABILITY NOTE: May contain intentional security weaknesses
+ * for educational cross-platform integration training.
+ */
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, CreditCard, Minus, Plus } from "lucide-react";
 
+/**
+ * CartItem Interface - Shopping cart item structure
+ * 
+ * Defines the shape of items in the shopping cart including
+ * product details, pricing, and quantity information.
+ */
 interface CartItem {
   id: number;
   name: string;
@@ -12,6 +36,17 @@ interface CartItem {
   quantity: number;
 }
 
+/**
+ * JuiceShop Component - E-commerce simulation interface
+ * 
+ * Simulates an external e-commerce application with WhoopsPay integration.
+ * Features include:
+ * - Shopping cart management with quantity controls
+ * - Product catalog display with pricing
+ * - Total calculation and order management
+ * - WhoopsPay checkout integration
+ * - Cross-platform payment processing
+ */
 export default function JuiceShop() {
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {

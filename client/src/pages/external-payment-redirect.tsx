@@ -1,7 +1,36 @@
+/**
+ * External Payment Redirect Page - Cross-platform payment processing handler
+ * 
+ * Intermediate page that handles payment requests from external applications:
+ * - Captures payment parameters from URL query strings
+ * - Displays countdown timer for user experience
+ * - Stores payment data in session storage for persistence
+ * - Redirects to authentication flow for payment processing
+ * - Provides visual feedback during transition
+ * 
+ * Educational Security Features:
+ * - Demonstrates cross-platform payment integration
+ * - Shows session storage usage for temporary data
+ * - Includes URL parameter handling patterns
+ * 
+ * VULNERABILITY NOTE: May expose payment data in session storage
+ * for educational security training purposes.
+ */
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreditCard, ArrowRight } from "lucide-react";
 
+/**
+ * ExternalPaymentRedirect Component - Payment transition interface
+ * 
+ * Handles the transition between external applications and WhoopsPay
+ * payment processing. Features include:
+ * - Payment parameter extraction from URL
+ * - Visual countdown timer for user feedback
+ * - Session data persistence for payment flow
+ * - Automatic redirection to authentication
+ * - Clean transition animations and icons
+ */
 export default function ExternalPaymentRedirect() {
   const [countdown, setCountdown] = useState(3);
 

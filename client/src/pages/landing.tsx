@@ -1,7 +1,36 @@
+/**
+ * Landing Page - Welcome interface for unauthenticated users
+ * 
+ * Marketing and onboarding page providing:
+ * - Hero section with value proposition and call-to-action buttons
+ * - Feature showcase highlighting platform capabilities
+ * - Security and trust indicators for user confidence
+ * - Responsive design optimized for all devices
+ * - Clear navigation to registration and login flows
+ * 
+ * Educational Security Features:
+ * - Demonstrates public-facing application design
+ * - Shows marketing page security considerations
+ * - Includes trust signal implementation
+ * 
+ * VULNERABILITY NOTE: Public interface may expose system information
+ * for educational security training purposes.
+ */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Send, Smartphone, CreditCard, Globe, Users } from "lucide-react";
 
+/**
+ * Landing Component - Marketing and onboarding interface
+ * 
+ * Main landing page for unauthenticated users featuring comprehensive
+ * product marketing and clear conversion paths. Features include:
+ * - Hero section with compelling value proposition
+ * - Feature grid showcasing platform capabilities
+ * - Trust indicators and security messaging
+ * - Clear call-to-action buttons for registration and login
+ * - Responsive design optimized for mobile and desktop
+ */
 export default function Landing() {
   const handleLogin = () => {
     window.location.href = "/login";
