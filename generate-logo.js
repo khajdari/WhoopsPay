@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 // Create a WhoopsPay logo PNG file for Juice Shop integration
 const createLogo = () => {
