@@ -316,7 +316,7 @@ curl -X POST https://whoopspay.replit.app/api/external/payment/123/approve \
 
 ## URL Examples
 
-- **PayPwned Payment Page**: `https://paypwned.replit.app/external-payment/123`
+- **WhoopsPay Payment Page**: `https://whoopspay.replit.app/external-payment/123`
 - **Juice Shop Return URL**: `http://localhost:3000/basket#/order-completion?status=success&transactionId=123`
 - **Juice Shop Cancel URL**: `http://localhost:3000/basket?status=cancelled&transactionId=123`
 
