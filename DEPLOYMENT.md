@@ -87,7 +87,7 @@ cp .env.example .env
 
 Then edit `.env` with their database details:
 ```env
-DATABASE_URL=postgresql://username:password@localhost:5432/paypwned
+DATABASE_URL=file:./server/database.db
 SESSION_SECRET=their-unique-secret-key
 NODE_ENV=development
 PORT=5000

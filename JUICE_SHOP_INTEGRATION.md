@@ -556,7 +556,7 @@ npm run test:integration
 
 1. **CORS Errors**: Ensure both services allow cross-origin requests
 2. **Port Conflicts**: Verify services run on correct ports (3001, 5000)
-3. **Database Connectivity**: Check PostgreSQL connection and schema
+3. **Database Connectivity**: Check SQLite connection and schema
 4. **Session Issues**: Clear browser storage and restart services
 5. **API Timeouts**: Verify network connectivity between services
 
