@@ -22,15 +22,12 @@
  */
 
 import {
-  pgTable,
+  sqliteTable,
   text,
   integer,
   real,
-  varchar,
-  timestamp,
-  jsonb,
   index,
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -38,12 +35,12 @@ import { z } from "zod";
  * Session storage table for Replit Auth
  * VULNERABILITY: Sessions stored in database without proper encryption
  */
-export const sessions = pgTable(
+export const sessions = sqliteTable(
   "sessions",
   {
-    sid: varchar("sid").primaryKey(),
-    sess: jsonb("sess").notNull(),
-    expire: timestamp("expire").notNull(),
+    sid: text("sid").primaryKey(),
+    sess: text("sess").notNull(),
+    expire: integer("expire").notNull(),
   },
   (table) => ({
     expireIdx: index("IDX_session_expire").on(table.expire),
@@ -51,8 +48,8 @@ export const sessions = pgTable(
 );
 
 // User storage table with vulnerable design
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().notNull(),
+export const users = sqliteTable("users", {
+  id: text("id").primaryKey().notNull(),
   email: text("email"),
   firstName: text("first_name"),
   lastName: text("last_name"),
@@ -63,18 +60,22 @@ export const users = pgTable("users", {
   password: text("password"),
   // VULNERABILITY: Unencrypted sensitive personal data
   ssn: text("ssn"),
-  phone: text("phone"),
   address: text("address"),
+  phoneNumber: text("phone_number"),
+  dateOfBirth: text("date_of_birth"),
+  nationality: text("nationality"),
+  gender: text("gender"),
+  // VULNERABILITY: Financial data stored in plain text
   balance: real("balance"),
   // VULNERABILITY: Weak role management
   isAdmin: integer("is_admin"),
 });
 
 // Transaction table with security flaws
-export const transactions = pgTable("transactions", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-  fromUserId: varchar("from_user_id").notNull(),
-  toUserId: varchar("to_user_id").notNull(),
+export const transactions = sqliteTable("transactions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  fromUserId: text("from_user_id").notNull(),
+  toUserId: text("to_user_id").notNull(),
   amount: real("amount").notNull(),
   description: text("description"),
   status: text("status"),
@@ -89,9 +90,9 @@ export const transactions = pgTable("transactions", {
 });
 
 // Payment methods with exposed sensitive data
-export const paymentMethods = pgTable("payment_methods", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-  userId: varchar("user_id").notNull(),
+export const paymentMethods = sqliteTable("payment_methods", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id").notNull(),
   type: text("type").notNull(), // 'card' or 'bank'
   // VULNERABILITY: Unencrypted payment data
   cardNumber: text("card_number"),
@@ -104,9 +105,9 @@ export const paymentMethods = pgTable("payment_methods", {
 });
 
 // Vulnerable session tracking
-export const userSessions = pgTable("user_sessions", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-  userId: varchar("user_id").notNull(),
+export const userSessions = sqliteTable("user_sessions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id").notNull(),
   sessionToken: text("session_token").notNull(),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
@@ -116,8 +117,8 @@ export const userSessions = pgTable("user_sessions", {
 });
 
 // Notifications table
-export const notifications = pgTable("notifications", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+export const notifications = sqliteTable("notifications", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull(),
   title: text("title").notNull(),
   message: text("message").notNull(),
@@ -126,6 +127,7 @@ export const notifications = pgTable("notifications", {
   createdAt: integer("created_at"),
 });
 
+// Validation schemas for forms
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -142,13 +144,18 @@ export const insertPaymentMethodSchema = createInsertSchema(paymentMethods).omit
   createdAt: true,
 });
 
+// Type exports
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+
 export type Transaction = typeof transactions.$inferSelect;
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
+
 export type PaymentMethod = typeof paymentMethods.$inferSelect;
 export type InsertPaymentMethod = z.infer<typeof insertPaymentMethodSchema>;
+
 export type UserSession = typeof userSessions.$inferSelect;
+
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
