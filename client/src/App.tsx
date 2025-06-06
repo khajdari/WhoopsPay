@@ -29,6 +29,7 @@ import Admin from "@/pages/admin";
 import Administration from "@/pages/administration";
 import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
+import IssueReporting from "@/pages/IssueReporting";
 
 // Special-purpose components
 import ExternalPayment from "@/pages/ExternalPayment";
