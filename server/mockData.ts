@@ -5,194 +5,137 @@ export async function seedMockData() {
   try {
     console.log("Starting mock data seeding...");
     
-    // Create mock users with intentionally vulnerable data
+    // Create one admin user and three regular users
     await storage.upsertUser({
-      id: "jdoe",
-      email: "john.doe@example.com",
-      firstName: "John",
-      lastName: "Doe",
+      id: "admin",
+      email: "admin@whoopspay.com",
+      firstName: "Admin",
+      lastName: "User",
       profileImageUrl: "",
-      address: "123 Main Street, New York, NY 10001",
+      address: "100 Admin Plaza, Security City, SC 12345",
       nationality: "American",
-      gender: "Male",
-      balance: 2500.75,
+      gender: "Non-binary",
+      balance: 10000.00,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       isAdmin: 1,
 
       // VULNERABLE: Sensitive data stored unencrypted
-      ssn: "123-45-6789",
-      password: "password123", // VULNERABLE: Plain text password
-    });
-
-    await storage.upsertUser({
-      id: "mdoe", 
-      email: "mary.doe@email.com",
-      firstName: "Mary",
-      lastName: "Doe",
-      profileImageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
-      address: "456 Oak Avenue, Los Angeles, CA 90210",
-      nationality: "Canadian",
-      gender: "Female",
-      balance: 875.25,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      isAdmin: 0,
-
-      ssn: "987-65-4321",
-      password: "pass", // VULNERABLE: Weak password
-    });
-
-    await storage.upsertUser({
-      id: "edoe",
-      email: "elisa.doe@email.com", 
-      firstName: "Elisa",
-      lastName: "Doe",
-      profileImageUrl: "",
-      address: "789 Pine Road, Chicago, IL 60601",
-      nationality: "British",
-      gender: "Female",
-      balance: 2150.00,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      isAdmin: 0,
-      ssn: "555-12-3456",
-      password: "pass", // VULNERABLE: Common password
-    });
-
-    // Add admin user
-    await storage.upsertUser({
-      id: "admin", 
-      email: "admin@example.com",
-      firstName: "Admin",
-      lastName: "User",
-      profileImageUrl: "",
-      address: "456 Admin Ave, City, State",
-      nationality: "System",
-      gender: "System",
-      balance: 10000.00,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      ssn: "987-65-4321",
+      ssn: "111-11-1111",
       password: "admin123", // VULNERABLE: Plain text password
-      isAdmin: 1,
     });
 
-    // Add additional test users
     await storage.upsertUser({
-      id: "alice",
-      email: "alice.smith@example.com",
+      id: "user1", 
+      email: "user1@example.com",
       firstName: "Alice",
+      lastName: "Johnson",
+      profileImageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
+      address: "123 Main Street, New York, NY 10001",
+      nationality: "American",
+      gender: "Female",
+      balance: 1500.50,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      isAdmin: 0,
+
+      ssn: "222-22-2222",
+      password: "password1", // VULNERABLE: Weak password
+    });
+
+    await storage.upsertUser({
+      id: "user2",
+      email: "user2@example.com",
+      firstName: "Bob",
       lastName: "Smith",
       profileImageUrl: "",
-      address: "321 Alice Ave, City, State",
-      nationality: "American",
-      gender: "Female",
-      balance: 1750.50,
+      address: "456 Oak Avenue, Los Angeles, CA 90210",
+      nationality: "Canadian",
+      gender: "Male",
+      balance: 750.25,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       isAdmin: 0,
+
       ssn: "333-33-3333",
-      password: "alice123", // VULNERABLE: Plain text password
+      password: "pass123", // VULNERABLE: Weak password
     });
 
     await storage.upsertUser({
-      id: "bob",
-      email: "bob.johnson@example.com",
-      firstName: "Bob",
-      lastName: "Johnson",
-      profileImageUrl: "",
-      address: "654 Bob Blvd, City, State",
-      nationality: "American",
-      gender: "Male",
-      balance: "3200.25",
-      ssn: "444-44-4444",
-      bankAccount: "4444-4444-4444-4444",
-      creditCard: "4444-4444-4444-4444",
-      password: "bob123", // VULNERABLE: Plain text password
-    });
-
-    await storage.upsertUser({
-      id: "charlie",
-      email: "charlie.brown@example.com",
+      id: "user3",
+      email: "user3@example.com", 
       firstName: "Charlie",
       lastName: "Brown",
       profileImageUrl: "",
-      address: "987 Charlie Circle, City, State",
-      nationality: "American",
+      address: "789 Pine Road, Chicago, IL 60601",
+      nationality: "British",
       gender: "Male",
-      balance: "890.75",
-      ssn: "666-66-6666",
-      bankAccount: "6666-6666-6666-6666",
-      creditCard: "6666-6666-6666-6666",
-      password: "charlie123", // VULNERABLE: Plain text password
+      balance: 425.00,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      isAdmin: 0,
+      ssn: "444-44-4444",
+      password: "123456", // VULNERABLE: Extremely weak password
     });
 
-    // Create mock transactions between mock users
+
+
+
+
+    // Create mock transactions between users
     await storage.createTransaction({
-      fromUserId: "jdoe",
-      toUserId: "mdoe", 
-      amount: "150.00",
-      description: "Dinner split",
+      fromUserId: "admin",
+      toUserId: "user1", 
+      amount: 150.00,
+      description: "Admin payment to Alice",
       status: "completed",
+      createdAt: Date.now(),
     });
 
     await storage.createTransaction({
-      fromUserId: "mdoe",
-      toUserId: "jdoe",
-      amount: "75.50", 
-      description: "Gift for birthday", // VULNERABLE: XSS payload removed
+      fromUserId: "user1",
+      toUserId: "user2",
+      amount: 75.50, 
+      description: "Dinner split payment",
       status: "completed",
+      createdAt: Date.now(),
     });
 
     await storage.createTransaction({
-      fromUserId: "edoe",
-      toUserId: "jdoe",
-      amount: "200.00",
-      description: "Rent payment",
-      status: "pending",
-    });
-
-    // Add more pending requests for testing the dropdown feature
-    await storage.createTransaction({
-      fromUserId: "alice",
-      toUserId: "jdoe",
-      amount: "85.50",
-      description: "Grocery shopping split",
-      status: "pending",
-    });
-
-    await storage.createTransaction({
-      fromUserId: "bob",
-      toUserId: "jdoe",
-      amount: "45.00",
+      fromUserId: "user2",
+      toUserId: "user3",
+      amount: 50.00,
       description: "Movie tickets",
       status: "pending",
+      createdAt: Date.now(),
     });
 
+    // Add more transactions for testing
     await storage.createTransaction({
-      fromUserId: "charlie",
-      toUserId: "jdoe",
-      amount: "30.25",
-      description: "Pizza dinner",
+      fromUserId: "user3",
+      toUserId: "admin",
+      amount: 85.50,
+      description: "Service fee payment",
       status: "pending",
+      createdAt: Date.now(),
     });
 
-    // Add pending requests for other users too
     await storage.createTransaction({
-      fromUserId: "jdoe",
-      toUserId: "alice",
-      amount: "120.00",
+      fromUserId: "user1",
+      toUserId: "user3",
+      amount: 45.00,
       description: "Concert tickets",
       status: "pending",
+      createdAt: Date.now(),
     });
 
     await storage.createTransaction({
-      fromUserId: "bob",
-      toUserId: "alice",
-      amount: "67.80",
-      description: "Uber ride share",
-      status: "pending",
+      fromUserId: "user2",
+      toUserId: "admin",
+      amount: 30.25,
+      description: "Monthly subscription",
+      status: "completed",
+      createdAt: Date.now(),
     });
 
     await storage.createTransaction({
