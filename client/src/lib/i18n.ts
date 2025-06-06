@@ -581,13 +581,13 @@ export const useI18n = () => {
 export function I18nProvider({ children }: { children: ReactNode }) {
   // Initialize language from localStorage with fallback to UK English
   const [language, setLanguage] = useState<Language>(() => {
-    const saved = localStorage.getItem('paypal-language');
-    return (saved as Language) || 'en-GB';
+    const saved = localStorage.getItem('whoopspay-language');
+    return (saved === 'en-GB' || saved === 'el-GR') ? (saved as Language) : 'en-GB';
   });
 
   // Persist language changes to localStorage
   useEffect(() => {
-    localStorage.setItem('paypal-language', language);
+    localStorage.setItem('whoopspay-language', language);
   }, [language]);
 
   /**
