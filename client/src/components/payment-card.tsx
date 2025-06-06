@@ -183,8 +183,10 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
                 <div className="text-xs text-gray-600">Savings Account</div>
               </div>
               <div className="text-right">
-                <div className="text-xs text-gray-500">Routing</div>
-                <div className="font-mono text-xs font-bold text-blue-800">123456789</div>
+                <div className="text-xs text-gray-500">Account Number</div>
+                <div className="font-mono text-xs font-bold text-blue-800">
+                  {accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••1234'}
+                </div>
               </div>
             </div>
             
@@ -194,23 +196,14 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               <div className="font-semibold text-sm text-gray-800">John Doe</div>
             </div>
             
-            {/* Account number */}
+            {/* IBAN */}
             <div className="bg-white/50 border border-blue-200 rounded p-2 mb-3">
-              <div className="text-xs text-gray-500 mb-1">Account Number</div>
+              <div className="text-xs text-gray-500 mb-1">IBAN</div>
               <div className="font-mono text-sm font-bold text-blue-800">
-                {accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••1234'}
+                {iban ? `${iban.slice(0, 8)}••••••••` : 'GB29NWBK••••••••'}
               </div>
             </div>
-            
-            {/* IBAN section */}
-            {iban && (
-              <div className="mb-3">
-                <div className="text-xs text-gray-500 mb-1">IBAN</div>
-                <div className="font-mono text-xs text-gray-700">
-                  {iban.slice(0, 8)}••••••••
-                </div>
-              </div>
-            )}
+
             
             {/* Bottom info */}
             <div className="absolute bottom-2 right-3 text-xs text-gray-500">
