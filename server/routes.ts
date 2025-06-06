@@ -993,6 +993,186 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * @swagger
+   * /api/pending-requests:
+   *   get:
+   *     summary: Get pending money requests for current user (VULNERABLE - Insufficient Auth)
+   *     description: "🚨 VULNERABILITY: Basic session check only, no rate limiting"
+   *     tags: [Money Requests]
+   *     responses:
+   *       200:
+   *         description: List of pending money requests for the user
+   *       401:
+   *         description: Unauthorized
+   */
+  app.get('/api/pending-requests/:userId?', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUserId = req.user?.id;
+      const requestedUserId = req.params.userId || currentUserId;
+      
+      // VULNERABLE: IDOR - users can potentially access other users' pending requests
+      if (!requestedUserId) {
+        return res.status(400).json({ message: "User ID required" });
+      }
+      
+      const pendingRequests = await storage.getPendingTransactions(requestedUserId);
+      
+      // Enrich with user data for display
+      const enrichedRequests = await Promise.all(
+        pendingRequests.map(async (request: any) => {
+          const fromUser = await storage.getUser(request.fromUserId);
+          return {
+            ...request,
+            fromUser: fromUser ? {
+              id: fromUser.id,
+              firstName: fromUser.firstName,
+              lastName: fromUser.lastName,
+              email: fromUser.email
+            } : null
+          };
+        })
+      );
+      
+      res.json(enrichedRequests);
+    } catch (error) {
+      console.error("Error fetching pending requests:", error);
+      res.status(500).json({ message: "Failed to fetch pending requests" });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/requests/{id}/approve:
+   *   post:
+   *     summary: Approve money request (VULNERABLE - Missing CSRF Protection)
+   *     description: "🚨 VULNERABILITY: No CSRF token validation, potential for CSRF attacks"
+   *     tags: [Money Requests]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: Request approved and payment processed
+   *       404:
+   *         description: Request not found
+   *       400:
+   *         description: Invalid request or insufficient funds
+   */
+  app.post('/api/requests/:id/approve', isAuthenticated, async (req: any, res) => {
+    try {
+      const requestId = parseInt(req.params.id);
+      const currentUserId = req.user?.id;
+      
+      // Get the pending request
+      const request = await storage.getTransaction(requestId);
+      if (!request) {
+        return res.status(404).json({ message: "Request not found" });
+      }
+      
+      // VULNERABLE: Insufficient validation - only basic checks
+      if (request.toUserId !== currentUserId) {
+        return res.status(403).json({ message: "You can only approve requests sent to you" });
+      }
+      
+      if (request.status !== 'pending') {
+        return res.status(400).json({ message: "Request is not pending" });
+      }
+      
+      // Get current user profile to check balance
+      const payingUser = await storage.getUser(currentUserId);
+      if (!payingUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      const currentBalance = parseFloat(payingUser.balance || "0");
+      const requestAmount = parseFloat(request.amount.toString());
+      
+      if (currentBalance < requestAmount) {
+        return res.status(400).json({ message: "Insufficient funds" });
+      }
+      
+      // Process the payment
+      const newBalance = (currentBalance - requestAmount).toFixed(2);
+      await storage.updateUserBalance(currentUserId, newBalance);
+      
+      // Update recipient balance
+      const recipient = await storage.getUser(request.fromUserId);
+      if (recipient) {
+        const recipientBalance = parseFloat(recipient.balance || "0");
+        const newRecipientBalance = (recipientBalance + requestAmount).toFixed(2);
+        await storage.updateUserBalance(request.fromUserId, newRecipientBalance);
+      }
+      
+      // Update transaction status
+      const updatedTransaction = await storage.updateTransactionStatus(requestId, 'completed');
+      
+      res.json({ 
+        message: "Request approved successfully",
+        transaction: updatedTransaction,
+        newBalance: newBalance
+      });
+    } catch (error) {
+      console.error("Error approving request:", error);
+      res.status(500).json({ message: "Failed to approve request" });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/requests/{id}/reject:
+   *   post:
+   *     summary: Reject money request (VULNERABLE - No Rate Limiting)
+   *     description: "🚨 VULNERABILITY: No rate limiting on rejection attempts"
+   *     tags: [Money Requests]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: Request rejected
+   *       404:
+   *         description: Request not found
+   */
+  app.post('/api/requests/:id/reject', isAuthenticated, async (req: any, res) => {
+    try {
+      const requestId = parseInt(req.params.id);
+      const currentUserId = req.user?.id;
+      
+      // Get the pending request
+      const request = await storage.getTransaction(requestId);
+      if (!request) {
+        return res.status(404).json({ message: "Request not found" });
+      }
+      
+      // VULNERABLE: Basic authorization check only
+      if (request.toUserId !== currentUserId) {
+        return res.status(403).json({ message: "You can only reject requests sent to you" });
+      }
+      
+      if (request.status !== 'pending') {
+        return res.status(400).json({ message: "Request is not pending" });
+      }
+      
+      // Update transaction status to rejected
+      const updatedTransaction = await storage.updateTransactionStatus(requestId, 'rejected');
+      
+      res.json({ 
+        message: "Request rejected successfully",
+        transaction: updatedTransaction
+      });
+    } catch (error) {
+      console.error("Error rejecting request:", error);
+      res.status(500).json({ message: "Failed to reject request" });
+    }
+  });
+
   // VULNERABLE: Update user profile without proper validation
   app.put('/api/users/:id/profile', async (req: any, res) => {
     try {
