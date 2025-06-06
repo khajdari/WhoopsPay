@@ -42,10 +42,10 @@ async getTransaction(id: number): Promise<Transaction | undefined> {
 **Code Examples**:
 ```javascript
 // VULNERABLE: Plain text password storage
-export const users = pgTable("users", {
-  password: varchar("password"), // Should be hashed
-  ssn: varchar("ssn"), // Should be encrypted
-  creditCard: varchar("credit_card"), // Should be encrypted
+export const users = sqliteTable("users", {
+  password: text("password"), // Should be hashed
+  ssn: text("ssn"), // Should be encrypted
+  creditCard: text("credit_card"), // Should be encrypted
 });
 ```
 

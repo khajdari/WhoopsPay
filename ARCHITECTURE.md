@@ -30,7 +30,7 @@ WhoopsPay is a full-stack educational security training platform built with mode
                         Database Layer
                               │
 ┌─────────────────────────────────────────────────────────────┐
-│                   PostgreSQL Database                       │
+│                    SQLite Database                          │
 ├─────────────────────────────────────────────────────────────┤
 │   Tables   │  Relations │  Indexes  │   Views  │ Functions  │
 │   - Users  │ - Foreign  │ - Primary │ - User   │ - Triggers │
@@ -74,7 +74,7 @@ WhoopsPay is a full-stack educational security training platform built with mode
 - **bcrypt** for secure password hashing
 
 #### Database Layer
-- **PostgreSQL** as the primary database
+- **SQLite** as the primary database
 - **Drizzle ORM** for type-safe database operations
 - **Database migrations** handled through Drizzle Kit
 
@@ -393,7 +393,7 @@ GET    /api/admin/logs             # System logs (admin only)
 ## Deployment Architecture
 
 ### Development Environment
-- **Local PostgreSQL** database
+- **Local SQLite** database
 - **Node.js** development server
 - **Hot module replacement** for fast development
 - **Source maps** for debugging

@@ -122,7 +122,7 @@ The application includes pre-configured demo users for testing:
 ### Backend
 - **Express.js** - Fast, unopinionated web framework
 - **TypeScript** - Type-safe server development
-- **PostgreSQL** - Robust relational database
+- **SQLite** - Lightweight embedded database
 - **Drizzle ORM** - Type-safe database operations
 - **Express Session** - Session-based authentication
 - **bcrypt** - Password hashing and verification
