@@ -148,11 +148,30 @@ export async function seedMockData() {
     console.log("Mock transactions created for new users");
 
     // Create mock payment methods with unencrypted data
+    // Admin payment methods
     await storage.addPaymentMethod({
       userId: "@admin_maria",
       type: "card",
       cardName: "Maria Rodriguez",
       cardNumber: "4532-1234-5678-9012", // VULNERABLE: Unencrypted card
+      isDefault: 1,
+    });
+
+    await storage.addPaymentMethod({
+      userId: "@admin_maria",
+      type: "bank",
+      bankName: "Capital One",
+      accountNumber: "111222333", // VULNERABLE: Unencrypted account
+      iban: "US89CAPU0208000100001111",
+      isDefault: 0,
+    });
+
+    // Sarah's payment methods - both card and saving account
+    await storage.addPaymentMethod({
+      userId: "@sarah_wilson", 
+      type: "card",
+      cardName: "Sarah Wilson",
+      cardNumber: "4111-1111-1111-1111", // VULNERABLE: Unencrypted card
       isDefault: 1,
     });
 
@@ -165,11 +184,30 @@ export async function seedMockData() {
       isDefault: 0,
     });
 
+    // James's payment methods - both card and saving account
     await storage.addPaymentMethod({
       userId: "@james_chen",
       type: "card",
       cardName: "James Chen",
       cardNumber: "5555-4444-3333-2222",
+      isDefault: 1,
+    });
+
+    await storage.addPaymentMethod({
+      userId: "@james_chen",
+      type: "bank",
+      bankName: "Wells Fargo",
+      accountNumber: "123456789",
+      iban: "US94WFBI0208000100012345",
+      isDefault: 0,
+    });
+
+    // Elena's payment methods - both card and saving account
+    await storage.addPaymentMethod({
+      userId: "@elena_kowalski", 
+      type: "card",
+      cardName: "Elena Kowalski",
+      cardNumber: "3782-822463-10005", // VULNERABLE: Unencrypted American Express
       isDefault: 1,
     });
 
