@@ -42,9 +42,9 @@ import { db } from "./db";
 import { eq, desc, and, or } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
-// Database-only storage - all data operations use PostgreSQL
+// Database-only storage - all data operations use SQLite
 
-// All data now comes from PostgreSQL database
+// All data now comes from SQLite database
 
 /**
  * Vulnerable storage interface - intentionally insecure for educational purposes
