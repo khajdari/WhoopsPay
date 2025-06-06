@@ -151,7 +151,7 @@ export default function SendMoney() {
   const addMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
       // VULNERABLE: No authentication check on add money endpoint
-      return await apiRequest("POST", "/api/add-money", data);
+      return await apiRequest("/api/add-money", "POST", data);
     },
     onSuccess: () => {
       toast({
@@ -173,7 +173,7 @@ export default function SendMoney() {
 
   const withdrawMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("POST", "/api/withdraw-money", data);
+      return await apiRequest("/api/withdraw-money", "POST", data);
     },
     onSuccess: () => {
       toast({

@@ -66,7 +66,7 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
       console.log("In mutation function, data received:", JSON.stringify(data, null, 2));
       console.log("Data has type field:", 'type' in data);
       console.log("Type value:", data.type);
-      const result = await apiRequest("POST", "/api/transactions", data);
+      const result = await apiRequest("/api/transactions", "POST", data);
       console.log("Mutation result:", result);
       return result;
     },
