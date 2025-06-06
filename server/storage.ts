@@ -196,39 +196,97 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
-    const newTransaction: Transaction = {
-      id: mockTransactions.length + 1,
-      ...transaction,
-      createdAt: Date.now(),
-    };
-    mockTransactions.push(newTransaction);
-    return newTransaction;
+  async createTransaction(transactionData: InsertTransaction): Promise<Transaction> {
+    try {
+      const [transaction] = await db
+        .insert(transactions)
+        .values({
+          ...transactionData,
+          createdAt: Date.now(),
+        })
+        .returning();
+      return transaction;
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+      throw error;
+    }
   }
 
   async getUserTransactions(userId: string): Promise<Transaction[]> {
-    return mockTransactions.filter(t => t.fromUserId === userId || t.toUserId === userId);
+    try {
+      const result = await db
+        .select()
+        .from(transactions)
+        .where(
+          or(
+            eq(transactions.fromUserId, userId),
+            eq(transactions.toUserId, userId)
+          )
+        );
+      return result;
+    } catch (error) {
+      console.error("Error fetching user transactions:", error);
+      return [];
+    }
   }
 
   async getTransaction(id: number): Promise<Transaction | undefined> {
-    return mockTransactions.find(t => t.id === id);
+    try {
+      const [transaction] = await db.select().from(transactions).where(eq(transactions.id, id));
+      return transaction;
+    } catch (error) {
+      console.error("Error fetching transaction:", error);
+      return undefined;
+    }
   }
 
   async getAllTransactions(): Promise<Transaction[]> {
-    return [...mockTransactions];
+    try {
+      const result = await db.select().from(transactions);
+      return result;
+    } catch (error) {
+      console.error("Error fetching all transactions:", error);
+      return [];
+    }
   }
 
   async getPendingTransactions(userId: string): Promise<Transaction[]> {
-    return mockTransactions.filter(t => t.status === 'pending' && (t.fromUserId === userId || t.toUserId === userId));
+    try {
+      const result = await db
+        .select()
+        .from(transactions)
+        .where(
+          and(
+            eq(transactions.status, 'pending'),
+            or(
+              eq(transactions.fromUserId, userId),
+              eq(transactions.toUserId, userId)
+            )
+          )
+        );
+      return result;
+    } catch (error) {
+      console.error("Error fetching pending transactions:", error);
+      return [];
+    }
   }
 
   async updateTransactionStatus(transactionId: number, status: string): Promise<Transaction> {
-    const transaction = mockTransactions.find(t => t.id === transactionId);
-    if (!transaction) {
-      throw new Error('Transaction not found');
+    try {
+      const [transaction] = await db
+        .update(transactions)
+        .set({ status })
+        .where(eq(transactions.id, transactionId))
+        .returning();
+      
+      if (!transaction) {
+        throw new Error('Transaction not found');
+      }
+      return transaction;
+    } catch (error) {
+      console.error("Error updating transaction status:", error);
+      throw error;
     }
-    transaction.status = status;
-    return transaction;
   }
 
   async addPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod> {
