@@ -103,6 +103,37 @@ interface Translations {
   // Settings
   language: TranslationKey;
   changeLanguage: TranslationKey;
+  
+  // Landing page
+  signIn: TranslationKey;
+  getStarted: TranslationKey;
+  heroTitle: TranslationKey;
+  heroSubtitle: TranslationKey;
+  learnMore: TranslationKey;
+  secureTransactions: TranslationKey;
+  secureTransactionsDesc: TranslationKey;
+  purchaseProtection: TranslationKey;
+  purchaseProtectionDesc: TranslationKey;
+  mobileReady: TranslationKey;
+  mobileReadyDesc: TranslationKey;
+  multiplePaymentOptions: TranslationKey;
+  multiplePaymentOptionsDesc: TranslationKey;
+  globalReach: TranslationKey;
+  globalReachDesc: TranslationKey;
+  trustedCommunity: TranslationKey;
+  trustedCommunityDesc: TranslationKey;
+  footerText: TranslationKey;
+  
+  // Login page
+  signInTitle: TranslationKey;
+  welcomeBack: TranslationKey;
+  username: TranslationKey;
+  password: TranslationKey;
+  enterUsername: TranslationKey;
+  enterPassword: TranslationKey;
+  loggingIn: TranslationKey;
+  dontHaveAccount: TranslationKey;
+  signUpHere: TranslationKey;
 }
 
 const translations: Translations = {
@@ -304,6 +335,118 @@ const translations: Translations = {
   changeLanguage: {
     'en-GB': 'Change Language',
     'el-GR': 'Αλλαγή Γλώσσας'
+  },
+  
+  // Landing page
+  signIn: {
+    'en-GB': 'Sign In',
+    'el-GR': 'Σύνδεση'
+  },
+  getStarted: {
+    'en-GB': 'Get Started',
+    'el-GR': 'Ξεκινήστε'
+  },
+  heroTitle: {
+    'en-GB': 'Send, spend, and receive money your way',
+    'el-GR': 'Στείλτε, ξοδέψτε και λάβετε χρήματα με τον δικό σας τρόπο'
+  },
+  heroSubtitle: {
+    'en-GB': 'It\'s fast, free, and secure to send money to friends and family',
+    'el-GR': 'Είναι γρήγορο, δωρεάν και ασφαλές να στέλνετε χρήματα σε φίλους και οικογένεια'
+  },
+  learnMore: {
+    'en-GB': 'Learn More',
+    'el-GR': 'Μάθετε Περισσότερα'
+  },
+  secureTransactions: {
+    'en-GB': 'Secure Transactions',
+    'el-GR': 'Ασφαλείς Συναλλαγές'
+  },
+  secureTransactionsDesc: {
+    'en-GB': 'Advanced encryption protects your financial information',
+    'el-GR': 'Προηγμένη κρυπτογράφηση προστατεύει τις οικονομικές σας πληροφορίες'
+  },
+  purchaseProtection: {
+    'en-GB': 'Purchase Protection',
+    'el-GR': 'Προστασία Αγορών'
+  },
+  purchaseProtectionDesc: {
+    'en-GB': 'Shop with confidence knowing your eligible purchases are covered',
+    'el-GR': 'Αγοράστε με εμπιστοσύνη γνωρίζοντας ότι οι επιλέξιμες αγορές σας καλύπτονται'
+  },
+  mobileReady: {
+    'en-GB': 'Mobile Ready',
+    'el-GR': 'Έτοιμο για Κινητά'
+  },
+  mobileReadyDesc: {
+    'en-GB': 'Access your account anywhere with our mobile-optimized platform',
+    'el-GR': 'Αποκτήστε πρόσβαση στον λογαριασμό σας οπουδήποτε με την πλατφόρμα μας που είναι βελτιστοποιημένη για κινητά'
+  },
+  multiplePaymentOptions: {
+    'en-GB': 'Multiple Payment Options',
+    'el-GR': 'Πολλαπλές Επιλογές Πληρωμής'
+  },
+  multiplePaymentOptionsDesc: {
+    'en-GB': 'Link your bank account, credit card, or debit card',
+    'el-GR': 'Συνδέστε τον τραπεζικό σας λογαριασμό, πιστωτική ή χρεωστική κάρτα'
+  },
+  globalReach: {
+    'en-GB': 'Global Reach',
+    'el-GR': 'Παγκόσμια Εμβέλεια'
+  },
+  globalReachDesc: {
+    'en-GB': 'Send and receive money in multiple currencies worldwide',
+    'el-GR': 'Στείλτε και λάβετε χρήματα σε πολλαπλά νομίσματα παγκοσμίως'
+  },
+  trustedCommunity: {
+    'en-GB': 'Trusted Community',
+    'el-GR': 'Αξιόπιστη Κοινότητα'
+  },
+  trustedCommunityDesc: {
+    'en-GB': 'Join millions of users who trust us with their payments',
+    'el-GR': 'Γίνετε μέλος των εκατομμυρίων χρηστών που μας εμπιστεύονται τις πληρωμές τους'
+  },
+  footerText: {
+    'en-GB': '© 2025 WhoopsPay. An educational project developed as part of a postgraduate thesis on web application vulnerabilities.',
+    'el-GR': '© 2025 WhoopsPay. Ένα εκπαιδευτικό έργο που αναπτύχθηκε στο πλαίσιο μεταπτυχιακής διατριβής για τρωτότητες εφαρμογών ιστού.'
+  },
+  
+  // Login page
+  signInTitle: {
+    'en-GB': 'Sign In',
+    'el-GR': 'Σύνδεση'
+  },
+  welcomeBack: {
+    'en-GB': 'Welcome back to WhoopsPay',
+    'el-GR': 'Καλώς ήρθατε πίσω στο WhoopsPay'
+  },
+  username: {
+    'en-GB': 'Username',
+    'el-GR': 'Όνομα Χρήστη'
+  },
+  password: {
+    'en-GB': 'Password',
+    'el-GR': 'Κωδικός Πρόσβασης'
+  },
+  enterUsername: {
+    'en-GB': 'Enter your username',
+    'el-GR': 'Εισάγετε το όνομα χρήστη σας'
+  },
+  enterPassword: {
+    'en-GB': 'Enter your password',
+    'el-GR': 'Εισάγετε τον κωδικό πρόσβασής σας'
+  },
+  loggingIn: {
+    'en-GB': 'Logging in...',
+    'el-GR': 'Σύνδεση...'
+  },
+  dontHaveAccount: {
+    'en-GB': 'Don\'t have an account?',
+    'el-GR': 'Δεν έχετε λογαριασμό;'
+  },
+  signUpHere: {
+    'en-GB': 'Sign up here',
+    'el-GR': 'Εγγραφείτε εδώ'
   }
 };
 
