@@ -491,8 +491,11 @@ export default function Dashboard() {
               <Card className="p-6">
                 <div className="flex items-center">
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-600">System Status</p>
-                    <p className="text-2xl font-bold text-green-600">Online</p>
+                    <p className="text-sm font-medium text-gray-600">API Server</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-lg font-bold text-green-600">Running</p>
+                      <span className="text-sm text-gray-500">({allUsers ? '4' : '0'} services)</span>
+                    </div>
                   </div>
                   <Shield className="h-8 w-8 text-green-600" />
                 </div>
