@@ -1073,7 +1073,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
    *       401:
    *         description: Unauthorized
    */
-  app.get('/api/pending-requests/:userId?', isAuthenticated, async (req: any, res) => {
+  app.get('/api/pending-requests', isAuthenticated, async (req: any, res) => {
+    try {
+      const currentUserId = req.user?.id;
+      
+      if (!currentUserId) {
+        return res.status(400).json({ message: "User ID required" });
+      }
+      
+      // Get both old transactions and new money requests
+      const pendingTransactions = await storage.getPendingTransactions(currentUserId);
+      const pendingMoneyRequests = await storage.getPendingMoneyRequests(currentUserId);
+      
+      // Combine and enrich with user data for display
+      const allRequests = [...pendingTransactions, ...pendingMoneyRequests];
+      const enrichedRequests = await Promise.all(
+        allRequests.map(async (request: any) => {
+          // Handle both transaction and money request formats
+          const fromUserId = request.fromUserId;
+          let fromUser = null;
+          
+          if (fromUserId === "juice-shop") {
+            fromUser = {
+              id: "juice-shop",
+              firstName: "Juice",
+              lastName: "Shop",
+              email: "orders@juice-shop.local"
+            };
+          } else {
+            const user = await storage.getUser(fromUserId);
+            fromUser = user ? {
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email
+            } : null;
+          }
+          
+          return {
+            ...request,
+            fromUser,
+            isExternal: request.type === "external"
+          };
+        })
+      );
+      
+      res.json(enrichedRequests);
+    } catch (error) {
+      console.error("Error fetching pending requests:", error);
+      res.status(500).json({ message: "Failed to fetch pending requests" });
+    }
+  });
+
+  app.get('/api/pending-requests/:userId', isAuthenticated, async (req: any, res) => {
     try {
       const currentUserId = req.user?.id;
       const requestedUserId = req.params.userId || currentUserId;
