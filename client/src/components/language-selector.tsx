@@ -25,6 +25,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useI18n, type Language } from "@/lib/i18n";
+import ukFlag from "@assets/uk.png";
+import grFlag from "@assets/gr.jpg";
 
 /**
  * LanguageSelector Component - Locale selection interface
@@ -50,26 +52,20 @@ export function LanguageSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-10 px-1 flex items-center justify-center">
-          <div className="w-6 h-4 rounded-sm overflow-hidden border border-gray-300">
+        <Button variant="ghost" size="sm" className="h-8 w-8 p-1 flex items-center justify-center">
+          <div className="w-6 h-6 rounded-full overflow-hidden">
             {currentLanguage.code === 'en-GB' ? (
-              <svg viewBox="0 0 60 40" className="w-full h-full">
-                <defs>
-                  <clipPath id="t">
-                    <path d="M30,20 h30 v20 z v20 h-30 z h-30 v-20 z v-20 h30 z"/>
-                  </clipPath>
-                </defs>
-                <rect width="60" height="40" fill="#012169"/>
-                <path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" strokeWidth="6"/>
-                <path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" strokeWidth="4"/>
-                <path d="M30,0 v40 M0,20 h60" stroke="#fff" strokeWidth="12"/>
-                <path d="M30,0 v40 M0,20 h60" stroke="#C8102E" strokeWidth="8"/>
-              </svg>
+              <img 
+                src={ukFlag} 
+                alt="UK Flag" 
+                className="w-full h-full object-cover"
+              />
             ) : (
-              <svg viewBox="0 0 60 40" className="w-full h-full">
-                <rect width="60" height="40" fill="#0D5EAF"/>
-                <rect y="13.33" width="60" height="13.33" fill="#ffffff"/>
-              </svg>
+              <img 
+                src={grFlag} 
+                alt="Greek Flag" 
+                className="w-full h-full object-cover"
+              />
             )}
           </div>
           <span className="sr-only">{t('changeLanguage')}</span>
