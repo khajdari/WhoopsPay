@@ -1,10 +1,14 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { initializeDatabase } from "./initDatabase";
+import { clearAndReinitializeDatabase } from "./initDatabase";
+import { seedMockData } from "./mockData";
 
-// Initialize database tables
-initializeDatabase();
+// Clear and reinitialize database on every restart
+clearAndReinitializeDatabase();
+
+// Seed fresh mock data after database reset
+seedMockData().catch(console.error);
 
 const app = express();
 app.use(express.json());
