@@ -82,6 +82,36 @@ export async function setupAuth(app: Express) {
           password: 'admin123',
           balance: 10000.00,
           isAdmin: 1
+        },
+        {
+          id: 'alice',
+          username: 'alice',
+          email: 'alice.smith@example.com',
+          firstName: 'Alice',
+          lastName: 'Smith',
+          password: 'alice123',
+          balance: 1750.50,
+          isAdmin: 0
+        },
+        {
+          id: 'bob',
+          username: 'bob',
+          email: 'bob.johnson@example.com',
+          firstName: 'Bob',
+          lastName: 'Johnson',
+          password: 'bob123',
+          balance: 3200.25,
+          isAdmin: 0
+        },
+        {
+          id: 'charlie',
+          username: 'charlie',
+          email: 'charlie.brown@example.com',
+          firstName: 'Charlie',
+          lastName: 'Brown',
+          password: 'charlie123',
+          balance: 890.75,
+          isAdmin: 0
         }
       ];
 

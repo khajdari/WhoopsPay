@@ -79,25 +79,59 @@ const adminUser: User = {
   isAdmin: 1
 };
 
-const modUser: User = {
-  id: "moderator",
-  email: "mod@example.com",
-  firstName: "Mike",
+const aliceUser: User = {
+  id: "alice",
+  email: "alice.smith@example.com",
+  firstName: "Alice",
   lastName: "Smith",
   profileImageUrl: null,
   createdAt: Date.now(),
   updatedAt: Date.now(),
-  password: "mod123",
-  ssn: "555-66-7777",
-  phone: "+5556667777",
-  address: "789 Mod Street, City, State",
-  balance: 5000.50,
+  password: "alice123",
+  ssn: "333-33-3333",
+  phone: "+3333333333",
+  address: "321 Alice Ave, City, State",
+  balance: 1750.50,
+  isAdmin: 0
+};
+
+const bobUser: User = {
+  id: "bob",
+  email: "bob.johnson@example.com",
+  firstName: "Bob",
+  lastName: "Johnson",
+  profileImageUrl: null,
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  password: "bob123",
+  ssn: "444-44-4444",
+  phone: "+4444444444",
+  address: "654 Bob Blvd, City, State",
+  balance: 3200.25,
+  isAdmin: 0
+};
+
+const charlieUser: User = {
+  id: "charlie",
+  email: "charlie.brown@example.com",
+  firstName: "Charlie",
+  lastName: "Brown",
+  profileImageUrl: null,
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  password: "charlie123",
+  ssn: "666-66-6666",
+  phone: "+6666666666",
+  address: "987 Charlie Circle, City, State",
+  balance: 890.75,
   isAdmin: 0
 };
 
 mockUsers.set("jdoe", demoUser);
 mockUsers.set("admin", adminUser);
-mockUsers.set("moderator", modUser);
+mockUsers.set("alice", aliceUser);
+mockUsers.set("bob", bobUser);
+mockUsers.set("charlie", charlieUser);
 
 // Demo transactions
 mockTransactions.push(
