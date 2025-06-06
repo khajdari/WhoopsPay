@@ -15,12 +15,13 @@ export async function seedMockData() {
       address: "123 Main Street, New York, NY 10001",
       nationality: "American",
       gender: "Male",
-      balance: "2500.75",
+      balance: 2500.75,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      isAdmin: 1,
 
       // VULNERABLE: Sensitive data stored unencrypted
       ssn: "123-45-6789",
-      bankAccount: "4532-1234-5678-9012",
-      creditCard: "4111-1111-1111-1111",
       password: "password123", // VULNERABLE: Plain text password
     });
 
@@ -33,11 +34,12 @@ export async function seedMockData() {
       address: "456 Oak Avenue, Los Angeles, CA 90210",
       nationality: "Canadian",
       gender: "Female",
-      balance: "875.25",
+      balance: 875.25,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      isAdmin: 0,
 
       ssn: "987-65-4321",
-      bankAccount: "5555-4444-3333-2222",
-      creditCard: "5555-5555-5555-4444",
       password: "pass", // VULNERABLE: Weak password
     });
 
@@ -50,10 +52,11 @@ export async function seedMockData() {
       address: "789 Pine Road, Chicago, IL 60601",
       nationality: "British",
       gender: "Female",
-      balance: "2150.00",
+      balance: 2150.00,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      isAdmin: 0,
       ssn: "555-12-3456",
-      bankAccount: "1111-2222-3333-4444",
-      creditCard: "3782-8224-6310-005",
       password: "pass", // VULNERABLE: Common password
     });
 
@@ -67,12 +70,12 @@ export async function seedMockData() {
       address: "456 Admin Ave, City, State",
       nationality: "System",
       gender: "System",
-      balance: "10000.00",
+      balance: 10000.00,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
       ssn: "987-65-4321",
-      bankAccount: "9876543210",
-      creditCard: "9999-9999-9999-9999",
       password: "admin123", // VULNERABLE: Plain text password
-      isAdmin: true,
+      isAdmin: 1,
     });
 
     // Add additional test users
@@ -85,10 +88,11 @@ export async function seedMockData() {
       address: "321 Alice Ave, City, State",
       nationality: "American",
       gender: "Female",
-      balance: "1750.50",
+      balance: 1750.50,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      isAdmin: 0,
       ssn: "333-33-3333",
-      bankAccount: "3333-3333-3333-3333",
-      creditCard: "3333-3333-3333-3333",
       password: "alice123", // VULNERABLE: Plain text password
     });
 
