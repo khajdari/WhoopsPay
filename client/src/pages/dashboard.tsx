@@ -133,6 +133,9 @@ export default function Dashboard() {
     setApprovingRequest(requestId);
     try {
       await approveMutation.mutateAsync(requestId);
+    } catch (error) {
+      // Error is already handled by mutation's onError
+      console.log('Request approval failed:', error);
     } finally {
       setApprovingRequest(null);
     }
@@ -142,6 +145,9 @@ export default function Dashboard() {
     setRejectingRequest(requestId);
     try {
       await rejectMutation.mutateAsync(requestId);
+    } catch (error) {
+      // Error is already handled by mutation's onError
+      console.log('Request rejection failed:', error);
     } finally {
       setRejectingRequest(null);
     }
