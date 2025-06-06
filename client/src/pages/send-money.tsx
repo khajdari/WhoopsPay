@@ -98,7 +98,7 @@ export default function SendMoney() {
 
   const sendMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("POST", "/api/transactions", data);
+      return await apiRequest("/api/transactions", "POST", data);
     },
     onSuccess: () => {
       toast({
@@ -124,7 +124,7 @@ export default function SendMoney() {
 
   const requestMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("POST", "/api/transactions", data);
+      return await apiRequest("/api/transactions", "POST", data);
     },
     onSuccess: () => {
       toast({
