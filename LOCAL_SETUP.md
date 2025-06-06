@@ -11,7 +11,6 @@
 ### Software Prerequisites
 - **Node.js**: Version 18.x or 20.x (LTS recommended)
 - **npm**: Version 9.x or higher (comes with Node.js)
-- **PostgreSQL**: Version 13.x or higher
 - **Git**: Latest version for repository management
 
 ## Installation Guide
@@ -26,30 +25,8 @@ node --version
 npm --version
 ```
 
-#### Install PostgreSQL
-```bash
-# Ubuntu/Debian
-sudo apt update
-sudo apt install postgresql postgresql-contrib
-
-# macOS (using Homebrew)
-brew install postgresql
-
-# Windows
-# Download installer from https://www.postgresql.org/download/windows/
-```
-
-#### Configure PostgreSQL
-```bash
-# Start PostgreSQL service
-sudo systemctl start postgresql
-
-# Create database user
-sudo -u postgres createuser --interactive --pwprompt whoopspay
-
-# Create database
-sudo -u postgres createdb -O whoopspay whoopspay_db
-```
+# Database is handled automatically with SQLite
+# No additional database setup required
 
 ### Step 2: Project Setup
 
@@ -80,12 +57,7 @@ nano .env
 #### Required Environment Variables
 ```env
 # Database Configuration
-DATABASE_URL=postgresql://whoopspay:password@localhost:5432/whoopspay_db
-PGHOST=localhost
-PGPORT=5432
-PGUSER=whoopspay
-PGPASSWORD=password
-PGDATABASE=whoopspay_db
+DATABASE_URL=file:./server/database.db
 
 # Application Configuration
 NODE_ENV=development

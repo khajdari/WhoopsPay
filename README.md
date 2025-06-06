@@ -35,7 +35,6 @@ WhoopsPay demonstrates common security vulnerabilities from the OWASP Top 10 and
 
 ### Prerequisites
 - Node.js 18+ and npm
-- PostgreSQL database
 - Git
 
 ### Installation
@@ -56,9 +55,9 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env` with your database credentials:
+Edit `.env` with your configuration:
 ```env
-DATABASE_URL=postgresql://username:password@localhost:5432/whoopspay
+DATABASE_URL=file:./server/database.db
 SESSION_SECRET=your-secret-key-here
 ```
 
@@ -80,9 +79,10 @@ The application includes pre-configured demo users for testing:
 
 | Username | Password | Role | Description |
 |----------|----------|------|-------------|
-| jdoe | password123 | User | Regular user account |
-| admin | admin123 | Admin | Full administrative privileges |
-| moderator | mod123 | Moderator | Limited administrative access |
+| @sarah_wilson | sarah123 | User | Regular user account |
+| @admin_maria | admin2024 | Admin | Full administrative privileges |
+| @james_anderson | james2024 | User | Regular user account |
+| @elena_kowalski | elena456 | User | Regular user account |
 
 ## 🎮 Key Features
 
