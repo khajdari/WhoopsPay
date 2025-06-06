@@ -38,174 +38,13 @@ import {
   type Notification,
   type InsertNotification,
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, and } from "drizzle-orm";
+import bcrypt from "bcrypt";
 
-// In-memory storage for demonstration
-const mockUsers = new Map<string, User>();
-const mockTransactions: Transaction[] = [];
-const mockPaymentMethods: PaymentMethod[] = [];
-const mockNotifications: Notification[] = [];
-const mockSessions: UserSession[] = [];
+// Database-only storage - all data operations use PostgreSQL
 
-// Initialize with demo data
-const demoUser: User = {
-  id: "jdoe",
-  email: "john.doe@example.com",
-  firstName: "John",
-  lastName: "Doe",
-  profileImageUrl: null,
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
-  password: "password123",
-  ssn: "123-45-6789",
-  phone: "+1234567890",
-  address: "123 Main St, City, State",
-  balance: 2500.75,
-  isAdmin: 0
-};
-
-const adminUser: User = {
-  id: "admin",
-  email: "admin@example.com",
-  firstName: "Admin",
-  lastName: "User",
-  profileImageUrl: null,
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
-  password: "admin123",
-  ssn: "987-65-4321",
-  phone: "+9876543210",
-  address: "456 Admin Ave, City, State",
-  balance: 10000.00,
-  isAdmin: 1
-};
-
-const aliceUser: User = {
-  id: "alice",
-  email: "alice.smith@example.com",
-  firstName: "Alice",
-  lastName: "Smith",
-  profileImageUrl: null,
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
-  password: "alice123",
-  ssn: "333-33-3333",
-  phone: "+3333333333",
-  address: "321 Alice Ave, City, State",
-  balance: 1750.50,
-  isAdmin: 0
-};
-
-const bobUser: User = {
-  id: "bob",
-  email: "bob.johnson@example.com",
-  firstName: "Bob",
-  lastName: "Johnson",
-  profileImageUrl: null,
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
-  password: "bob123",
-  ssn: "444-44-4444",
-  phone: "+4444444444",
-  address: "654 Bob Blvd, City, State",
-  balance: 3200.25,
-  isAdmin: 0
-};
-
-const charlieUser: User = {
-  id: "charlie",
-  email: "charlie.brown@example.com",
-  firstName: "Charlie",
-  lastName: "Brown",
-  profileImageUrl: null,
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
-  password: "charlie123",
-  ssn: "666-66-6666",
-  phone: "+6666666666",
-  address: "987 Charlie Circle, City, State",
-  balance: 890.75,
-  isAdmin: 0
-};
-
-mockUsers.set("jdoe", demoUser);
-mockUsers.set("admin", adminUser);
-mockUsers.set("alice", aliceUser);
-mockUsers.set("bob", bobUser);
-mockUsers.set("charlie", charlieUser);
-
-// Demo transactions
-mockTransactions.push(
-  {
-    id: 1,
-    fromUserId: "jdoe",
-    toUserId: "admin",
-    amount: 150.00,
-    description: "Payment for services",
-    status: "completed",
-    type: "transfer",
-    createdAt: Date.now() - 86400000
-  },
-  {
-    id: 2,
-    fromUserId: "admin",
-    toUserId: "jdoe",
-    amount: 500.00,
-    description: "Refund",
-    status: "pending",
-    type: "request",
-    createdAt: Date.now() - 3600000
-  }
-);
-
-// Demo payment methods
-mockPaymentMethods.push(
-  {
-    id: 1,
-    userId: "jdoe",
-    type: "card",
-    cardNumber: "4111111111111111",
-    cardName: "John Doe",
-    bankName: null,
-    accountNumber: null,
-    iban: null,
-    isDefault: 1,
-    createdAt: Date.now()
-  },
-  {
-    id: 2,
-    userId: "jdoe",
-    type: "bank",
-    cardNumber: null,
-    cardName: null,
-    bankName: "First National Bank",
-    accountNumber: "123456789",
-    iban: "GB33BUKB20201555555555",
-    isDefault: 0,
-    createdAt: Date.now()
-  }
-);
-
-// Demo notifications
-mockNotifications.push(
-  {
-    id: 1,
-    userId: "jdoe",
-    title: "Payment Received",
-    message: "You received $500.00 from Admin User",
-    type: "payment",
-    isRead: 0,
-    createdAt: Date.now() - 1800000
-  },
-  {
-    id: 2,
-    userId: "jdoe",
-    title: "Money Request",
-    message: "Admin User is requesting $500.00",
-    type: "request",
-    isRead: 0,
-    createdAt: Date.now() - 900000
-  }
-);
+// All data now comes from PostgreSQL database
 
 /**
  * Vulnerable storage interface - intentionally insecure for educational purposes
@@ -214,7 +53,7 @@ export interface IStorage {
   // User operations
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
-  createUser(user: InsertUser): Promise<User>;
+  createUser(user: UpsertUser): Promise<User>;
   
   // Vulnerable user operations
   getUserByEmail(email: string): Promise<User | undefined>;
@@ -253,76 +92,108 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
-    return mockUsers.get(id);
+    try {
+      const [user] = await db.select().from(users).where(eq(users.id, id));
+      return user;
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      return undefined;
+    }
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
-    const now = Date.now();
-    const user: User = {
-      ...userData,
-      id: userData.id || 'user1',
-      createdAt: now,
-      updatedAt: now,
-      balance: userData.balance || 1000,
-      isAdmin: userData.isAdmin || 0,
-    };
-    mockUsers.set(user.id, user);
-    return user;
+    try {
+      const now = Date.now();
+      const [user] = await db
+        .insert(users)
+        .values({
+          ...userData,
+          updatedAt: now,
+        })
+        .onConflictDoUpdate({
+          target: users.id,
+          set: {
+            ...userData,
+            updatedAt: now,
+          },
+        })
+        .returning();
+      return user;
+    } catch (error) {
+      console.error("Error upserting user:", error);
+      throw error;
+    }
   }
 
-  async createUser(userData: InsertUser): Promise<User> {
-    const now = Date.now();
-    const user: User = {
-      ...userData,
-      createdAt: now,
-      updatedAt: now,
-      profileImageUrl: null,
-      ssn: null,
-      phone: null,
-      address: null,
-      balance: userData.balance || 1000,
-      isAdmin: userData.isAdmin || 0,
-    };
-    mockUsers.set(user.id, user);
-    return user;
+  async createUser(userData: UpsertUser): Promise<User> {
+    try {
+      const now = Date.now();
+      const hashedPassword = userData.password ? await bcrypt.hash(userData.password, 10) : null;
+      
+      const [user] = await db
+        .insert(users)
+        .values({
+          ...userData,
+          password: hashedPassword,
+          createdAt: now,
+          updatedAt: now,
+          balance: userData.balance || 1000,
+          isAdmin: userData.isAdmin || 0,
+        })
+        .returning();
+      return user;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw error;
+    }
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    for (const user of mockUsers.values()) {
-      if (user.email === email) {
-        return user;
-      }
+    try {
+      const [user] = await db.select().from(users).where(eq(users.email, email));
+      return user;
+    } catch (error) {
+      console.error("Error fetching user by email:", error);
+      return undefined;
     }
-    return undefined;
   }
 
   async searchUsers(query: string): Promise<User[]> {
-    const results: User[] = [];
-    const users = Array.from(mockUsers.values());
-    for (const user of users) {
-      if (user.firstName?.includes(query) || user.lastName?.includes(query) || user.email?.includes(query)) {
-        results.push(user);
-      }
+    try {
+      // Note: This intentionally uses string concatenation for educational vulnerability demonstration
+      const result = await db.select().from(users);
+      return result.filter(user => 
+        user.firstName?.includes(query) || 
+        user.lastName?.includes(query) || 
+        user.email?.includes(query)
+      );
+    } catch (error) {
+      console.error("Error searching users:", error);
+      return [];
     }
-    return results;
   }
 
   async updateUserBalance(userId: string, amount: string): Promise<void> {
-    const user = mockUsers.get(userId);
-    if (user) {
-      user.balance = parseFloat(amount);
-      mockUsers.set(userId, user);
+    try {
+      await db
+        .update(users)
+        .set({ balance: parseFloat(amount), updatedAt: Date.now() })
+        .where(eq(users.id, userId));
+    } catch (error) {
+      console.error("Error updating user balance:", error);
+      throw error;
     }
   }
 
   async getTestAccounts(): Promise<User[]> {
-    // VULNERABILITY: Return user credentials for educational testing
-    const testAccounts = Array.from(mockUsers.values()).slice(0, 5);
-    return testAccounts.map(user => ({
-      ...user,
-      // Expose password for educational purposes - NEVER do this in production
-      password: user.password 
-    }));
+    try {
+      const result = await db.select().from(users).limit(5);
+      // VULNERABILITY: Return user credentials for educational testing - NEVER do this in production
+      return result;
+    } catch (error) {
+      console.error("Error fetching test accounts:", error);
+      return [];
+    }
   }
 
   async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
