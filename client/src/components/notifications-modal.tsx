@@ -58,7 +58,7 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
 
   const approveRequestMutation = useMutation({
     mutationFn: async (transactionId: number) => {
-      return await apiRequest("POST", `/api/transactions/${transactionId}/approve`, {});
+      return await apiRequest(`/api/transactions/${transactionId}/approve`, "POST", {});
     },
     onSuccess: () => {
       toast({
@@ -79,7 +79,7 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
 
   const rejectRequestMutation = useMutation({
     mutationFn: async (transactionId: number) => {
-      return await apiRequest("POST", `/api/transactions/${transactionId}/reject`, {});
+      return await apiRequest(`/api/transactions/${transactionId}/reject`, "POST", {});
     },
     onSuccess: () => {
       toast({
