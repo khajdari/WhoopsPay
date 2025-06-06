@@ -63,9 +63,8 @@ export default function Dashboard() {
   // If admin, show only health check information
   if (user?.isAdmin) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Header />
-        <MobileNav />
+      <Layout>
+        <div className="bg-gray-50 dark:bg-gray-900 flex-1">
         
         <div className="max-w-7xl mx-auto p-6">
           <div className="mb-8">
@@ -155,9 +154,8 @@ export default function Dashboard() {
             </Card>
           </div>
         </div>
-
-        <Footer />
-      </div>
+        </div>
+      </Layout>
     );
   }
 
@@ -273,21 +271,21 @@ export default function Dashboard() {
 
   if (profileLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <div className="space-y-4">
-            <Skeleton className="h-8 w-64" />
-            <Skeleton className="h-32 w-full" />
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <Skeleton key={i} className="h-24" />
-              ))}
+      <Layout>
+        <div className="bg-gray-50 flex-1">
+          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div className="space-y-4">
+              <Skeleton className="h-8 w-64" />
+              <Skeleton className="h-32 w-full" />
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <Skeleton key={i} className="h-24" />
+                ))}
+              </div>
             </div>
           </div>
-        </main>
-        <MobileNav />
-      </div>
+        </div>
+      </Layout>
     );
   }
 
@@ -295,8 +293,8 @@ export default function Dashboard() {
   const isAdmin = (user as any)?.isAdmin === 1;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <Layout>
+      <div className="bg-gray-50 flex-1">
       
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 mobile-nav-spacing">
         {/* Welcome Section with Send/Request Buttons */}
@@ -670,14 +668,12 @@ export default function Dashboard() {
           </div>
         )}
       </main>
-
-      <MobileNav />
       
       {showSendModal && (
         <SendMoneyModal onClose={() => setShowSendModal(false)} />
       )}
       
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 }
