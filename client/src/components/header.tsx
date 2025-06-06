@@ -44,7 +44,8 @@ export function Header() {
   };
 
   const navigation = user?.isAdmin ? [
-    { name: t('admin'), href: "/administration", current: location === "/administration" },
+    { name: t('dashboard'), href: "/dashboard", current: location === "/" || location === "/dashboard" },
+    { name: "Administration", href: "/administration", current: location === "/administration" },
     { name: "Issue Reports", href: "/issues", current: location === "/issues" },
   ] : [
     { name: t('dashboard'), href: "/dashboard", current: location === "/" || location === "/dashboard" },

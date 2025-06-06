@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { IssueReportForm } from "@/components/IssueReportForm";
+import { AdminIssueMonitor } from "@/components/AdminIssueMonitor";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,6 +39,7 @@ interface IssueReport {
 }
 
 export default function IssueReporting() {
+  const { user } = useAuth();
   const [showForm, setShowForm] = useState(false);
 
   const { data: userIssues = [], isLoading } = useQuery({
@@ -99,6 +102,30 @@ export default function IssueReporting() {
     resolved: userIssues.filter((issue: IssueReport) => issue.status === "resolved"),
     closed: userIssues.filter((issue: IssueReport) => issue.status === "closed"),
   };
+
+  // If admin, show AdminIssueMonitor component instead of regular user interface
+  if (user?.isAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Header />
+        
+        <div className="max-w-6xl mx-auto p-6">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              Issue Reports Administration
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Monitor and manage all user issue reports across the platform
+            </p>
+          </div>
+          
+          <AdminIssueMonitor />
+        </div>
+        
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
