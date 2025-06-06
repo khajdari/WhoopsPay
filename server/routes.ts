@@ -1045,8 +1045,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         externalOrderId,
         externalSource: "juice-shop",
         returnUrl,
-        cancelUrl,
-        createdAt: Date.now()
+        cancelUrl
       });
       
       res.status(201).json({ 
@@ -1083,20 +1082,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "User ID required" });
       }
       
-      const pendingRequests = await storage.getPendingTransactions(requestedUserId);
+      // Get both old transactions and new money requests
+      const pendingTransactions = await storage.getPendingTransactions(requestedUserId);
+      const pendingMoneyRequests = await storage.getPendingMoneyRequests(requestedUserId);
       
-      // Enrich with user data for display
+      // Combine and enrich with user data for display
+      const allRequests = [...pendingTransactions, ...pendingMoneyRequests];
       const enrichedRequests = await Promise.all(
-        pendingRequests.map(async (request: any) => {
-          const fromUser = await storage.getUser(request.fromUserId);
+        allRequests.map(async (request: any) => {
+          // Handle both transaction and money request formats
+          const fromUserId = request.fromUserId;
+          let fromUser = null;
+          
+          if (fromUserId === "juice-shop") {
+            fromUser = {
+              id: "juice-shop",
+              firstName: "Juice",
+              lastName: "Shop",
+              email: "orders@juice-shop.local"
+            };
+          } else {
+            const user = await storage.getUser(fromUserId);
+            fromUser = user ? {
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email
+            } : null;
+          }
+          
           return {
             ...request,
-            fromUser: fromUser ? {
-              id: fromUser.id,
-              firstName: fromUser.firstName,
-              lastName: fromUser.lastName,
-              email: fromUser.email
-            } : null
+            fromUser,
+            isExternal: request.type === "external"
           };
         })
       );
@@ -1134,8 +1152,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const requestId = parseInt(req.params.id);
       const currentUserId = req.user?.id;
       
-      // Get the pending request
-      const request = await storage.getTransaction(requestId);
+      // Try to get as money request first, then as transaction
+      let request = await storage.getMoneyRequest(requestId);
+      let isMoneyRequest = true;
+      
+      if (!request) {
+        request = await storage.getTransaction(requestId);
+        isMoneyRequest = false;
+      }
+      
       if (!request) {
         return res.status(404).json({ message: "Request not found" });
       }
@@ -1166,20 +1191,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const newBalance = (currentBalance - requestAmount).toFixed(2);
       await storage.updateUserBalance(currentUserId, newBalance);
       
-      // Update recipient balance
-      const recipient = await storage.getUser(request.fromUserId);
-      if (recipient) {
-        const recipientBalance = parseFloat(recipient.balance || "0");
-        const newRecipientBalance = (recipientBalance + requestAmount).toFixed(2);
-        await storage.updateUserBalance(request.fromUserId, newRecipientBalance);
+      // For external requests, don't update recipient balance (Juice Shop handles that)
+      if (request.fromUserId !== "juice-shop") {
+        const recipient = await storage.getUser(request.fromUserId);
+        if (recipient) {
+          const recipientBalance = parseFloat(recipient.balance || "0");
+          const newRecipientBalance = (recipientBalance + requestAmount).toFixed(2);
+          await storage.updateUserBalance(request.fromUserId, newRecipientBalance);
+        }
       }
       
-      // Update transaction status
-      const updatedTransaction = await storage.updateTransactionStatus(requestId, 'completed');
+      // Update request status
+      let updatedRequest;
+      if (isMoneyRequest) {
+        updatedRequest = await storage.updateMoneyRequestStatus(requestId, 'approved');
+      } else {
+        updatedRequest = await storage.updateTransactionStatus(requestId, 'completed');
+      }
+      
+      // Handle external redirect for Juice Shop
+      if (isMoneyRequest && request.type === "external" && request.returnUrl) {
+        const redirectUrl = `${request.returnUrl}?status=approved&orderId=${request.externalOrderId}&amount=${requestAmount}`;
+        return res.json({
+          message: "External payment approved successfully",
+          redirect: true,
+          redirectUrl,
+          request: updatedRequest
+        });
+      }
       
       res.json({ 
         message: "Request approved successfully",
-        transaction: updatedTransaction,
+        transaction: updatedRequest,
         newBalance: newBalance
       });
     } catch (error) {
@@ -1212,8 +1255,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const requestId = parseInt(req.params.id);
       const currentUserId = req.user?.id;
       
-      // Get the pending request
-      const request = await storage.getTransaction(requestId);
+      // Try to get as money request first, then as transaction
+      let request = await storage.getMoneyRequest(requestId);
+      let isMoneyRequest = true;
+      
+      if (!request) {
+        request = await storage.getTransaction(requestId);
+        isMoneyRequest = false;
+      }
+      
       if (!request) {
         return res.status(404).json({ message: "Request not found" });
       }
@@ -1227,12 +1277,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Request is not pending" });
       }
       
-      // Update transaction status to rejected
-      const updatedTransaction = await storage.updateTransactionStatus(requestId, 'rejected');
+      // Update request status to rejected
+      let updatedRequest;
+      if (isMoneyRequest) {
+        updatedRequest = await storage.updateMoneyRequestStatus(requestId, 'rejected');
+      } else {
+        updatedRequest = await storage.updateTransactionStatus(requestId, 'rejected');
+      }
+      
+      // Handle external redirect for Juice Shop
+      if (isMoneyRequest && request.type === "external" && request.cancelUrl) {
+        const redirectUrl = `${request.cancelUrl}?status=rejected&orderId=${request.externalOrderId}`;
+        return res.json({
+          message: "External payment rejected successfully",
+          redirect: true,
+          redirectUrl,
+          request: updatedRequest
+        });
+      }
       
       res.json({ 
         message: "Request rejected successfully",
-        transaction: updatedTransaction
+        transaction: updatedRequest
       });
     } catch (error) {
       console.error("Error rejecting request:", error);
