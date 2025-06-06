@@ -109,13 +109,12 @@ export default function Login() {
           amount,
           description,
           returnUrl,
-          cancelUrl,
-          // Create the payment URL to redirect to after login (without returnUrl to prevent redirect back to Juice Shop)
-          originalUrl: `/external-payment/${transactionId}`
+          cancelUrl
         };
       }
       
       if (paymentData) {
+        console.log('External payment request detected:', paymentData);
         setExternalPaymentData(paymentData);
       }
     }
@@ -200,38 +199,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="w-full max-w-md space-y-6">
-        {/* Test Accounts Section */}
-        {testAccounts && Array.isArray(testAccounts) && testAccounts.length > 0 && (
-          <Card className="border-amber-200 bg-amber-50">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg text-amber-800">🧪 Test Accounts</CardTitle>
-              <CardDescription className="text-amber-700">
-                Quick autofill with real database accounts for testing
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {testAccounts.slice(0, 3).map((account: any, index: number) => (
-                <Button
-                  key={account.id}
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start text-left border-amber-300 hover:bg-amber-100"
-                  onClick={() => fillTestAccount(account.username, account.password)}
-                >
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">{account.username}</span>
-                    <span className="text-xs text-gray-600">
-                      {account.isAdmin ? 'Admin Account' : 'User Account'} • Balance: £{account.balance}
-                    </span>
-                  </div>
-                </Button>
-              ))}
-            </CardContent>
-          </Card>
-        )}
-
-        <Card className="w-full">
+      <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex items-center justify-center space-x-2">
             <CreditCard className="h-8 w-8 text-blue-600" />
@@ -241,7 +209,24 @@ export default function Login() {
           <CardDescription>Welcome back to WhoopsPay</CardDescription>
         </CardHeader>
         <CardContent>
-
+          {/* Discrete Test Account Autofill */}
+          {testAccounts && Array.isArray(testAccounts) && testAccounts.length > 0 && (
+            <div className="mb-4 pb-4 border-b border-gray-200">
+              <p className="text-xs text-gray-500 mb-2">Demo accounts for testing:</p>
+              <div className="flex flex-wrap gap-1">
+                {testAccounts.slice(0, 3).map((account: any) => (
+                  <button
+                    key={account.id}
+                    type="button"
+                    onClick={() => fillTestAccount(account.id, account.password)}
+                    className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
+                  >
+                    {account.id} {account.isAdmin ? '(admin)' : ''}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           
           <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
             <div className="space-y-2">
@@ -283,8 +268,6 @@ export default function Login() {
             </Button>
           </form>
 
-
-
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
@@ -296,8 +279,7 @@ export default function Login() {
             </p>
           </div>
         </CardContent>
-        </Card>
-      </div>
+      </Card>
 
       {/* External Payment Modal */}
       <ExternalPaymentModal 
