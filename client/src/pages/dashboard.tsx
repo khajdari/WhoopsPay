@@ -201,6 +201,13 @@ export default function Dashboard() {
     enabled: !!user && (user as any)?.isAdmin === 1,
   });
 
+  // Server status data for admin dashboard
+  const { data: serverStatus } = useQuery({
+    queryKey: ["/api/admin/server-status"],
+    enabled: !!user && (user as any)?.isAdmin === 1,
+    refetchInterval: 30000, // Refetch every 30 seconds
+  });
+
   // Mutation for approving requests - moved before conditional return
   const approveMutation = useMutation({
     mutationFn: async (requestId: number) => {
@@ -492,9 +499,17 @@ export default function Dashboard() {
                 <div className="flex items-center">
                   <div className="flex-1">
                     <p className="text-sm font-medium text-gray-600">API Server</p>
-                    <div className="flex items-center gap-2">
-                      <p className="text-lg font-bold text-green-600">Running</p>
-                      <span className="text-sm text-gray-500">({allUsers ? '4' : '0'} services)</span>
+                    <div className="flex flex-col">
+                      {serverStatus ? (
+                        <>
+                          <p className="text-sm font-medium text-green-600">
+                            Started: {new Date(serverStatus.startTime).toLocaleString()}
+                          </p>
+                          <span className="text-xs text-gray-500">({allUsers ? '4' : '0'} services running)</span>
+                        </>
+                      ) : (
+                        <p className="text-lg font-bold text-green-600">Running</p>
+                      )}
                     </div>
                   </div>
                   <Shield className="h-8 w-8 text-green-600" />

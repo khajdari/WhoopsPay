@@ -28,6 +28,7 @@ import { insertTransactionSchema, insertPaymentMethodSchema } from "@shared/sche
 import { seedMockData } from "./mockData";
 import { requireAdmin, logStore, expressLogger } from "./adminMiddleware";
 import { isAuthenticated, setupAuth } from "./localAuth";
+import { serverStartTime } from "./index";
 import { z } from "zod";
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -1424,6 +1425,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching database logs:", error);
       res.status(500).json({ error: "Failed to fetch database logs" });
+    }
+  });
+
+  // Server status endpoint for admin dashboard
+  app.get('/api/admin/server-status', requireAdmin, async (req: any, res) => {
+    try {
+      res.json({ 
+        startTime: serverStartTime.toISOString(),
+        uptime: Date.now() - serverStartTime.getTime(),
+        status: 'running'
+      });
+    } catch (error) {
+      console.error("Error fetching server status:", error);
+      res.status(500).json({ error: "Failed to fetch server status" });
     }
   });
 

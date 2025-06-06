@@ -4,6 +4,9 @@ import { setupVite, serveStatic, log } from "./vite";
 import { clearAndReinitializeDatabase } from "./initDatabase";
 import { seedMockData } from "./mockData";
 
+// Track server start time
+export const serverStartTime = new Date();
+
 // Clear and reinitialize database on every restart, then seed data
 async function initializeSystem() {
   clearAndReinitializeDatabase();
