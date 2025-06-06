@@ -8,20 +8,20 @@ export async function seedMockData() {
     // Create mock users with intentionally vulnerable data
     await storage.upsertUser({
       id: "jdoe",
-      email: "john.doe@email.com",
+      email: "john.doe@example.com",
       firstName: "John",
       lastName: "Doe",
       profileImageUrl: "",
       address: "123 Main Street, New York, NY 10001",
       nationality: "American",
       gender: "Male",
-      balance: "1250.50",
+      balance: "2500.75",
 
       // VULNERABLE: Sensitive data stored unencrypted
       ssn: "123-45-6789",
       bankAccount: "4532-1234-5678-9012",
       creditCard: "4111-1111-1111-1111",
-      password: "pass", // VULNERABLE: Plain text password
+      password: "password123", // VULNERABLE: Plain text password
     });
 
     await storage.upsertUser({
@@ -60,19 +60,68 @@ export async function seedMockData() {
     // Add admin user
     await storage.upsertUser({
       id: "admin", 
-      email: "admin@whoopspay.com",
+      email: "admin@example.com",
       firstName: "Admin",
       lastName: "User",
       profileImageUrl: "",
-      address: "System Administrator",
+      address: "456 Admin Ave, City, State",
       nationality: "System",
       gender: "System",
-      balance: "0.00",
-      ssn: "000-00-0000",
-      bankAccount: "0000000000",
-      creditCard: "0000-0000-0000-0000",
-      password: "Admin", // VULNERABLE: Plain text password
+      balance: "10000.00",
+      ssn: "987-65-4321",
+      bankAccount: "9876543210",
+      creditCard: "9999-9999-9999-9999",
+      password: "admin123", // VULNERABLE: Plain text password
       isAdmin: true,
+    });
+
+    // Add additional test users
+    await storage.upsertUser({
+      id: "alice",
+      email: "alice.smith@example.com",
+      firstName: "Alice",
+      lastName: "Smith",
+      profileImageUrl: "",
+      address: "321 Alice Ave, City, State",
+      nationality: "American",
+      gender: "Female",
+      balance: "1750.50",
+      ssn: "333-33-3333",
+      bankAccount: "3333-3333-3333-3333",
+      creditCard: "3333-3333-3333-3333",
+      password: "alice123", // VULNERABLE: Plain text password
+    });
+
+    await storage.upsertUser({
+      id: "bob",
+      email: "bob.johnson@example.com",
+      firstName: "Bob",
+      lastName: "Johnson",
+      profileImageUrl: "",
+      address: "654 Bob Blvd, City, State",
+      nationality: "American",
+      gender: "Male",
+      balance: "3200.25",
+      ssn: "444-44-4444",
+      bankAccount: "4444-4444-4444-4444",
+      creditCard: "4444-4444-4444-4444",
+      password: "bob123", // VULNERABLE: Plain text password
+    });
+
+    await storage.upsertUser({
+      id: "charlie",
+      email: "charlie.brown@example.com",
+      firstName: "Charlie",
+      lastName: "Brown",
+      profileImageUrl: "",
+      address: "987 Charlie Circle, City, State",
+      nationality: "American",
+      gender: "Male",
+      balance: "890.75",
+      ssn: "666-66-6666",
+      bankAccount: "6666-6666-6666-6666",
+      creditCard: "6666-6666-6666-6666",
+      password: "charlie123", // VULNERABLE: Plain text password
     });
 
     // Create mock transactions between mock users
