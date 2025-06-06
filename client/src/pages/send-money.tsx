@@ -47,6 +47,7 @@ import { useNotifications } from "@/hooks/useNotifications";
 export default function SendMoney() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useI18n();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("send");

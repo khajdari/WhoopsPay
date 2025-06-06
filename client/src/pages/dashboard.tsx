@@ -7,6 +7,7 @@
  */
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { useI18n } from "@/lib/i18n";
 import { Header } from "@/components/header";
 import { MobileNav } from "@/components/mobile-nav";
 import { SendMoneyModal } from "@/components/send-money-modal";
@@ -32,6 +33,7 @@ import { Link } from "wouter";
  */
 export default function Dashboard() {
   const { user } = useAuth(); // Current authenticated user data
+  const { t } = useI18n(); // Translation system
   const [showSendModal, setShowSendModal] = useState(false); // Send money modal state
 
   const { data: transactions, isLoading: transactionsLoading } = useQuery({
@@ -114,13 +116,13 @@ export default function Dashboard() {
                 onClick={() => window.location.href = '/transfer?mode=send'}
                 className="paypal-btn-base paypal-btn-primary paypal-btn-sm"
               >
-                Send
+                {t('sendMoney')}
               </button>
               <button
                 onClick={() => window.location.href = '/transfer?mode=request'}
                 className="paypal-btn-base paypal-btn-secondary paypal-btn-sm"
               >
-                Request
+                {t('requestMoney')}
               </button>
             </div>
           )}
@@ -130,7 +132,7 @@ export default function Dashboard() {
         <div className="whoopspay-gradient rounded-xl p-6 text-white mb-6">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-blue-100 text-sm mb-2">WhoopsPay Balance</p>
+              <p className="text-blue-100 text-sm mb-2">{t('balance')}</p>
               <h3 className="text-3xl font-bold">${balance}</h3>
             </div>
             <div className="text-right">
