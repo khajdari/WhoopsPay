@@ -54,8 +54,12 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
     return (
       <div className="flex justify-center">
         <div 
-          className="relative w-68 h-41 cursor-pointer group"
-          style={{ perspective: '1000px' }}
+          className="relative cursor-pointer group"
+          style={{ 
+            perspective: '1000px',
+            width: '272px',
+            height: '164px'
+          }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={() => setIsFlipped(!isFlipped)}
@@ -149,7 +153,11 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
   return (
     <div className="flex justify-center">
       <div 
-        className="relative w-68 h-41 cursor-pointer group"
+        className="relative cursor-pointer group"
+        style={{ 
+          width: '272px',
+          height: '164px'
+        }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
