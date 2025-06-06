@@ -26,7 +26,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { CreditCard } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -68,6 +68,12 @@ export default function Login() {
   const [, setLocation] = useLocation();
   const [showExternalPaymentModal, setShowExternalPaymentModal] = useState(false);
   const [externalPaymentData, setExternalPaymentData] = useState<any>(null);
+
+  // Fetch test accounts from database for autofill
+  const { data: testAccounts } = useQuery({
+    queryKey: ["/api/test-accounts"],
+    retry: false,
+  });
 
   // Check for external payment request on component mount
   useEffect(() => {

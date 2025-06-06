@@ -284,6 +284,7 @@ export default function Transactions() {
       </main>
 
       <MobileNav />
+      <Footer />
     </div>
   );
 }
