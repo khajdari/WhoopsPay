@@ -50,8 +50,17 @@ export function LanguageSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <span className="text-lg">{currentLanguage.flag}</span>
+        <Button variant="ghost" size="sm" className="h-8 w-10 px-2 flex items-center justify-center">
+          <span 
+            className="block text-center" 
+            style={{ 
+              fontSize: '18px', 
+              lineHeight: '1',
+              fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+            }}
+          >
+            {currentLanguage.flag}
+          </span>
           <span className="sr-only">{t('changeLanguage')}</span>
         </Button>
       </DropdownMenuTrigger>
