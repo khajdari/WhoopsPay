@@ -19,6 +19,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Send, Smartphone, CreditCard, Globe, Users } from "lucide-react";
+import { LanguageSelector } from "@/components/language-selector";
+import { useI18n } from "@/lib/i18n";
 
 /**
  * Landing Component - Marketing and onboarding interface
@@ -32,6 +34,8 @@ import { Shield, Send, Smartphone, CreditCard, Globe, Users } from "lucide-react
  * - Responsive design optimized for mobile and desktop
  */
 export default function Landing() {
+  const { t } = useI18n();
+
   const handleLogin = () => {
     window.location.href = "/login";
   };
