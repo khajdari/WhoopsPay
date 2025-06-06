@@ -56,12 +56,6 @@ export default function Landing() {
             </div>
             <div className="flex items-center space-x-4">
               <LanguageSelector />
-              <Button variant="outline" onClick={handleLogin}>
-                {t('signIn')}
-              </Button>
-              <Button onClick={handleSignup}>
-                {t('getStarted')}
-              </Button>
             </div>
           </div>
         </div>
