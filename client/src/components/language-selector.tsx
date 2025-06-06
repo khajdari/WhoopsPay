@@ -41,8 +41,8 @@ export function LanguageSelector() {
   const { language, setLanguage, t } = useI18n();
 
   const languages = [
-    { code: 'en-GB' as Language, name: 'English (UK)', flag: '🇬🇧' },
-    { code: 'el-GR' as Language, name: 'Ελληνικά', flag: '🇬🇷' }
+    { code: 'en-GB' as Language, name: 'English (UK)', flag: '🇬🇧', fallback: 'EN' },
+    { code: 'el-GR' as Language, name: 'Ελληνικά', flag: '🇬🇷', fallback: 'GR' }
   ];
 
   const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
@@ -50,16 +50,9 @@ export function LanguageSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-10 px-2 flex items-center justify-center">
-          <span 
-            className="block text-center" 
-            style={{ 
-              fontSize: '18px', 
-              lineHeight: '1',
-              fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
-            }}
-          >
-            {currentLanguage.flag}
+        <Button variant="ghost" size="sm" className="h-8 w-12 px-1 flex items-center justify-center border border-gray-200 rounded bg-gray-50 hover:bg-gray-100">
+          <span className="text-xs font-semibold text-gray-700">
+            {currentLanguage.code === 'en-GB' ? 'UK' : 'GR'}
           </span>
           <span className="sr-only">{t('changeLanguage')}</span>
         </Button>
