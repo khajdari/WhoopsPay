@@ -41,6 +41,13 @@ export default function Dashboard() {
   const [approvingRequest, setApprovingRequest] = useState<number | null>(null);
   const [rejectingRequest, setRejectingRequest] = useState<number | null>(null);
 
+  // Server status data for admin dashboard
+  const { data: serverStatus } = useQuery({
+    queryKey: ["/api/admin/server-status"],
+    enabled: !!user && (user as any)?.isAdmin === 1,
+    refetchInterval: 30000, // Refetch every 30 seconds
+  });
+
   // System Failures Count Component
   const SystemFailuresCount = () => {
     const { data: expressLogs } = useQuery({
@@ -208,13 +215,6 @@ export default function Dashboard() {
   const { data: systemLogs, isLoading: logsLoading } = useQuery({
     queryKey: ["/api/admin/logs"],
     enabled: !!user && (user as any)?.isAdmin === 1,
-  });
-
-  // Server status data for admin dashboard
-  const { data: serverStatus } = useQuery({
-    queryKey: ["/api/admin/server-status"],
-    enabled: !!user && (user as any)?.isAdmin === 1,
-    refetchInterval: 30000, // Refetch every 30 seconds
   });
 
   // Mutation for approving requests - moved before conditional return
