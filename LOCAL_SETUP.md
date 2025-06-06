@@ -132,17 +132,19 @@ curl http://localhost:3001/health
 
 ### Demo User Accounts
 ```
-Regular User:
-  Username: jdoe
-  Password: password123
+Regular Users:
+  Username: @sarah_wilson
+  Password: sarah123
+
+  Username: @james_anderson
+  Password: james2024
+
+  Username: @elena_kowalski
+  Password: elena456
 
 Administrator:
-  Username: admin
-  Password: admin123
-
-Moderator:
-  Username: moderator
-  Password: mod123
+  Username: @admin_maria
+  Password: admin2024
 ```
 
 ## Testing the Integration
@@ -166,7 +168,7 @@ http://localhost:3001
 - System redirects to WhoopsPay
 
 #### 4. Authentication
-- Login with demo credentials (jdoe/password123)
+- Login with demo credentials (@sarah_wilson/sarah123)
 - Complete authentication flow
 
 #### 5. Payment Approval
