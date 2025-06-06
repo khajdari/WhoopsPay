@@ -159,3 +159,35 @@ export type UserSession = typeof userSessions.$inferSelect;
 
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
+
+/**
+ * Issue Reports table for user-submitted issues and admin monitoring
+ * VULNERABILITY: No access control validation on sensitive issue data
+ */
+export const issueReports = sqliteTable("issue_reports", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull(), // 'technical', 'payment', 'security', 'account', 'other'
+  priority: text("priority").notNull(), // 'low', 'medium', 'high', 'critical'
+  status: text("status").notNull().default("open"), // 'open', 'in_progress', 'resolved', 'closed'
+  adminNotes: text("admin_notes"),
+  assignedTo: text("assigned_to"), // Admin user ID
+  attachmentUrl: text("attachment_url"),
+  userAgent: text("user_agent"),
+  ipAddress: text("ip_address"),
+  createdAt: integer("created_at"),
+  updatedAt: integer("updated_at"),
+  resolvedAt: integer("resolved_at"),
+});
+
+// Issue Reports schema
+export const insertIssueReportSchema = createInsertSchema(issueReports).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type IssueReport = typeof issueReports.$inferSelect;
+export type InsertIssueReport = z.infer<typeof insertIssueReportSchema>;
