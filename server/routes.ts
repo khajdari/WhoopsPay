@@ -994,6 +994,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Juice Shop external payment integration
+  /**
+   * @swagger
+   * /api/external/payment/create:
+   *   post:
+   *     summary: Create external payment request from Juice Shop
+   *     description: "Creates a money request for external checkout from Juice Shop"
+   *     tags: [External Payments]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               amount:
+   *                 type: number
+   *               description:
+   *                 type: string
+   *               toUserId:
+   *                 type: string
+   *               externalOrderId:
+   *                 type: string
+   *               returnUrl:
+   *                 type: string
+   *               cancelUrl:
+   *                 type: string
+   *     responses:
+   *       201:
+   *         description: External payment request created
+   *       400:
+   *         description: Invalid request data
+   */
+  app.post('/api/external/payment/create', async (req, res) => {
+    try {
+      const { amount, description, toUserId, externalOrderId, returnUrl, cancelUrl } = req.body;
+      
+      if (!amount || !toUserId || !externalOrderId) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+      
+      // Create external money request
+      const moneyRequest = await storage.createMoneyRequest({
+        fromUserId: "juice-shop",
+        toUserId,
+        amount: parseFloat(amount),
+        description: description || `Juice Shop Order #${externalOrderId}`,
+        type: "external",
+        externalOrderId,
+        externalSource: "juice-shop",
+        returnUrl,
+        cancelUrl,
+        createdAt: Date.now()
+      });
+      
+      res.status(201).json({ 
+        message: "External payment request created",
+        requestId: moneyRequest.id,
+        redirectUrl: `/login?redirect=/dashboard&external_request=${moneyRequest.id}`
+      });
+    } catch (error) {
+      console.error("Error creating external payment request:", error);
+      res.status(500).json({ message: "Failed to create payment request" });
+    }
+  });
+
   /**
    * @swagger
    * /api/pending-requests:

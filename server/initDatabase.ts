@@ -13,7 +13,8 @@ export function clearAndReinitializeDatabase() {
     'payment_methods',
     'user_sessions',
     'notifications',
-    'issue_reports'
+    'issue_reports',
+    'money_requests'
   ];
   
   tables.forEach(table => {
@@ -149,6 +150,26 @@ export function initializeDatabase() {
       created_at INTEGER,
       updated_at INTEGER,
       resolved_at INTEGER
+    );
+  `);
+
+  // Create money_requests table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS money_requests (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      from_user_id TEXT NOT NULL,
+      to_user_id TEXT NOT NULL,
+      amount REAL NOT NULL,
+      description TEXT,
+      status TEXT NOT NULL DEFAULT 'pending',
+      type TEXT NOT NULL DEFAULT 'internal',
+      external_order_id TEXT,
+      external_source TEXT,
+      return_url TEXT,
+      cancel_url TEXT,
+      external_metadata TEXT,
+      created_at INTEGER,
+      responded_at INTEGER
     );
   `);
 

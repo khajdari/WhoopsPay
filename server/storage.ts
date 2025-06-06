@@ -29,6 +29,7 @@ import {
   userSessions,
   notifications,
   issueReports,
+  moneyRequests,
   type User,
   type UpsertUser,
   type Transaction,
@@ -40,6 +41,8 @@ import {
   type InsertNotification,
   type IssueReport,
   type InsertIssueReport,
+  type MoneyRequest,
+  type InsertMoneyRequest,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, or } from "drizzle-orm";
