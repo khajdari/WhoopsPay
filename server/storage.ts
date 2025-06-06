@@ -186,6 +186,7 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   searchUsers(query: string): Promise<User[]>;
   updateUserBalance(userId: string, amount: string): Promise<void>;
+  getTestAccounts(): Promise<User[]>;
   
   // Transaction operations
   createTransaction(transaction: InsertTransaction): Promise<Transaction>;
@@ -263,7 +264,8 @@ export class DatabaseStorage implements IStorage {
 
   async searchUsers(query: string): Promise<User[]> {
     const results: User[] = [];
-    for (const user of mockUsers.values()) {
+    const users = Array.from(mockUsers.values());
+    for (const user of users) {
       if (user.firstName?.includes(query) || user.lastName?.includes(query) || user.email?.includes(query)) {
         results.push(user);
       }
@@ -277,6 +279,16 @@ export class DatabaseStorage implements IStorage {
       user.balance = parseFloat(amount);
       mockUsers.set(userId, user);
     }
+  }
+
+  async getTestAccounts(): Promise<User[]> {
+    // VULNERABILITY: Return user credentials for educational testing
+    const testAccounts = Array.from(mockUsers.values()).slice(0, 5);
+    return testAccounts.map(user => ({
+      ...user,
+      // Expose password for educational purposes - NEVER do this in production
+      password: user.password 
+    }));
   }
 
   async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
