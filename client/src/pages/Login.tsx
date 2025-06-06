@@ -59,77 +59,55 @@ type LoginForm = z.infer<typeof loginSchema>;
  * requests from integrated applications. Features include:
  * - Form-based authentication with validation
  * - External payment request detection and handling
- * - Payment modal integration for cross-platform flows
- * - Automatic redirection after successful login
- * - Session management and state synchronization
+ * - Auto-redirect after successful login
+ * - Test account integration for demonstration
+ * - Real-time form validation and error display
+ * 
+ * VULNERABILITY FEATURES:
+ * - Exposes test accounts for easy demonstration access
+ * - Basic authentication without advanced security measures
+ * - External payment integration with minimal validation
  */
 export default function Login() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
   const [showExternalPaymentModal, setShowExternalPaymentModal] = useState(false);
-  const [externalPaymentData, setExternalPaymentData] = useState<any>(null);
+  const [externalPaymentData, setExternalPaymentData] = useState(null);
 
-  // Fetch test accounts from database for autofill
+  // Fetch test accounts for development
   const { data: testAccounts } = useQuery({
     queryKey: ["/api/test-accounts"],
     retry: false,
   });
 
-  // Check for external payment request on component mount
+  // Check for external payment requests on page load
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const redirect = urlParams.get('redirect');
-    const transactionId = urlParams.get('transactionId');
+    const external = urlParams.get('external');
     const amount = urlParams.get('amount');
+    const currency = urlParams.get('currency');
     const description = urlParams.get('description');
     const returnUrl = urlParams.get('returnUrl');
-    const cancelUrl = urlParams.get('cancelUrl');
-    
-    const from = urlParams.get('from');
-    
-    if (redirect === 'payment') {
-      let paymentData;
-      
-      if (from) {
-        // Extract payment data from the 'from' URL
-        const fromUrl = decodeURIComponent(from);
-        const fromParams = new URLSearchParams(fromUrl.split('?')[1] || '');
-        paymentData = {
-          transactionId: fromUrl.split('/').pop()?.split('?')[0] || '',
-          amount: fromParams.get('amount'),
-          description: fromParams.get('description'),
-          returnUrl: fromParams.get('returnUrl'),
-          cancelUrl: fromParams.get('cancelUrl'),
-          originalUrl: from
-        };
-      } else if (transactionId && amount) {
-        // Direct payment parameters in login URL
-        paymentData = {
-          transactionId,
-          amount,
-          description,
-          returnUrl,
-          cancelUrl
-        };
-      }
-      
-      if (paymentData) {
-        console.log('External payment request detected:', paymentData);
-        setExternalPaymentData(paymentData);
-      }
-    }
-    
-    // Legacy external payment check
-    const isExternal = urlParams.get('external');
-    if (isExternal) {
-      const paymentData = sessionStorage.getItem('externalPayment');
-      if (paymentData) {
-        setExternalPaymentData(JSON.parse(paymentData));
-      }
+
+    if (external === 'true' && amount && currency) {
+      const paymentData = {
+        amount: parseFloat(amount),
+        currency,
+        description: description || 'External Payment',
+        returnUrl: returnUrl || 'http://localhost:3000'
+      };
+      setExternalPaymentData(paymentData);
+      setShowExternalPaymentModal(true);
     }
   }, []);
 
+  /**
+   * Login Form Configuration - React Hook Form setup
+   * 
+   * Configures form handling with Zod validation resolver
+   * and default empty values for username/password fields.
+   */
   const loginForm = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -149,24 +127,7 @@ export default function Login() {
       });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       
-      // Check if this is an external payment flow
-      if (externalPaymentData) {
-        console.log('External payment data detected:', externalPaymentData);
-        
-        // If we have the original URL, redirect back to it
-        if (externalPaymentData.originalUrl) {
-          console.log('Redirecting to payment page:', externalPaymentData.originalUrl);
-          window.location.href = externalPaymentData.originalUrl;
-          return;
-        } else {
-          // Fallback to showing modal for legacy flow
-          console.log('Showing payment modal as fallback');
-          setShowExternalPaymentModal(true);
-          return;
-        }
-      }
-      
-      // Normal login flow - check if admin
+      // Check if user is admin and redirect accordingly
       try {
         const user = await apiRequest("/api/auth/user", "GET");
         if (user && (user as any).isAdmin) {
@@ -188,11 +149,10 @@ export default function Login() {
     },
   });
 
-  const onLogin = (data: LoginForm) => {
+  const handleSubmit = (data: LoginForm) => {
     loginMutation.mutate(data);
   };
 
-  // Autofill form with selected test account
   const fillTestAccount = (username: string, password: string) => {
     loginForm.setValue('username', username);
     loginForm.setValue('password', password);
@@ -201,94 +161,105 @@ export default function Login() {
   return (
     <Layout showHeader={false} showMobileNav={false}>
       <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex items-center justify-center space-x-2">
-            <CreditCard className="h-8 w-8 text-blue-600" />
-            <h1 className="text-3xl font-bold whoopspay-blue">WhoopsPay</h1>
-          </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">Sign In</CardTitle>
-          <CardDescription>Welcome back to WhoopsPay</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {/* Discrete Test Account Autofill */}
-          {testAccounts && Array.isArray(testAccounts) && testAccounts.length > 0 && (
-            <div className="mb-4 pb-4 border-b border-gray-200">
-              <p className="text-xs text-gray-500 mb-2">Demo accounts for testing:</p>
-              <div className="flex flex-wrap gap-1">
-                {testAccounts.map((account: any) => (
-                  <button
-                    key={account.id}
-                    type="button"
-                    onClick={() => fillTestAccount(account.id, account.password)}
-                    className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
-                  >
-                    {account.id} {account.isAdmin ? '(admin)' : ''}
-                  </button>
-                ))}
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="mx-auto mb-4 flex items-center justify-center space-x-2">
+              <CreditCard className="h-8 w-8 text-blue-600" />
+              <h1 className="text-3xl font-bold whoopspay-blue">WhoopsPay</h1>
+            </div>
+            <CardTitle className="text-2xl font-bold text-gray-900">Sign In</CardTitle>
+            <CardDescription>Welcome back to WhoopsPay</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {/* Discrete Test Account Autofill */}
+            {testAccounts && Array.isArray(testAccounts) && testAccounts.length > 0 && (
+              <div className="mb-4 pb-4 border-b border-gray-200">
+                <p className="text-xs text-gray-500 mb-2">Demo accounts for testing:</p>
+                <div className="flex flex-wrap gap-1">
+                  {testAccounts.map((account: any) => (
+                    <button
+                      key={account.id}
+                      type="button"
+                      onClick={() => fillTestAccount(account.id, 'password123')}
+                      className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 border"
+                      title={`Click to autofill: ${account.id}`}
+                    >
+                      {account.id}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-          
-          <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                type="text"
-                {...loginForm.register("username")}
-                placeholder="Enter your username"
-              />
-              {loginForm.formState.errors.username && (
-                <p className="text-sm text-red-600">
-                  {loginForm.formState.errors.username.message}
-                </p>
-              )}
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                {...loginForm.register("password")}
-                placeholder="Enter your password"
-              />
-              {loginForm.formState.errors.password && (
-                <p className="text-sm text-red-600">
-                  {loginForm.formState.errors.password.message}
-                </p>
-              )}
-            </div>
-            
-            <Button 
-              type="submit" 
-              className="w-full"
-              disabled={loginMutation.isPending}
-            >
-              {loginMutation.isPending ? "Logging in..." : "Sign In"}
-            </Button>
-          </form>
+            )}
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
-              <Link href="/signup">
-                <span className="text-blue-600 hover:text-blue-500 font-medium cursor-pointer">
-                  Create one
-                </span>
-              </Link>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+            <form onSubmit={loginForm.handleSubmit(handleSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Enter your username"
+                  {...loginForm.register("username")}
+                />
+                {loginForm.formState.errors.username && (
+                  <p className="text-sm text-red-600">
+                    {loginForm.formState.errors.username.message}
+                  </p>
+                )}
+              </div>
 
-      {/* External Payment Modal */}
-      <ExternalPaymentModal 
-        isOpen={showExternalPaymentModal}
-        onClose={() => setShowExternalPaymentModal(false)}
-        paymentData={externalPaymentData}
-      />
-    </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  {...loginForm.register("password")}
+                />
+                {loginForm.formState.errors.password && (
+                  <p className="text-sm text-red-600">
+                    {loginForm.formState.errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700"
+                disabled={loginMutation.isPending}
+              >
+                {loginMutation.isPending ? "Signing in..." : "Sign In"}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                Don't have an account?{" "}
+                <Link
+                  href="/signup"
+                  className="text-blue-600 hover:text-blue-500 font-medium"
+                >
+                  Sign up
+                </Link>
+              </p>
+            </div>
+
+            {showExternalPaymentModal && (
+              <Alert className="mt-4">
+                <AlertDescription>
+                  External payment request detected. Please complete authentication to process the payment.
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* External Payment Modal */}
+        <ExternalPaymentModal 
+          isOpen={showExternalPaymentModal}
+          onClose={() => setShowExternalPaymentModal(false)}
+          paymentData={externalPaymentData}
+        />
+      </div>
+    </Layout>
   );
 }
