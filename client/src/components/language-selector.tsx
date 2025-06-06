@@ -53,12 +53,12 @@ export function LanguageSelector() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-1 flex items-center justify-center">
-          <div className="w-6 h-6 rounded-full overflow-hidden">
+          <div className="w-6 h-6 rounded-full overflow-hidden border border-gray-200">
             {currentLanguage.code === 'en-GB' ? (
               <img 
                 src={ukFlag} 
                 alt="UK Flag" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain scale-110"
               />
             ) : (
               <img 
