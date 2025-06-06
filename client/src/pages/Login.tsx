@@ -214,7 +214,7 @@ export default function Login() {
             <div className="mb-4 pb-4 border-b border-gray-200">
               <p className="text-xs text-gray-500 mb-2">Demo accounts for testing:</p>
               <div className="flex flex-wrap gap-1">
-                {testAccounts.slice(0, 3).map((account: any) => (
+                {testAccounts.map((account: any) => (
                   <button
                     key={account.id}
                     type="button"

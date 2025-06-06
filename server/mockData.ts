@@ -12,6 +12,16 @@ export async function seedMockData() {
     }
     console.log("Cleared all existing users");
     
+    // Clear old transactions with non-@ prefix user IDs
+    const allTransactions = await storage.getAllTransactions();
+    for (const transaction of allTransactions) {
+      if (!transaction.fromUserId.startsWith('@') || !transaction.toUserId.startsWith('@')) {
+        // Delete old transactions that reference old user IDs
+        await storage.deleteTransaction(transaction.id);
+      }
+    }
+    console.log("Cleared old transactions with non-@ prefix user IDs");
+    
     // Create one admin user and three regular users with @ prefix
     await storage.upsertUser({
       id: "@admin_maria",

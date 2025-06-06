@@ -68,6 +68,7 @@ export interface IStorage {
   getAllTransactions(): Promise<Transaction[]>;
   getPendingTransactions(userId: string): Promise<Transaction[]>;
   updateTransactionStatus(transactionId: number, status: string): Promise<Transaction>;
+  deleteTransaction(id: number): Promise<void>;
   
   // Payment method operations
   addPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod>;
@@ -285,6 +286,15 @@ export class DatabaseStorage implements IStorage {
       return transaction;
     } catch (error) {
       console.error("Error updating transaction status:", error);
+      throw error;
+    }
+  }
+
+  async deleteTransaction(id: number): Promise<void> {
+    try {
+      await db.delete(transactions).where(eq(transactions.id, id));
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
       throw error;
     }
   }
