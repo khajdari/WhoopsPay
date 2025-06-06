@@ -133,8 +133,13 @@ export async function setupAuth(app: Express) {
         });
       }
 
-      // Try database users
-      const user = await storage.getUserByEmail(username);
+      // Try database users by username (ID) first
+      let user = await storage.getUser(username);
+      
+      // If not found by ID, try by email
+      if (!user) {
+        user = await storage.getUserByEmail(username);
+      }
       
       if (!user) {
         return res.status(401).json({ message: "Invalid credentials" });
