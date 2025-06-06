@@ -72,7 +72,7 @@ export default function Settings() {
    */
   const changePasswordMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("PUT", "/api/auth/change-password", data);
+      return await apiRequest("/api/auth/change-password", "PUT", data);
     },
     onSuccess: () => {
       toast({

@@ -77,7 +77,7 @@ export default function Profile() {
    */
   const updateProfileMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("PUT", `/api/users/${user?.id}/profile`, data);
+      return await apiRequest(`/api/users/${user?.id}/profile`, "PUT", data);
     },
     onSuccess: () => {
       toast({
