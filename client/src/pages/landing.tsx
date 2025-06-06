@@ -111,11 +111,11 @@ export default function Landing() {
                 <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                   <Shield className="w-6 h-6 text-blue-600" />
                 </div>
-                <CardTitle>Purchase Protection</CardTitle>
+                <CardTitle>{t('purchaseProtection')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Shop with confidence knowing your eligible purchases are covered
+                  {t('purchaseProtectionDesc')}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -125,7 +125,7 @@ export default function Landing() {
                 <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
                   <Send className="w-6 h-6 text-green-600" />
                 </div>
-                <CardTitle>Send Money</CardTitle>
+                <CardTitle>{t('sendMoney')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
@@ -139,11 +139,11 @@ export default function Landing() {
                 <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
                   <Smartphone className="w-6 h-6 text-purple-600" />
                 </div>
-                <CardTitle>Mobile Ready</CardTitle>
+                <CardTitle>{t('mobileReady')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Access your account anywhere with our mobile-optimized platform
+                  {t('mobileReadyDesc')}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -153,11 +153,11 @@ export default function Landing() {
                 <div className="mx-auto w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
                   <CreditCard className="w-6 h-6 text-yellow-600" />
                 </div>
-                <CardTitle>Multiple Payment Options</CardTitle>
+                <CardTitle>{t('multiplePaymentOptions')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Link your bank account, credit card, or debit card
+                  {t('multiplePaymentOptionsDesc')}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -167,11 +167,11 @@ export default function Landing() {
                 <div className="mx-auto w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
                   <Globe className="w-6 h-6 text-indigo-600" />
                 </div>
-                <CardTitle>Global Reach</CardTitle>
+                <CardTitle>{t('globalReach')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Send and receive money in multiple currencies worldwide
+                  {t('globalReachDesc')}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -181,11 +181,11 @@ export default function Landing() {
                 <div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
                   <Users className="w-6 h-6 text-red-600" />
                 </div>
-                <CardTitle>Trusted Community</CardTitle>
+                <CardTitle>{t('trustedCommunity')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Join millions of users who trust us with their payments
+                  {t('trustedCommunityDesc')}
                 </CardDescription>
               </CardContent>
             </Card>
@@ -198,7 +198,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-400">
-              © 2025 WhoopsPay. An educational project developed as part of a postgraduate thesis on web application vulnerabilities.
+              {t('footerText')}
             </p>
           </div>
         </div>
