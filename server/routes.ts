@@ -1027,7 +1027,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
    *       400:
    *         description: Invalid request data
    */
-  app.post('/api/external/payment/create', async (req, res) => {
+  // Juice Shop Integration Endpoint
+  app.post('/api/juice-shop/payment-request', async (req, res) => {
     try {
       const { amount, description, toUserId, externalOrderId, returnUrl, cancelUrl } = req.body;
       
