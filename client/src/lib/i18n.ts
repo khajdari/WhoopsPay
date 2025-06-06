@@ -421,6 +421,40 @@ const translations: Translations = {
     'el-GR': '© 2025 WhoopsPay. Ένα εκπαιδευτικό έργο που αναπτύχθηκε στο πλαίσιο μεταπτυχιακής διατριβής για τρωτότητες εφαρμογών ιστού.'
   },
   
+  // Additional landing page features
+  featuresTitle: {
+    'en-GB': 'Why Choose WhoopsPay?',
+    'el-GR': 'Γιατί να επιλέξετε το WhoopsPay;'
+  },
+  featuresSubtitle: {
+    'en-GB': 'Discover the features that make WhoopsPay the preferred choice for secure digital payments.',
+    'el-GR': 'Ανακαλύψτε τα χαρακτηριστικά που κάνουν το WhoopsPay την προτιμώμενη επιλογή για ασφαλείς ψηφιακές πληρωμές.'
+  },
+  instantTransfers: {
+    'en-GB': 'Instant Transfers',
+    'el-GR': 'Άμεσες Μεταφορές'
+  },
+  instantTransfersDesc: {
+    'en-GB': 'Send money instantly to friends and family with just a few clicks.',
+    'el-GR': 'Στείλτε χρήματα άμεσα σε φίλους και οικογένεια με λίγα κλικ.'
+  },
+  secureProtection: {
+    'en-GB': 'Secure Protection',
+    'el-GR': 'Ασφαλής Προστασία'
+  },
+  secureProtectionDesc: {
+    'en-GB': 'Bank-level security keeps your money and personal information safe.',
+    'el-GR': 'Ασφάλεια επιπέδου τράπεζας διατηρεί τα χρήματα και τις προσωπικές σας πληροφορίες ασφαλείς.'
+  },
+  mobileApp: {
+    'en-GB': 'Mobile App',
+    'el-GR': 'Εφαρμογή Κινητού'
+  },
+  mobileAppDesc: {
+    'en-GB': 'Manage your payments on the go with our intuitive mobile application.',
+    'el-GR': 'Διαχειριστείτε τις πληρωμές σας εν κινήσει με τη διαισθητική μας εφαρμογή κινητού.'
+  },
+  
   // Login page
   signInTitle: {
     'en-GB': 'Sign In',
