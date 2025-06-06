@@ -8,9 +8,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useI18n } from "@/lib/i18n";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { MobileNav } from "@/components/mobile-nav";
+import { Layout } from "@/components/layout";
 import { SendMoneyModal } from "@/components/send-money-modal";
 import { TransactionItem } from "@/components/transaction-item";
 import { PaymentCard } from "@/components/payment-card";

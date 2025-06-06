@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global layout styles for proper footer positioning */
+html, body {
+  height: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure all page containers use full height */
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+/* Footer minimum height and positioning */
+footer {
+  min-height: 200px;
+  margin-top: auto;
+}
+
 :root {
   --background: 0 0% 100%;
   --foreground: 20 14.3% 4.1%;
