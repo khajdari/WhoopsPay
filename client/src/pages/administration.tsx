@@ -211,14 +211,23 @@ export default function Administration() {
                 </div>
               </CardHeader>
               <CardContent>
+                <div className="flex items-center gap-2 mb-4">
+                  <Search className="w-4 h-4 text-gray-500" />
+                  <Input
+                    placeholder="Search express logs..."
+                    value={expressSearchTerm}
+                    onChange={(e) => setExpressSearchTerm(e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
                 <ScrollArea className="h-[500px] w-full border rounded-lg p-4 bg-gray-900 text-green-400 font-mono text-sm">
-                  {expressLogs.length === 0 ? (
+                  {filteredExpressLogs.length === 0 ? (
                     <div className="text-gray-500 text-center py-8">
-                      No Express logs available. Logs will appear here as the server processes requests.
+                      {expressSearchTerm ? 'No logs match your search.' : 'No Express logs available. Logs will appear here as the server processes requests.'}
                     </div>
                   ) : (
                     <div className="space-y-1">
-                      {expressLogs.map((log, index) => (
+                      {filteredExpressLogs.map((log, index) => (
                         <div key={index} className="whitespace-pre-wrap">
                           {log}
                         </div>
@@ -254,14 +263,23 @@ export default function Administration() {
                 </div>
               </CardHeader>
               <CardContent>
+                <div className="flex items-center gap-2 mb-4">
+                  <Search className="w-4 h-4 text-gray-500" />
+                  <Input
+                    placeholder="Search database logs..."
+                    value={dbSearchTerm}
+                    onChange={(e) => setDbSearchTerm(e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
                 <ScrollArea className="h-[500px] w-full border rounded-lg p-4 bg-gray-900 text-blue-400 font-mono text-sm">
-                  {dbLogs.length === 0 ? (
+                  {filteredDbLogs.length === 0 ? (
                     <div className="text-gray-500 text-center py-8">
-                      No database logs available. SQL queries and database operations will appear here.
+                      {dbSearchTerm ? 'No logs match your search.' : 'No database logs available. SQL queries and database operations will appear here.'}
                     </div>
                   ) : (
                     <div className="space-y-1">
-                      {dbLogs.map((log, index) => (
+                      {filteredDbLogs.map((log, index) => (
                         <div key={index} className="whitespace-pre-wrap">
                           {log}
                         </div>
