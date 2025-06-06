@@ -15,7 +15,7 @@ import { PaymentCard } from "@/components/payment-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Send, HandCoins, Plus, University, Wallet, CreditCard, Users, Shield, Activity, AlertTriangle, Clock, Check, X, Loader2 } from "lucide-react";
+import { Send, HandCoins, Plus, University, Wallet, CreditCard, Users, Shield, Activity, AlertTriangle, Clock, Check, X, Loader2, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
 import { useMutation } from "@tanstack/react-query";
@@ -222,14 +222,26 @@ export default function Dashboard() {
     mutationFn: async (requestId: number) => {
       return await apiRequest(`/api/requests/${requestId}/approve`, 'POST');
     },
-    onSuccess: () => {
+    onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
-      toast({
-        title: "Request Approved",
-        description: "The money request has been approved successfully.",
-      });
+      
+      // Handle external redirect for Juice Shop
+      if (data.redirect && data.redirectUrl) {
+        toast({
+          title: "External Payment Approved",
+          description: "Redirecting back to Juice Shop...",
+        });
+        setTimeout(() => {
+          window.location.href = data.redirectUrl;
+        }, 1500);
+      } else {
+        toast({
+          title: "Request Approved",
+          description: "The money request has been approved successfully.",
+        });
+      }
     },
     onError: (error: any) => {
       toast({
@@ -245,12 +257,24 @@ export default function Dashboard() {
     mutationFn: async (requestId: number) => {
       return await apiRequest(`/api/requests/${requestId}/reject`, 'POST');
     },
-    onSuccess: () => {
+    onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
-      toast({
-        title: "Request Rejected",
-        description: "The money request has been rejected.",
-      });
+      
+      // Handle external redirect for Juice Shop
+      if (data.redirect && data.redirectUrl) {
+        toast({
+          title: "External Payment Rejected",
+          description: "Redirecting back to Juice Shop...",
+        });
+        setTimeout(() => {
+          window.location.href = data.redirectUrl;
+        }, 1500);
+      } else {
+        toast({
+          title: "Request Rejected",
+          description: "The money request has been rejected.",
+        });
+      }
     },
     onError: (error: any) => {
       toast({
@@ -392,20 +416,42 @@ export default function Dashboard() {
                 ) : Array.isArray(pendingRequests) && pendingRequests.length > 0 ? (
                   <div className="mt-4 space-y-3">
                     {pendingRequests.map((request: any) => (
-                      <div key={request.id} className="flex items-center justify-between p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                      <div key={request.id} className={`flex items-center justify-between p-4 rounded-lg border ${
+                        request.isExternal 
+                          ? 'bg-blue-50 border-blue-200' 
+                          : 'bg-orange-50 border-orange-200'
+                      }`}>
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                            <span className="text-orange-600 font-medium">
-                              {request.fromUser?.firstName?.charAt(0) || request.fromUserId.charAt(0)}
-                            </span>
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            request.isExternal 
+                              ? 'bg-blue-100' 
+                              : 'bg-orange-100'
+                          }`}>
+                            {request.isExternal ? (
+                              <ExternalLink className="w-5 h-5 text-blue-600" />
+                            ) : (
+                              <span className="text-orange-600 font-medium">
+                                {request.fromUser?.firstName?.charAt(0) || request.fromUserId.charAt(0)}
+                              </span>
+                            )}
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">
-                              ${request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
-                            </p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium text-gray-900">
+                                ${request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
+                              </p>
+                              {request.isExternal && (
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                  External
+                                </span>
+                              )}
+                            </div>
                             <p className="text-sm text-gray-600">{request.description}</p>
                             <p className="text-xs text-gray-500">
                               {new Date(request.createdAt).toLocaleDateString()}
+                              {request.externalOrderId && (
+                                <span className="ml-2">• Order #{request.externalOrderId}</span>
+                              )}
                             </p>
                           </div>
                         </div>
