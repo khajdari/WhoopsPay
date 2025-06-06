@@ -31,6 +31,7 @@ import { Link, useLocation } from "wouter";
 import { CreditCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ExternalPaymentModal } from "@/components/external-payment-modal";
+import { Layout } from "@/components/layout";
 
 /**
  * Login Form Validation Schema - Input validation rules
@@ -198,7 +199,8 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <Layout showHeader={false} showMobileNav={false}>
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex items-center justify-center space-x-2">
