@@ -54,6 +54,15 @@ export default function Landing() {
               <CreditCard className="h-6 w-6 text-blue-600" />
               <h1 className="text-2xl font-bold whoopspay-blue">WhoopsPay</h1>
             </div>
+            <div className="flex items-center space-x-4">
+              <LanguageSelector />
+              <Button variant="outline" onClick={handleLogin}>
+                {t('signIn')}
+              </Button>
+              <Button onClick={handleSignup}>
+                {t('getStarted')}
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -62,23 +71,23 @@ export default function Landing() {
       <section className="whoopspay-gradient text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            Send, spend, and receive money your way
+            {t('heroTitle')}
           </h2>
           <p className="text-xl md:text-2xl mb-8 text-blue-100">
-            It's fast, free, and secure to send money to friends and family
+            {t('heroSubtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
               onClick={handleSignup}
               className="paypal-btn-base paypal-btn-primary"
             >
-              Sign Up
+              {t('getStarted')}
             </button>
             <button 
               onClick={handleLogin}
               className="paypal-btn-base paypal-btn-secondary"
             >
-              Log In
+              {t('signIn')}
             </button>
           </div>
         </div>
