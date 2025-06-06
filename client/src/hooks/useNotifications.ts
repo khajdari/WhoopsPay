@@ -90,7 +90,7 @@ export function useNotifications() {
   const markAllAsReadMutation = useMutation({
     mutationFn: async () => {
       if (!user?.id) return;
-      return await apiRequest("PUT", "/api/notifications/mark-all-read", { userId: user.id });
+      return await apiRequest("/api/notifications/mark-all-read", "PUT", { userId: user.id });
     },
     onSuccess: () => {
       setLocalNotifications([]);
@@ -101,7 +101,7 @@ export function useNotifications() {
   const clearAllMutation = useMutation({
     mutationFn: async () => {
       if (!user?.id) return;
-      return await apiRequest("DELETE", "/api/notifications", { userId: user.id });
+      return await apiRequest("/api/notifications", "DELETE", { userId: user.id });
     },
     onSuccess: () => {
       setLocalNotifications([]);

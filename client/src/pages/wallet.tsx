@@ -106,7 +106,7 @@ export default function Wallet() {
    */
   const deletePaymentMethodMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/payments/${id}`);
+      await apiRequest(`/api/payments/${id}`, "DELETE");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/payments", user?.id] });
