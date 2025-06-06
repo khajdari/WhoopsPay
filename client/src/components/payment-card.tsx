@@ -57,8 +57,8 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
           className="relative cursor-pointer group"
           style={{ 
             perspective: '1000px',
-            width: '272px',
-            height: '164px'
+            width: '286px',
+            height: '172px'
           }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -155,8 +155,8 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
       <div 
         className="relative cursor-pointer group"
         style={{ 
-          width: '272px',
-          height: '164px'
+          width: '286px',
+          height: '172px'
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
