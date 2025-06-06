@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
 import { AddCardModal } from "@/components/add-card-modal";
 import { AddBankModal } from "@/components/add-bank-modal";
@@ -259,6 +260,8 @@ export default function Wallet() {
       {showAddBankModal && (
         <AddBankModal onClose={() => setShowAddBankModal(false)} />
       )}
+      
+      <Footer />
     </div>
   );
 }
