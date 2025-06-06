@@ -95,7 +95,16 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">API Server</p>
-                    <p className="text-2xl font-bold text-green-600">Running</p>
+                    {serverStatus ? (
+                      <div className="flex flex-col">
+                        <p className="text-sm font-medium text-green-600">
+                          Started: {new Date(serverStatus.startTime).toLocaleString()}
+                        </p>
+                        <span className="text-xs text-gray-500">(4 services running)</span>
+                      </div>
+                    ) : (
+                      <p className="text-2xl font-bold text-green-600">Running</p>
+                    )}
                   </div>
                   <Shield className="h-8 w-8 text-green-600" />
                 </div>
@@ -106,7 +115,7 @@ export default function Dashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Active Users</p>
+                    <p className="text-sm font-medium text-gray-600">Total Users</p>
                     <p className="text-2xl font-bold text-blue-600">4</p>
                   </div>
                   <Users className="h-8 w-8 text-blue-600" />
