@@ -17,9 +17,12 @@ import { PaymentCard } from "@/components/payment-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Send, HandCoins, Plus, University, Wallet, CreditCard, Users, Shield, Activity, AlertTriangle } from "lucide-react";
+import { Send, HandCoins, Plus, University, Wallet, CreditCard, Users, Shield, Activity, AlertTriangle, Clock, Check, X, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 /**
  * Dashboard Component - Main authenticated user landing page
@@ -35,7 +38,10 @@ import { Link } from "wouter";
 export default function Dashboard() {
   const { user } = useAuth(); // Current authenticated user data
   const { t } = useI18n(); // Translation system
+  const { toast } = useToast(); // Toast notifications
   const [showSendModal, setShowSendModal] = useState(false); // Send money modal state
+  const [approvingRequest, setApprovingRequest] = useState<number | null>(null);
+  const [rejectingRequest, setRejectingRequest] = useState<number | null>(null);
 
   const { data: transactions, isLoading: transactionsLoading } = useQuery({
     queryKey: ["/api/transactions"],
@@ -66,6 +72,12 @@ export default function Dashboard() {
   const { data: allTransactions, isLoading: allTransactionsLoading } = useQuery({
     queryKey: ["/api/admin/transactions"],
     enabled: !!user && (user as any)?.isAdmin === 1,
+  });
+
+  // Pending requests data for regular users
+  const { data: pendingRequests, isLoading: pendingRequestsLoading } = useQuery({
+    queryKey: ["/api/pending-requests", user?.id],
+    enabled: !!user && (user as any)?.isAdmin !== 1,
   });
 
   const { data: systemLogs, isLoading: logsLoading } = useQuery({
@@ -141,6 +153,115 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
+        {/* Pending Requests Dropdown - Only for regular users */}
+        {!isAdmin && (
+          <div className="mb-6">
+            <Card>
+              <div className="px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium text-gray-900 flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-orange-500" />
+                    Pending Money Requests
+                    {pendingRequests && pendingRequests.length > 0 && (
+                      <span className="ml-2 bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        {pendingRequests.length}
+                      </span>
+                    )}
+                  </h3>
+                </div>
+                
+                {pendingRequestsLoading ? (
+                  <div className="mt-4 space-y-3">
+                    {[1, 2].map((i) => (
+                      <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <Skeleton className="w-10 h-10 rounded-full" />
+                          <div>
+                            <Skeleton className="h-4 w-32 mb-2" />
+                            <Skeleton className="h-3 w-24" />
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Skeleton className="h-8 w-20" />
+                          <Skeleton className="h-8 w-20" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : Array.isArray(pendingRequests) && pendingRequests.length > 0 ? (
+                  <div className="mt-4 space-y-3">
+                    {pendingRequests.map((request: any) => (
+                      <div key={request.id} className="flex items-center justify-between p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                            <span className="text-orange-600 font-medium">
+                              {request.fromUser?.firstName?.charAt(0) || request.fromUserId.charAt(0)}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">
+                              ${request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
+                            </p>
+                            <p className="text-sm text-gray-600">{request.description}</p>
+                            <p className="text-xs text-gray-500">
+                              {new Date(request.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => handleApproveRequest(request.id)}
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                            disabled={approvingRequest === request.id}
+                          >
+                            {approvingRequest === request.id ? (
+                              <>
+                                <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                                Approving...
+                              </>
+                            ) : (
+                              <>
+                                <Check className="h-4 w-4 mr-1" />
+                                Approve
+                              </>
+                            )}
+                          </Button>
+                          <Button
+                            onClick={() => handleRejectRequest(request.id)}
+                            size="sm"
+                            variant="outline"
+                            className="border-red-300 text-red-600 hover:bg-red-50"
+                            disabled={rejectingRequest === request.id}
+                          >
+                            {rejectingRequest === request.id ? (
+                              <>
+                                <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                                Rejecting...
+                              </>
+                            ) : (
+                              <>
+                                <X className="h-4 w-4 mr-1" />
+                                Reject
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="mt-4 text-center py-6 text-gray-500">
+                    <Clock className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                    <p>No pending money requests</p>
+                    <p className="text-sm">When someone requests money from you, it will appear here</p>
+                  </div>
+                )}
+              </div>
+            </Card>
+          </div>
+        )}
 
         {isAdmin ? (
           /* Admin Dashboard Content */
