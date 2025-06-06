@@ -1407,20 +1407,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin routes for administration panel
-  app.get('/api/admin/logs/express', async (req: any, res) => {
+  app.get('/api/admin/logs/express', requireAdmin, async (req: any, res) => {
     try {
-      // Simple authentication check - in production this would use proper session management
-      const userId = req.headers['user-id'] || req.query.userId;
-      
-      if (!userId) {
-        return res.status(401).json({ error: "Authentication required" });
-      }
-
-      const user = await storage.getUser(userId);
-      if (!user?.isAdmin) {
-        return res.status(403).json({ error: "Admin access required" });
-      }
-
       const logs = logStore.getExpressLogs();
       res.json({ logs });
     } catch (error) {

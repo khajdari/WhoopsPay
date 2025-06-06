@@ -43,6 +43,25 @@ export default function Dashboard() {
   const [approvingRequest, setApprovingRequest] = useState<number | null>(null);
   const [rejectingRequest, setRejectingRequest] = useState<number | null>(null);
 
+  // System Failures Count Component
+  const SystemFailuresCount = () => {
+    const { data: expressLogs } = useQuery({
+      queryKey: ["/api/admin/logs/express"],
+      refetchInterval: 30000, // Refetch every 30 seconds
+    });
+
+    const errorCount = expressLogs?.logs ? 
+      expressLogs.logs.filter((log: string) => 
+        log.includes(' 4') || log.includes(' 5') || log.toLowerCase().includes('error')
+      ).length : 0;
+
+    return (
+      <p className={`text-2xl font-bold ${errorCount > 0 ? 'text-red-600' : 'text-green-600'}`}>
+        {errorCount}
+      </p>
+    );
+  };
+
   // If admin, show only health check information
   if (user?.isAdmin) {
     return (
@@ -102,17 +121,17 @@ export default function Dashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">System Load</p>
-                    <p className="text-2xl font-bold text-yellow-600">Normal</p>
+                    <p className="text-sm font-medium text-gray-600">System Failures</p>
+                    <SystemFailuresCount />
                   </div>
-                  <AlertTriangle className="h-8 w-8 text-yellow-600" />
+                  <AlertTriangle className="h-8 w-8 text-red-600" />
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Quick Actions for Admin */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-4">Administration</h3>
@@ -134,26 +153,6 @@ export default function Dashboard() {
                     Monitor Issues
                   </Button>
                 </Link>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">System Status</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-600 mr-2" />
-                    All services operational
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-600 mr-2" />
-                    Database responsive
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-600 mr-2" />
-                    No critical alerts
-                  </div>
-                </div>
               </CardContent>
             </Card>
           </div>
