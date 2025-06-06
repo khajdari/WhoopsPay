@@ -262,7 +262,7 @@ app.get('/api/transactions/:id', isAuthenticated, async (req, res) => {
 ### Secure Data Storage
 ```javascript
 // SECURE: Encrypted sensitive data
-export const users = pgTable("users", {
+export const users = sqliteTable("users", {
   passwordHash: varchar("password_hash"), // Properly hashed
   ssnEncrypted: varchar("ssn_encrypted"), // Encrypted at rest
 });
