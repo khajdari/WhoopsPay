@@ -1,5 +1,38 @@
 import Database from 'better-sqlite3';
 
+export function clearAndReinitializeDatabase() {
+  const db = new Database('./data/whoopspay.db');
+  
+  console.log('Starting database cleanup and reinitialization...');
+  
+  // Drop all tables to ensure clean state
+  const tables = [
+    'sessions',
+    'users', 
+    'transactions',
+    'payment_methods',
+    'user_sessions',
+    'notifications',
+    'issue_reports'
+  ];
+  
+  tables.forEach(table => {
+    try {
+      db.exec(`DROP TABLE IF EXISTS ${table}`);
+      console.log(`Dropped table: ${table}`);
+    } catch (error) {
+      console.log(`Note: Table ${table} did not exist`);
+    }
+  });
+  
+  console.log('All tables cleared. Creating fresh database structure...');
+  
+  db.close();
+  
+  // Now initialize with fresh tables
+  initializeDatabase();
+}
+
 export function initializeDatabase() {
   const db = new Database('./data/whoopspay.db');
   
