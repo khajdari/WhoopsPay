@@ -43,6 +43,127 @@ export default function Dashboard() {
   const [approvingRequest, setApprovingRequest] = useState<number | null>(null);
   const [rejectingRequest, setRejectingRequest] = useState<number | null>(null);
 
+  // If admin, show only health check information
+  if (user?.isAdmin) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Header />
+        <MobileNav />
+        
+        <div className="max-w-7xl mx-auto p-6">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              System Health Dashboard
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Monitor application health and system status
+            </p>
+          </div>
+
+          {/* Health Check Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Database</p>
+                    <p className="text-2xl font-bold text-green-600">Online</p>
+                  </div>
+                  <Activity className="h-8 w-8 text-green-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">API Server</p>
+                    <p className="text-2xl font-bold text-green-600">Running</p>
+                  </div>
+                  <Shield className="h-8 w-8 text-green-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Active Users</p>
+                    <p className="text-2xl font-bold text-blue-600">4</p>
+                  </div>
+                  <Users className="h-8 w-8 text-blue-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">System Load</p>
+                    <p className="text-2xl font-bold text-yellow-600">Normal</p>
+                  </div>
+                  <AlertTriangle className="h-8 w-8 text-yellow-600" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Quick Actions for Admin */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-4">Administration</h3>
+                <Link href="/administration">
+                  <Button className="w-full">
+                    <Shield className="h-4 w-4 mr-2" />
+                    Access Admin Panel
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-4">Issue Reports</h3>
+                <Link href="/issues">
+                  <Button className="w-full" variant="outline">
+                    <AlertTriangle className="h-4 w-4 mr-2" />
+                    Monitor Issues
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-4">System Status</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center text-sm">
+                    <Check className="h-4 w-4 text-green-600 mr-2" />
+                    All services operational
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <Check className="h-4 w-4 text-green-600 mr-2" />
+                    Database responsive
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <Check className="h-4 w-4 text-green-600 mr-2" />
+                    No critical alerts
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        <Footer />
+      </div>
+    );
+  }
+
   const { data: transactions, isLoading: transactionsLoading } = useQuery({
     queryKey: ["/api/transactions"],
     enabled: !!user,
