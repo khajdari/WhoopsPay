@@ -5,12 +5,7 @@ import { storage } from "./storage";
 export const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Check if user is authenticated via session
-    if (!(req as any).isAuthenticated || !(req as any).isAuthenticated()) {
-      return res.status(401).json({ error: "Authentication required" });
-    }
-
-    // Get user ID from session
-    const userId = (req as any).session?.userId || (req as any).user?.id;
+    const userId = (req as any).session?.userId;
     
     if (!userId) {
       return res.status(401).json({ error: "Authentication required" });

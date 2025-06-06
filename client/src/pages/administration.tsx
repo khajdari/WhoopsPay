@@ -25,7 +25,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Shield, Database, FileText, Settings, AlertTriangle, RefreshCw } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Shield, Database, FileText, Settings, AlertTriangle, RefreshCw, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -46,6 +47,8 @@ export default function Administration() {
   const [expressLogs, setExpressLogs] = useState<string[]>([]);
   const [dbLogs, setDbLogs] = useState<string[]>([]);
   const [autoRefresh, setAutoRefresh] = useState(false);
+  const [expressSearchTerm, setExpressSearchTerm] = useState("");
+  const [dbSearchTerm, setDbSearchTerm] = useState("");
 
   // Check if user is admin
   useEffect(() => {
@@ -61,12 +64,12 @@ export default function Administration() {
   // Fetch logs
   const fetchLogs = async () => {
     try {
-      const headers = {
-        'user-id': user?.id || '',
-      };
-      
-      const expressResponse = await fetch('/api/admin/logs/express', { headers });
-      const dbResponse = await fetch('/api/admin/logs/database', { headers });
+      const expressResponse = await fetch('/api/admin/logs/express', { 
+        credentials: 'include' 
+      });
+      const dbResponse = await fetch('/api/admin/logs/database', { 
+        credentials: 'include' 
+      });
       
       if (expressResponse.ok) {
         const expressData = await expressResponse.json();
@@ -81,6 +84,15 @@ export default function Administration() {
       console.error('Failed to fetch logs:', error);
     }
   };
+
+  // Filter logs based on search terms
+  const filteredExpressLogs = expressLogs.filter(log => 
+    log.toLowerCase().includes(expressSearchTerm.toLowerCase())
+  );
+  
+  const filteredDbLogs = dbLogs.filter(log => 
+    log.toLowerCase().includes(dbSearchTerm.toLowerCase())
+  );
 
   // Auto-refresh logs
   useEffect(() => {
