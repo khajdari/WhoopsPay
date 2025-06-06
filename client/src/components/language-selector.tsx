@@ -45,11 +45,13 @@ export function LanguageSelector() {
     { code: 'el-GR' as Language, name: 'Ελληνικά', flag: '🇬🇷' }
   ];
 
+  const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <Globe className="h-4 w-4" />
+          <span className="text-lg">{currentLanguage.flag}</span>
           <span className="sr-only">{t('changeLanguage')}</span>
         </Button>
       </DropdownMenuTrigger>
