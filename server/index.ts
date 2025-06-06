@@ -4,11 +4,13 @@ import { setupVite, serveStatic, log } from "./vite";
 import { clearAndReinitializeDatabase } from "./initDatabase";
 import { seedMockData } from "./mockData";
 
-// Clear and reinitialize database on every restart
-clearAndReinitializeDatabase();
+// Clear and reinitialize database on every restart, then seed data
+async function initializeSystem() {
+  clearAndReinitializeDatabase();
+  await seedMockData();
+}
 
-// Seed fresh mock data after database reset
-seedMockData().catch(console.error);
+initializeSystem().catch(console.error);
 
 const app = express();
 app.use(express.json());

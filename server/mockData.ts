@@ -5,22 +5,8 @@ export async function seedMockData() {
   try {
     console.log("Starting mock data seeding...");
     
-    // Clear all existing users first
-    const allUsers = await storage.getAllUsers();
-    for (const user of allUsers) {
-      await storage.deleteUser(user.id);
-    }
-    console.log("Cleared all existing users");
-    
-    // Clear old transactions with non-@ prefix user IDs
-    const allTransactions = await storage.getAllTransactions();
-    for (const transaction of allTransactions) {
-      if (!transaction.fromUserId.startsWith('@') || !transaction.toUserId.startsWith('@')) {
-        // Delete old transactions that reference old user IDs
-        await storage.deleteTransaction(transaction.id);
-      }
-    }
-    console.log("Cleared old transactions with non-@ prefix user IDs");
+    // Since database is already cleared by clearAndReinitializeDatabase, we don't need to clear again
+    // This prevents the function from running cleanup twice
     
     // Create one admin user and three regular users with @ prefix
     await storage.upsertUser({
