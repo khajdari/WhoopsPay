@@ -312,7 +312,7 @@ export async function seedMockData() {
       cardNumber: "5555-4444-3333-2222",
       expiryDate: "08/26", 
       cvv: "456",
-      isDefault: true,
+      isDefault: 1,
     });
 
     await storage.addPaymentMethod({
@@ -321,7 +321,7 @@ export async function seedMockData() {
       bankName: "Bank of America",
       accountNumber: "456789123",
       iban: "US33BOFA0208000100003328",
-      isDefault: false,
+      isDefault: 0,
     });
 
     // Create payment methods for mdoe user (only if they don't exist)
@@ -333,9 +333,7 @@ export async function seedMockData() {
         cardName: "Mairy Doe",
         cardNumber: "4111-1111-1111-6639",
         bankName: "Chase Bank",
-        expiryDate: "12/26", 
-        cvv: "123",
-        isDefault: true,
+        isDefault: 1,
       });
 
       await storage.addPaymentMethod({
@@ -344,9 +342,7 @@ export async function seedMockData() {
         cardName: "M. Doe",
         cardNumber: "5555-5555-5555-4111",
         bankName: "Bank of America",
-        expiryDate: "09/27", 
-        cvv: "456",
-        isDefault: false,
+        isDefault: 0,
       });
 
       await storage.addPaymentMethod({
@@ -355,7 +351,7 @@ export async function seedMockData() {
         bankName: "Chase Bank",
         accountNumber: "123456782123",
         iban: "US89370400440532013000",
-        isDefault: false,
+        isDefault: 0,
       });
     }
 
