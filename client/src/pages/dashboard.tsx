@@ -85,30 +85,7 @@ export default function Dashboard() {
     enabled: !!user && (user as any)?.isAdmin === 1,
   });
 
-  if (profileLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <div className="space-y-4">
-            <Skeleton className="h-8 w-64" />
-            <Skeleton className="h-32 w-full" />
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <Skeleton key={i} className="h-24" />
-              ))}
-            </div>
-          </div>
-        </main>
-        <MobileNav />
-      </div>
-    );
-  }
-
-  const balance = (userProfile as any)?.balance || "0.00";
-  const isAdmin = (user as any)?.isAdmin === 1;
-
-  // Mutation for approving requests
+  // Mutation for approving requests - moved before conditional return
   const approveMutation = useMutation({
     mutationFn: async (requestId: number) => {
       return await apiRequest(`/api/requests/${requestId}/approve`, 'POST');
@@ -131,7 +108,7 @@ export default function Dashboard() {
     },
   });
 
-  // Mutation for rejecting requests
+  // Mutation for rejecting requests - moved before conditional return
   const rejectMutation = useMutation({
     mutationFn: async (requestId: number) => {
       return await apiRequest(`/api/requests/${requestId}/reject`, 'POST');
@@ -169,6 +146,29 @@ export default function Dashboard() {
       setRejectingRequest(null);
     }
   };
+
+  if (profileLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <div className="space-y-4">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-32 w-full" />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <Skeleton key={i} className="h-24" />
+              ))}
+            </div>
+          </div>
+        </main>
+        <MobileNav />
+      </div>
+    );
+  }
+
+  const balance = (userProfile as any)?.balance || "0.00";
+  const isAdmin = (user as any)?.isAdmin === 1;
 
   return (
     <div className="min-h-screen bg-gray-50">
