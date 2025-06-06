@@ -90,22 +90,22 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               
               <div className="flex justify-between items-start">
                 <div className="flex flex-col">
-                  <CreditCard className="w-6 h-6 mb-1 opacity-80" />
-                  <div className="text-xs opacity-70 uppercase tracking-wider">Debit Card</div>
+                  <CreditCard className="w-4 h-4 mb-1 opacity-80" />
+                  <div className="text-xs opacity-70 uppercase tracking-wider text-xs">Debit Card</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-bold tracking-wide">{brand}</div>
+                  <div className="text-xs font-bold tracking-wide">{brand}</div>
                 </div>
               </div>
 
               <div className="flex-1 flex items-center justify-center">
-                <div className="font-mono text-lg tracking-widest text-center">{maskedNumber}</div>
+                <div className="font-mono text-sm tracking-widest text-center">{maskedNumber}</div>
               </div>
 
               <div className="flex justify-between items-end">
                 <div>
                   <div className="text-xs opacity-70 uppercase tracking-wider mb-1">Card Holder</div>
-                  <div className="text-sm font-semibold uppercase tracking-wide">{cardName || 'John Doe'}</div>
+                  <div className="text-xs font-semibold uppercase tracking-wide">{cardName || 'John Doe'}</div>
                 </div>
                 <div className="text-right">
                   <div className="text-xs opacity-70 uppercase tracking-wider mb-1">Valid Thru</div>
@@ -183,7 +183,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             )}
             
             {/* Cheque header */}
-            <div className="flex justify-between items-start mb-3">
+            <div className="flex justify-between items-start mb-2">
               <div>
                 <div className="text-xs font-bold text-blue-800 uppercase tracking-wider">
                   {bankName || 'First National Bank'}
@@ -199,15 +199,15 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             </div>
             
             {/* Account holder */}
-            <div className="mb-3">
+            <div className="mb-2">
               <div className="text-xs text-gray-500 mb-1">Account Holder</div>
-              <div className="font-semibold text-sm text-gray-800">John Doe</div>
+              <div className="font-semibold text-xs text-gray-800">John Doe</div>
             </div>
             
             {/* IBAN */}
-            <div className="bg-white/50 border border-blue-200 rounded p-2 mb-3">
+            <div className="bg-white/50 border border-blue-200 rounded p-2 mb-2">
               <div className="text-xs text-gray-500 mb-1">IBAN</div>
-              <div className="font-mono text-sm font-bold text-blue-800">
+              <div className="font-mono text-xs font-bold text-blue-800">
                 {iban ? `${iban.slice(0, 8)}••••••••` : 'GB29NWBK••••••••'}
               </div>
             </div>
