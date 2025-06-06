@@ -149,6 +149,48 @@ export async function seedMockData() {
       status: "pending",
     });
 
+    // Add more pending requests for testing the dropdown feature
+    await storage.createTransaction({
+      fromUserId: "alice",
+      toUserId: "jdoe",
+      amount: "85.50",
+      description: "Grocery shopping split",
+      status: "pending",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "bob",
+      toUserId: "jdoe",
+      amount: "45.00",
+      description: "Movie tickets",
+      status: "pending",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "charlie",
+      toUserId: "jdoe",
+      amount: "30.25",
+      description: "Pizza dinner",
+      status: "pending",
+    });
+
+    // Add pending requests for other users too
+    await storage.createTransaction({
+      fromUserId: "jdoe",
+      toUserId: "alice",
+      amount: "120.00",
+      description: "Concert tickets",
+      status: "pending",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "bob",
+      toUserId: "alice",
+      amount: "67.80",
+      description: "Uber ride share",
+      status: "pending",
+    });
+
     await storage.createTransaction({
       fromUserId: "jdoe",
       toUserId: "edoe",

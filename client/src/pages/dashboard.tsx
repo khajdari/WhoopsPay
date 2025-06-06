@@ -108,6 +108,68 @@ export default function Dashboard() {
   const balance = (userProfile as any)?.balance || "0.00";
   const isAdmin = (user as any)?.isAdmin === 1;
 
+  // Mutation for approving requests
+  const approveMutation = useMutation({
+    mutationFn: async (requestId: number) => {
+      return await apiRequest(`/api/requests/${requestId}/approve`, 'POST');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
+      toast({
+        title: "Request Approved",
+        description: "The money request has been approved successfully.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to approve request",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Mutation for rejecting requests
+  const rejectMutation = useMutation({
+    mutationFn: async (requestId: number) => {
+      return await apiRequest(`/api/requests/${requestId}/reject`, 'POST');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
+      toast({
+        title: "Request Rejected",
+        description: "The money request has been rejected.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to reject request",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleApproveRequest = async (requestId: number) => {
+    setApprovingRequest(requestId);
+    try {
+      await approveMutation.mutateAsync(requestId);
+    } finally {
+      setApprovingRequest(null);
+    }
+  };
+
+  const handleRejectRequest = async (requestId: number) => {
+    setRejectingRequest(requestId);
+    try {
+      await rejectMutation.mutateAsync(requestId);
+    } finally {
+      setRejectingRequest(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
