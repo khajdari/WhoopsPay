@@ -191,3 +191,37 @@ export const insertIssueReportSchema = createInsertSchema(issueReports).omit({
 
 export type IssueReport = typeof issueReports.$inferSelect;
 export type InsertIssueReport = z.infer<typeof insertIssueReportSchema>;
+
+/**
+ * Money Requests table for pending payment requests
+ * Handles both internal requests and external (Juice Shop) transactions
+ */
+export const moneyRequests = sqliteTable("money_requests", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  fromUserId: text("from_user_id").notNull(), // Who is requesting money
+  toUserId: text("to_user_id").notNull(), // Who should pay
+  amount: real("amount").notNull(),
+  description: text("description"),
+  status: text("status").notNull().default("pending"), // 'pending', 'approved', 'rejected'
+  type: text("type").notNull().default("internal"), // 'internal', 'external'
+  
+  // External transaction fields (for Juice Shop integration)
+  externalOrderId: text("external_order_id"),
+  externalSource: text("external_source"), // 'juice-shop'
+  returnUrl: text("return_url"), // Where to redirect after approval/rejection
+  cancelUrl: text("cancel_url"),
+  externalMetadata: text("external_metadata"), // JSON string for extra data
+  
+  createdAt: integer("created_at"),
+  respondedAt: integer("responded_at"),
+});
+
+// Money Requests schema
+export const insertMoneyRequestSchema = createInsertSchema(moneyRequests).omit({
+  id: true,
+  createdAt: true,
+  respondedAt: true,
+});
+
+export type MoneyRequest = typeof moneyRequests.$inferSelect;
+export type InsertMoneyRequest = z.infer<typeof insertMoneyRequestSchema>;
