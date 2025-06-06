@@ -5,145 +5,149 @@ export async function seedMockData() {
   try {
     console.log("Starting mock data seeding...");
     
-    // Create one admin user and three regular users
+    // Clear all existing users first
+    const allUsers = await storage.getAllUsers();
+    for (const user of allUsers) {
+      await storage.deleteUser(user.id);
+    }
+    console.log("Cleared all existing users");
+    
+    // Create one admin user and three regular users with @ prefix
     await storage.upsertUser({
-      id: "admin",
-      email: "admin@whoopspay.com",
-      firstName: "Admin",
-      lastName: "User",
+      id: "@admin_maria",
+      email: "maria.rodriguez@whoopspay.com",
+      firstName: "Maria",
+      lastName: "Rodriguez",
       profileImageUrl: "",
-      address: "100 Admin Plaza, Security City, SC 12345",
-      nationality: "American",
-      gender: "Non-binary",
-      balance: 10000.00,
+      address: "500 Security Boulevard, Admin District, Washington DC 20001",
+      nationality: "Spanish",
+      gender: "Female",
+      balance: 15000.00,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       isAdmin: 1,
 
       // VULNERABLE: Sensitive data stored unencrypted
-      ssn: "111-11-1111",
-      password: "admin123", // VULNERABLE: Plain text password
+      ssn: "555-11-1111",
+      password: "admin2024", // VULNERABLE: Plain text password
     });
 
     await storage.upsertUser({
-      id: "user1", 
-      email: "user1@example.com",
-      firstName: "Alice",
-      lastName: "Johnson",
+      id: "@sarah_wilson", 
+      email: "sarah.wilson@example.com",
+      firstName: "Sarah",
+      lastName: "Wilson",
       profileImageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
-      address: "123 Main Street, New York, NY 10001",
+      address: "245 Maple Street, Portland, OR 97201",
       nationality: "American",
       gender: "Female",
-      balance: 1500.50,
+      balance: 2850.75,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       isAdmin: 0,
 
-      ssn: "222-22-2222",
-      password: "password1", // VULNERABLE: Weak password
+      ssn: "555-22-2222",
+      password: "sarah123", // VULNERABLE: Weak password
     });
 
     await storage.upsertUser({
-      id: "user2",
-      email: "user2@example.com",
-      firstName: "Bob",
-      lastName: "Smith",
+      id: "@james_chen",
+      email: "james.chen@example.com",
+      firstName: "James",
+      lastName: "Chen",
       profileImageUrl: "",
-      address: "456 Oak Avenue, Los Angeles, CA 90210",
+      address: "837 Technology Drive, Austin, TX 78701",
       nationality: "Canadian",
       gender: "Male",
-      balance: 750.25,
+      balance: 1247.50,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       isAdmin: 0,
 
-      ssn: "333-33-3333",
-      password: "pass123", // VULNERABLE: Weak password
+      ssn: "555-33-3333",
+      password: "james2024", // VULNERABLE: Weak password
     });
 
     await storage.upsertUser({
-      id: "user3",
-      email: "user3@example.com", 
-      firstName: "Charlie",
-      lastName: "Brown",
+      id: "@elena_kowalski",
+      email: "elena.kowalski@example.com", 
+      firstName: "Elena",
+      lastName: "Kowalski",
       profileImageUrl: "",
-      address: "789 Pine Road, Chicago, IL 60601",
-      nationality: "British",
-      gender: "Male",
-      balance: 425.00,
+      address: "192 Heritage Lane, Boston, MA 02101",
+      nationality: "Polish",
+      gender: "Female",
+      balance: 963.25,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       isAdmin: 0,
-      ssn: "444-44-4444",
-      password: "123456", // VULNERABLE: Extremely weak password
+
+      ssn: "555-44-4444",
+      password: "elena456", // VULNERABLE: Extremely weak password
     });
 
-
-
-
-
-    // Create mock transactions between users
+    // Create mock transactions between new users
     await storage.createTransaction({
-      fromUserId: "admin",
-      toUserId: "user1", 
-      amount: 150.00,
-      description: "Admin payment to Alice",
+      fromUserId: "@admin_maria",
+      toUserId: "@sarah_wilson", 
+      amount: 200.00,
+      description: "Administrative payment",
       status: "completed",
     });
 
     await storage.createTransaction({
-      fromUserId: "user1",
-      toUserId: "user2",
-      amount: 75.50, 
-      description: "Dinner split payment",
+      fromUserId: "@sarah_wilson",
+      toUserId: "@james_chen",
+      amount: 125.75, 
+      description: "Project collaboration payment",
       status: "completed",
     });
 
     await storage.createTransaction({
-      fromUserId: "user2",
-      toUserId: "user3",
-      amount: 50.00,
-      description: "Movie tickets",
+      fromUserId: "@james_chen",
+      toUserId: "@elena_kowalski",
+      amount: 80.50,
+      description: "Consulting services",
       status: "pending",
     });
 
     await storage.createTransaction({
-      fromUserId: "user3",
-      toUserId: "admin",
-      amount: 85.50,
-      description: "Service fee payment",
+      fromUserId: "@elena_kowalski",
+      toUserId: "@admin_maria",
+      amount: 95.25,
+      description: "Monthly service fee",
       status: "pending",
     });
 
     await storage.createTransaction({
-      fromUserId: "user1",
-      toUserId: "user3",
-      amount: 45.00,
-      description: "Concert tickets",
+      fromUserId: "@sarah_wilson",
+      toUserId: "@elena_kowalski",
+      amount: 60.00,
+      description: "Design work payment",
       status: "pending",
     });
 
     await storage.createTransaction({
-      fromUserId: "user2",
-      toUserId: "admin",
-      amount: 30.25,
-      description: "Monthly subscription",
+      fromUserId: "@james_chen",
+      toUserId: "@admin_maria",
+      amount: 45.75,
+      description: "License renewal",
       status: "completed",
     });
 
-    console.log("Mock transactions created for admin and three regular users");
+    console.log("Mock transactions created for new users");
 
     // Create mock payment methods with unencrypted data
     await storage.addPaymentMethod({
-      userId: "admin",
+      userId: "@admin_maria",
       type: "card",
-      cardName: "Admin User",
+      cardName: "Maria Rodriguez",
       cardNumber: "4532-1234-5678-9012", // VULNERABLE: Unencrypted card
       isDefault: 1,
     });
 
     await storage.addPaymentMethod({
-      userId: "user1", 
+      userId: "@sarah_wilson", 
       type: "bank",
       bankName: "Chase Bank",
       accountNumber: "987654321", // VULNERABLE: Unencrypted account
@@ -152,15 +156,15 @@ export async function seedMockData() {
     });
 
     await storage.addPaymentMethod({
-      userId: "user2",
+      userId: "@james_chen",
       type: "card",
-      cardName: "Bob Smith",
+      cardName: "James Chen",
       cardNumber: "5555-4444-3333-2222",
       isDefault: 1,
     });
 
     await storage.addPaymentMethod({
-      userId: "user3", 
+      userId: "@elena_kowalski", 
       type: "bank",
       bankName: "Bank of America",
       accountNumber: "456789123",
@@ -168,9 +172,7 @@ export async function seedMockData() {
       isDefault: 0,
     });
 
-
-
-    console.log("Mock data seeded successfully with intentional vulnerabilities");
+    console.log("Mock data seeded successfully with new users and @ prefix IDs");
   } catch (error) {
     console.error("Error seeding mock data:", error);
   }
