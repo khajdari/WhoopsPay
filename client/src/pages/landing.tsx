@@ -21,6 +21,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Shield, Send, Smartphone, CreditCard, Globe, Users } from "lucide-react";
 import { LanguageSelector } from "@/components/language-selector";
 import { useI18n } from "@/lib/i18n";
+import { Layout } from "@/components/layout";
 
 /**
  * Landing Component - Marketing and onboarding interface
@@ -45,158 +46,148 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <CreditCard className="h-6 w-6 text-blue-600" />
-              <h1 className="text-2xl font-bold whoopspay-blue">WhoopsPay</h1>
+    <Layout showHeader={false} showMobileNav={false}>
+      <div className="bg-gray-50 flex-1">
+        {/* Header */}
+        <header className="bg-white shadow-sm border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center space-x-2">
+                <CreditCard className="h-8 w-8 text-indigo-600" />
+                <span className="text-2xl font-bold text-gray-900">WhoopsPay</span>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <LanguageSelector />
+                <Button onClick={handleLogin} variant="outline">
+                  {t('signIn')}
+                </Button>
+                <Button onClick={handleSignup} className="bg-indigo-600 hover:bg-indigo-700">
+                  {t('getStarted')}
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <LanguageSelector />
+          </div>
+        </header>
+
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-indigo-50 to-white py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                {t('heroTitle')}
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                {t('heroSubtitle')}
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  onClick={handleSignup}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-3"
+                >
+                  {t('getStarted')}
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  onClick={handleLogin}
+                  className="text-lg px-8 py-3"
+                >
+                  {t('signIn')}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </section>
 
-      {/* Hero Section */}
-      <section className="whoopspay-gradient text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            {t('heroTitle')}
-          </h2>
-          <p className="text-xl md:text-2xl mb-8 text-blue-100">
-            {t('heroSubtitle')}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
-              onClick={handleSignup}
-              className="paypal-btn-base paypal-btn-primary"
-            >
-              {t('getStarted')}
-            </button>
-            <button 
-              onClick={handleLogin}
-              className="paypal-btn-base paypal-btn-secondary"
-            >
-              {t('signIn')}
-            </button>
+        {/* Features Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                {t('featuresTitle')}
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                {t('featuresSubtitle')}
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+                    <Send className="w-6 h-6 text-indigo-600" />
+                  </div>
+                  <CardTitle>{t('instantTransfers')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    {t('instantTransfersDesc')}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                    <Shield className="w-6 h-6 text-green-600" />
+                  </div>
+                  <CardTitle>{t('secureProtection')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    {t('secureProtectionDesc')}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                    <Smartphone className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <CardTitle>{t('mobileApp')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    {t('mobileAppDesc')}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+                    <Globe className="w-6 h-6 text-indigo-600" />
+                  </div>
+                  <CardTitle>{t('globalReach')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    {t('globalReachDesc')}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                    <Users className="w-6 h-6 text-red-600" />
+                  </div>
+                  <CardTitle>{t('trustedCommunity')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    {t('trustedCommunityDesc')}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Send and receive money your way
-            </h3>
-            <p className="text-xl text-gray-600">
-              Pay however you want. We make it simple and secure.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <Shield className="w-6 h-6 text-blue-600" />
-                </div>
-                <CardTitle>{t('purchaseProtection')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  {t('purchaseProtectionDesc')}
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <Send className="w-6 h-6 text-green-600" />
-                </div>
-                <CardTitle>{t('sendMoney')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Send money to friends and family instantly with just an email
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-                  <Smartphone className="w-6 h-6 text-purple-600" />
-                </div>
-                <CardTitle>{t('mobileReady')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  {t('mobileReadyDesc')}
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
-                  <CreditCard className="w-6 h-6 text-yellow-600" />
-                </div>
-                <CardTitle>{t('multiplePaymentOptions')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  {t('multiplePaymentOptionsDesc')}
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-                  <Globe className="w-6 h-6 text-indigo-600" />
-                </div>
-                <CardTitle>{t('globalReach')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  {t('globalReachDesc')}
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                  <Users className="w-6 h-6 text-red-600" />
-                </div>
-                <CardTitle>{t('trustedCommunity')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  {t('trustedCommunityDesc')}
-                </CardDescription>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-gray-400">
-              {t('footerText')}
-            </p>
-          </div>
-        </div>
-      </footer>
-    </div>
+        </section>
+      </div>
+    </Layout>
   );
 }
