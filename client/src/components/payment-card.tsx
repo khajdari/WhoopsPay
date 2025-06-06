@@ -54,7 +54,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
     return (
       <div className="flex justify-center">
         <div 
-          className="relative w-80 h-48 cursor-pointer group"
+          className="relative w-68 h-41 cursor-pointer group"
           style={{ perspective: '1000px' }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -149,7 +149,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
   return (
     <div className="flex justify-center">
       <div 
-        className="relative w-80 h-48 cursor-pointer group"
+        className="relative w-68 h-41 cursor-pointer group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -204,11 +204,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               </div>
             </div>
 
-            
-            {/* Bottom info */}
-            <div className="absolute bottom-2 right-3 text-xs text-gray-500">
-              Member FDIC
-            </div>
+
             
             {/* Cheque perforations */}
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-blue-300 to-transparent opacity-30"></div>
