@@ -39,7 +39,7 @@ import {
   type InsertNotification,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, or } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
 // Database-only storage - all data operations use PostgreSQL
@@ -289,88 +289,168 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async addPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod> {
-    const newPaymentMethod: PaymentMethod = {
-      id: mockPaymentMethods.length + 1,
-      ...paymentMethod,
-      createdAt: Date.now(),
-    };
-    mockPaymentMethods.push(newPaymentMethod);
-    return newPaymentMethod;
+  async addPaymentMethod(paymentMethodData: InsertPaymentMethod): Promise<PaymentMethod> {
+    try {
+      const [paymentMethod] = await db
+        .insert(paymentMethods)
+        .values({
+          ...paymentMethodData,
+          createdAt: Date.now(),
+        })
+        .returning();
+      return paymentMethod;
+    } catch (error) {
+      console.error("Error adding payment method:", error);
+      throw error;
+    }
   }
 
   async getUserPaymentMethods(userId: string): Promise<PaymentMethod[]> {
-    return mockPaymentMethods.filter(pm => pm.userId === userId);
+    try {
+      const result = await db
+        .select()
+        .from(paymentMethods)
+        .where(eq(paymentMethods.userId, userId));
+      return result;
+    } catch (error) {
+      console.error("Error fetching user payment methods:", error);
+      return [];
+    }
   }
 
   async deletePaymentMethod(id: number): Promise<void> {
-    const index = mockPaymentMethods.findIndex(pm => pm.id === id);
-    if (index > -1) {
-      mockPaymentMethods.splice(index, 1);
+    try {
+      await db
+        .delete(paymentMethods)
+        .where(eq(paymentMethods.id, id));
+    } catch (error) {
+      console.error("Error deleting payment method:", error);
+      throw error;
     }
   }
 
   async createUserSession(userId: string, sessionToken: string, ipAddress: string, userAgent: string): Promise<UserSession> {
-    const session: UserSession = {
-      id: mockSessions.length + 1,
-      userId,
-      sessionToken,
-      ipAddress,
-      userAgent,
-      isActive: 1,
-      createdAt: Date.now(),
-      expiresAt: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
-    };
-    mockSessions.push(session);
-    return session;
+    try {
+      const [session] = await db
+        .insert(userSessions)
+        .values({
+          userId,
+          sessionToken,
+          ipAddress,
+          userAgent,
+          isActive: 1,
+          createdAt: Date.now(),
+          expiresAt: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
+        })
+        .returning();
+      return session;
+    } catch (error) {
+      console.error("Error creating user session:", error);
+      throw error;
+    }
   }
 
   async validateSession(sessionToken: string): Promise<UserSession | undefined> {
-    return mockSessions.find(s => s.sessionToken === sessionToken && s.isActive === 1);
+    try {
+      const [session] = await db
+        .select()
+        .from(userSessions)
+        .where(
+          and(
+            eq(userSessions.sessionToken, sessionToken),
+            eq(userSessions.isActive, 1)
+          )
+        );
+      return session;
+    } catch (error) {
+      console.error("Error validating session:", error);
+      return undefined;
+    }
   }
 
   async getAllUsers(): Promise<User[]> {
-    return Array.from(mockUsers.values());
+    try {
+      const result = await db.select().from(users);
+      return result;
+    } catch (error) {
+      console.error("Error fetching all users:", error);
+      return [];
+    }
   }
 
   async deleteUser(userId: string): Promise<void> {
-    mockUsers.delete(userId);
+    try {
+      await db
+        .delete(users)
+        .where(eq(users.id, userId));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      throw error;
+    }
   }
 
-  async createNotification(notification: InsertNotification): Promise<Notification> {
-    const newNotification: Notification = {
-      id: mockNotifications.length + 1,
-      ...notification,
-      createdAt: Date.now(),
-    };
-    mockNotifications.push(newNotification);
-    return newNotification;
+  async createNotification(notificationData: InsertNotification): Promise<Notification> {
+    try {
+      const [notification] = await db
+        .insert(notifications)
+        .values({
+          ...notificationData,
+          createdAt: Date.now(),
+        })
+        .returning();
+      return notification;
+    } catch (error) {
+      console.error("Error creating notification:", error);
+      throw error;
+    }
   }
 
   async getUserNotifications(userId: string): Promise<Notification[]> {
-    return mockNotifications.filter(n => n.userId === userId);
+    try {
+      const result = await db
+        .select()
+        .from(notifications)
+        .where(eq(notifications.userId, userId))
+        .orderBy(desc(notifications.createdAt));
+      return result;
+    } catch (error) {
+      console.error("Error fetching user notifications:", error);
+      return [];
+    }
   }
 
   async markNotificationAsRead(id: number): Promise<void> {
-    const notification = mockNotifications.find(n => n.id === id);
-    if (notification) {
-      notification.isRead = 1;
+    try {
+      await db
+        .update(notifications)
+        .set({ isRead: 1 })
+        .where(eq(notifications.id, id));
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      throw error;
     }
   }
 
   async markAllNotificationsAsRead(userId: string): Promise<void> {
-    mockNotifications.forEach(n => {
-      if (n.userId === userId) {
-        n.isRead = 1;
-      }
-    });
+    try {
+      await db
+        .update(notifications)
+        .set({ isRead: 1 })
+        .where(eq(notifications.userId, userId));
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+      throw error;
+    }
   }
 
   async deleteAllNotifications(userId: string): Promise<void> {
-    for (let i = mockNotifications.length - 1; i >= 0; i--) {
-      if (mockNotifications[i].userId === userId) {
-        mockNotifications.splice(i, 1);
-      }
+    try {
+      await db
+        .delete(notifications)
+        .where(eq(notifications.userId, userId));
+    } catch (error) {
+      console.error("Error deleting all notifications:", error);
+      throw error;
     }
   }
 }
