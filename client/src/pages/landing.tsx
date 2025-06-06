@@ -85,7 +85,7 @@ export default function Landing() {
                 <Button 
                   size="lg" 
                   onClick={handleSignup}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-lg px-8 py-3"
+                  className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3"
                 >
                   {t('getStarted')}
                 </Button>

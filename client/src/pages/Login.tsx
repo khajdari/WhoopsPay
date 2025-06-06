@@ -176,17 +176,25 @@ export default function Login() {
               <div className="mb-4 pb-4 border-b border-gray-200">
                 <p className="text-xs text-gray-500 mb-2">Demo accounts for testing:</p>
                 <div className="flex flex-wrap gap-1">
-                  {testAccounts.map((account: any) => (
-                    <button
-                      key={account.id}
-                      type="button"
-                      onClick={() => fillTestAccount(account.id, 'password123')}
-                      className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 border"
-                      title={`Click to autofill: ${account.id}`}
-                    >
-                      {account.id}
-                    </button>
-                  ))}
+                  {testAccounts.map((account: any) => {
+                    const passwords: { [key: string]: string } = {
+                      "@admin_maria": "admin2024",
+                      "@sarah_wilson": "sarah123", 
+                      "@james_chen": "james2024",
+                      "@elena_kowalski": "elena456"
+                    };
+                    return (
+                      <button
+                        key={account.id}
+                        type="button"
+                        onClick={() => fillTestAccount(account.id, passwords[account.id] || 'password123')}
+                        className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 border"
+                        title={`Click to autofill: ${account.id} (password: ${passwords[account.id]})`}
+                      >
+                        {account.id}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
