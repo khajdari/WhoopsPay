@@ -8,10 +8,12 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { NotificationsModal } from "@/components/notifications-modal";
+import { LanguageSelector } from "@/components/language-selector";
 import { Bell, ChevronDown, Menu, CreditCard } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
@@ -30,6 +32,7 @@ import { Link, useLocation } from "wouter";
 export function Header() {
   const { user, logout, isAuthenticated } = useAuth(); // Authentication state and controls
   const { unreadCount, markAllAsRead, clearAll } = useNotifications(); // Notification management
+  const { t } = useI18n(); // Translation system
   const [location] = useLocation(); // Current page location
   const [showNotifications, setShowNotifications] = useState(false); // Notification modal state
 
@@ -41,12 +44,12 @@ export function Header() {
   };
 
   const navigation = user?.isAdmin ? [
-    { name: "Administration", href: "/administration", current: location === "/administration" },
+    { name: t('admin'), href: "/administration", current: location === "/administration" },
   ] : [
-    { name: "Summary", href: "/summary", current: location === "/" || location === "/summary" },
-    { name: "Transfer", href: "/transfer", current: location === "/transfer" },
-    { name: "Transactions", href: "/transactions", current: location === "/transactions" },
-    { name: "Money", href: "/money", current: location === "/money" },
+    { name: t('dashboard'), href: "/summary", current: location === "/" || location === "/summary" },
+    { name: t('sendMoney'), href: "/transfer", current: location === "/transfer" },
+    { name: t('transactions'), href: "/transactions", current: location === "/transactions" },
+    { name: t('wallet'), href: "/money", current: location === "/money" },
   ];
 
   return (
@@ -84,6 +87,9 @@ export function Header() {
 
           {/* User Profile */}
           <div className="flex items-center space-x-4">
+            {/* Language Selector */}
+            <LanguageSelector />
+            
             <Button 
               variant="ghost" 
               size="icon"
@@ -119,7 +125,7 @@ export function Header() {
                     onClick={() => window.location.href = '/profile'}
                     className="w-full text-left cursor-pointer"
                   >
-                    Profile
+                    {t('profile')}
                   </button>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -127,12 +133,12 @@ export function Header() {
                     onClick={() => window.location.href = '/account'}
                     className="w-full text-left cursor-pointer"
                   >
-                    Account
+                    {t('settings')}
                   </button>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={handleLogout}>
-                  Log Out
+                  {t('logout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
