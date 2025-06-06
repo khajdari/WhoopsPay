@@ -582,6 +582,67 @@ export class DatabaseStorage implements IStorage {
       throw error;
     }
   }
+
+  // Money Requests operations for Juice Shop integration
+  async createMoneyRequest(requestData: InsertMoneyRequest): Promise<MoneyRequest> {
+    try {
+      const [request] = await db
+        .insert(moneyRequests)
+        .values({
+          ...requestData,
+          createdAt: Date.now()
+        })
+        .returning();
+      return request;
+    } catch (error) {
+      console.error("Error creating money request:", error);
+      throw error;
+    }
+  }
+
+  async getMoneyRequest(id: number): Promise<MoneyRequest | undefined> {
+    try {
+      const [request] = await db.select().from(moneyRequests).where(eq(moneyRequests.id, id));
+      return request;
+    } catch (error) {
+      console.error("Error fetching money request:", error);
+      return undefined;
+    }
+  }
+
+  async getPendingMoneyRequests(userId: string): Promise<MoneyRequest[]> {
+    try {
+      const result = await db
+        .select()
+        .from(moneyRequests)
+        .where(and(
+          eq(moneyRequests.toUserId, userId),
+          eq(moneyRequests.status, "pending")
+        ))
+        .orderBy(desc(moneyRequests.createdAt));
+      return result;
+    } catch (error) {
+      console.error("Error fetching pending money requests:", error);
+      return [];
+    }
+  }
+
+  async updateMoneyRequestStatus(id: number, status: string): Promise<MoneyRequest> {
+    try {
+      const [request] = await db
+        .update(moneyRequests)
+        .set({ 
+          status,
+          respondedAt: Date.now() 
+        })
+        .where(eq(moneyRequests.id, id))
+        .returning();
+      return request;
+    } catch (error) {
+      console.error("Error updating money request status:", error);
+      throw error;
+    }
+  }
 }
 
 export const storage = new DatabaseStorage();
