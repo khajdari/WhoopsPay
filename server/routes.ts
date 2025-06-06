@@ -1921,6 +1921,247 @@ export async function registerRoutes(app: Express): Promise<Server> {
     `);
   });
 
+  // ===== ISSUE REPORTING SYSTEM =====
+  
+  /**
+   * @swagger
+   * /api/issues:
+   *   post:
+   *     summary: Create new issue report (User functionality)
+   *     description: "Users can submit issue reports for admin monitoring"
+   *     tags: [Issue Reports]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               title:
+   *                 type: string
+   *               description:
+   *                 type: string
+   *               category:
+   *                 type: string
+   *                 enum: ['technical', 'payment', 'security', 'account', 'other']
+   *               priority:
+   *                 type: string
+   *                 enum: ['low', 'medium', 'high', 'critical']
+   *     responses:
+   *       200:
+   *         description: Issue report created successfully
+   *       401:
+   *         description: Unauthorized
+   */
+  app.post("/api/issues", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      const { title, description, category, priority } = req.body;
+      
+      if (!title || !description || !category || !priority) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+      
+      const ipAddress = req.ip || req.connection.remoteAddress;
+      const userAgent = req.headers['user-agent'];
+      
+      const report = await storage.createIssueReport({
+        userId,
+        title,
+        description,
+        category,
+        priority,
+        status: 'open',
+        ipAddress,
+        userAgent,
+      });
+      
+      logStore.addExpressLog(`[ISSUE-REPORT] User ${userId} created issue report: ${title}`);
+      
+      res.json({
+        message: "Issue report submitted successfully",
+        reportId: report.id
+      });
+    } catch (error) {
+      console.error('Issue report creation error:', error);
+      res.status(500).json({
+        error: 'Failed to create issue report'
+      });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/issues:
+   *   get:
+   *     summary: Get user's issue reports
+   *     description: "Users can view their own issue reports"
+   *     tags: [Issue Reports]
+   *     responses:
+   *       200:
+   *         description: List of user's issue reports
+   *       401:
+   *         description: Unauthorized
+   */
+  app.get("/api/issues", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      const reports = await storage.getUserIssueReports(userId);
+      
+      res.json(reports);
+    } catch (error) {
+      console.error('Error fetching user issue reports:', error);
+      res.status(500).json({
+        error: 'Failed to fetch issue reports'
+      });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/admin/issues:
+   *   get:
+   *     summary: Get all issue reports (Admin only)
+   *     description: "🚨 VULNERABILITY: Admin can view all issue reports for monitoring"
+   *     tags: [Admin, Issue Reports]
+   *     responses:
+   *       200:
+   *         description: List of all issue reports
+   *       401:
+   *         description: Unauthorized
+   *       403:
+   *         description: Admin access required
+   */
+  app.get("/api/admin/issues", requireAdmin, async (req, res) => {
+    try {
+      const reports = await storage.getAllIssueReports();
+      
+      logStore.addExpressLog(`[ADMIN-ISSUES] Retrieved ${reports.length} issue reports for admin monitoring`);
+      
+      res.json(reports);
+    } catch (error) {
+      console.error('Error fetching admin issue reports:', error);
+      res.status(500).json({
+        error: 'Failed to fetch issue reports'
+      });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/admin/issues/{id}/status:
+   *   put:
+   *     summary: Update issue report status (Admin only)
+   *     description: "Admin can update issue report status and add notes"
+   *     tags: [Admin, Issue Reports]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               status:
+   *                 type: string
+   *                 enum: ['open', 'in_progress', 'resolved', 'closed']
+   *               adminNotes:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Issue report updated successfully
+   *       404:
+   *         description: Issue report not found
+   */
+  app.put("/api/admin/issues/:id/status", requireAdmin, async (req: any, res) => {
+    try {
+      const reportId = parseInt(req.params.id);
+      const { status, adminNotes } = req.body;
+      const adminUserId = req.user?.id;
+      
+      if (!status) {
+        return res.status(400).json({ message: "Status is required" });
+      }
+      
+      const updatedReport = await storage.updateIssueReportStatus(reportId, status, adminNotes);
+      
+      logStore.addExpressLog(`[ADMIN-ISSUE-UPDATE] Admin ${adminUserId} updated issue #${reportId} to status: ${status}`);
+      
+      res.json({
+        message: "Issue report updated successfully",
+        report: updatedReport
+      });
+    } catch (error) {
+      console.error('Error updating issue report:', error);
+      if (error.message === 'Issue report not found') {
+        res.status(404).json({ message: "Issue report not found" });
+      } else {
+        res.status(500).json({ error: 'Failed to update issue report' });
+      }
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/admin/issues/{id}/assign:
+   *   put:
+   *     summary: Assign issue report to admin (Admin only)
+   *     description: "Admin can assign issue reports to specific administrators"
+   *     tags: [Admin, Issue Reports]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               assignedTo:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Issue report assigned successfully
+   *       404:
+   *         description: Issue report not found
+   */
+  app.put("/api/admin/issues/:id/assign", requireAdmin, async (req: any, res) => {
+    try {
+      const reportId = parseInt(req.params.id);
+      const { assignedTo } = req.body;
+      const adminUserId = req.user?.id;
+      
+      if (!assignedTo) {
+        return res.status(400).json({ message: "Assigned to field is required" });
+      }
+      
+      const updatedReport = await storage.assignIssueReport(reportId, assignedTo);
+      
+      logStore.addExpressLog(`[ADMIN-ISSUE-ASSIGN] Admin ${adminUserId} assigned issue #${reportId} to ${assignedTo}`);
+      
+      res.json({
+        message: "Issue report assigned successfully",
+        report: updatedReport
+      });
+    } catch (error) {
+      console.error('Error assigning issue report:', error);
+      if (error.message === 'Issue report not found') {
+        res.status(404).json({ message: "Issue report not found" });
+      } else {
+        res.status(500).json({ error: 'Failed to assign issue report' });
+      }
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -25,6 +25,7 @@ import { Footer } from "@/components/footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { AdminIssueMonitor } from "@/components/AdminIssueMonitor";
 import { Eye, EyeOff } from "lucide-react";
 
 /**
@@ -133,46 +134,8 @@ export default function Admin() {
             </CardContent>
           </Card>
 
-          {/* Transactions Overview */}
-          <Card>
-            <CardHeader>
-              <CardTitle>All Transactions ({transactions?.length || 0})</CardTitle>
-              <CardDescription>
-                Including XSS payloads and test data
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {transactions?.map((transaction: any) => (
-                  <div key={transaction.id} className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge 
-                        variant={transaction.status === 'completed' ? 'default' : 'secondary'}
-                      >
-                        {transaction.status}
-                      </Badge>
-                      <span className="font-semibold">${transaction.amount}</span>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-1">
-                      From: {transaction.fromUserId} → To: {transaction.toUserId}
-                    </p>
-                    <div className="text-sm">
-                      Description: 
-                      <span 
-                        className="ml-1 p-1 bg-yellow-100 border border-yellow-300 rounded text-xs"
-                        dangerouslySetInnerHTML={{ __html: transaction.description }}
-                      />
-                    </div>
-                    {(transaction.description.includes('<script>') || transaction.description.includes('<img')) && (
-                      <Badge variant="destructive" className="mt-2">
-                        ⚠️ Contains XSS Payload
-                      </Badge>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          {/* Issue Reports Monitor */}
+          <AdminIssueMonitor />
         </div>
 
         <div className="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg">
