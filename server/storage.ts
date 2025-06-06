@@ -28,6 +28,7 @@ import {
   paymentMethods,
   userSessions,
   notifications,
+  issueReports,
   type User,
   type UpsertUser,
   type Transaction,
@@ -37,6 +38,8 @@ import {
   type UserSession,
   type Notification,
   type InsertNotification,
+  type IssueReport,
+  type InsertIssueReport,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, or } from "drizzle-orm";
@@ -89,6 +92,14 @@ export interface IStorage {
   markNotificationAsRead(id: number): Promise<void>;
   markAllNotificationsAsRead(userId: string): Promise<void>;
   deleteAllNotifications(userId: string): Promise<void>;
+  
+  // Issue Reports operations
+  createIssueReport(report: InsertIssueReport): Promise<IssueReport>;
+  getAllIssueReports(): Promise<IssueReport[]>;
+  getUserIssueReports(userId: string): Promise<IssueReport[]>;
+  getIssueReport(id: number): Promise<IssueReport | undefined>;
+  updateIssueReportStatus(id: number, status: string, adminNotes?: string): Promise<IssueReport>;
+  assignIssueReport(id: number, assignedTo: string): Promise<IssueReport>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -460,6 +471,111 @@ export class DatabaseStorage implements IStorage {
         .where(eq(notifications.userId, userId));
     } catch (error) {
       console.error("Error deleting all notifications:", error);
+      throw error;
+    }
+  }
+
+  // Issue Reports operations
+  async createIssueReport(reportData: InsertIssueReport): Promise<IssueReport> {
+    try {
+      const [report] = await db
+        .insert(issueReports)
+        .values({
+          ...reportData,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+        })
+        .returning();
+      return report;
+    } catch (error) {
+      console.error("Error creating issue report:", error);
+      throw error;
+    }
+  }
+
+  async getAllIssueReports(): Promise<IssueReport[]> {
+    try {
+      const result = await db.select().from(issueReports).orderBy(issueReports.createdAt);
+      return result;
+    } catch (error) {
+      console.error("Error fetching all issue reports:", error);
+      return [];
+    }
+  }
+
+  async getUserIssueReports(userId: string): Promise<IssueReport[]> {
+    try {
+      const result = await db
+        .select()
+        .from(issueReports)
+        .where(eq(issueReports.userId, userId))
+        .orderBy(issueReports.createdAt);
+      return result;
+    } catch (error) {
+      console.error("Error fetching user issue reports:", error);
+      return [];
+    }
+  }
+
+  async getIssueReport(id: number): Promise<IssueReport | undefined> {
+    try {
+      const [report] = await db.select().from(issueReports).where(eq(issueReports.id, id));
+      return report;
+    } catch (error) {
+      console.error("Error fetching issue report:", error);
+      return undefined;
+    }
+  }
+
+  async updateIssueReportStatus(id: number, status: string, adminNotes?: string): Promise<IssueReport> {
+    try {
+      const updateData: any = {
+        status,
+        updatedAt: Date.now(),
+      };
+      
+      if (adminNotes) {
+        updateData.adminNotes = adminNotes;
+      }
+      
+      if (status === 'resolved') {
+        updateData.resolvedAt = Date.now();
+      }
+      
+      const [report] = await db
+        .update(issueReports)
+        .set(updateData)
+        .where(eq(issueReports.id, id))
+        .returning();
+      
+      if (!report) {
+        throw new Error('Issue report not found');
+      }
+      return report;
+    } catch (error) {
+      console.error("Error updating issue report status:", error);
+      throw error;
+    }
+  }
+
+  async assignIssueReport(id: number, assignedTo: string): Promise<IssueReport> {
+    try {
+      const [report] = await db
+        .update(issueReports)
+        .set({
+          assignedTo,
+          status: 'in_progress',
+          updatedAt: Date.now(),
+        })
+        .where(eq(issueReports.id, id))
+        .returning();
+      
+      if (!report) {
+        throw new Error('Issue report not found');
+      }
+      return report;
+    } catch (error) {
+      console.error("Error assigning issue report:", error);
       throw error;
     }
   }

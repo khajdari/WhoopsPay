@@ -98,6 +98,27 @@ export function initializeDatabase() {
     );
   `);
 
+  // Create issue_reports table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS issue_reports (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT NOT NULL,
+      category TEXT NOT NULL,
+      priority TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'open',
+      admin_notes TEXT,
+      assigned_to TEXT,
+      attachment_url TEXT,
+      user_agent TEXT,
+      ip_address TEXT,
+      created_at INTEGER,
+      updated_at INTEGER,
+      resolved_at INTEGER
+    );
+  `);
+
   db.close();
   console.log('Database tables initialized successfully');
 }
