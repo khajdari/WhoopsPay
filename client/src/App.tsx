@@ -71,6 +71,7 @@ function Router() {
           <Route path="/administration" component={Administration} />
           <Route path="/profile" component={Profile} />
           <Route path="/account" component={Settings} />
+          <Route path="/issues" component={IssueReporting} />
         </>
       )}
 
