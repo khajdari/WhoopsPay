@@ -293,9 +293,7 @@ export async function seedMockData() {
       type: "card",
       cardName: "John Doe",
       cardNumber: "4532-1234-5678-9012", // VULNERABLE: Unencrypted card
-      expiryDate: "12/25",
-      cvv: "123", // VULNERABLE: Stored CVV
-      isDefault: true,
+      isDefault: 1,
     });
 
     await storage.addPaymentMethod({
@@ -304,7 +302,7 @@ export async function seedMockData() {
       bankName: "Chase Bank",
       accountNumber: "987654321", // VULNERABLE: Unencrypted account
       iban: "US64SVBKUS6S3300958879",
-      isDefault: false,
+      isDefault: 0,
     });
 
     await storage.addPaymentMethod({
