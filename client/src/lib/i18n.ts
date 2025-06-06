@@ -124,6 +124,16 @@ interface Translations {
   trustedCommunityDesc: TranslationKey;
   footerText: TranslationKey;
   
+  // Additional landing page features
+  featuresTitle: TranslationKey;
+  featuresSubtitle: TranslationKey;
+  instantTransfers: TranslationKey;
+  instantTransfersDesc: TranslationKey;
+  secureProtection: TranslationKey;
+  secureProtectionDesc: TranslationKey;
+  mobileApp: TranslationKey;
+  mobileAppDesc: TranslationKey;
+  
   // Login page
   signInTitle: TranslationKey;
   welcomeBack: TranslationKey;
