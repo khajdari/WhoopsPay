@@ -182,6 +182,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== TEST ACCOUNTS ENDPOINT =====
+  
+  /**
+   * @swagger
+   * /api/test-accounts:
+   *   get:
+   *     summary: Get test accounts for autofill (VULNERABLE - Data Exposure)
+   *     description: "🚨 VULNERABILITY: Exposes user credentials for educational testing"
+   *     tags: [Authentication]
+   *     responses:
+   *       200:
+   *         description: List of test accounts with credentials
+   */
+  app.get("/api/test-accounts", async (req, res) => {
+    try {
+      // VULNERABILITY: Exposing user credentials for educational purposes
+      const testAccounts = await storage.getTestAccounts();
+      logStore.addExpressLog(`[TEST-ACCOUNTS] Retrieved ${testAccounts.length} test accounts for autofill`);
+      
+      res.json(testAccounts);
+    } catch (error) {
+      console.error('Test accounts fetch error:', error);
+      res.status(500).json({
+        error: 'Failed to fetch test accounts'
+      });
+    }
+  });
+
   // ===== EXTERNAL PAYMENT INTEGRATION ROUTES =====
   
   /**
