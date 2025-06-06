@@ -192,9 +192,46 @@ export default function Login() {
     loginMutation.mutate(data);
   };
 
+  // Autofill form with selected test account
+  const fillTestAccount = (username: string, password: string) => {
+    loginForm.setValue('username', username);
+    loginForm.setValue('password', password);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md">
+      <div className="w-full max-w-md space-y-6">
+        {/* Test Accounts Section */}
+        {testAccounts && Array.isArray(testAccounts) && testAccounts.length > 0 && (
+          <Card className="border-amber-200 bg-amber-50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg text-amber-800">🧪 Test Accounts</CardTitle>
+              <CardDescription className="text-amber-700">
+                Quick autofill with real database accounts for testing
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {testAccounts.slice(0, 3).map((account: any, index: number) => (
+                <Button
+                  key={account.id}
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start text-left border-amber-300 hover:bg-amber-100"
+                  onClick={() => fillTestAccount(account.username, account.password)}
+                >
+                  <div className="flex flex-col items-start">
+                    <span className="font-medium">{account.username}</span>
+                    <span className="text-xs text-gray-600">
+                      {account.isAdmin ? 'Admin Account' : 'User Account'} • Balance: £{account.balance}
+                    </span>
+                  </div>
+                </Button>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
+        <Card className="w-full">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex items-center justify-center space-x-2">
             <CreditCard className="h-8 w-8 text-blue-600" />
@@ -259,7 +296,8 @@ export default function Login() {
             </p>
           </div>
         </CardContent>
-      </Card>
+        </Card>
+      </div>
 
       {/* External Payment Modal */}
       <ExternalPaymentModal 
