@@ -47,7 +47,7 @@ export function Header() {
     { name: t('admin'), href: "/administration", current: location === "/administration" },
     { name: "Issue Reports", href: "/issues", current: location === "/issues" },
   ] : [
-    { name: t('dashboard'), href: "/summary", current: location === "/" || location === "/summary" },
+    { name: t('dashboard'), href: "/dashboard", current: location === "/" || location === "/dashboard" },
     { name: t('sendMoney'), href: "/transfer", current: location === "/transfer" },
     { name: t('transactions'), href: "/transactions", current: location === "/transactions" },
     { name: t('wallet'), href: "/money", current: location === "/money" },
