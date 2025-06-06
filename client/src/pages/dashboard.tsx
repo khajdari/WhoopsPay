@@ -369,6 +369,8 @@ export default function Dashboard() {
       {showSendModal && (
         <SendMoneyModal onClose={() => setShowSendModal(false)} />
       )}
+      
+      <Footer />
     </div>
   );
 }

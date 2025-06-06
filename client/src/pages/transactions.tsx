@@ -19,6 +19,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
 import { TransactionItem } from "@/components/transaction-item";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
