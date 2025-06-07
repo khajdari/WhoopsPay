@@ -60,20 +60,7 @@ export function AddCardModal({ onClose }: AddCardModalProps) {
 
   const addCardMutation = useMutation({
     mutationFn: async (data: any) => {
-      const response = await fetch("/api/payments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to add card");
-      }
-      
-      return response.json();
+      return apiRequest("/api/payments", "POST", data);
     },
     onSuccess: () => {
       toast({

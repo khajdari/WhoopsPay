@@ -58,13 +58,7 @@ export default function ExternalPayment() {
   // Approve payment mutation
   const approveMutation = useMutation({
     mutationFn: async () => {
-      const response = await fetch(`/api/external/payment/${transactionId}/approve`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return await response.json();
+      return apiRequest(`/api/external/payment/${transactionId}/approve`, "POST");
     },
     onSuccess: (data) => {
       toast({
