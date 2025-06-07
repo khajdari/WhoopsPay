@@ -261,7 +261,7 @@ app.get('/', (req, res) => {
   res.send(html);
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '127.0.0.1', () => {
   console.log('Juice Shop server running on port ' + PORT);
   console.log('Visit: http://localhost:' + PORT);
 });

@@ -43,7 +43,7 @@ export function LanguageSelector() {
   const { language, setLanguage, t } = useI18n();
 
   const languages = [
-    { code: 'en-GB' as Language, name: 'English (UK)', flag: '🇬🇧', fallback: 'EN' },
+    { code: 'en-GB' as Language, name: 'English', flag: '🇬🇧', fallback: 'EN' },
     { code: 'el-GR' as Language, name: 'Ελληνικά', flag: '🇬🇷', fallback: 'GR' }
   ];
 
@@ -58,13 +58,13 @@ export function LanguageSelector() {
               <img 
                 src={ukFlag} 
                 alt="UK Flag" 
-                className="w-full h-full object-contain scale-110"
+                className="w-full h-full object-contain scale-150"
               />
             ) : (
               <img 
                 src={grFlag} 
                 alt="Greek Flag" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover scale-110"
               />
             )}
           </div>
