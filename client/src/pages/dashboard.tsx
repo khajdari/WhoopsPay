@@ -719,16 +719,17 @@ export default function Dashboard() {
                       <Skeleton className="h-24 w-full rounded-xl" />
                     </div>
                   ) : paymentMethods && paymentMethods.length > 0 ? (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {paymentMethods.map((method: any) => (
-                        <PaymentCard
-                          key={method.id}
-                          type={method.type}
-                          cardNumber={method.cardNumber}
-                          cardName={method.cardName}
-                          bankName={method.bankName}
-                          accountNumber={method.accountNumber}
-                        />
+                        <div key={method.id} className="h-[172px] flex items-center justify-center">
+                          <PaymentCard
+                            type={method.type}
+                            cardNumber={method.cardNumber}
+                            cardName={method.cardName}
+                            bankName={method.bankName}
+                            accountNumber={method.accountNumber}
+                          />
+                        </div>
                       ))}
                     </div>
                   ) : (

@@ -157,7 +157,8 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
         style={{ 
           perspective: '1000px',
           width: '286px',
-          height: '172px'
+          height: '172px',
+          overflow: 'visible'
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -172,7 +173,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
         >
           {/* Front of bank account card */}
           <div 
-            className={`absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden transform ${isHovered ? 'scale-105' : ''} transition-transform duration-300`}
+            className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
             style={{ backfaceVisibility: 'hidden' }}
           >
             
