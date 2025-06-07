@@ -24,13 +24,7 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
 
   const submitIssueMutation = useMutation({
     mutationFn: async (data: any) => {
-      return apiRequest("/api/issues", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      return apiRequest("/api/issues", "POST", data);
     },
     onSuccess: () => {
       toast({
