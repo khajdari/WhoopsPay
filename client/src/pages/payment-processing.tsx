@@ -63,28 +63,14 @@ export default function PaymentProcessing() {
         try {
           console.log('Creating transaction with params:', { transactionId, amount, description });
           
-          const response = await fetch("/api/external/payment/initiate", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              amount: parseFloat(amount || '0'),
-              orderId: transactionId,
-              source: 'juice-shop',
-              description: description || 'External payment',
-              returnUrl: returnUrl || '',
-              cancelUrl: cancelUrl || ''
-            })
+          const result = await apiRequest("/api/external/payment/initiate", "POST", {
+            amount: parseFloat(amount || '0'),
+            orderId: transactionId,
+            source: 'juice-shop',
+            description: description || 'External payment',
+            returnUrl: returnUrl || '',
+            cancelUrl: cancelUrl || ''
           });
-          
-          if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Transaction creation failed:', response.status, errorText);
-            throw new Error(`Failed to create transaction: ${response.status}`);
-          }
-          
-          const result = await response.json();
           console.log('Transaction created successfully:', result);
           
           // Use the actual transaction ID from the server response
