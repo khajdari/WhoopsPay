@@ -88,13 +88,27 @@ export default function Transactions() {
     if (filterType === "sent" && transaction.fromUserId !== user?.id) return false;
     if (filterType === "received" && transaction.toUserId !== user?.id) return false;
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+      const query = searchQuery.toLowerCase().trim();
+      
+      // Search by user ID if query starts with @
+      if (query.startsWith('@')) {
+        const userQuery = query.substring(1);
+        return (
+          transaction.fromUserId?.toLowerCase().includes(userQuery) ||
+          transaction.toUserId?.toLowerCase().includes(userQuery)
+        );
+      }
+      
+      // Search by amount if query is a number
+      if (!isNaN(parseFloat(query)) && isFinite(parseFloat(query))) {
+        return transaction.amount?.toString().includes(query);
+      }
+      
+      // Search by transaction type and description for text queries
       return (
         transaction.description?.toLowerCase().includes(query) ||
-        transaction.amount?.toString().includes(query) ||
         transaction.status?.toLowerCase().includes(query) ||
-        transaction.fromUserId?.toLowerCase().includes(query) ||
-        transaction.toUserId?.toLowerCase().includes(query)
+        transaction.type?.toLowerCase().includes(query)
       );
     }
     return true;
