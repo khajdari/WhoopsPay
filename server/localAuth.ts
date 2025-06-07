@@ -39,13 +39,18 @@ export function getSession() {
  * Essential for protecting authenticated routes throughout the application.
  */
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
-  // Check if session exists and contains user ID
-  if (req.session && req.session.userId) {
-    req.user = { id: req.session.userId }; // Attach user to request object
-    return next();
+  try {
+    // Check if session exists and contains user ID
+    if (req.session && req.session.userId) {
+      req.user = { id: req.session.userId }; // Attach user to request object
+      return next();
+    }
+    
+    return res.status(401).json({ message: "Unauthorized - Please log in" });
+  } catch (error) {
+    console.error("Authentication middleware error:", error);
+    return res.status(500).json({ message: "Authentication error" });
   }
-  
-  return res.status(401).json({ message: "Unauthorized - Please log in" });
 };
 
 // Setup simple local authentication routes

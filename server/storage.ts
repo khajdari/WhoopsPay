@@ -498,6 +498,7 @@ export class DatabaseStorage implements IStorage {
   // Issue Reports operations
   async createIssueReport(reportData: InsertIssueReport): Promise<IssueReport> {
     try {
+      logStore.addDbLog(`Creating issue report for user: ${reportData.userId} - ${reportData.title}`);
       const [report] = await db
         .insert(issueReports)
         .values({
@@ -506,8 +507,10 @@ export class DatabaseStorage implements IStorage {
           updatedAt: Date.now(),
         })
         .returning();
+      logStore.addDbLog(`Issue report created successfully: ID ${report.id}`);
       return report;
     } catch (error) {
+      logStore.addDbLog(`Error creating issue report: ${error}`);
       console.error("Error creating issue report:", error);
       throw error;
     }
