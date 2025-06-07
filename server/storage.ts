@@ -47,6 +47,7 @@ import {
 import { db } from "./db";
 import { eq, desc, and, or } from "drizzle-orm";
 import bcrypt from "bcrypt";
+import { logStore } from "./adminMiddleware";
 
 // Database-only storage - all data operations use SQLite
 
@@ -213,6 +214,7 @@ export class DatabaseStorage implements IStorage {
 
   async createTransaction(transactionData: InsertTransaction): Promise<Transaction> {
     try {
+      logStore.addDbLog(`Creating transaction: ${transactionData.fromUserId} -> ${transactionData.toUserId} (${transactionData.amount})`);
       const [transaction] = await db
         .insert(transactions)
         .values({
@@ -220,8 +222,10 @@ export class DatabaseStorage implements IStorage {
           createdAt: Date.now(),
         })
         .returning();
+      logStore.addDbLog(`Transaction created successfully: ID ${transaction.id}`);
       return transaction;
     } catch (error) {
+      logStore.addDbLog(`Error creating transaction: ${error}`);
       console.error("Error creating transaction:", error);
       throw error;
     }
@@ -229,6 +233,7 @@ export class DatabaseStorage implements IStorage {
 
   async getUserTransactions(userId: string): Promise<Transaction[]> {
     try {
+      logStore.addDbLog(`Fetching transactions for user: ${userId}`);
       const result = await db
         .select()
         .from(transactions)
@@ -238,8 +243,10 @@ export class DatabaseStorage implements IStorage {
             eq(transactions.toUserId, userId)
           )
         );
+      logStore.addDbLog(`Found ${result.length} transactions for user ${userId}`);
       return result;
     } catch (error) {
+      logStore.addDbLog(`Error fetching user transactions: ${error}`);
       console.error("Error fetching user transactions:", error);
       return [];
     }
