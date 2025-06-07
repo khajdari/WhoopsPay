@@ -149,20 +149,32 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
     );
   }
 
-  // Bank cheque design
+  // Bank account design with flip animation
   return (
     <div className="flex justify-center">
       <div 
         className="relative cursor-pointer group"
         style={{ 
+          perspective: '1000px',
           width: '286px',
           height: '172px'
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onClick={() => setIsFlipped(!isFlipped)}
       >
-        <div className={`relative w-full h-full transition-all duration-300 transform ${isHovered ? 'scale-105' : ''}`}>
-          <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden">
+        <div 
+          className="relative w-full h-full transition-transform duration-700"
+          style={{
+            transformStyle: 'preserve-3d',
+            transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
+          }}
+        >
+          {/* Front of bank account card */}
+          <div 
+            className={`absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden transform ${isHovered ? 'scale-105' : ''} transition-transform duration-300`}
+            style={{ backfaceVisibility: 'hidden' }}
+          >
             
             {/* Cheque security pattern background */}
             <div className="absolute inset-0 opacity-5">
@@ -216,7 +228,60 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             
             {/* Cheque perforations */}
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-blue-300 to-transparent opacity-30"></div>
+          </div>
+
+          {/* Back of bank account card */}
+          <div 
+            className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
+            style={{
+              backfaceVisibility: 'hidden',
+              transform: 'rotateY(180deg)'
+            }}
+          >
+            {/* Security pattern background */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute top-0 left-0 w-full h-full" 
+                   style={{
+                     backgroundImage: `repeating-linear-gradient(-45deg, transparent, transparent 8px, #22c55e 8px, #22c55e 9px)`,
+                   }}>
+              </div>
+            </div>
+
+            {/* Header */}
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <div className="text-xs font-bold text-green-800 uppercase tracking-wider">Account Details</div>
+                <div className="text-xs text-gray-600">Savings Account Information</div>
+              </div>
+              <Building2 className="w-6 h-6 text-green-600" />
+            </div>
             
+            {/* Account Information */}
+            <div className="space-y-2">
+              <div className="bg-white/60 border border-green-200 rounded p-2">
+                <div className="text-xs text-gray-500">Full Account Number</div>
+                <div className="font-mono text-xs font-bold text-green-800">
+                  {accountNumber || '1234567890123456'}
+                </div>
+              </div>
+              
+              <div className="bg-white/60 border border-green-200 rounded p-2">
+                <div className="text-xs text-gray-500">Sort Code</div>
+                <div className="font-mono text-xs font-bold text-green-800">20-00-00</div>
+              </div>
+              
+              <div className="bg-white/60 border border-green-200 rounded p-2">
+                <div className="text-xs text-gray-500">Branch</div>
+                <div className="text-xs font-semibold text-green-800">Main Street Branch</div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="absolute bottom-2 left-4 right-4">
+              <div className="text-xs text-gray-500 text-center">
+                Interest Rate: 2.5% APY | FDIC Insured
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -704,7 +704,12 @@ export default function Dashboard() {
             <div className="lg:col-span-1">
               <Card>
                 <div className="px-6 py-4 border-b border-gray-200">
-                  <h3 className="text-lg font-medium text-gray-900">Payment Methods</h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium text-gray-900">Payment Methods</h3>
+                    <div className="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded-full border border-blue-200">
+                      💳 Click cards to flip
+                    </div>
+                  </div>
                 </div>
                 
                 <div className="p-6 space-y-4">
