@@ -58,7 +58,7 @@ docker-compose ps
 ```bash
 NODE_ENV=production
 PORT=5000
-HOST=0.0.0.0
+HOST=127.0.0.1
 DATABASE_URL=file:./server/database.db
 SESSION_SECRET=your-secure-session-secret-key
 JUICE_SHOP_URL=http://juice-shop:3000
