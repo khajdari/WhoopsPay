@@ -33,7 +33,7 @@ export function Header() {
   const { user, logout, isAuthenticated } = useAuth(); // Authentication state and controls
   const { unreadCount, markAllAsRead, clearAll } = useNotifications(); // Notification management
   const { t } = useI18n(); // Translation system
-  const [location] = useLocation(); // Current page location
+  const [location, navigate] = useLocation(); // Current page location and navigation
   const [showNotifications, setShowNotifications] = useState(false); // Notification modal state
 
   /**
@@ -124,20 +124,14 @@ export function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem asChild>
-                  <button 
-                    onClick={() => window.location.href = '/profile'}
-                    className="w-full text-left cursor-pointer"
-                  >
+                  <Link href="/profile" className="w-full cursor-pointer">
                     {t('profile')}
-                  </button>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <button 
-                    onClick={() => window.location.href = '/account'}
-                    className="w-full text-left cursor-pointer"
-                  >
+                  <Link href="/account" className="w-full cursor-pointer">
                     {t('settings')}
-                  </button>
+                  </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={handleLogout}>
