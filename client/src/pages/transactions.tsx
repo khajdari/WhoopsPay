@@ -193,7 +193,7 @@ export default function Transactions() {
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
-                    placeholder="Search by name or amount..."
+                    placeholder="Search: @user for users, numbers for amounts, text for types..."
                     value={searchQuery}
                     onChange={(e) => handleSearchChange(e.target.value)}
                     className="pl-10"

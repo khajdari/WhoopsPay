@@ -109,9 +109,16 @@ export interface IStorage {
 export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
     try {
+      logStore.addDbLog(`Fetching user by ID: ${id}`);
       const [user] = await db.select().from(users).where(eq(users.id, id));
+      if (user) {
+        logStore.addDbLog(`User found: ${user.id}`);
+      } else {
+        logStore.addDbLog(`User not found: ${id}`);
+      }
       return user;
     } catch (error) {
+      logStore.addDbLog(`Error fetching user: ${error}`);
       console.error("Error fetching user:", error);
       return undefined;
     }
@@ -119,6 +126,7 @@ export class DatabaseStorage implements IStorage {
 
   async upsertUser(userData: UpsertUser): Promise<User> {
     try {
+      logStore.addDbLog(`Upserting user: ${userData.id}`);
       const now = Date.now();
       const [user] = await db
         .insert(users)
@@ -134,8 +142,10 @@ export class DatabaseStorage implements IStorage {
           },
         })
         .returning();
+      logStore.addDbLog(`User upserted successfully: ${user.id}`);
       return user;
     } catch (error) {
+      logStore.addDbLog(`Error upserting user: ${error}`);
       console.error("Error upserting user:", error);
       throw error;
     }
