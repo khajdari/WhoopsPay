@@ -61,11 +61,7 @@ export function AdminIssueMonitor() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status, notes }: { id: number; status: string; notes?: string }) => {
-      return apiRequest(`/api/admin/issues/${id}/status`, {
-        method: "PUT",
-        body: JSON.stringify({ status, adminNotes: notes }),
-        headers: { "Content-Type": "application/json" },
-      });
+      return apiRequest(`/api/admin/issues/${id}/status`, "PUT", { status, adminNotes: notes });
     },
     onSuccess: () => {
       toast({
@@ -88,11 +84,7 @@ export function AdminIssueMonitor() {
 
   const assignIssueMutation = useMutation({
     mutationFn: async ({ id, assignedTo }: { id: number; assignedTo: string }) => {
-      return apiRequest(`/api/admin/issues/${id}/assign`, {
-        method: "PUT",
-        body: JSON.stringify({ assignedTo }),
-        headers: { "Content-Type": "application/json" },
-      });
+      return apiRequest(`/api/admin/issues/${id}/assign`, "PUT", { assignedTo });
     },
     onSuccess: () => {
       toast({
