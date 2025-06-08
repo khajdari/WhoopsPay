@@ -18,6 +18,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { useI18n } from "@/lib/i18n";
 import { Header } from "@/components/header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,7 @@ import { useLocation } from "wouter";
  */
 export default function Profile() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
@@ -148,7 +150,7 @@ export default function Profile() {
           {/* Profile Information */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Personal Information</CardTitle>
+              <CardTitle>{t('profile.personalInfo')}</CardTitle>
               {!isEditing ? (
                 <Button
                   variant="outline"
@@ -156,7 +158,7 @@ export default function Profile() {
                   onClick={() => setIsEditing(true)}
                 >
                   <Edit2 className="w-4 h-4 mr-2" />
-                  Edit
+                  {t('edit')}
                 </Button>
               ) : (
                 <div className="flex gap-2">
@@ -165,7 +167,7 @@ export default function Profile() {
                     size="sm"
                     onClick={handleCancel}
                   >
-                    Cancel
+                    {t('cancel')}
                   </Button>
                   <Button
                     size="sm"
@@ -174,7 +176,7 @@ export default function Profile() {
                     disabled={updateProfileMutation.isPending}
                   >
                     <Save className="w-4 h-4 mr-2" />
-                    Save
+                    {t('save')}
                   </Button>
                 </div>
               )}
