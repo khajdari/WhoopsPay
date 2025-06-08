@@ -104,6 +104,13 @@ interface Translations {
   language: TranslationKey;
   changeLanguage: TranslationKey;
   
+  // Dashboard sections
+  recentActivity: TranslationKey;
+  recentTransactions: TranslationKey;
+  whoopsPayBalance: TranslationKey;
+  paymentMethods: TranslationKey;
+  issueReportingCenter: TranslationKey;
+  
 
   
   // Landing page
@@ -463,6 +470,28 @@ const translations: Translations = {
   changeLanguage: {
     'en-GB': 'Change Language',
     'el-GR': 'Αλλαγή Γλώσσας'
+  },
+  
+  // Dashboard sections
+  recentActivity: {
+    'en-GB': 'Recent Activity',
+    'el-GR': 'Πρόσφατη Δραστηριότητα'
+  },
+  recentTransactions: {
+    'en-GB': 'Recent Transactions',
+    'el-GR': 'Πρόσφατες Συναλλαγές'
+  },
+  whoopsPayBalance: {
+    'en-GB': 'WhoopsPay Balance',
+    'el-GR': 'Υπόλοιπο WhoopsPay'
+  },
+  paymentMethods: {
+    'en-GB': 'Payment Methods',
+    'el-GR': 'Μέθοδοι Πληρωμής'
+  },
+  issueReportingCenter: {
+    'en-GB': 'Issue Reporting Center',
+    'el-GR': 'Κέντρο Αναφοράς Προβλημάτων'
   },
   
   // Landing page
