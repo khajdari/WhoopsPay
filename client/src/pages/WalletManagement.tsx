@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
+import { useI18n } from "@/lib/i18n";
 import { WalletService, type PaymentMethod, type WalletBalance } from "../services/WalletService";
 import { PaymentMethodCard } from "../components/business/PaymentMethodCard";
 import { AddCardForm } from "../components/forms/AddCardForm";
@@ -27,6 +28,7 @@ import { useToast } from "../hooks/use-toast";
 
 export default function WalletManagement() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   

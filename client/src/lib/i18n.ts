@@ -702,6 +702,10 @@ const translations: Translations = {
     'en-GB': 'Pending Money Requests',
     'el-GR': 'Εκκρεμείς Αιτήσεις Χρημάτων'
   },
+  'transactions.subtitle': {
+    'en-GB': 'View all your payment activity',
+    'el-GR': 'Δείτε όλη τη δραστηριότητα πληρωμών σας'
+  },
   'dashboard.recentTransactions': {
     'en-GB': 'Recent Transactions',
     'el-GR': 'Πρόσφατες Συναλλαγές'
