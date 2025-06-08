@@ -234,6 +234,23 @@ interface Translations {
   'issues.reportStatus': TranslationKey;
   'issues.priority': TranslationKey;
   'issues.assignedTo': TranslationKey;
+
+  // Send Money page
+  'sendMoney.title': TranslationKey;
+  'sendMoney.subtitle': TranslationKey;
+  'sendMoney.backToDashboard': TranslationKey;
+  'sendMoney.send': TranslationKey;
+  'sendMoney.request': TranslationKey;
+  'sendMoney.addMoney': TranslationKey;
+  'sendMoney.withdraw': TranslationKey;
+  'sendMoney.sendTo': TranslationKey;
+  'sendMoney.amount': TranslationKey;
+  'sendMoney.note': TranslationKey;
+  'sendMoney.optional': TranslationKey;
+  'sendMoney.sendButton': TranslationKey;
+  'sendMoney.recipientPlaceholder': TranslationKey;
+  'sendMoney.amountPlaceholder': TranslationKey;
+  'sendMoney.notePlaceholder': TranslationKey;
 }
 
 const translations: Translations = {
@@ -899,6 +916,100 @@ const translations: Translations = {
   'issues.assignedTo': {
     'en-GB': 'Assigned To',
     'el-GR': 'Ανατέθηκε σε'
+  },
+
+  // Send Money page translations
+  'sendMoney.title': {
+    'en-GB': 'Money Center',
+    'el-GR': 'Κέντρο Χρημάτων'
+  },
+  'sendMoney.subtitle': {
+    'en-GB': 'Send, request, add, or withdraw money',
+    'el-GR': 'Αποστολή, αίτημα, προσθήκη ή ανάληψη χρημάτων'
+  },
+  'sendMoney.backToDashboard': {
+    'en-GB': 'Back to Dashboard',
+    'el-GR': 'Επιστροφή στον Πίνακα Ελέγχου'
+  },
+  'sendMoney.send': {
+    'en-GB': 'Send',
+    'el-GR': 'Αποστολή'
+  },
+  'sendMoney.request': {
+    'en-GB': 'Request',
+    'el-GR': 'Αίτημα'
+  },
+  'sendMoney.addMoney': {
+    'en-GB': 'Add Money',
+    'el-GR': 'Προσθήκη Χρημάτων'
+  },
+  'sendMoney.withdraw': {
+    'en-GB': 'Withdraw',
+    'el-GR': 'Ανάληψη'
+  },
+  'sendMoney.sendTo': {
+    'en-GB': 'Send to',
+    'el-GR': 'Αποστολή σε'
+  },
+  'sendMoney.amount': {
+    'en-GB': 'Amount',
+    'el-GR': 'Ποσό'
+  },
+  'sendMoney.note': {
+    'en-GB': 'Note (Optional)',
+    'el-GR': 'Σημείωση (Προαιρετική)'
+  },
+  'sendMoney.optional': {
+    'en-GB': 'Optional',
+    'el-GR': 'Προαιρετική'
+  },
+  'sendMoney.sendButton': {
+    'en-GB': 'Send Money',
+    'el-GR': 'Αποστολή Χρημάτων'
+  },
+  'sendMoney.recipientPlaceholder': {
+    'en-GB': 'Email, phone number, or user ID',
+    'el-GR': 'Email, τηλέφωνο ή ID χρήστη'
+  },
+  'sendMoney.amountPlaceholder': {
+    'en-GB': '0.00',
+    'el-GR': '0,00'
+  },
+  'sendMoney.notePlaceholder': {
+    'en-GB': 'What\'s this for?',
+    'el-GR': 'Για τι είναι αυτό;'
+  },
+  'sendMoney.requestFrom': {
+    'en-GB': 'Request from',
+    'el-GR': 'Αίτημα από'
+  },
+  'sendMoney.requestButton': {
+    'en-GB': 'Request Money',
+    'el-GR': 'Αίτημα Χρημάτων'
+  },
+  'sendMoney.addMoneyButton': {
+    'en-GB': 'Add Money',
+    'el-GR': 'Προσθήκη Χρημάτων'
+  },
+  'sendMoney.withdrawButton': {
+    'en-GB': 'Withdraw Money',
+    'el-GR': 'Ανάληψη Χρημάτων'
+  },
+  'sendMoney.source': {
+    'en-GB': 'Payment Source',
+    'el-GR': 'Πηγή Πληρωμής'
+  },
+  'sendMoney.destination': {
+    'en-GB': 'Destination',
+    'el-GR': 'Προορισμός'
+  },
+  'sendMoney.sourcePlaceholder': {
+    'en-GB': 'Select payment method',
+    'el-GR': 'Επιλέξτε μέθοδο πληρωμής'
+  },
+  'sendMoney.destinationPlaceholder': {
+    'en-GB': 'Bank account or card',
+    'el-GR': 'Τραπεζικός λογαριασμός ή κάρτα'
   }
 };
 

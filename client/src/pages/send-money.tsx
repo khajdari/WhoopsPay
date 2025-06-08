@@ -287,11 +287,11 @@ export default function SendMoney() {
             className="mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
+            {t('sendMoney.backToDashboard')}
           </Button>
-          <h1 className="text-3xl font-bold text-gray-900">Money Center</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('sendMoney.title')}</h1>
           <p className="text-gray-600 mt-2">
-            Send, request, add, or withdraw money
+            {t('sendMoney.subtitle')}
           </p>
         </div>
 
@@ -299,19 +299,19 @@ export default function SendMoney() {
           <TabsList className="grid grid-cols-4 w-full">
             <TabsTrigger value="send" className="flex items-center gap-2">
               <Send className="w-4 h-4" />
-              Send
+              {t('sendMoney.send')}
             </TabsTrigger>
             <TabsTrigger value="request" className="flex items-center gap-2">
               <DollarSign className="w-4 h-4" />
-              Request
+              {t('sendMoney.request')}
             </TabsTrigger>
             <TabsTrigger value="add" className="flex items-center gap-2">
               <CreditCard className="w-4 h-4" />
-              Add Money
+              {t('sendMoney.addMoney')}
             </TabsTrigger>
             <TabsTrigger value="withdraw" className="flex items-center gap-2">
               <Banknote className="w-4 h-4" />
-              Withdraw
+              {t('sendMoney.withdraw')}
             </TabsTrigger>
           </TabsList>
 
@@ -319,16 +319,16 @@ export default function SendMoney() {
           <TabsContent value="send">
             <Card>
               <CardHeader>
-                <CardTitle>Send Money</CardTitle>
+                <CardTitle>{t('sendMoney.sendButton')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSendMoney} className="space-y-6">
                   <div>
-                    <Label htmlFor="send-recipient">Send to</Label>
+                    <Label htmlFor="send-recipient">{t('sendMoney.sendTo')}</Label>
                     <Input
                       id="send-recipient"
                       type="text"
-                      placeholder="Email, phone number, or user ID"
+                      placeholder={t('sendMoney.recipientPlaceholder')}
                       value={sendRecipient}
                       onChange={(e) => setSendRecipient(e.target.value)}
                       required
@@ -339,7 +339,7 @@ export default function SendMoney() {
                   </div>
 
                   <div>
-                    <Label htmlFor="send-amount">Amount</Label>
+                    <Label htmlFor="send-amount">{t('sendMoney.amount')}</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-2.5 text-gray-500">$</span>
                       <Input
@@ -347,7 +347,7 @@ export default function SendMoney() {
                         type="number"
                         step="0.01"
                         min="0.01"
-                        placeholder="0.00"
+                        placeholder={t('sendMoney.amountPlaceholder')}
                         className="pl-8"
                         value={sendAmount}
                         onChange={(e) => setSendAmount(e.target.value)}
@@ -357,11 +357,11 @@ export default function SendMoney() {
                   </div>
 
                   <div>
-                    <Label htmlFor="send-note">Note (Optional)</Label>
+                    <Label htmlFor="send-note">{t('sendMoney.note')}</Label>
                     <Input
                       id="send-note"
                       type="text"
-                      placeholder="What's this for?"
+                      placeholder={t('sendMoney.notePlaceholder')}
                       value={sendNote}
                       onChange={(e) => setSendNote(e.target.value)}
                     />
@@ -372,7 +372,7 @@ export default function SendMoney() {
                     className="w-full bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                     disabled={sendMoneyMutation.isPending}
                   >
-                    {sendMoneyMutation.isPending ? "Sending..." : "Send Money"}
+                    {sendMoneyMutation.isPending ? "Sending..." : t('sendMoney.sendButton')}
                   </Button>
                 </form>
               </CardContent>
