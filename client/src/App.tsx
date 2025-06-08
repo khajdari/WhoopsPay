@@ -20,7 +20,7 @@ import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 
 // Page components for authenticated users
-import Dashboard from "@/pages/DashboardRefactoredFixed";
+import Dashboard from "@/pages/dashboard";
 import SendMoney from "@/pages/send-money";
 import Transactions from "@/pages/transactions";
 import Wallet from "@/pages/wallet";
