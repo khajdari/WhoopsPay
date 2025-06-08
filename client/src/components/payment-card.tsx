@@ -163,23 +163,11 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => setIsFlipped(!isFlipped)}
       >
-        <div 
-          className="relative w-full h-full transition-transform duration-700"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
-          }}
-        >
-          {/* Front of bank account card */}
+        {/* Front of bank account card */}
+        {!isFlipped && (
           <div 
             className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
-            style={{ 
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              zIndex: isFlipped ? 1 : 2
-            }}
           >
-            
             {/* Cheque security pattern background */}
             <div className="absolute inset-0 opacity-5">
               <div className="absolute top-0 left-0 w-full h-full" 
@@ -202,14 +190,14 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             <div className="flex justify-between items-start mb-2">
               <div>
                 <div className="text-xs font-bold text-blue-800 uppercase tracking-wider">
-                  {bankName || 'First National Bank'}
+                  {bankName || 'WELLS FARGO'}
                 </div>
                 <div className="text-xs text-gray-600">Savings Account</div>
               </div>
               <div className="text-right">
                 <div className="text-xs text-gray-500">Account Number</div>
                 <div className="font-mono text-xs font-bold text-blue-800">
-                  {accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••1234'}
+                  {accountNumber ? `•••••${accountNumber.slice(-4)}` : '••••••6789'}
                 </div>
               </div>
             </div>
@@ -227,22 +215,16 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
                 {iban ? `${iban.slice(0, 8)}••••••••` : 'GB29NWBK••••••••'}
               </div>
             </div>
-
-
             
             {/* Cheque perforations */}
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-blue-300 to-transparent opacity-30"></div>
           </div>
+        )}
 
-          {/* Back of bank account card */}
+        {/* Back of bank account card */}
+        {isFlipped && (
           <div 
             className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
-            style={{
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              transform: 'rotateY(180deg)',
-              zIndex: isFlipped ? 2 : 1
-            }}
           >
             {/* Security pattern background */}
             <div className="absolute inset-0 opacity-5">
@@ -267,7 +249,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               <div className="bg-white/60 border border-green-200 rounded p-2">
                 <div className="text-xs text-gray-500">Full Account Number</div>
                 <div className="font-mono text-xs font-bold text-green-800">
-                  {accountNumber || '1234567890123456'}
+                  {accountNumber || '123456789'}
                 </div>
               </div>
               
@@ -277,19 +259,12 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               </div>
               
               <div className="bg-white/60 border border-green-200 rounded p-2">
-                <div className="text-xs text-gray-500">Branch</div>
-                <div className="text-xs font-semibold text-green-800">Main Street Branch</div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="absolute bottom-2 left-4 right-4">
-              <div className="text-xs text-gray-500 text-center">
-                Interest Rate: 2.5% APY | FDIC Insured
+                <div className="text-xs text-gray-500">Interest Rate</div>
+                <div className="text-xs font-semibold text-green-800">2.5% APY | FDIC Insured</div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
