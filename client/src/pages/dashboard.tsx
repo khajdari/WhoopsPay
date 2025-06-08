@@ -339,10 +339,10 @@ export default function Dashboard() {
         <div className="mb-8 flex justify-between items-start">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {isAdmin ? `Admin Dashboard - Hi ${(user as any)?.firstName || 'Admin'}` : `Hi ${(user as any)?.firstName || 'there'}`}
+              {isAdmin ? `${t('admin.title')} - Hi ${(user as any)?.firstName || 'Admin'}` : `Hi ${(user as any)?.firstName || 'there'}`}
             </h2>
             <p className="text-gray-600">
-              {isAdmin ? "Manage users, transactions, and system security." : "Here's what's happening with your money."}
+              {isAdmin ? t('admin.userManagement') : t('dashboard.subtitle')}
             </p>
           </div>
           {!isAdmin && (
@@ -384,7 +384,7 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-medium text-gray-900 flex items-center gap-2">
                     <Clock className="h-5 w-5 text-orange-500" />
-                    Pending Money Requests
+                    {t('dashboard.pendingRequests')}
                     {pendingRequests && pendingRequests.length > 0 && (
                       <span className="ml-2 bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                         {pendingRequests.length}
