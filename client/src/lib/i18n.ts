@@ -175,6 +175,65 @@ interface Translations {
   'dashboard.sendFirstPayment': TranslationKey;
   'dashboard.noPaymentMethods': TranslationKey;
   'dashboard.addPaymentMethod': TranslationKey;
+
+  // Transactions page
+  'transactions.title': TranslationKey;
+  'transactions.overview': TranslationKey;
+  'transactions.totalTransactions': TranslationKey;
+  'transactions.totalSent': TranslationKey;
+  'transactions.totalReceived': TranslationKey;
+  'transactions.monthlyVolume': TranslationKey;
+  'transactions.refresh': TranslationKey;
+  'transactions.export': TranslationKey;
+  'transactions.allTransactions': TranslationKey;
+  'transactions.noTransactionsFound': TranslationKey;
+  'transactions.filterByStatus': TranslationKey;
+  'transactions.searchTransactions': TranslationKey;
+
+  // Wallet page  
+  'wallet.title': TranslationKey;
+  'wallet.currentBalance': TranslationKey;
+  'wallet.availableBalance': TranslationKey;
+  'wallet.pendingTransactions': TranslationKey;
+  'wallet.addFunds': TranslationKey;
+  'wallet.withdrawFunds': TranslationKey;
+  'wallet.managePaymentMethods': TranslationKey;
+  'wallet.transactionHistory': TranslationKey;
+  'wallet.quickSend': TranslationKey;
+
+  // Profile page
+  'profile.title': TranslationKey;
+  'profile.personalInfo': TranslationKey;
+  'profile.accountSettings': TranslationKey;
+  'profile.securitySettings': TranslationKey;
+  'profile.changePassword': TranslationKey;
+  'profile.twoFactorAuth': TranslationKey;
+  'profile.privacySettings': TranslationKey;
+  'profile.accountActivity': TranslationKey;
+  'profile.deleteAccount': TranslationKey;
+  'profile.saveChanges': TranslationKey;
+
+  // Admin page
+  'admin.title': TranslationKey;
+  'admin.userManagement': TranslationKey;
+  'admin.systemStats': TranslationKey;
+  'admin.transactionMonitoring': TranslationKey;
+  'admin.securityLogs': TranslationKey;
+  'admin.systemHealth': TranslationKey;
+  'admin.backupRestore': TranslationKey;
+  'admin.userActivity': TranslationKey;
+  'admin.configureSystem': TranslationKey;
+
+  // Issue Reporting page
+  'issues.title': TranslationKey;
+  'issues.reportIssue': TranslationKey;
+  'issues.issueType': TranslationKey;
+  'issues.issueDescription': TranslationKey;
+  'issues.submitReport': TranslationKey;
+  'issues.myReports': TranslationKey;
+  'issues.reportStatus': TranslationKey;
+  'issues.priority': TranslationKey;
+  'issues.assignedTo': TranslationKey;
 }
 
 const translations: Translations = {
@@ -634,6 +693,212 @@ const translations: Translations = {
   'dashboard.addPaymentMethod': {
     'en-GB': 'Add Payment Method',
     'el-GR': 'Προσθήκη Μεθόδου Πληρωμής'
+  },
+
+  // Transactions page translations
+  'transactions.title': {
+    'en-GB': 'Transaction History',
+    'el-GR': 'Ιστορικό Συναλλαγών'
+  },
+  'transactions.overview': {
+    'en-GB': 'Transaction Overview',
+    'el-GR': 'Επισκόπηση Συναλλαγών'
+  },
+  'transactions.totalTransactions': {
+    'en-GB': 'Total Transactions',
+    'el-GR': 'Συνολικές Συναλλαγές'
+  },
+  'transactions.totalSent': {
+    'en-GB': 'Total Sent',
+    'el-GR': 'Σύνολο Αποσταλέντων'
+  },
+  'transactions.totalReceived': {
+    'en-GB': 'Total Received',
+    'el-GR': 'Σύνολο Ληφθέντων'
+  },
+  'transactions.monthlyVolume': {
+    'en-GB': 'Monthly Volume',
+    'el-GR': 'Μηνιαίος Όγκος'
+  },
+  'transactions.refresh': {
+    'en-GB': 'Refresh',
+    'el-GR': 'Ανανέωση'
+  },
+  'transactions.export': {
+    'en-GB': 'Export CSV',
+    'el-GR': 'Εξαγωγή CSV'
+  },
+  'transactions.allTransactions': {
+    'en-GB': 'All Transactions',
+    'el-GR': 'Όλες οι Συναλλαγές'
+  },
+  'transactions.noTransactionsFound': {
+    'en-GB': 'No transactions found',
+    'el-GR': 'Δεν βρέθηκαν συναλλαγές'
+  },
+  'transactions.filterByStatus': {
+    'en-GB': 'Filter by Status',
+    'el-GR': 'Φιλτράρισμα κατά Κατάσταση'
+  },
+  'transactions.searchTransactions': {
+    'en-GB': 'Search transactions...',
+    'el-GR': 'Αναζήτηση συναλλαγών...'
+  },
+
+  // Wallet page translations
+  'wallet.title': {
+    'en-GB': 'My Wallet',
+    'el-GR': 'Το Πορτοφόλι μου'
+  },
+  'wallet.currentBalance': {
+    'en-GB': 'Current Balance',
+    'el-GR': 'Τρέχον Υπόλοιπο'
+  },
+  'wallet.availableBalance': {
+    'en-GB': 'Available Balance',
+    'el-GR': 'Διαθέσιμο Υπόλοιπο'
+  },
+  'wallet.pendingTransactions': {
+    'en-GB': 'Pending Transactions',
+    'el-GR': 'Συναλλαγές σε Εκκρεμότητα'
+  },
+  'wallet.addFunds': {
+    'en-GB': 'Add Funds',
+    'el-GR': 'Προσθήκη Κεφαλαίων'
+  },
+  'wallet.withdrawFunds': {
+    'en-GB': 'Withdraw Funds',
+    'el-GR': 'Ανάληψη Κεφαλαίων'
+  },
+  'wallet.managePaymentMethods': {
+    'en-GB': 'Manage Payment Methods',
+    'el-GR': 'Διαχείριση Μεθόδων Πληρωμής'
+  },
+  'wallet.transactionHistory': {
+    'en-GB': 'Transaction History',
+    'el-GR': 'Ιστορικό Συναλλαγών'
+  },
+  'wallet.quickSend': {
+    'en-GB': 'Quick Send',
+    'el-GR': 'Γρήγορη Αποστολή'
+  },
+
+  // Profile page translations
+  'profile.title': {
+    'en-GB': 'My Profile',
+    'el-GR': 'Το Προφίλ μου'
+  },
+  'profile.personalInfo': {
+    'en-GB': 'Personal Information',
+    'el-GR': 'Προσωπικές Πληροφορίες'
+  },
+  'profile.accountSettings': {
+    'en-GB': 'Account Settings',
+    'el-GR': 'Ρυθμίσεις Λογαριασμού'
+  },
+  'profile.securitySettings': {
+    'en-GB': 'Security Settings',
+    'el-GR': 'Ρυθμίσεις Ασφαλείας'
+  },
+  'profile.changePassword': {
+    'en-GB': 'Change Password',
+    'el-GR': 'Αλλαγή Κωδικού'
+  },
+  'profile.twoFactorAuth': {
+    'en-GB': 'Two-Factor Authentication',
+    'el-GR': 'Ταυτοποίηση Δύο Παραγόντων'
+  },
+  'profile.privacySettings': {
+    'en-GB': 'Privacy Settings',
+    'el-GR': 'Ρυθμίσεις Απορρήτου'
+  },
+  'profile.accountActivity': {
+    'en-GB': 'Account Activity',
+    'el-GR': 'Δραστηριότητα Λογαριασμού'
+  },
+  'profile.deleteAccount': {
+    'en-GB': 'Delete Account',
+    'el-GR': 'Διαγραφή Λογαριασμού'
+  },
+  'profile.saveChanges': {
+    'en-GB': 'Save Changes',
+    'el-GR': 'Αποθήκευση Αλλαγών'
+  },
+
+  // Admin page translations
+  'admin.title': {
+    'en-GB': 'Administration Panel',
+    'el-GR': 'Πίνακας Διαχείρισης'
+  },
+  'admin.userManagement': {
+    'en-GB': 'User Management',
+    'el-GR': 'Διαχείριση Χρηστών'
+  },
+  'admin.systemStats': {
+    'en-GB': 'System Statistics',
+    'el-GR': 'Στατιστικά Συστήματος'
+  },
+  'admin.transactionMonitoring': {
+    'en-GB': 'Transaction Monitoring',
+    'el-GR': 'Παρακολούθηση Συναλλαγών'
+  },
+  'admin.securityLogs': {
+    'en-GB': 'Security Logs',
+    'el-GR': 'Αρχεία Ασφαλείας'
+  },
+  'admin.systemHealth': {
+    'en-GB': 'System Health',
+    'el-GR': 'Υγεία Συστήματος'
+  },
+  'admin.backupRestore': {
+    'en-GB': 'Backup & Restore',
+    'el-GR': 'Αντίγραφα Ασφαλείας & Επαναφορά'
+  },
+  'admin.userActivity': {
+    'en-GB': 'User Activity',
+    'el-GR': 'Δραστηριότητα Χρηστών'
+  },
+  'admin.configureSystem': {
+    'en-GB': 'Configure System',
+    'el-GR': 'Διαμόρφωση Συστήματος'
+  },
+
+  // Issue Reporting page translations
+  'issues.title': {
+    'en-GB': 'Issue Reporting',
+    'el-GR': 'Αναφορά Προβλημάτων'
+  },
+  'issues.reportIssue': {
+    'en-GB': 'Report New Issue',
+    'el-GR': 'Αναφορά Νέου Προβλήματος'
+  },
+  'issues.issueType': {
+    'en-GB': 'Issue Type',
+    'el-GR': 'Τύπος Προβλήματος'
+  },
+  'issues.issueDescription': {
+    'en-GB': 'Issue Description',
+    'el-GR': 'Περιγραφή Προβλήματος'
+  },
+  'issues.submitReport': {
+    'en-GB': 'Submit Report',
+    'el-GR': 'Υποβολή Αναφοράς'
+  },
+  'issues.myReports': {
+    'en-GB': 'My Reports',
+    'el-GR': 'Οι Αναφορές μου'
+  },
+  'issues.reportStatus': {
+    'en-GB': 'Report Status',
+    'el-GR': 'Κατάσταση Αναφοράς'
+  },
+  'issues.priority': {
+    'en-GB': 'Priority',
+    'el-GR': 'Προτεραιότητα'
+  },
+  'issues.assignedTo': {
+    'en-GB': 'Assigned To',
+    'el-GR': 'Ανατέθηκε σε'
   }
 };
 
