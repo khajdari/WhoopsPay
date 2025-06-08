@@ -159,7 +159,7 @@ export default function Login() {
   };
 
   return (
-    <Layout showHeader={false} showMobileNav={false}>
+    <Layout showHeader={false} showFooter={false} showMobileNav={false}>
       <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
