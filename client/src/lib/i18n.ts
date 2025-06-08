@@ -104,6 +104,8 @@ interface Translations {
   language: TranslationKey;
   changeLanguage: TranslationKey;
   
+
+  
   // Landing page
   signIn: TranslationKey;
   getStarted: TranslationKey;
@@ -165,6 +167,7 @@ interface Translations {
   'dashboard.balance': TranslationKey;
   'dashboard.transactions': TranslationKey;
   'dashboard.paymentMethods': TranslationKey;
+  'dashboard.pendingRequests': TranslationKey;
   'dashboard.sendMoney': TranslationKey;
   'dashboard.addMoney': TranslationKey;
   'dashboard.viewTransactions': TranslationKey;
