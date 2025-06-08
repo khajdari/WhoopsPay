@@ -144,6 +144,20 @@ interface Translations {
   loggingIn: TranslationKey;
   dontHaveAccount: TranslationKey;
   signUpHere: TranslationKey;
+  returnToHome: TranslationKey;
+  
+  // Signup page
+  signUpTitle: TranslationKey;
+  createAccount: TranslationKey;
+  firstName: TranslationKey;
+  lastName: TranslationKey;
+  email: TranslationKey;
+  enterFirstName: TranslationKey;
+  enterLastName: TranslationKey;
+  enterEmail: TranslationKey;
+  choosePassword: TranslationKey;
+  creatingAccount: TranslationKey;
+  alreadyHaveAccount: TranslationKey;
 }
 
 const translations: Translations = {
@@ -421,6 +435,94 @@ const translations: Translations = {
     'el-GR': '© 2025 WhoopsPay. Ένα εκπαιδευτικό έργο που αναπτύχθηκε στο πλαίσιο μεταπτυχιακής διπλωματικής για τρωτότητες εφαρμογών ιστού.'
   },
   
+  // Login page translations
+  signInTitle: {
+    'en-GB': 'Sign In',
+    'el-GR': 'Σύνδεση'
+  },
+  welcomeBack: {
+    'en-GB': 'Welcome back',
+    'el-GR': 'Καλώς ήρθατε πίσω'
+  },
+  username: {
+    'en-GB': 'Username',
+    'el-GR': 'Όνομα χρήστη'
+  },
+  password: {
+    'en-GB': 'Password',
+    'el-GR': 'Κωδικός πρόσβασης'
+  },
+  enterUsername: {
+    'en-GB': 'Enter your username',
+    'el-GR': 'Εισάγετε το όνομα χρήστη σας'
+  },
+  enterPassword: {
+    'en-GB': 'Enter your password',
+    'el-GR': 'Εισάγετε τον κωδικό πρόσβασης σας'
+  },
+  loggingIn: {
+    'en-GB': 'Signing in...',
+    'el-GR': 'Συνδέεστε...'
+  },
+  dontHaveAccount: {
+    'en-GB': "Don't have an account?",
+    'el-GR': 'Δεν έχετε λογαριασμό;'
+  },
+  signUpHere: {
+    'en-GB': 'Sign up',
+    'el-GR': 'Εγγραφή'
+  },
+  returnToHome: {
+    'en-GB': 'Return to Home',
+    'el-GR': 'Επιστροφή στην Αρχική'
+  },
+  
+  // Signup page translations
+  signUpTitle: {
+    'en-GB': 'Create Account',
+    'el-GR': 'Δημιουργία Λογαριασμού'
+  },
+  createAccount: {
+    'en-GB': 'Create Account',
+    'el-GR': 'Δημιουργία Λογαριασμού'
+  },
+  firstName: {
+    'en-GB': 'First Name',
+    'el-GR': 'Όνομα'
+  },
+  lastName: {
+    'en-GB': 'Last Name',
+    'el-GR': 'Επώνυμο'
+  },
+  email: {
+    'en-GB': 'Email',
+    'el-GR': 'Email'
+  },
+  enterFirstName: {
+    'en-GB': 'Enter your first name',
+    'el-GR': 'Εισάγετε το όνομά σας'
+  },
+  enterLastName: {
+    'en-GB': 'Enter your last name',
+    'el-GR': 'Εισάγετε το επώνυμό σας'
+  },
+  enterEmail: {
+    'en-GB': 'Enter your email address',
+    'el-GR': 'Εισάγετε τη διεύθυνση email σας'
+  },
+  choosePassword: {
+    'en-GB': 'Choose a password',
+    'el-GR': 'Επιλέξτε κωδικό πρόσβασης'
+  },
+  creatingAccount: {
+    'en-GB': 'Creating account...',
+    'el-GR': 'Δημιουργία λογαριασμού...'
+  },
+  alreadyHaveAccount: {
+    'en-GB': 'Already have an account?',
+    'el-GR': 'Έχετε ήδη λογαριασμό;'
+  },
+  
   // Additional landing page features
   featuresTitle: {
     'en-GB': 'Why Choose WhoopsPay?',
@@ -453,44 +555,6 @@ const translations: Translations = {
   mobileAppDesc: {
     'en-GB': 'Manage your payments on the go with our intuitive mobile application.',
     'el-GR': 'Διαχειριστείτε τις πληρωμές σας εν κινήσει με τη διαισθητική μας εφαρμογή κινητού.'
-  },
-  
-  // Login page
-  signInTitle: {
-    'en-GB': 'Sign In',
-    'el-GR': 'Σύνδεση'
-  },
-  welcomeBack: {
-    'en-GB': 'Welcome back to WhoopsPay',
-    'el-GR': 'Καλώς ήρθατε πίσω στο WhoopsPay'
-  },
-  username: {
-    'en-GB': 'Username',
-    'el-GR': 'Όνομα Χρήστη'
-  },
-  password: {
-    'en-GB': 'Password',
-    'el-GR': 'Κωδικός Πρόσβασης'
-  },
-  enterUsername: {
-    'en-GB': 'Enter your username',
-    'el-GR': 'Εισάγετε το όνομα χρήστη σας'
-  },
-  enterPassword: {
-    'en-GB': 'Enter your password',
-    'el-GR': 'Εισάγετε τον κωδικό πρόσβασής σας'
-  },
-  loggingIn: {
-    'en-GB': 'Logging in...',
-    'el-GR': 'Σύνδεση...'
-  },
-  dontHaveAccount: {
-    'en-GB': 'Don\'t have an account?',
-    'el-GR': 'Δεν έχετε λογαριασμό;'
-  },
-  signUpHere: {
-    'en-GB': 'Sign up here',
-    'el-GR': 'Εγγραφείτε εδώ'
   }
 };
 

@@ -169,14 +169,14 @@ export default function Landing() {
 
               <Card className="text-center">
                 <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                    <Users className="w-6 h-6 text-red-600" />
+                  <div className="mx-auto w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                    <CreditCard className="w-6 h-6 text-orange-600" />
                   </div>
-                  <CardTitle>{t('trustedCommunity')}</CardTitle>
+                  <CardTitle>{t('multiplePaymentOptions')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    {t('trustedCommunityDesc')}
+                    {t('multiplePaymentOptionsDesc')}
                   </CardDescription>
                 </CardContent>
               </Card>
