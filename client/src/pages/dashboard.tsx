@@ -219,93 +219,15 @@ export default function Dashboard() {
     enabled: !!user && (user as any)?.isAdmin === 1,
   });
 
-  // Mutation for approving requests - moved before conditional return
-  const approveMutation = useMutation({
-    mutationFn: async (requestId: number) => {
-      return await apiRequest(`/api/requests/${requestId}/approve`, 'POST');
-    },
-    onSuccess: (data: any) => {
-      console.log("Approval response:", data);
-      queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
-      queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
-      
-      // Handle external redirect for Juice Shop
-      if (data.redirect && data.redirectUrl) {
-        console.log("Redirecting to:", data.redirectUrl);
-        window.location.href = data.redirectUrl;
-        return;
-      } else {
-        toast({
-          title: "Request Approved",
-          description: "The money request has been approved successfully.",
-        });
-      }
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to approve request",
-        variant: "destructive",
-      });
-    },
-  });
-
-  // Mutation for rejecting requests - moved before conditional return
-  const rejectMutation = useMutation({
-    mutationFn: async (requestId: number) => {
-      return await apiRequest(`/api/requests/${requestId}/reject`, 'POST');
-    },
-    onSuccess: (data: any) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
-      
-      // Handle external redirect for Juice Shop
-      if (data.redirect && data.redirectUrl) {
-        toast({
-          title: "External Payment Rejected",
-          description: "Redirecting back to Juice Shop...",
-        });
-        setTimeout(() => {
-          window.location.href = data.redirectUrl;
-        }, 1500);
-      } else {
-        toast({
-          title: "Request Rejected",
-          description: "The money request has been rejected.",
-        });
-      }
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to reject request",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handleApproveRequest = async (requestId: number) => {
-    setApprovingRequest(requestId);
-    try {
-      await approveMutation.mutateAsync(requestId);
-    } catch (error) {
-      // Error is already handled by mutation's onError
-      console.log('Request approval failed:', error);
-    } finally {
-      setApprovingRequest(null);
-    }
+  // Handle opening request modal for review
+  const handleRequestClick = (request: any) => {
+    setSelectedRequest(request);
+    setShowRequestModal(true);
   };
 
-  const handleRejectRequest = async (requestId: number) => {
-    setRejectingRequest(requestId);
-    try {
-      await rejectMutation.mutateAsync(requestId);
-    } catch (error) {
-      // Error is already handled by mutation's onError
-      console.log('Request rejection failed:', error);
-    } finally {
-      setRejectingRequest(null);
-    }
+  const handleCloseRequestModal = () => {
+    setSelectedRequest(null);
+    setShowRequestModal(false);
   };
 
   if (profileLoading) {
@@ -422,10 +344,7 @@ export default function Dashboard() {
                             ? 'bg-blue-50 border-blue-200 hover:bg-blue-100' 
                             : 'bg-orange-50 border-orange-200 hover:bg-orange-100'
                         }`}
-                        onClick={() => {
-                          setSelectedRequest(request);
-                          setShowRequestModal(true);
-                        }}
+                        onClick={() => handleRequestClick(request)}
                       >
                         <div className="flex items-center space-x-3">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -717,6 +636,14 @@ export default function Dashboard() {
       
       {showSendModal && (
         <SendMoneyModal onClose={() => setShowSendModal(false)} />
+      )}
+      
+      {selectedRequest && (
+        <MoneyRequestModal 
+          request={selectedRequest}
+          isOpen={showRequestModal}
+          onClose={handleCloseRequestModal}
+        />
       )}
       
       </div>
