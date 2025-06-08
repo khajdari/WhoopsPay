@@ -66,84 +66,18 @@ export async function setupAuth(app: Express) {
         return res.status(400).json({ message: "Username and password required" });
       }
 
-      // Demo users for local development
-      const demoUsers = [
-        {
-          id: 'jdoe',
-          username: 'jdoe',
-          email: 'john.doe@example.com',
-          firstName: 'John',
-          lastName: 'Doe',
-          password: 'password123',
-          balance: 2500.75,
-          isAdmin: 0
-        },
-        {
-          id: 'admin',
-          username: 'admin',
-          email: 'admin@example.com',
-          firstName: 'Admin',
-          lastName: 'User',
-          password: 'admin123',
-          balance: 10000.00,
-          isAdmin: 1
-        },
-        {
-          id: 'alice',
-          username: 'alice',
-          email: 'alice.smith@example.com',
-          firstName: 'Alice',
-          lastName: 'Smith',
-          password: 'alice123',
-          balance: 1750.50,
-          isAdmin: 0
-        },
-        {
-          id: 'bob',
-          username: 'bob',
-          email: 'bob.johnson@example.com',
-          firstName: 'Bob',
-          lastName: 'Johnson',
-          password: 'bob123',
-          balance: 3200.25,
-          isAdmin: 0
-        },
-        {
-          id: 'charlie',
-          username: 'charlie',
-          email: 'charlie.brown@example.com',
-          firstName: 'Charlie',
-          lastName: 'Brown',
-          password: 'charlie123',
-          balance: 890.75,
-          isAdmin: 0
-        }
-      ];
-
-      // Check demo users first
-      const demoUser = demoUsers.find(u => u.username === username && u.password === password);
-      if (demoUser) {
-        req.session.userId = demoUser.id;
-        
-        return res.json({ 
-          message: "Login successful",
-          user: {
-            id: demoUser.id,
-            email: demoUser.email,
-            firstName: demoUser.firstName,
-            lastName: demoUser.lastName,
-            balance: demoUser.balance,
-            isAdmin: demoUser.isAdmin
-          }
-        });
-      }
-
-      // Try database users by username (ID) first
+      // Try to authenticate with database users first
       let user = await storage.getUser(username);
       
       // If not found by ID, try by email
       if (!user) {
         user = await storage.getUserByEmail(username);
+      }
+      
+      // If still not found, check test accounts
+      if (!user) {
+        const testAccounts = await storage.getTestAccounts();
+        user = testAccounts.find((u: any) => u.id === username || u.email === username);
       }
       
       if (!user) {
