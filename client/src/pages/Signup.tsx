@@ -86,13 +86,19 @@ export default function Signup() {
     mutationFn: async (data: RegisterForm) => {
       return await apiRequest("/api/register", "POST", data);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         title: "Registration successful",
         description: "Welcome to WhoopsPay!",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
-      window.location.href = "/";
+      
+      // Wait for the authentication state to be properly updated
+      await queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      
+      // Small delay to ensure auth state is updated before redirect
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 100);
     },
     onError: (error: Error) => {
       toast({

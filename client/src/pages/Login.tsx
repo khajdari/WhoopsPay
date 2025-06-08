@@ -129,20 +129,23 @@ export default function Login() {
         title: "Login successful",
         description: "Welcome back to WhoopsPay!",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       
-      // Check if user is admin and redirect accordingly
-      try {
-        const user = await apiRequest("/api/auth/user", "GET");
-        if (user && (user as any).isAdmin) {
-          setLocation("/administration");
-        } else {
+      // Wait for the authentication state to be properly updated
+      await queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      
+      // Small delay to ensure auth state is updated
+      setTimeout(async () => {
+        try {
+          const user = await apiRequest("/api/auth/user", "GET");
+          if (user && (user as any).isAdmin) {
+            setLocation("/administration");
+          } else {
+            setLocation("/dashboard");
+          }
+        } catch (error) {
           setLocation("/dashboard");
         }
-      } catch (error) {
-        // Fallback to dashboard page if user fetch fails
-        setLocation("/dashboard");
-      }
+      }, 100);
     },
     onError: (error: Error) => {
       toast({
