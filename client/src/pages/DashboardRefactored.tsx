@@ -23,10 +23,9 @@ import {
   Loader2, 
   ExternalLink 
 } from "lucide-react";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import EmptyState from "@/components/common/EmptyState";
-import PaymentCard from "@/components/common/PaymentCard";
-import PaymentList from "@/components/common/PaymentList";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TransactionItem } from "@/components/transaction-item";
+import { PaymentCard } from "@/components/payment-card";
 
 export default function DashboardRefactored() {
   const { t } = useI18n();
