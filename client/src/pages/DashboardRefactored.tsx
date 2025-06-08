@@ -238,7 +238,7 @@ export default function DashboardRefactored() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-400">{t("dashboard.transactions")}</p>
+                    <p className="text-sm font-medium text-gray-400">{t("dashboardTransactions")}</p>
                     <p className="text-2xl font-bold text-yellow-400">{transactions.length}</p>
                   </div>
                   <Activity className="h-8 w-8 text-yellow-400" />
@@ -250,7 +250,7 @@ export default function DashboardRefactored() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-400">{t("dashboard.paymentMethods")}</p>
+                    <p className="text-sm font-medium text-gray-400">{t("dashboardPaymentMethods")}</p>
                     <p className="text-2xl font-bold text-yellow-400">{paymentMethods.length}</p>
                   </div>
                   <CreditCard className="h-8 w-8 text-yellow-400" />
