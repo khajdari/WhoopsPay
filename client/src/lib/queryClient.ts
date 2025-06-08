@@ -33,14 +33,14 @@ async function throwIfResNotOk(res: Response) {
  * @param url - API endpoint URL
  * @param method - HTTP method (GET, POST, PUT, DELETE, etc.)
  * @param data - Optional request body data (will be JSON stringified)
- * @returns Promise resolving to Response object
+ * @returns Promise resolving to parsed JSON data
  * @throws Error if request fails or returns error status
  */
 export async function apiRequest(
   url: string,
   method: string,
   data?: unknown | undefined,
-): Promise<Response> {
+): Promise<any> {
   const bodyString = data ? JSON.stringify(data) : undefined;
   
   const res = await fetch(url, {
@@ -51,7 +51,14 @@ export async function apiRequest(
   });
 
   await throwIfResNotOk(res);
-  return res;
+  
+  // Handle empty responses for DELETE operations
+  const contentType = res.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return await res.json();
+  }
+  
+  return null;
 }
 
 /**
