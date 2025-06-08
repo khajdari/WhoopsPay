@@ -12,6 +12,7 @@ import { Layout } from "@/components/layout";
 import { SendMoneyModal } from "@/components/send-money-modal";
 import { TransactionItem } from "@/components/transaction-item";
 import { PaymentCard } from "@/components/payment-card";
+import { PaymentRequestList } from "@/components/business/PaymentRequestList";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
