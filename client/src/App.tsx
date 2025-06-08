@@ -35,6 +35,7 @@ import IssueReporting from "@/pages/IssueReporting";
 import ExternalPayment from "@/pages/ExternalPayment";
 import PaymentProcessing from "@/pages/payment-processing";
 import PaymentResult from "@/pages/PaymentResult";
+import PaymentResultRedirect from "@/pages/PaymentResultRedirect";
 import { RedirectHandler } from "@/components/RedirectHandler";
 
 /**
@@ -59,7 +60,7 @@ function Router() {
       <Route path="/signup" component={Signup} />
       <Route path="/payment-processing" component={PaymentProcessing} />
       <Route path="/external-payment/:transactionId" component={ExternalPayment} />
-      <Route path="/payment-result" component={PaymentResult} />
+      <Route path="/payment-result" component={PaymentResultRedirect} />
       
       {/* Authenticated routes */}
       {isAuthenticated && (

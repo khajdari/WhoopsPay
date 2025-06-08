@@ -231,11 +231,8 @@ export default function Dashboard() {
       // Handle external redirect for Juice Shop
       if (data.redirect && data.redirectUrl) {
         console.log("Redirecting to:", data.redirectUrl);
-        toast({
-          title: "External Payment Approved",
-          description: "Redirecting back to Juice Shop...",
-        });
         window.location.href = data.redirectUrl;
+        return;
       } else {
         toast({
           title: "Request Approved",

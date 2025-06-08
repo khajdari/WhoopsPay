@@ -1283,17 +1283,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         updatedRequest = await storage.updateTransactionStatus(requestId, 'completed');
       }
       
-      // Handle external redirect for Juice Shop
-      console.log("Request details:", { isMoneyRequest, type: request.type, externalSource: request.externalSource, fromUserId: request.fromUserId });
-      if (isMoneyRequest && (request.type === "external" || request.externalSource === "juice-shop" || request.fromUserId === "juice-shop")) {
-        const redirectUrl = `http://localhost:3000/basket#/order-completion?status=approved&orderId=${request.externalOrderId}&amount=${requestAmount}`;
+      // Handle external redirect for Juice Shop - always redirect external requests
+      if (isMoneyRequest && request.fromUserId === "juice-shop") {
+        const redirectUrl = `http://localhost:5000/payment-result?status=approved&orderId=${request.externalOrderId}&amount=${requestAmount}&returnTo=juice-shop`;
         const response = {
           message: "External payment approved successfully",
           redirect: true,
           redirectUrl,
-          request: updatedRequest
+          request: updatedRequest,
+          external: true
         };
-        console.log("Sending redirect response:", response);
+        console.log("Sending external redirect response:", response);
         return res.json(response);
       }
       
