@@ -70,22 +70,27 @@ export function initializeDatabase() {
     );
   `);
 
-  // Create transactions table
+  // Create transactions table with ONUS/OFFUS categorization
   db.exec(`
     CREATE TABLE IF NOT EXISTS transactions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       from_user_id TEXT NOT NULL,
-      to_user_id TEXT NOT NULL,
+      to_user_id TEXT,
       amount REAL NOT NULL,
       description TEXT,
       status TEXT,
       type TEXT,
       created_at INTEGER,
+      transaction_category TEXT NOT NULL,
+      is_internal INTEGER NOT NULL,
       external_order_id TEXT,
       external_source TEXT,
+      external_merchant_id TEXT,
       return_url TEXT,
       cancel_url TEXT,
-      external_metadata TEXT
+      external_metadata TEXT,
+      network_code TEXT,
+      routing_number TEXT
     );
   `);
 

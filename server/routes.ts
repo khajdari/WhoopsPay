@@ -2372,6 +2372,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  /**
+   * @swagger
+   * /api/external/juice-shop/payment:
+   *   post:
+   *     summary: Process Juice Shop payment (OFFUS transaction)
+   *     description: "Creates external payment transaction for Juice Shop integration"
+   *     tags: [External Payments]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               userId:
+   *                 type: string
+   *                 description: WhoopsPay user ID
+   *               amount:
+   *                 type: number
+   *                 description: Payment amount
+   *               orderId:
+   *                 type: string
+   *                 description: Juice Shop order ID
+   *               description:
+   *                 type: string
+   *                 description: Payment description
+   *     responses:
+   *       200:
+   *         description: Payment processed successfully
+   *       400:
+   *         description: Invalid request
+   *       401:
+   *         description: Unauthorized
+   */
+  app.post("/api/external/juice-shop/payment", async (req, res) => {
+    try {
+      const { userId, amount, orderId, description } = req.body;
+      
+      if (!userId || !amount || !orderId) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      // Verify user exists and has sufficient balance
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      if (user.balance < amount) {
+        return res.status(400).json({ error: "Insufficient balance" });
+      }
+
+      // Create OFFUS transaction
+      const transaction = await storage.createTransaction({
+        fromUserId: userId,
+        toUserId: null, // External transaction
+        amount: amount,
+        description: description || `Juice Shop - Order ${orderId}`,
+        status: "completed",
+        type: "payment",
+        externalOrderId: orderId,
+        externalSource: "juice-shop",
+        externalMerchantId: "JUICE_SHOP_001",
+        networkCode: "VISA-EXT",
+        routingNumber: "021000021",
+      });
+
+      // Update user balance
+      const newBalance = user.balance - amount;
+      await storage.updateUserBalance(userId, newBalance.toString());
+
+      res.json({
+        success: true,
+        transaction: transaction,
+        message: "Payment processed successfully",
+        balanceAfter: newBalance.toFixed(2)
+      });
+
+    } catch (error) {
+      console.error("Juice Shop payment error:", error);
+      res.status(500).json({ error: "Failed to process payment" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
