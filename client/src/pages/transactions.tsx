@@ -18,6 +18,7 @@
  */
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { useI18n } from "@/lib/i18n";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
@@ -43,6 +44,7 @@ import { useState } from "react";
  */
 export default function Transactions() {
   const { user } = useAuth();
+  const { t } = useI18n();
   
   /**
    * Transaction Filter State - Search and pagination controls
@@ -181,8 +183,8 @@ export default function Transactions() {
       
       <main className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8 mobile-nav-spacing">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Transaction History</h1>
-          <p className="text-gray-600">View all your payment activity</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('transactions.title')}</h1>
+          <p className="text-gray-600">{t('transactions.subtitle')}</p>
         </div>
 
         {/* Filters */}
