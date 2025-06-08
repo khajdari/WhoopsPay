@@ -699,8 +699,8 @@ const translations: Translations = {
     'el-GR': 'Ρυθμίσεις'
   },
   'dashboard.pendingRequests': {
-    'en-GB': 'Pending Requests',
-    'el-GR': 'Αιτήματα σε Εκκρεμότητα'
+    'en-GB': 'Pending Money Requests',
+    'el-GR': 'Εκκρεμείς Αιτήσεις Χρημάτων'
   },
   'dashboard.recentTransactions': {
     'en-GB': 'Recent Transactions',
