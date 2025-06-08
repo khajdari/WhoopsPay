@@ -213,9 +213,9 @@ export default function DashboardRefactored() {
           {/* Welcome Section */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-2">
-              {t("dashboard.welcome")}, {userProfile?.firstName || user?.email || "User"}!
+              {t("dashboardWelcome")}, {userProfile?.firstName || user?.email || "User"}!
             </h1>
-            <p className="text-gray-400">{t("dashboard.subtitle")}</p>
+            <p className="text-gray-400">{t("dashboardSubtitle")}</p>
           </div>
 
           {/* Account Overview */}
@@ -224,7 +224,7 @@ export default function DashboardRefactored() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-400">{t("dashboard.balance")}</p>
+                    <p className="text-sm font-medium text-gray-400">{t("dashboardBalance")}</p>
                     <p className="text-2xl font-bold text-yellow-400">
                       {formatAmount(userProfile?.balance || "0")}
                     </p>
