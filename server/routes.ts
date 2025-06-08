@@ -1286,12 +1286,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Handle external redirect for Juice Shop
       if (isMoneyRequest && request.type === "external") {
         const redirectUrl = `http://localhost:5000/payment-result?status=approved&orderId=${request.externalOrderId}&amount=${requestAmount}`;
-        return res.json({
+        const response = {
           message: "External payment approved successfully",
           redirect: true,
           redirectUrl,
           request: updatedRequest
-        });
+        };
+        console.log("Sending redirect response:", response);
+        return res.json(response);
       }
       
       res.json({ 
