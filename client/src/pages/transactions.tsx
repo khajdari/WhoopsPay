@@ -22,7 +22,7 @@ import { useI18n } from "@/lib/i18n";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
-import { TransactionItem } from "@/components/transaction-item";
+import TransactionItem from "@/components/TransactionItem";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -89,6 +89,8 @@ export default function Transactions() {
   const filteredTransactions = transactionsList.filter((transaction: any) => {
     if (filterType === "sent" && transaction.fromUserId !== user?.id) return false;
     if (filterType === "received" && transaction.toUserId !== user?.id) return false;
+    if (filterType === "onus" && transaction.transactionCategory !== "ONUS") return false;
+    if (filterType === "offus" && transaction.transactionCategory !== "OFFUS") return false;
     if (searchQuery) {
       const query = searchQuery.toLowerCase().trim();
       
