@@ -223,15 +223,17 @@ export default function Dashboard() {
       return await apiRequest(`/api/requests/${requestId}/approve`, 'POST');
     },
     onSuccess: (data: any) => {
+      console.log("Approval response:", data);
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
       
       // Handle external redirect for Juice Shop
       if (data.redirect && data.redirectUrl) {
+        console.log("Redirecting to:", data.redirectUrl);
         toast({
           title: "External Payment Approved",
-          description: "Redirecting back to Juice Shop...",
+          description: "Redirecting to payment result page...",
         });
         setTimeout(() => {
           window.location.href = data.redirectUrl;
