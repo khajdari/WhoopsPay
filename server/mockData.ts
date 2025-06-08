@@ -131,7 +131,50 @@ export async function seedMockData() {
       status: "completed",
     });
 
-    console.log("Mock transactions created for new users");
+    // Add OFFUS transactions (external payments)
+    await storage.createTransaction({
+      fromUserId: "@sarah_wilson",
+      toUserId: null, // External transaction
+      amount: 29.99,
+      description: "Juice Shop - Apple Juice Purchase",
+      status: "completed",
+      type: "payment",
+      externalOrderId: "juice-12345",
+      externalSource: "juice-shop",
+      externalMerchantId: "JUICE_SHOP_001",
+      networkCode: "VISA-EXT",
+      routingNumber: "021000021",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "@james_chen",
+      toUserId: null, // External transaction
+      amount: 45.50,
+      description: "Juice Shop - Mixed Fruit Bundle",
+      status: "completed",
+      type: "payment",
+      externalOrderId: "juice-67890",
+      externalSource: "juice-shop",
+      externalMerchantId: "JUICE_SHOP_001",
+      networkCode: "MASTERCARD-EXT",
+      routingNumber: "026009593",
+    });
+
+    await storage.createTransaction({
+      fromUserId: "@elena_kowalski",
+      toUserId: null, // External transaction
+      amount: 12.75,
+      description: "External Merchant - Coffee Shop",
+      status: "pending",
+      type: "payment",
+      externalOrderId: "ext-54321",
+      externalSource: "external-merchant",
+      externalMerchantId: "COFFEE_SHOP_001",
+      networkCode: "AMEX-EXT",
+      routingNumber: "026009593",
+    });
+
+    console.log("Mock ONUS and OFFUS transactions created for new users");
 
     // Create mock payment methods with unencrypted data
     // Admin payment methods

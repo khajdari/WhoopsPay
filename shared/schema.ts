@@ -71,22 +71,29 @@ export const users = sqliteTable("users", {
   isAdmin: integer("is_admin"),
 });
 
-// Transaction table with security flaws
+// Transaction table with ONUS/OFFUS categorization
 export const transactions = sqliteTable("transactions", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   fromUserId: text("from_user_id").notNull(),
-  toUserId: text("to_user_id").notNull(),
+  toUserId: text("to_user_id"),
   amount: real("amount").notNull(),
   description: text("description"),
   status: text("status"),
   type: text("type"),
   createdAt: integer("created_at"),
-  // External payment integration fields
+  // ONUS/OFFUS Transaction Classification
+  transactionCategory: text("transaction_category").notNull(), // 'ONUS' or 'OFFUS'
+  isInternal: integer("is_internal").notNull(), // 1 for ONUS, 0 for OFFUS
+  // External system integration for OFFUS transactions
   externalOrderId: text("external_order_id"),
-  externalSource: text("external_source"), // 'juice-shop', 'external-api', etc.
+  externalSource: text("external_source"), // 'juice-shop', 'external-merchant', etc.
+  externalMerchantId: text("external_merchant_id"),
   returnUrl: text("return_url"),
   cancelUrl: text("cancel_url"),
   externalMetadata: text("external_metadata"), // JSON string for extra data
+  // Banking classification fields
+  networkCode: text("network_code"), // Internal routing code for ONUS, external network for OFFUS
+  routingNumber: text("routing_number"), // Bank routing for OFFUS transactions
 });
 
 // Payment methods with exposed sensitive data

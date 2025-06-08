@@ -230,21 +230,38 @@ export class DatabaseStorage implements IStorage {
 
   async createTransaction(transactionData: InsertTransaction): Promise<Transaction> {
     try {
-      logStore.addDbLog(`Creating transaction: ${transactionData.fromUserId} -> ${transactionData.toUserId} (${transactionData.amount})`);
+      // Determine if transaction is ONUS or OFFUS
+      const isInternalTransaction = this.isOnUsTransaction(transactionData);
+      const transactionCategory = isInternalTransaction ? 'ONUS' : 'OFFUS';
+      
+      logStore.addDbLog(`Creating ${transactionCategory} transaction: ${transactionData.fromUserId} -> ${transactionData.toUserId || 'External'} (${transactionData.amount})`);
+      
       const [transaction] = await db
         .insert(transactions)
         .values({
           ...transactionData,
+          transactionCategory,
+          isInternal: isInternalTransaction ? 1 : 0,
+          networkCode: isInternalTransaction ? 'WHOOPS-INT' : transactionData.networkCode || 'EXT-NET',
           createdAt: Date.now(),
         })
         .returning();
-      logStore.addDbLog(`Transaction created successfully: ID ${transaction.id}`);
+      
+      logStore.addDbLog(`${transactionCategory} transaction created successfully: ID ${transaction.id}`);
       return transaction;
     } catch (error) {
       logStore.addDbLog(`Error creating transaction: ${error}`);
       console.error("Error creating transaction:", error);
       throw error;
     }
+  }
+
+  private isOnUsTransaction(transactionData: InsertTransaction): boolean {
+    // ONUS: Both fromUserId and toUserId exist and start with @ (WhoopsPay accounts)
+    // OFFUS: toUserId is null/undefined or doesn't start with @ (external transaction)
+    return !!(transactionData.toUserId && 
+              transactionData.fromUserId?.startsWith('@') && 
+              transactionData.toUserId.startsWith('@'));
   }
 
   async getUserTransactions(userId: string): Promise<Transaction[]> {
