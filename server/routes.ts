@@ -253,17 +253,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.post("/api/external/payment/initiate", async (req, res) => {
     try {
-      const { amount, orderId, source, returnUrl, cancelUrl, description, metadata } = req.body;
+      const { amount, orderId, source, returnUrl, cancelUrl, description, metadata, userId } = req.body;
 
       // VULNERABILITY: Insufficient input validation
       if (!amount || amount <= 0) {
         return res.status(400).json({ error: "Invalid amount" });
       }
 
+      // Use provided userId or default to admin for backwards compatibility
+      const targetUserId = userId || "@admin_maria";
+
       // Create money request instead of transaction for proper pending request handling
       const moneyRequest = await storage.createMoneyRequest({
         fromUserId: "juice-shop", // External merchant requests payment
-        toUserId: "@admin_maria", // Default admin user to receive external payment requests
+        toUserId: targetUserId, // Use the specified user or default to admin
         amount: parseFloat(amount),
         description: description || `Juice Shop Order #${orderId}`,
         status: "pending",
@@ -278,7 +281,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Also create the transaction record for tracking
       const transaction = await storage.createTransaction({
         fromUserId: "juice-shop",
-        toUserId: "@admin_maria", 
+        toUserId: targetUserId, 
         amount: parseFloat(amount),
         description: description || `Juice Shop Order #${orderId}`,
         status: "external_pending",
