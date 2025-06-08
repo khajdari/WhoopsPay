@@ -418,7 +418,7 @@ const translations: Translations = {
   },
   footerText: {
     'en-GB': '© 2025 WhoopsPay. An educational project developed as part of a postgraduate thesis on web application vulnerabilities.',
-    'el-GR': '© 2025 WhoopsPay. Ένα εκπαιδευτικό έργο που αναπτύχθηκε στο πλαίσιο μεταπτυχιακής διατριβής για τρωτότητες εφαρμογών ιστού.'
+    'el-GR': '© 2025 WhoopsPay. Ένα εκπαιδευτικό έργο που αναπτύχθηκε στο πλαίσιο μεταπτυχιακής διπλωματικής για τρωτότητες εφαρμογών ιστού.'
   },
   
   // Additional landing page features

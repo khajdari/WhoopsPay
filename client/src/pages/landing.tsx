@@ -53,7 +53,7 @@ export default function Landing() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center space-x-2">
-                <CreditCard className="h-8 w-8 text-indigo-600" />
+                <CreditCard className="h-6 w-6 text-blue-600" />
                 <span className="text-2xl font-bold text-gray-900">WhoopsPay</span>
               </div>
               
@@ -62,7 +62,7 @@ export default function Landing() {
                 <Button onClick={handleLogin} variant="outline">
                   {t('signIn')}
                 </Button>
-                <Button onClick={handleSignup} className="bg-indigo-600 hover:bg-indigo-700">
+                <Button onClick={handleSignup} className="bg-blue-600 hover:bg-blue-300">
                   {t('getStarted')}
                 </Button>
               </div>
@@ -71,33 +71,15 @@ export default function Landing() {
         </header>
 
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-indigo-50 to-white py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="bg-gradient-to-br from-blue-800 to-blue-400 py-10">
+          <div className="mwhoopspay-gradient">
             <div className="text-center">
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              <h1 className="text-4xl md:text-6xl font-bold text-blue-50 mb-6">
                 {t('heroTitle')}
               </h1>
-              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              <p className="text-xl text-blue-50 mb-8 max-w-3xl mx-auto">
                 {t('heroSubtitle')}
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
-                  onClick={handleSignup}
-                  className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3"
-                >
-                  {t('getStarted')}
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  onClick={handleLogin}
-                  className="text-lg px-8 py-3"
-                >
-                  {t('signIn')}
-                </Button>
-              </div>
             </div>
           </div>
         </section>
@@ -167,6 +149,20 @@ export default function Landing() {
                 <CardContent>
                   <CardDescription>
                     {t('globalReachDesc')}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                    <Users className="w-6 h-6 text-red-600" />
+                  </div>
+                  <CardTitle>{t('trustedCommunity')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    {t('trustedCommunityDesc')}
                   </CardDescription>
                 </CardContent>
               </Card>
