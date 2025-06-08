@@ -158,6 +158,145 @@ interface Translations {
   choosePassword: TranslationKey;
   creatingAccount: TranslationKey;
   alreadyHaveAccount: TranslationKey;
+  
+  // Dashboard specific translations
+  dashboardWelcome: TranslationKey;
+  dashboardSubtitle: TranslationKey;
+  dashboardBalance: TranslationKey;
+  dashboardTransactions: TranslationKey;
+  dashboardPaymentMethods: TranslationKey;
+  dashboardSendMoney: TranslationKey;
+  dashboardAddMoney: TranslationKey;
+  dashboardViewTransactions: TranslationKey;
+  dashboardSettings: TranslationKey;
+  dashboardPendingRequests: TranslationKey;
+  dashboardRecentTransactions: TranslationKey;
+  dashboardNoTransactions: TranslationKey;
+  dashboardSendFirstPayment: TranslationKey;
+  dashboardNoPaymentMethods: TranslationKey;
+  dashboardAddPaymentMethod: TranslationKey;
+  
+  // Transfer specific translations
+  transferTitle: TranslationKey;
+  transferSubtitle: TranslationKey;
+  transferRecipientEmail: TranslationKey;
+  transferAmount: TranslationKey;
+  transferDescription: TranslationKey;
+  transferPaymentMethod: TranslationKey;
+  transferReviewTitle: TranslationKey;
+  transferConfirmTitle: TranslationKey;
+  transferCompleteTitle: TranslationKey;
+  transferSuccessMessage: TranslationKey;
+  transferSendAnother: TranslationKey;
+  transferGoToDashboard: TranslationKey;
+  transferAvailableBalance: TranslationKey;
+  transferRecentTransfers: TranslationKey;
+  
+  // Issues/Support translations
+  issuesTitle: TranslationKey;
+  issuesSubtitle: TranslationKey;
+  issuesReportTitle: TranslationKey;
+  issuesReportIssue: TranslationKey;
+  issuesTitle2: TranslationKey;
+  issuesCategory: TranslationKey;
+  issuesPriority: TranslationKey;
+  issuesDescription2: TranslationKey;
+  issuesSubmitIssue: TranslationKey;
+  issuesNoIssuesFound: TranslationKey;
+  issuesStartReporting: TranslationKey;
+  issuesSearch: TranslationKey;
+  issuesAllStatuses: TranslationKey;
+  issuesAllCategories: TranslationKey;
+  issuesAllPriorities: TranslationKey;
+  issuesFilters: TranslationKey;
+  issuesStatus: TranslationKey;
+  issuesOpen: TranslationKey;
+  issuesInProgress: TranslationKey;
+  issuesResolved: TranslationKey;
+  issuesClosed: TranslationKey;
+  issuesLow: TranslationKey;
+  issuesMedium: TranslationKey;
+  issuesHigh: TranslationKey;
+  issuesUrgent: TranslationKey;
+  
+  // Admin translations
+  adminTitle: TranslationKey;
+  adminSubtitle: TranslationKey;
+  adminOverview: TranslationKey;
+  adminUsers: TranslationKey;
+  adminTransactions2: TranslationKey;
+  adminSystemHealth: TranslationKey;
+  adminActiveUsers: TranslationKey;
+  adminTotalVolume: TranslationKey;
+  adminPendingIssues: TranslationKey;
+  adminRecentActivity: TranslationKey;
+  adminSystemAlerts: TranslationKey;
+  adminManageUsers: TranslationKey;
+  adminViewTransactions: TranslationKey;
+  adminIssueManagement: TranslationKey;
+  adminSystemSettings: TranslationKey;
+  
+  // Profile translations
+  profileTitle: TranslationKey;
+  profileSubtitle: TranslationKey;
+  profilePersonalInfo: TranslationKey;
+  profileSecuritySettings: TranslationKey;
+  profilePreferences: TranslationKey;
+  profileActivityLog: TranslationKey;
+  profileChangePassword: TranslationKey;
+  profileTwoFactor: TranslationKey;
+  profileNotificationSettings: TranslationKey;
+  profilePrivacySettings: TranslationKey;
+  
+  // Wallet translations
+  walletTitle: TranslationKey;
+  walletSubtitle: TranslationKey;
+  walletBalance: TranslationKey;
+  walletAddFunds: TranslationKey;
+  walletWithdraw: TranslationKey;
+  walletPaymentMethods: TranslationKey;
+  walletAddPaymentMethod: TranslationKey;
+  walletTransactionHistory: TranslationKey;
+  
+  // Authentication translations
+  authWelcome: TranslationKey;
+  authSecureLogin: TranslationKey;
+  authQuickAccess: TranslationKey;
+  authLoginAsUser: TranslationKey;
+  authLoginAsAdmin: TranslationKey;
+  authCreateAccount2: TranslationKey;
+  authForgotPassword: TranslationKey;
+  authResetPassword: TranslationKey;
+  authSignUpHere2: TranslationKey;
+  authSignInHere: TranslationKey;
+  authRememberPassword: TranslationKey;
+  authDontHaveAccount2: TranslationKey;
+  authAlreadyHaveAccount2: TranslationKey;
+  authProcessing: TranslationKey;
+  authSendResetLink: TranslationKey;
+  authBackToEdit: TranslationKey;
+  authClearForm: TranslationKey;
+  authReviewTransfer: TranslationKey;
+  
+  // Common UI elements
+  loading: TranslationKey;
+  refresh: TranslationKey;
+  search: TranslationKey;
+  filter: TranslationKey;
+  sort: TranslationKey;
+  export: TranslationKey;
+  view: TranslationKey;
+  manage: TranslationKey;
+  update: TranslationKey;
+  create: TranslationKey;
+  close: TranslationKey;
+  confirm: TranslationKey;
+  continue: TranslationKey;
+  back: TranslationKey;
+  next: TranslationKey;
+  previous: TranslationKey;
+  yes: TranslationKey;
+  no: TranslationKey;
 }
 
 const translations: Translations = {
@@ -521,6 +660,514 @@ const translations: Translations = {
   alreadyHaveAccount: {
     'en-GB': 'Already have an account?',
     'el-GR': 'Έχετε ήδη λογαριασμό;'
+  },
+  
+  // Dashboard specific translations
+  dashboardWelcome: {
+    'en-GB': 'Welcome back',
+    'el-GR': 'Καλώς ήρθατε πίσω'
+  },
+  dashboardSubtitle: {
+    'en-GB': 'Here\'s what\'s happening with your account',
+    'el-GR': 'Δείτε τι συμβαίνει με τον λογαριασμό σας'
+  },
+  dashboardBalance: {
+    'en-GB': 'Current Balance',
+    'el-GR': 'Τρέχον Υπόλοιπο'
+  },
+  dashboardTransactions: {
+    'en-GB': 'Recent Transactions',
+    'el-GR': 'Πρόσφατες Συναλλαγές'
+  },
+  dashboardPaymentMethods: {
+    'en-GB': 'Payment Methods',
+    'el-GR': 'Μέθοδοι Πληρωμής'
+  },
+  dashboardSendMoney: {
+    'en-GB': 'Send Money',
+    'el-GR': 'Αποστολή Χρημάτων'
+  },
+  dashboardAddMoney: {
+    'en-GB': 'Add Money',
+    'el-GR': 'Προσθήκη Χρημάτων'
+  },
+  dashboardViewTransactions: {
+    'en-GB': 'View All Transactions',
+    'el-GR': 'Προβολή Όλων των Συναλλαγών'
+  },
+  dashboardSettings: {
+    'en-GB': 'Account Settings',
+    'el-GR': 'Ρυθμίσεις Λογαριασμού'
+  },
+  dashboardPendingRequests: {
+    'en-GB': 'Pending Requests',
+    'el-GR': 'Αιτήματα σε Εκκρεμότητα'
+  },
+  dashboardRecentTransactions: {
+    'en-GB': 'Recent Transactions',
+    'el-GR': 'Πρόσφατες Συναλλαγές'
+  },
+  dashboardNoTransactions: {
+    'en-GB': 'No transactions yet',
+    'el-GR': 'Δεν υπάρχουν συναλλαγές ακόμα'
+  },
+  dashboardSendFirstPayment: {
+    'en-GB': 'Send your first payment',
+    'el-GR': 'Στείλτε την πρώτη σας πληρωμή'
+  },
+  dashboardNoPaymentMethods: {
+    'en-GB': 'No payment methods added',
+    'el-GR': 'Δεν έχουν προστεθεί μέθοδοι πληρωμής'
+  },
+  dashboardAddPaymentMethod: {
+    'en-GB': 'Add Payment Method',
+    'el-GR': 'Προσθήκη Μεθόδου Πληρωμής'
+  },
+  
+  // Transfer specific translations
+  transferTitle: {
+    'en-GB': 'Send Money',
+    'el-GR': 'Αποστολή Χρημάτων'
+  },
+  transferSubtitle: {
+    'en-GB': 'Transfer funds securely to other users',
+    'el-GR': 'Μεταφέρετε κεφάλαια με ασφάλεια σε άλλους χρήστες'
+  },
+  transferRecipientEmail: {
+    'en-GB': 'Recipient Email',
+    'el-GR': 'Email Παραλήπτη'
+  },
+  transferAmount: {
+    'en-GB': 'Amount',
+    'el-GR': 'Ποσό'
+  },
+  transferDescription: {
+    'en-GB': 'Description (Optional)',
+    'el-GR': 'Περιγραφή (Προαιρετικό)'
+  },
+  transferPaymentMethod: {
+    'en-GB': 'Payment Method',
+    'el-GR': 'Μέθοδος Πληρωμής'
+  },
+  transferReviewTitle: {
+    'en-GB': 'Review Transfer',
+    'el-GR': 'Έλεγχος Μεταφοράς'
+  },
+  transferConfirmTitle: {
+    'en-GB': 'Confirm Transfer',
+    'el-GR': 'Επιβεβαίωση Μεταφοράς'
+  },
+  transferCompleteTitle: {
+    'en-GB': 'Transfer Complete!',
+    'el-GR': 'Η Μεταφορά Ολοκληρώθηκε!'
+  },
+  transferSuccessMessage: {
+    'en-GB': 'Your money has been sent successfully',
+    'el-GR': 'Τα χρήματά σας εστάλησαν επιτυχώς'
+  },
+  transferSendAnother: {
+    'en-GB': 'Send Another',
+    'el-GR': 'Αποστολή Άλλης'
+  },
+  transferGoToDashboard: {
+    'en-GB': 'Go to Dashboard',
+    'el-GR': 'Μετάβαση στον Πίνακα Ελέγχου'
+  },
+  transferAvailableBalance: {
+    'en-GB': 'Available Balance',
+    'el-GR': 'Διαθέσιμο Υπόλοιπο'
+  },
+  transferRecentTransfers: {
+    'en-GB': 'Recent Transfers',
+    'el-GR': 'Πρόσφατες Μεταφορές'
+  },
+  
+  // Issues/Support translations
+  issuesTitle: {
+    'en-GB': 'Support Issues',
+    'el-GR': 'Ζητήματα Υποστήριξης'
+  },
+  issuesSubtitle: {
+    'en-GB': 'Report issues and track their resolution status',
+    'el-GR': 'Αναφέρετε προβλήματα και παρακολουθήστε την κατάσταση επίλυσής τους'
+  },
+  issuesReportTitle: {
+    'en-GB': 'Report New Issue',
+    'el-GR': 'Αναφορά Νέου Προβλήματος'
+  },
+  issuesReportIssue: {
+    'en-GB': 'Report Issue',
+    'el-GR': 'Αναφορά Προβλήματος'
+  },
+  issuesTitle2: {
+    'en-GB': 'Issue Title',
+    'el-GR': 'Τίτλος Προβλήματος'
+  },
+  issuesCategory: {
+    'en-GB': 'Category',
+    'el-GR': 'Κατηγορία'
+  },
+  issuesPriority: {
+    'en-GB': 'Priority',
+    'el-GR': 'Προτεραιότητα'
+  },
+  issuesDescription2: {
+    'en-GB': 'Detailed Description',
+    'el-GR': 'Λεπτομερής Περιγραφή'
+  },
+  issuesSubmitIssue: {
+    'en-GB': 'Submit Issue',
+    'el-GR': 'Υποβολή Προβλήματος'
+  },
+  issuesNoIssuesFound: {
+    'en-GB': 'No issues found',
+    'el-GR': 'Δεν βρέθηκαν προβλήματα'
+  },
+  issuesStartReporting: {
+    'en-GB': 'Start by reporting your first issue',
+    'el-GR': 'Ξεκινήστε αναφέροντας το πρώτο σας πρόβλημα'
+  },
+  issuesSearch: {
+    'en-GB': 'Search issues...',
+    'el-GR': 'Αναζήτηση προβλημάτων...'
+  },
+  issuesAllStatuses: {
+    'en-GB': 'All statuses',
+    'el-GR': 'Όλες οι καταστάσεις'
+  },
+  issuesAllCategories: {
+    'en-GB': 'All categories',
+    'el-GR': 'Όλες οι κατηγορίες'
+  },
+  issuesAllPriorities: {
+    'en-GB': 'All priorities',
+    'el-GR': 'Όλες οι προτεραιότητες'
+  },
+  issuesFilters: {
+    'en-GB': 'Filters',
+    'el-GR': 'Φίλτρα'
+  },
+  issuesStatus: {
+    'en-GB': 'Status',
+    'el-GR': 'Κατάσταση'
+  },
+  issuesOpen: {
+    'en-GB': 'Open',
+    'el-GR': 'Ανοιχτό'
+  },
+  issuesInProgress: {
+    'en-GB': 'In Progress',
+    'el-GR': 'Σε Εξέλιξη'
+  },
+  issuesResolved: {
+    'en-GB': 'Resolved',
+    'el-GR': 'Επιλύθηκε'
+  },
+  issuesClosed: {
+    'en-GB': 'Closed',
+    'el-GR': 'Κλειστό'
+  },
+  issuesLow: {
+    'en-GB': 'Low',
+    'el-GR': 'Χαμηλή'
+  },
+  issuesMedium: {
+    'en-GB': 'Medium',
+    'el-GR': 'Μεσαία'
+  },
+  issuesHigh: {
+    'en-GB': 'High',
+    'el-GR': 'Υψηλή'
+  },
+  issuesUrgent: {
+    'en-GB': 'Urgent',
+    'el-GR': 'Επείγον'
+  },
+  
+  // Admin translations
+  adminTitle: {
+    'en-GB': 'Administration Panel',
+    'el-GR': 'Πάνελ Διαχείρισης'
+  },
+  adminSubtitle: {
+    'en-GB': 'Manage users, transactions, and system settings',
+    'el-GR': 'Διαχειριστείτε χρήστες, συναλλαγές και ρυθμίσεις συστήματος'
+  },
+  adminOverview: {
+    'en-GB': 'System Overview',
+    'el-GR': 'Επισκόπηση Συστήματος'
+  },
+  adminUsers: {
+    'en-GB': 'Users',
+    'el-GR': 'Χρήστες'
+  },
+  adminTransactions2: {
+    'en-GB': 'Transactions',
+    'el-GR': 'Συναλλαγές'
+  },
+  adminSystemHealth: {
+    'en-GB': 'System Health',
+    'el-GR': 'Υγεία Συστήματος'
+  },
+  adminActiveUsers: {
+    'en-GB': 'Active Users',
+    'el-GR': 'Ενεργοί Χρήστες'
+  },
+  adminTotalVolume: {
+    'en-GB': 'Total Volume',
+    'el-GR': 'Συνολικός Όγκος'
+  },
+  adminPendingIssues: {
+    'en-GB': 'Pending Issues',
+    'el-GR': 'Προβλήματα σε Εκκρεμότητα'
+  },
+  adminRecentActivity: {
+    'en-GB': 'Recent Activity',
+    'el-GR': 'Πρόσφατη Δραστηριότητα'
+  },
+  adminSystemAlerts: {
+    'en-GB': 'System Alerts',
+    'el-GR': 'Ειδοποιήσεις Συστήματος'
+  },
+  adminManageUsers: {
+    'en-GB': 'Manage Users',
+    'el-GR': 'Διαχείριση Χρηστών'
+  },
+  adminViewTransactions: {
+    'en-GB': 'View Transactions',
+    'el-GR': 'Προβολή Συναλλαγών'
+  },
+  adminIssueManagement: {
+    'en-GB': 'Issue Management',
+    'el-GR': 'Διαχείριση Προβλημάτων'
+  },
+  adminSystemSettings: {
+    'en-GB': 'System Settings',
+    'el-GR': 'Ρυθμίσεις Συστήματος'
+  },
+  
+  // Profile translations
+  profileTitle: {
+    'en-GB': 'Profile Settings',
+    'el-GR': 'Ρυθμίσεις Προφίλ'
+  },
+  profileSubtitle: {
+    'en-GB': 'Manage your account information and preferences',
+    'el-GR': 'Διαχειριστείτε τις πληροφορίες και τις προτιμήσεις του λογαριασμού σας'
+  },
+  profilePersonalInfo: {
+    'en-GB': 'Personal Information',
+    'el-GR': 'Προσωπικές Πληροφορίες'
+  },
+  profileSecuritySettings: {
+    'en-GB': 'Security Settings',
+    'el-GR': 'Ρυθμίσεις Ασφαλείας'
+  },
+  profilePreferences: {
+    'en-GB': 'Preferences',
+    'el-GR': 'Προτιμήσεις'
+  },
+  profileActivityLog: {
+    'en-GB': 'Activity Log',
+    'el-GR': 'Αρχείο Δραστηριότητας'
+  },
+  profileChangePassword: {
+    'en-GB': 'Change Password',
+    'el-GR': 'Αλλαγή Κωδικού Πρόσβασης'
+  },
+  profileTwoFactor: {
+    'en-GB': 'Two-Factor Authentication',
+    'el-GR': 'Ταυτοποίηση Δύο Παραγόντων'
+  },
+  profileNotificationSettings: {
+    'en-GB': 'Notification Settings',
+    'el-GR': 'Ρυθμίσεις Ειδοποιήσεων'
+  },
+  profilePrivacySettings: {
+    'en-GB': 'Privacy Settings',
+    'el-GR': 'Ρυθμίσεις Απορρήτου'
+  },
+  
+  // Wallet translations
+  walletTitle: {
+    'en-GB': 'Wallet Management',
+    'el-GR': 'Διαχείριση Πορτοφολιού'
+  },
+  walletSubtitle: {
+    'en-GB': 'Manage your balance and payment methods',
+    'el-GR': 'Διαχειριστείτε το υπόλοιπο και τις μεθόδους πληρωμής σας'
+  },
+  walletBalance: {
+    'en-GB': 'Wallet Balance',
+    'el-GR': 'Υπόλοιπο Πορτοφολιού'
+  },
+  walletAddFunds: {
+    'en-GB': 'Add Funds',
+    'el-GR': 'Προσθήκη Κεφαλαίων'
+  },
+  walletWithdraw: {
+    'en-GB': 'Withdraw',
+    'el-GR': 'Ανάληψη'
+  },
+  walletPaymentMethods: {
+    'en-GB': 'Payment Methods',
+    'el-GR': 'Μέθοδοι Πληρωμής'
+  },
+  walletAddPaymentMethod: {
+    'en-GB': 'Add Payment Method',
+    'el-GR': 'Προσθήκη Μεθόδου Πληρωμής'
+  },
+  walletTransactionHistory: {
+    'en-GB': 'Transaction History',
+    'el-GR': 'Ιστορικό Συναλλαγών'
+  },
+  
+  // Authentication translations
+  authWelcome: {
+    'en-GB': 'Welcome to WhoopsPay',
+    'el-GR': 'Καλώς ήρθατε στο WhoopsPay'
+  },
+  authSecureLogin: {
+    'en-GB': 'Secure login to your account',
+    'el-GR': 'Ασφαλής σύνδεση στον λογαριασμό σας'
+  },
+  authQuickAccess: {
+    'en-GB': 'Quick Test Access',
+    'el-GR': 'Γρήγορη Πρόσβαση Δοκιμής'
+  },
+  authLoginAsUser: {
+    'en-GB': 'Login as User',
+    'el-GR': 'Σύνδεση ως Χρήστης'
+  },
+  authLoginAsAdmin: {
+    'en-GB': 'Login as Admin',
+    'el-GR': 'Σύνδεση ως Διαχειριστής'
+  },
+  authCreateAccount2: {
+    'en-GB': 'Create Account',
+    'el-GR': 'Δημιουργία Λογαριασμού'
+  },
+  authForgotPassword: {
+    'en-GB': 'Forgot Password?',
+    'el-GR': 'Ξεχάσατε τον Κωδικό;'
+  },
+  authResetPassword: {
+    'en-GB': 'Reset Password',
+    'el-GR': 'Επαναφορά Κωδικού'
+  },
+  authSignUpHere2: {
+    'en-GB': 'Sign up here',
+    'el-GR': 'Εγγραφή εδώ'
+  },
+  authSignInHere: {
+    'en-GB': 'Sign in here',
+    'el-GR': 'Σύνδεση εδώ'
+  },
+  authRememberPassword: {
+    'en-GB': 'Remember your password?',
+    'el-GR': 'Θυμάστε τον κωδικό σας;'
+  },
+  authDontHaveAccount2: {
+    'en-GB': "Don't have an account?",
+    'el-GR': 'Δεν έχετε λογαριασμό;'
+  },
+  authAlreadyHaveAccount2: {
+    'en-GB': 'Already have an account?',
+    'el-GR': 'Έχετε ήδη λογαριασμό;'
+  },
+  authProcessing: {
+    'en-GB': 'Processing...',
+    'el-GR': 'Επεξεργασία...'
+  },
+  authSendResetLink: {
+    'en-GB': 'Send Reset Link',
+    'el-GR': 'Αποστολή Συνδέσμου Επαναφοράς'
+  },
+  authBackToEdit: {
+    'en-GB': 'Back to Edit',
+    'el-GR': 'Επιστροφή για Επεξεργασία'
+  },
+  authClearForm: {
+    'en-GB': 'Clear Form',
+    'el-GR': 'Εκκαθάριση Φόρμας'
+  },
+  authReviewTransfer: {
+    'en-GB': 'Review Transfer',
+    'el-GR': 'Έλεγχος Μεταφοράς'
+  },
+  
+  // Common UI elements
+  loading: {
+    'en-GB': 'Loading...',
+    'el-GR': 'Φόρτωση...'
+  },
+  refresh: {
+    'en-GB': 'Refresh',
+    'el-GR': 'Ανανέωση'
+  },
+  search: {
+    'en-GB': 'Search',
+    'el-GR': 'Αναζήτηση'
+  },
+  filter: {
+    'en-GB': 'Filter',
+    'el-GR': 'Φίλτρο'
+  },
+  sort: {
+    'en-GB': 'Sort',
+    'el-GR': 'Ταξινόμηση'
+  },
+  export: {
+    'en-GB': 'Export',
+    'el-GR': 'Εξαγωγή'
+  },
+  view: {
+    'en-GB': 'View',
+    'el-GR': 'Προβολή'
+  },
+  manage: {
+    'en-GB': 'Manage',
+    'el-GR': 'Διαχείριση'
+  },
+  update: {
+    'en-GB': 'Update',
+    'el-GR': 'Ενημέρωση'
+  },
+  create: {
+    'en-GB': 'Create',
+    'el-GR': 'Δημιουργία'
+  },
+  close: {
+    'en-GB': 'Close',
+    'el-GR': 'Κλείσιμο'
+  },
+  confirm: {
+    'en-GB': 'Confirm',
+    'el-GR': 'Επιβεβαίωση'
+  },
+  continue: {
+    'en-GB': 'Continue',
+    'el-GR': 'Συνέχεια'
+  },
+  back: {
+    'en-GB': 'Back',
+    'el-GR': 'Πίσω'
+  },
+  next: {
+    'en-GB': 'Next',
+    'el-GR': 'Επόμενο'
+  },
+  previous: {
+    'en-GB': 'Previous',
+    'el-GR': 'Προηγούμενο'
+  },
+  yes: {
+    'en-GB': 'Yes',
+    'el-GR': 'Ναι'
+  },
+  no: {
+    'en-GB': 'No',
+    'el-GR': 'Όχι'
   },
   
   // Additional landing page features
