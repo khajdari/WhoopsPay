@@ -661,7 +661,7 @@ export default function Dashboard() {
               <Card>
                 <div className="px-6 py-4 border-b border-gray-200">
                   <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
+                    <h3 className="text-lg font-medium text-gray-900">{t('recentActivity')}</h3>
                     <Link href="/transactions">
                       <Button variant="link" className="text-blue-600 hover:text-blue-700 p-0">
                         See all
@@ -703,7 +703,7 @@ export default function Dashboard() {
               <Card>
                 <div className="px-6 py-4 border-b border-gray-200">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium text-gray-900">Payment Methods</h3>
+                    <h3 className="text-lg font-medium text-gray-900">{t('paymentMethods')}</h3>
                   </div>
                 </div>
                 
