@@ -212,6 +212,8 @@ export default function Transactions() {
                     <SelectItem value="all">All transactions</SelectItem>
                     <SelectItem value="sent">Money sent</SelectItem>
                     <SelectItem value="received">Money received</SelectItem>
+                    <SelectItem value="onus">ONUS (Internal)</SelectItem>
+                    <SelectItem value="offus">OFFUS (External)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
