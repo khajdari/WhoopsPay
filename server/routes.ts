@@ -1284,8 +1284,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Handle external redirect for Juice Shop - always redirect external requests
-      if (isMoneyRequest && request.fromUserId === "juice-shop") {
-        const redirectUrl = `http://localhost:5000/payment-result?status=approved&orderId=${request.externalOrderId}&amount=${requestAmount}&returnTo=juice-shop`;
+      if (isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external")) {
+        // Use returnUrl if available, otherwise fallback to Juice Shop default
+        const redirectUrl = request.returnUrl || `http://localhost:3000/#/basket?payment=success&orderId=${request.externalOrderId}&amount=${requestAmount}`;
         const response = {
           message: "External payment approved successfully",
           redirect: true,
@@ -1362,15 +1363,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         updatedRequest = await storage.updateTransactionStatus(requestId, 'rejected');
       }
       
-      // Handle external redirect for Juice Shop
-      if (isMoneyRequest && request.type === "external") {
-        const redirectUrl = `http://localhost:5000/payment-result?status=rejected&orderId=${request.externalOrderId}`;
-        return res.json({
+      // Handle external redirect for Juice Shop - always redirect external requests
+      if (isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external")) {
+        // Use cancelUrl if available, otherwise fallback to Juice Shop default
+        const redirectUrl = request.cancelUrl || `http://localhost:3000/#/basket?payment=cancelled&orderId=${request.externalOrderId}&amount=${request.amount}`;
+        const response = {
           message: "External payment rejected successfully",
           redirect: true,
           redirectUrl,
-          request: updatedRequest
-        });
+          request: updatedRequest,
+          external: true
+        };
+        console.log("Sending external redirect response:", response);
+        return res.json(response);
       }
       
       res.json({ 
