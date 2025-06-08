@@ -121,7 +121,7 @@ export default function DashboardRefactoredFixed() {
                   <div>
                     <p className="text-sm font-medium text-gray-400">{t("dashboardBalance")}</p>
                     <p className="text-2xl font-bold text-yellow-400">
-                      {formatAmount(userProfile?.balance || "0")}
+                      {formatAmount((detailedProfile as any)?.balance || "0")}
                     </p>
                   </div>
                   <Wallet className="h-8 w-8 text-yellow-400" />
