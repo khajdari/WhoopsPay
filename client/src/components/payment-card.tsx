@@ -163,10 +163,20 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => setIsFlipped(!isFlipped)}
       >
-        {/* Front of bank account card */}
-        {!isFlipped && (
+        <div 
+          className="relative w-full h-full transition-transform duration-700"
+          style={{
+            transformStyle: 'preserve-3d',
+            transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
+          }}
+        >
+          {/* Front of bank account card */}
           <div 
             className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
+            style={{ 
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden'
+            }}
           >
             {/* Cheque security pattern background */}
             <div className="absolute inset-0 opacity-5">
@@ -219,12 +229,15 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             {/* Cheque perforations */}
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-blue-300 to-transparent opacity-30"></div>
           </div>
-        )}
 
-        {/* Back of bank account card */}
-        {isFlipped && (
+          {/* Back of bank account card */}
           <div 
             className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
+            style={{
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'rotateY(180deg)'
+            }}
           >
             {/* Security pattern background */}
             <div className="absolute inset-0 opacity-5">
@@ -264,7 +277,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
