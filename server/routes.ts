@@ -260,12 +260,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Invalid amount" });
       }
 
-      // Create pending transaction for external payment
-      const transaction = await storage.createTransaction({
-        fromUserId: "external", // VULNERABILITY: Using generic user for external payments
-        toUserId: "merchant", // VULNERABILITY: Fixed merchant ID
+      // Create money request instead of transaction for proper pending request handling
+      const moneyRequest = await storage.createMoneyRequest({
+        fromUserId: "juice-shop", // External merchant requests payment
+        toUserId: "@admin_maria", // Default admin user to receive external payment requests
         amount: parseFloat(amount),
-        description: description || `External payment from ${source}`,
+        description: description || `Juice Shop Order #${orderId}`,
+        status: "pending",
+        type: "external",
+        externalOrderId: orderId,
+        externalSource: source,
+        returnUrl: returnUrl,
+        cancelUrl: cancelUrl,
+        externalMetadata: metadata ? JSON.stringify(metadata) : null,
+      });
+
+      // Also create the transaction record for tracking
+      const transaction = await storage.createTransaction({
+        fromUserId: "juice-shop",
+        toUserId: "@admin_maria", 
+        amount: parseFloat(amount),
+        description: description || `Juice Shop Order #${orderId}`,
         status: "external_pending",
         type: "external_payment",
         externalOrderId: orderId,
@@ -278,10 +293,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // VULNERABILITY: Exposing internal transaction ID in URL
       const paymentUrl = `${req.protocol}://${req.get('host')}/external-payment/${transaction.id}`;
       
+      logStore.addExpressLog(`[EXTERNAL-PAYMENT] Created money request ID ${moneyRequest.id} for Juice Shop order ${orderId}, amount: $${amount}`);
+      
       res.json({
         success: true,
         paymentUrl,
         transactionId: transaction.id,
+        requestId: moneyRequest.id,
         status: "pending"
       });
       

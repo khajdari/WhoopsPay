@@ -104,6 +104,12 @@ export interface IStorage {
   getIssueReport(id: number): Promise<IssueReport | undefined>;
   updateIssueReportStatus(id: number, status: string, adminNotes?: string): Promise<IssueReport>;
   assignIssueReport(id: number, assignedTo: string): Promise<IssueReport>;
+
+  // Money Request operations
+  createMoneyRequest(request: InsertMoneyRequest): Promise<MoneyRequest>;
+  getMoneyRequest(id: number): Promise<MoneyRequest | undefined>;
+  getPendingMoneyRequests(userId: string): Promise<MoneyRequest[]>;
+  updateMoneyRequestStatus(id: number, status: string): Promise<MoneyRequest>;
 }
 
 export class DatabaseStorage implements IStorage {
