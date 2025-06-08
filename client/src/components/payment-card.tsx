@@ -172,7 +172,7 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
         >
           {/* Front of bank account card */}
           <div 
-            className={`absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden transform ${isHovered ? 'scale-105' : ''} transition-transform duration-300`}
+            className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
             style={{ backfaceVisibility: 'hidden' }}
           >
             
@@ -232,10 +232,10 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
 
           {/* Back of bank account card */}
           <div 
-            className={`absolute inset-0 w-full h-full bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-lg p-4 text-gray-800 relative overflow-hidden transform ${isHovered ? 'scale-105' : ''} transition-transform duration-300`}
+            className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
             style={{
               backfaceVisibility: 'hidden',
-              transform: `rotateY(180deg) ${isHovered ? 'scale(1.05)' : 'scale(1)'}`
+              transform: 'rotateY(180deg)'
             }}
           >
             {/* Security pattern background */}
