@@ -251,6 +251,14 @@ interface Translations {
   'sendMoney.recipientPlaceholder': TranslationKey;
   'sendMoney.amountPlaceholder': TranslationKey;
   'sendMoney.notePlaceholder': TranslationKey;
+  'sendMoney.requestFrom': TranslationKey;
+  'sendMoney.requestButton': TranslationKey;
+  'sendMoney.addMoneyButton': TranslationKey;
+  'sendMoney.withdrawButton': TranslationKey;
+  'sendMoney.source': TranslationKey;
+  'sendMoney.destination': TranslationKey;
+  'sendMoney.sourcePlaceholder': TranslationKey;
+  'sendMoney.destinationPlaceholder': TranslationKey;
 }
 
 const translations: Translations = {

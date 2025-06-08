@@ -383,16 +383,16 @@ export default function SendMoney() {
           <TabsContent value="request">
             <Card>
               <CardHeader>
-                <CardTitle>Request Money</CardTitle>
+                <CardTitle>{t('sendMoney.requestButton')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleRequestMoney} className="space-y-6">
                   <div>
-                    <Label htmlFor="request-from">Request from</Label>
+                    <Label htmlFor="request-from">{t('sendMoney.requestFrom')}</Label>
                     <Input
                       id="request-from"
                       type="text"
-                      placeholder="Email, phone number, or user ID"
+                      placeholder={t('sendMoney.recipientPlaceholder')}
                       value={requestFrom}
                       onChange={(e) => setRequestFrom(e.target.value)}
                       required
@@ -403,7 +403,7 @@ export default function SendMoney() {
                   </div>
 
                   <div>
-                    <Label htmlFor="request-amount">Amount</Label>
+                    <Label htmlFor="request-amount">{t('sendMoney.amount')}</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-2.5 text-gray-500">$</span>
                       <Input
@@ -411,7 +411,7 @@ export default function SendMoney() {
                         type="number"
                         step="0.01"
                         min="0.01"
-                        placeholder="0.00"
+                        placeholder={t('sendMoney.amountPlaceholder')}
                         className="pl-8"
                         value={requestAmount}
                         onChange={(e) => setRequestAmount(e.target.value)}
@@ -421,11 +421,11 @@ export default function SendMoney() {
                   </div>
 
                   <div>
-                    <Label htmlFor="request-note">Note (Optional)</Label>
+                    <Label htmlFor="request-note">{t('sendMoney.note')}</Label>
                     <Input
                       id="request-note"
                       type="text"
-                      placeholder="What's this for?"
+                      placeholder={t('sendMoney.notePlaceholder')}
                       value={requestNote}
                       onChange={(e) => setRequestNote(e.target.value)}
                     />
@@ -436,7 +436,7 @@ export default function SendMoney() {
                     className="w-full bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                     disabled={requestMoneyMutation.isPending}
                   >
-                    {requestMoneyMutation.isPending ? "Requesting..." : "Request Money"}
+                    {requestMoneyMutation.isPending ? "Requesting..." : t('sendMoney.requestButton')}
                   </Button>
                 </form>
               </CardContent>
@@ -447,12 +447,12 @@ export default function SendMoney() {
           <TabsContent value="add">
             <Card>
               <CardHeader>
-                <CardTitle>Add Money</CardTitle>
+                <CardTitle>{t('sendMoney.addMoneyButton')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleAddMoney} className="space-y-6">
                   <div>
-                    <Label htmlFor="add-amount">Amount</Label>
+                    <Label htmlFor="add-amount">{t('sendMoney.amount')}</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-2.5 text-gray-500">$</span>
                       <Input
@@ -460,7 +460,7 @@ export default function SendMoney() {
                         type="number"
                         step="0.01"
                         min="0.01"
-                        placeholder="0.00"
+                        placeholder={t('sendMoney.amountPlaceholder')}
                         className="pl-8"
                         value={addAmount}
                         onChange={(e) => setAddAmount(e.target.value)}
@@ -470,10 +470,10 @@ export default function SendMoney() {
                   </div>
 
                   <div>
-                    <Label htmlFor="add-source">Funding Source</Label>
+                    <Label htmlFor="add-source">{t('sendMoney.source')}</Label>
                     <Select value={addSource} onValueChange={setAddSource} required>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select funding source" />
+                        <SelectValue placeholder={t('sendMoney.sourcePlaceholder')} />
                       </SelectTrigger>
                       <SelectContent>
                         {paymentMethods.map((method) => (
@@ -494,7 +494,7 @@ export default function SendMoney() {
                     className="w-full bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                     disabled={addMoneyMutation.isPending}
                   >
-                    {addMoneyMutation.isPending ? "Adding..." : "Add Money"}
+                    {addMoneyMutation.isPending ? "Adding..." : t('sendMoney.addMoneyButton')}
                   </Button>
                 </form>
               </CardContent>
@@ -505,12 +505,12 @@ export default function SendMoney() {
           <TabsContent value="withdraw">
             <Card>
               <CardHeader>
-                <CardTitle>Withdraw Money</CardTitle>
+                <CardTitle>{t('sendMoney.withdrawButton')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleWithdrawMoney} className="space-y-6">
                   <div>
-                    <Label htmlFor="withdraw-amount">Amount</Label>
+                    <Label htmlFor="withdraw-amount">{t('sendMoney.amount')}</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-2.5 text-gray-500">$</span>
                       <Input
@@ -518,7 +518,7 @@ export default function SendMoney() {
                         type="number"
                         step="0.01"
                         min="0.01"
-                        placeholder="0.00"
+                        placeholder={t('sendMoney.amountPlaceholder')}
                         className="pl-8"
                         value={withdrawAmount}
                         onChange={(e) => setWithdrawAmount(e.target.value)}
@@ -528,10 +528,10 @@ export default function SendMoney() {
                   </div>
 
                   <div>
-                    <Label htmlFor="withdraw-destination">Withdraw to</Label>
+                    <Label htmlFor="withdraw-destination">{t('sendMoney.destination')}</Label>
                     <Select value={withdrawDestination} onValueChange={setWithdrawDestination} required>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select destination" />
+                        <SelectValue placeholder={t('sendMoney.destinationPlaceholder')} />
                       </SelectTrigger>
                       <SelectContent>
                         {paymentMethods.map((method) => (
@@ -552,7 +552,7 @@ export default function SendMoney() {
                     className="w-full bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                     disabled={withdrawMoneyMutation.isPending}
                   >
-                    {withdrawMoneyMutation.isPending ? "Processing..." : "Withdraw Money"}
+                    {withdrawMoneyMutation.isPending ? "Processing..." : t('sendMoney.withdrawButton')}
                   </Button>
                 </form>
               </CardContent>

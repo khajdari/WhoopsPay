@@ -67,6 +67,7 @@ function Router() {
           <Route path="/" component={Dashboard} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/transfer" component={SendMoney} />
+          <Route path="/send-money" component={SendMoney} />
           <Route path="/transactions" component={Transactions} />
           <Route path="/money" component={Wallet} />
           <Route path="/admin" component={Admin} />
