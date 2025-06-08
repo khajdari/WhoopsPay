@@ -13,6 +13,7 @@ import { SendMoneyModal } from "@/components/send-money-modal";
 import { TransactionItem } from "@/components/transaction-item";
 import { PaymentCard } from "@/components/payment-card";
 import { PaymentRequestList } from "@/components/business/PaymentRequestList";
+import MoneyRequestModal from "@/components/modals/MoneyRequestModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -39,8 +40,8 @@ export default function Dashboard() {
   const { t } = useI18n(); // Translation system
   const { toast } = useToast(); // Toast notifications
   const [showSendModal, setShowSendModal] = useState(false); // Send money modal state
-  const [approvingRequest, setApprovingRequest] = useState<number | null>(null);
-  const [rejectingRequest, setRejectingRequest] = useState<number | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
+  const [showRequestModal, setShowRequestModal] = useState(false);
 
   // Server status data for admin dashboard
   const { data: serverStatus } = useQuery({
@@ -414,11 +415,18 @@ export default function Dashboard() {
                 ) : Array.isArray(pendingRequests) && pendingRequests.length > 0 ? (
                   <div className="mt-4 space-y-3">
                     {pendingRequests.map((request: any) => (
-                      <div key={request.id} className={`flex items-center justify-between p-4 rounded-lg border ${
-                        request.isExternal 
-                          ? 'bg-blue-50 border-blue-200' 
-                          : 'bg-orange-50 border-orange-200'
-                      }`}>
+                      <div 
+                        key={request.id} 
+                        className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer hover:shadow-md transition-shadow ${
+                          request.isExternal 
+                            ? 'bg-blue-50 border-blue-200 hover:bg-blue-100' 
+                            : 'bg-orange-50 border-orange-200 hover:bg-orange-100'
+                        }`}
+                        onClick={() => {
+                          setSelectedRequest(request);
+                          setShowRequestModal(true);
+                        }}
+                      >
                         <div className="flex items-center space-x-3">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                             request.isExternal 
@@ -453,44 +461,8 @@ export default function Dashboard() {
                             </p>
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button
-                            onClick={() => handleApproveRequest(request.id)}
-                            size="sm"
-                            className="bg-green-600 hover:bg-green-700 text-white"
-                            disabled={approvingRequest === request.id}
-                          >
-                            {approvingRequest === request.id ? (
-                              <>
-                                <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                                Approving...
-                              </>
-                            ) : (
-                              <>
-                                <Check className="h-4 w-4 mr-1" />
-                                Approve
-                              </>
-                            )}
-                          </Button>
-                          <Button
-                            onClick={() => handleRejectRequest(request.id)}
-                            size="sm"
-                            variant="outline"
-                            className="border-red-300 text-red-600 hover:bg-red-50"
-                            disabled={rejectingRequest === request.id}
-                          >
-                            {rejectingRequest === request.id ? (
-                              <>
-                                <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                                Rejecting...
-                              </>
-                            ) : (
-                              <>
-                                <X className="h-4 w-4 mr-1" />
-                                Reject
-                              </>
-                            )}
-                          </Button>
+                        <div className="text-gray-400">
+                          <span className="text-sm">Click to review</span>
                         </div>
                       </div>
                     ))}
