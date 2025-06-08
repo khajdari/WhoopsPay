@@ -233,11 +233,9 @@ export default function Dashboard() {
         console.log("Redirecting to:", data.redirectUrl);
         toast({
           title: "External Payment Approved",
-          description: "Redirecting to payment result page...",
+          description: "Redirecting back to Juice Shop...",
         });
-        setTimeout(() => {
-          window.location.href = data.redirectUrl;
-        }, 1500);
+        window.location.href = data.redirectUrl;
       } else {
         toast({
           title: "Request Approved",
