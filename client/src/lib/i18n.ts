@@ -158,6 +158,23 @@ interface Translations {
   choosePassword: TranslationKey;
   creatingAccount: TranslationKey;
   alreadyHaveAccount: TranslationKey;
+
+  // Dashboard specific
+  'dashboard.welcome': TranslationKey;
+  'dashboard.subtitle': TranslationKey;
+  'dashboard.balance': TranslationKey;
+  'dashboard.transactions': TranslationKey;
+  'dashboard.paymentMethods': TranslationKey;
+  'dashboard.sendMoney': TranslationKey;
+  'dashboard.addMoney': TranslationKey;
+  'dashboard.viewTransactions': TranslationKey;
+  'dashboard.settings': TranslationKey;
+  'dashboard.pendingRequests': TranslationKey;
+  'dashboard.recentTransactions': TranslationKey;
+  'dashboard.noTransactions': TranslationKey;
+  'dashboard.sendFirstPayment': TranslationKey;
+  'dashboard.noPaymentMethods': TranslationKey;
+  'dashboard.addPaymentMethod': TranslationKey;
 }
 
 const translations: Translations = {
@@ -555,6 +572,68 @@ const translations: Translations = {
   mobileAppDesc: {
     'en-GB': 'Manage your payments on the go with our intuitive mobile application.',
     'el-GR': 'Διαχειριστείτε τις πληρωμές σας εν κινήσει με τη διαισθητική μας εφαρμογή κινητού.'
+  },
+
+  // Dashboard specific translations
+  'dashboard.welcome': {
+    'en-GB': 'Welcome back, {firstName}!',
+    'el-GR': 'Καλώς ήρθατε πίσω, {firstName}!'
+  },
+  'dashboard.subtitle': {
+    'en-GB': 'Here\'s your account overview',
+    'el-GR': 'Εδώ είναι η επισκόπηση του λογαριασμού σας'
+  },
+  'dashboard.balance': {
+    'en-GB': 'Balance',
+    'el-GR': 'Υπόλοιπο'
+  },
+  'dashboard.transactions': {
+    'en-GB': 'Transactions',
+    'el-GR': 'Συναλλαγές'
+  },
+  'dashboard.paymentMethods': {
+    'en-GB': 'Payment Methods',
+    'el-GR': 'Μέθοδοι Πληρωμής'
+  },
+  'dashboard.sendMoney': {
+    'en-GB': 'Send Money',
+    'el-GR': 'Αποστολή Χρημάτων'
+  },
+  'dashboard.addMoney': {
+    'en-GB': 'Add Money',
+    'el-GR': 'Προσθήκη Χρημάτων'
+  },
+  'dashboard.viewTransactions': {
+    'en-GB': 'View All Transactions',
+    'el-GR': 'Προβολή Όλων των Συναλλαγών'
+  },
+  'dashboard.settings': {
+    'en-GB': 'Settings',
+    'el-GR': 'Ρυθμίσεις'
+  },
+  'dashboard.pendingRequests': {
+    'en-GB': 'Pending Requests',
+    'el-GR': 'Αιτήματα σε Εκκρεμότητα'
+  },
+  'dashboard.recentTransactions': {
+    'en-GB': 'Recent Transactions',
+    'el-GR': 'Πρόσφατες Συναλλαγές'
+  },
+  'dashboard.noTransactions': {
+    'en-GB': 'No transactions yet',
+    'el-GR': 'Δεν υπάρχουν συναλλαγές ακόμα'
+  },
+  'dashboard.sendFirstPayment': {
+    'en-GB': 'Send your first payment',
+    'el-GR': 'Στείλτε την πρώτη σας πληρωμή'
+  },
+  'dashboard.noPaymentMethods': {
+    'en-GB': 'No payment methods added',
+    'el-GR': 'Δεν έχουν προστεθεί μέθοδοι πληρωμής'
+  },
+  'dashboard.addPaymentMethod': {
+    'en-GB': 'Add Payment Method',
+    'el-GR': 'Προσθήκη Μεθόδου Πληρωμής'
   }
 };
 
