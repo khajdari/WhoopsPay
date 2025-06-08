@@ -32,6 +32,9 @@ import { CreditCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ExternalPaymentModal } from "@/components/external-payment-modal";
 import { Layout } from "@/components/layout";
+import { useI18n } from "@/lib/i18n";
+import { LanguageSelector } from "@/components/language-selector";
+import { ArrowLeft } from "lucide-react";
 
 /**
  * Login Form Validation Schema - Input validation rules
@@ -73,7 +76,8 @@ export default function Login() {
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
   const [showExternalPaymentModal, setShowExternalPaymentModal] = useState(false);
-  const [externalPaymentData, setExternalPaymentData] = useState(null);
+  const [externalPaymentData, setExternalPaymentData] = useState<any>(null);
+  const { t } = useI18n();
 
   // Fetch test accounts for development
   const { data: testAccounts } = useQuery({
@@ -167,8 +171,8 @@ export default function Login() {
               <CreditCard className="h-8 w-8 text-blue-600" />
               <h1 className="text-3xl font-bold whoopspay-blue">WhoopsPay</h1>
             </div>
-            <CardTitle className="text-2xl font-bold text-gray-900">Sign In</CardTitle>
-            <CardDescription>Welcome back to WhoopsPay</CardDescription>
+            <CardTitle className="text-2xl font-bold text-gray-900">{t('signInTitle')}</CardTitle>
+            <CardDescription>{t('welcomeBack')}</CardDescription>
           </CardHeader>
           <CardContent>
             {/* Discrete Test Account Autofill */}
@@ -201,11 +205,11 @@ export default function Login() {
 
             <form onSubmit={loginForm.handleSubmit(handleSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="username">{t('username')}</Label>
                 <Input
                   id="username"
                   type="text"
-                  placeholder="Enter your username"
+                  placeholder={t('enterUsername')}
                   {...loginForm.register("username")}
                 />
                 {loginForm.formState.errors.username && (
@@ -216,11 +220,11 @@ export default function Login() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t('password')}</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder={t('enterPassword')}
                   {...loginForm.register("password")}
                 />
                 {loginForm.formState.errors.password && (
@@ -235,20 +239,28 @@ export default function Login() {
                 className="w-full bg-blue-600 hover:bg-blue-700"
                 disabled={loginMutation.isPending}
               >
-                {loginMutation.isPending ? "Signing in..." : "Sign In"}
+                {loginMutation.isPending ? t('loggingIn') : t('signInTitle')}
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
+            <div className="mt-6 text-center space-y-3">
               <p className="text-sm text-gray-600">
-                Don't have an account?{" "}
+                {t('dontHaveAccount')}{" "}
                 <Link
                   href="/signup"
                   className="text-blue-600 hover:text-blue-500 font-medium"
                 >
-                  Sign up
+                  {t('signUpHere')}
                 </Link>
               </p>
+              
+              <div className="flex items-center justify-between pt-3 border-t border-gray-200">
+                <Link href="/" className="flex items-center text-sm text-gray-600 hover:text-gray-800">
+                  <ArrowLeft className="h-4 w-4 mr-1" />
+                  {t('returnToHome')}
+                </Link>
+                <LanguageSelector />
+              </div>
             </div>
 
             {showExternalPaymentModal && (
