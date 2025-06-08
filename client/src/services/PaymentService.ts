@@ -49,6 +49,19 @@ export interface CreatePayment {
   description?: string;
 }
 
+export interface SendMoneyRequest {
+  toUserId: string;
+  amount: number;
+  description?: string;
+  paymentMethodId: number;
+}
+
+export interface MoneyRequest {
+  toUserId: string;
+  amount: number;
+  description?: string;
+}
+
 export interface CreatePaymentMethod {
   type: string;
   cardNumber?: string;
@@ -156,5 +169,20 @@ export class PaymentService {
 
   static getExternalSource(transaction: Transaction | PaymentRequest): string {
     return transaction.source || 'External';
+  }
+
+  static async sendMoney(request: SendMoneyRequest): Promise<any> {
+    return apiRequest("/api/send-money", "POST", request);
+  }
+
+  static async requestMoney(request: MoneyRequest): Promise<any> {
+    return apiRequest("/api/money-requests", "POST", request);
+  }
+
+  static calculateTransactionFee(amount: number): number {
+    // Standard transaction fee: 2.9% + $0.30, minimum $0.50
+    const percentageFee = amount * 0.029;
+    const totalFee = percentageFee + 0.30;
+    return Math.max(totalFee, 0.50);
   }
 }
