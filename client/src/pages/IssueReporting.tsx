@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { useI18n } from "@/lib/i18n";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { IssueReportForm } from "@/components/IssueReportForm";
@@ -40,6 +41,7 @@ interface IssueReport {
 
 export default function IssueReporting() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const [showForm, setShowForm] = useState(false);
 
   const { data: userIssues = [], isLoading } = useQuery({
@@ -112,10 +114,10 @@ export default function IssueReporting() {
         <div className="max-w-6xl mx-auto p-6">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              Issue Reports Administration
+              {t('issues.title')}
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Monitor and manage all user issue reports across the platform
+              {t('admin.userManagement')}
             </p>
           </div>
           

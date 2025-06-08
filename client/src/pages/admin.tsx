@@ -41,6 +41,7 @@ import { Eye, EyeOff } from "lucide-react";
  */
 export default function Admin() {
   const [showSensitive, setShowSensitive] = useState(false);
+  const { t } = useI18n();
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['/api/users'], // VULNERABLE: No access control
@@ -59,10 +60,10 @@ export default function Admin() {
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Admin Panel - Mock Data Overview
+            {t('admin.title')}
           </h1>
           <p className="text-gray-600">
-            View all users and their sensitive data (VULNERABLE: No access control)
+            {t('admin.systemStats')}
           </p>
           <div className="mt-4">
             <Button
