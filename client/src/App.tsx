@@ -25,14 +25,11 @@ import SendMoney from "@/pages/send-money";
 import Transactions from "@/pages/transactions";
 import Wallet from "@/pages/wallet";
 import Admin from "@/pages/admin";
-import Administration from "@/pages/administration";
 import Profile from "@/pages/profile";
-import Settings from "@/pages/settings";
 import IssueReporting from "@/pages/IssueReporting";
 
 // Special-purpose components
 import ExternalPayment from "@/pages/ExternalPayment";
-import PaymentProcessing from "@/pages/payment-processing";
 import PaymentResult from "@/pages/PaymentResult";
 import PaymentResultRedirect from "@/pages/PaymentResultRedirect";
 import { RedirectHandler } from "@/components/RedirectHandler";
@@ -57,7 +54,6 @@ function Router() {
       {/* Always available routes */}
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
-      <Route path="/payment-processing" component={PaymentProcessing} />
       <Route path="/external-payment/:transactionId" component={ExternalPayment} />
       <Route path="/payment-result" component={PaymentResultRedirect} />
       
@@ -71,9 +67,7 @@ function Router() {
           <Route path="/transactions" component={Transactions} />
           <Route path="/money" component={Wallet} />
           <Route path="/admin" component={Admin} />
-          <Route path="/administration" component={Administration} />
           <Route path="/profile" component={Profile} />
-          <Route path="/account" component={Settings} />
           <Route path="/issues" component={IssueReporting} />
         </>
       )}
