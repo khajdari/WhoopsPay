@@ -173,7 +173,11 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
           {/* Front of bank account card */}
           <div 
             className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
-            style={{ backfaceVisibility: 'hidden' }}
+            style={{ 
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              zIndex: isFlipped ? 1 : 2
+            }}
           >
             
             {/* Cheque security pattern background */}
@@ -235,7 +239,9 @@ export function PaymentCard({ id, type, cardNumber, cardName, bankName, accountN
             className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-lg p-4 text-gray-800 relative overflow-hidden"
             style={{
               backfaceVisibility: 'hidden',
-              transform: 'rotateY(180deg)'
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'rotateY(180deg)',
+              zIndex: isFlipped ? 2 : 1
             }}
           >
             {/* Security pattern background */}
