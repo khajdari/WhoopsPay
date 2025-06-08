@@ -249,7 +249,59 @@ export async function seedMockData() {
       isDefault: 0,
     });
 
-    console.log("Mock data seeded successfully with new users and @ prefix IDs");
+    // Create external money requests from Juice Shop that users can approve
+    await storage.createMoneyRequest({
+      fromUserId: "juice-shop",
+      toUserId: "@james_chen",
+      amount: 24.99,
+      description: "Juice Shop - Apple Juice Order #JS-2024-001",
+      status: "pending",
+      type: "external",
+      externalOrderId: "JS-2024-001",
+      externalSource: "juice-shop",
+      returnUrl: "http://localhost:3000/#/basket?payment=success&orderId=JS-2024-001",
+      cancelUrl: "http://localhost:3000/#/basket?payment=cancelled&orderId=JS-2024-001",
+      externalMetadata: JSON.stringify({
+        items: [{ name: "Apple Juice", quantity: 2, price: 12.495 }],
+        merchant: "OWASP Juice Shop"
+      })
+    });
+
+    await storage.createMoneyRequest({
+      fromUserId: "juice-shop", 
+      toUserId: "@sarah_wilson",
+      amount: 15.50,
+      description: "Juice Shop - Green Smoothie Order #JS-2024-002",
+      status: "pending",
+      type: "external",
+      externalOrderId: "JS-2024-002",
+      externalSource: "juice-shop",
+      returnUrl: "http://localhost:3000/#/basket?payment=success&orderId=JS-2024-002",
+      cancelUrl: "http://localhost:3000/#/basket?payment=cancelled&orderId=JS-2024-002",
+      externalMetadata: JSON.stringify({
+        items: [{ name: "Green Smoothie", quantity: 1, price: 15.50 }],
+        merchant: "OWASP Juice Shop"
+      })
+    });
+
+    await storage.createMoneyRequest({
+      fromUserId: "juice-shop",
+      toUserId: "@elena_kowalski", 
+      amount: 8.25,
+      description: "Juice Shop - Orange Juice Order #JS-2024-003",
+      status: "pending",
+      type: "external",
+      externalOrderId: "JS-2024-003",
+      externalSource: "juice-shop",
+      returnUrl: "http://localhost:3000/#/basket?payment=success&orderId=JS-2024-003",
+      cancelUrl: "http://localhost:3000/#/basket?payment=cancelled&orderId=JS-2024-003",
+      externalMetadata: JSON.stringify({
+        items: [{ name: "Orange Juice", quantity: 1, price: 8.25 }],
+        merchant: "OWASP Juice Shop"
+      })
+    });
+
+    console.log("Mock data seeded successfully with new users, @ prefix IDs, and external money requests");
   } catch (error) {
     console.error("Error seeding mock data:", error);
   }
