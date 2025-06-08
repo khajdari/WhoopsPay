@@ -53,13 +53,14 @@ function Router() {
 
   return (
     <Switch>
-      {!isAuthenticated ? (
-        <>
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/" component={Landing} />
-        </>
-      ) : (
+      {/* Always available routes */}
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={Signup} />
+      <Route path="/payment-processing" component={PaymentProcessing} />
+      <Route path="/external-payment/:transactionId" component={ExternalPayment} />
+      
+      {/* Authenticated routes */}
+      {isAuthenticated && (
         <>
           <Route path="/" component={Dashboard} />
           <Route path="/dashboard" component={Dashboard} />
@@ -74,8 +75,10 @@ function Router() {
         </>
       )}
 
-      <Route path="/payment-processing" component={PaymentProcessing} />
-      <Route path="/external-payment/:transactionId" component={ExternalPayment} />
+      {/* Landing page for unauthenticated users */}
+      {!isAuthenticated && <Route path="/" component={Landing} />}
+      
+      {/* Catch-all route */}
       <Route component={NotFound} />
     </Switch>
   );
