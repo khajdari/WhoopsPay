@@ -1284,8 +1284,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Handle external redirect for Juice Shop
-      if (isMoneyRequest && request.type === "external" && request.returnUrl) {
-        const redirectUrl = `${request.returnUrl}?status=approved&orderId=${request.externalOrderId}&amount=${requestAmount}`;
+      if (isMoneyRequest && request.type === "external") {
+        const redirectUrl = `http://localhost:5000/payment-result?status=approved&orderId=${request.externalOrderId}&amount=${requestAmount}`;
         return res.json({
           message: "External payment approved successfully",
           redirect: true,
@@ -1360,8 +1360,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Handle external redirect for Juice Shop
-      if (isMoneyRequest && request.type === "external" && request.cancelUrl) {
-        const redirectUrl = `${request.cancelUrl}?status=rejected&orderId=${request.externalOrderId}`;
+      if (isMoneyRequest && request.type === "external") {
+        const redirectUrl = `http://localhost:5000/payment-result?status=rejected&orderId=${request.externalOrderId}`;
         return res.json({
           message: "External payment rejected successfully",
           redirect: true,
