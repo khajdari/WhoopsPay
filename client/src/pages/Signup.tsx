@@ -69,6 +69,7 @@ type RegisterForm = z.infer<typeof registerSchema>;
 export default function Signup() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { t } = useI18n();
 
   const registerForm = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
@@ -114,19 +115,19 @@ export default function Signup() {
             <CreditCard className="h-8 w-8 text-blue-600" />
             <h1 className="text-3xl font-bold whoopspay-blue">WhoopsPay</h1>
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">Create Account</CardTitle>
-          <CardDescription>Join WhoopsPay - Secure Payment Platform</CardDescription>
+          <CardTitle className="text-2xl font-bold text-gray-900">{t('signUpTitle')}</CardTitle>
+          <CardDescription>{t('createAccount')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
+                <Label htmlFor="firstName">{t('firstName')}</Label>
                 <Input
                   id="firstName"
                   type="text"
                   {...registerForm.register("firstName")}
-                  placeholder="First name"
+                  placeholder={t('enterFirstName')}
                 />
                 {registerForm.formState.errors.firstName && (
                   <p className="text-sm text-red-600">
@@ -136,12 +137,12 @@ export default function Signup() {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
+                <Label htmlFor="lastName">{t('lastName')}</Label>
                 <Input
                   id="lastName"
                   type="text"
                   {...registerForm.register("lastName")}
-                  placeholder="Last name"
+                  placeholder={t('enterLastName')}
                 />
                 {registerForm.formState.errors.lastName && (
                   <p className="text-sm text-red-600">
@@ -152,12 +153,12 @@ export default function Signup() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username">{t('username')}</Label>
               <Input
                 id="username"
                 type="text"
                 {...registerForm.register("username")}
-                placeholder="Choose a username"
+                placeholder={t('enterUsername')}
               />
               {registerForm.formState.errors.username && (
                 <p className="text-sm text-red-600">
@@ -167,12 +168,12 @@ export default function Signup() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('email')}</Label>
               <Input
                 id="email"
                 type="email"
                 {...registerForm.register("email")}
-                placeholder="Enter your email"
+                placeholder={t('enterEmail')}
               />
               {registerForm.formState.errors.email && (
                 <p className="text-sm text-red-600">
@@ -182,12 +183,12 @@ export default function Signup() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('password')}</Label>
               <Input
                 id="password"
                 type="password"
                 {...registerForm.register("password")}
-                placeholder="Choose a password"
+                placeholder={t('choosePassword')}
               />
               {registerForm.formState.errors.password && (
                 <p className="text-sm text-red-600">
@@ -201,19 +202,27 @@ export default function Signup() {
               className="w-full"
               disabled={registerMutation.isPending}
             >
-              {registerMutation.isPending ? "Creating account..." : "Create Account"}
+              {registerMutation.isPending ? t('creatingAccount') : t('createAccount')}
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-y-3">
             <p className="text-sm text-gray-600">
-              Already have an account?{" "}
+              {t('alreadyHaveAccount')}{" "}
               <Link href="/login">
                 <span className="text-blue-600 hover:text-blue-500 font-medium cursor-pointer">
-                  Sign in
+                  {t('signInTitle')}
                 </span>
               </Link>
             </p>
+            
+            <div className="flex items-center justify-between pt-3 border-t border-gray-200">
+              <Link href="/" className="flex items-center text-sm text-gray-600 hover:text-gray-800">
+                <ArrowLeft className="h-4 w-4 mr-1" />
+                {t('returnToHome')}
+              </Link>
+              <LanguageSelector />
+            </div>
           </div>
         </CardContent>
       </Card>
