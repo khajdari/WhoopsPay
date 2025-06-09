@@ -245,19 +245,18 @@ interface Translations {
   'issues.assignedTo': TranslationKey;
 
   // External redirect page
-  'external.paymentApproved': TranslationKey;
-  'external.paymentRejected': TranslationKey;
-  'external.approvedDescription': TranslationKey;
-  'external.rejectedDescription': TranslationKey;
-  'external.orderId': TranslationKey;
-  'external.amount': TranslationKey;
-  'external.service': TranslationKey;
-  'external.redirectingTo': TranslationKey;
-  'external.redirectingIn': TranslationKey;
-  'external.seconds': TranslationKey;
-  'external.redirecting': TranslationKey;
-  'external.stayHere': TranslationKey;
-  'external.redirectNow': TranslationKey;
+  paymentApproved: TranslationKey;
+  paymentRejected: TranslationKey;
+  approvedDescription: TranslationKey;
+  rejectedDescription: TranslationKey;
+  orderId: TranslationKey;
+  service: TranslationKey;
+  redirectingTo: TranslationKey;
+  redirectingIn: TranslationKey;
+  seconds: TranslationKey;
+  redirecting: TranslationKey;
+  stayHere: TranslationKey;
+  redirectNow: TranslationKey;
 
   // Send Money page
   'sendMoney.title': TranslationKey;
