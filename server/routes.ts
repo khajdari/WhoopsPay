@@ -1292,11 +1292,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         type: request.type,
         externalSource: request.externalSource,
         returnUrl: request.returnUrl,
-        shouldRedirect: isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external")
+        shouldRedirect: isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external" || request.externalSource === "juice-shop")
       });
       
       // Handle external redirect for Juice Shop - always redirect external requests
-      if (isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external")) {
+      if (isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external" || request.externalSource === "juice-shop")) {
         // Create proper Juice Shop redirect URL using dynamic configuration
         let juiceShopUrl;
         if (request.returnUrl?.includes('http')) {
