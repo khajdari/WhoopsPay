@@ -122,13 +122,25 @@ export default function Login() {
 
   const loginMutation = useMutation({
     mutationFn: async (data: LoginForm) => {
-      return await apiRequest("/api/login", "POST", data);
+      // Include payment parameters in the login request if they exist
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryString = urlParams.toString();
+      const loginUrl = queryString ? `/api/login?${queryString}` : "/api/login";
+      return await apiRequest(loginUrl, "POST", data);
     },
-    onSuccess: async () => {
-      toast({
-        title: "Login successful",
-        description: "Welcome back to WhoopsPay!",
-      });
+    onSuccess: async (response: any) => {
+      // Check if this was a Juice Shop payment login
+      if (response.paymentRequest) {
+        toast({
+          title: "Login successful",
+          description: `Payment request created for $${response.paymentRequest.amount}. Check your pending requests.`,
+        });
+      } else {
+        toast({
+          title: "Login successful",
+          description: "Welcome back to WhoopsPay!",
+        });
+      }
       
       // Wait for the authentication state to be properly updated
       await queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
@@ -140,6 +152,7 @@ export default function Login() {
           if (user && (user as any).isAdmin) {
             setLocation("/administration");
           } else {
+            // Always redirect to dashboard where pending requests are visible
             setLocation("/dashboard");
           }
         } catch (error) {

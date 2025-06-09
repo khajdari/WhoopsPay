@@ -95,17 +95,83 @@ export async function setupAuth(app: Express) {
       // Set session
       req.session.userId = user.id;
       
-      res.json({ 
-        message: "Login successful",
-        user: {
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          balance: user.balance,
-          isAdmin: user.isAdmin
+      // Check for Juice Shop payment parameters and create pending money request
+      const { redirect, transactionId, amount, description, returnUrl, cancelUrl } = req.query;
+      if (redirect === 'payment' && transactionId && amount) {
+        try {
+          // Create pending money request for the logged-in user
+          const { storage } = require('./storage');
+          const moneyRequest = await storage.createMoneyRequest({
+            fromUserId: "juice-shop",
+            toUserId: user.id,
+            amount: parseFloat(amount as string),
+            description: description as string || `Juice Shop Order #${transactionId}`,
+            status: "pending",
+            type: "external",
+            externalOrderId: transactionId as string,
+            externalSource: "juice-shop",
+            returnUrl: returnUrl as string,
+            cancelUrl: cancelUrl as string,
+            externalMetadata: JSON.stringify({
+              source: "juice-shop",
+              orderId: transactionId,
+              timestamp: Date.now()
+            })
+          });
+
+          // Create notification for the user
+          await storage.createNotification({
+            userId: user.id,
+            title: "New Payment Request",
+            message: `You have a pending payment request from Juice Shop for $${amount}`,
+            type: "payment_request"
+          });
+
+          res.json({ 
+            message: "Login successful",
+            user: {
+              id: user.id,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              balance: user.balance,
+              isAdmin: user.isAdmin
+            },
+            paymentRequest: {
+              id: moneyRequest.id,
+              amount: amount,
+              description: description,
+              redirect: true
+            }
+          });
+        } catch (error) {
+          console.error("Error creating payment request:", error);
+          // Continue with normal login even if payment request creation fails
+          res.json({ 
+            message: "Login successful",
+            user: {
+              id: user.id,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              balance: user.balance,
+              isAdmin: user.isAdmin
+            }
+          });
         }
-      });
+      } else {
+        res.json({ 
+          message: "Login successful",
+          user: {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            balance: user.balance,
+            isAdmin: user.isAdmin
+          }
+        });
+      }
     } catch (error) {
       console.error("Login error:", error);
       res.status(500).json({ message: "Internal server error" });
