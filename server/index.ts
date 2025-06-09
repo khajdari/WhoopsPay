@@ -7,10 +7,9 @@ import { seedMockData } from "./mockData";
 // Track server start time
 export const serverStartTime = new Date();
 
-// Clear and reinitialize database on every restart, then seed data
+// Clear and reinitialize database on every restart
 async function initializeSystem() {
   clearAndReinitializeDatabase();
-  await seedMockData();
 }
 
 initializeSystem().catch(console.error);
