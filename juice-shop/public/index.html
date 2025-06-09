@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWASP Juice Shop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2rem;
+            text-align: center;
+        }
+        
+        .header p {
+            text-align: center;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .add-to-basket {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .add-to-basket:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .basket {
+            position: fixed;
+            top: 50%;
+            right: -400px;
+            transform: translateY(-50%);
+            width: 380px;
+            height: 80vh;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px 0 0 20px;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+            padding: 2rem;
+            transition: right 0.3s ease;
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+        }
+        
+        .basket.open {
+            right: 0;
+        }
+        
+        .basket-toggle {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            z-index: 1000;
+        }
+        
+        .basket-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        .payment-methods {
+            margin-top: 1rem;
+        }
+        
+        .payment-method {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .payment-method.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .message {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>OWASP Juice Shop</h1>
+        <p>Probably the most modern and sophisticated insecure web application</p>
+    </div>
+
+    <div class="container">
+        <div class="products-grid" id="products-grid">
+            <!-- Products will be loaded here -->
+        </div>
+    </div>
+
+    <button class="basket-toggle" onclick="toggleBasket()">🛒 <span id="basket-count">0</span></button>
+
+    <div class="basket" id="basket">
+        <h2>Shopping Basket</h2>
+        <div id="basket-items">
+            <!-- Basket items will appear here -->
+        </div>
+        <div class="total" id="total">Total: $0.00</div>
+        
+        <div class="payment-methods">
+            <h3>Payment Method</h3>
+            <button class="payment-method" data-method="card" onclick="selectPayment('card')">💳 Credit Card</button>
+            <button class="payment-method selected" data-method="whoopspay" onclick="selectPayment('whoopspay')">💰 WhoopsPay</button>
+            <button class="payment-method" data-method="paypal" onclick="selectPayment('paypal')">🅿️ PayPal</button>
+        </div>
+        
+        <button class="checkout-btn" onclick="checkout()">Checkout</button>
+        
+        <div id="message-area"></div>
+    </div>
+
+    <script>
+        let products = [];
+        let basket = [];
+        let selectedPayment = 'whoopspay';
+        const fruitIcons = ['🍎', '🍊', '🥭', '🍇', '🍋'];
+
+        // Load products
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/Products');
+                const data = await response.json();
+                products = data.data;
+                renderProducts();
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = products.map((product, index) => `
+                <div class="product-card">
+                    <div class="product-image">${fruitIcons[index % fruitIcons.length]}</div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-description">${product.description}</div>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <button class="add-to-basket" onclick="addToBasket(${product.id})">Add to Basket</button>
+                </div>
+            `).join('');
+        }
+
+        async function addToBasket(productId) {
+            try {
+                const response = await fetch('/api/BasketItems', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ProductId: productId })
+                });
+                
+                if (response.ok) {
+                    loadBasket();
+                }
+            } catch (error) {
+                console.error('Error adding to basket:', error);
+            }
+        }
+
+        async function loadBasket() {
+            try {
+                const response = await fetch('/api/BasketItems');
+                const data = await response.json();
+                basket = data.data;
+                renderBasket();
+            } catch (error) {
+                console.error('Error loading basket:', error);
+            }
+        }
+
+        function renderBasket() {
+            const basketItems = document.getElementById('basket-items');
+            const basketCount = document.getElementById('basket-count');
+            const total = document.getElementById('total');
+
+            if (basket.length === 0) {
+                basketItems.innerHTML = '<p>Your basket is empty</p>';
+                basketCount.textContent = '0';
+                total.textContent = 'Total: $0.00';
+                return;
+            }
+
+            basketItems.innerHTML = basket.map(item => `
+                <div class="basket-item">
+                    <div>
+                        <strong>${item.product.name}</strong><br>
+                        Qty: ${item.quantity} × $${item.product.price.toFixed(2)}
+                    </div>
+                    <button onclick="removeFromBasket(${item.id})" style="background: #ff4757; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer;">×</button>
+                </div>
+            `).join('');
+
+            const totalAmount = basket.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+            const totalItems = basket.reduce((sum, item) => sum + item.quantity, 0);
+            
+            basketCount.textContent = totalItems;
+            total.textContent = `Total: $${totalAmount.toFixed(2)}`;
+        }
+
+        async function removeFromBasket(itemId) {
+            try {
+                const response = await fetch(`/api/BasketItems/${itemId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    loadBasket();
+                }
+            } catch (error) {
+                console.error('Error removing from basket:', error);
+            }
+        }
+
+        function toggleBasket() {
+            const basket = document.getElementById('basket');
+            basket.classList.toggle('open');
+        }
+
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll('.payment-method').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-method="${method}"]`).classList.add('selected');
+        }
+
+        async function checkout() {
+            const messageArea = document.getElementById('message-area');
+            
+            if (basket.length === 0) {
+                showMessage('Your basket is empty!', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ paymentMethod: selectedPayment })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (selectedPayment === 'whoopspay') {
+                        showMessage(`Payment request sent to WhoopsPay! Order ID: ${result.orderId}. Check your WhoopsPay dashboard to approve the payment.`, 'success');
+                        setTimeout(() => {
+                            window.open(result.paymentUrl || 'http://localhost:5000/dashboard', '_blank');
+                        }, 2000);
+                    } else {
+                        showMessage(`Order completed! Order ID: ${result.orderId}. Total: $${result.total}`, 'success');
+                    }
+                    loadBasket();
+                } else {
+                    showMessage(result.error || 'Checkout failed', 'error');
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                showMessage('Checkout failed - please try again', 'error');
+            }
+        }
+
+        function showMessage(text, type) {
+            const messageArea = document.getElementById('message-area');
+            messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
+            setTimeout(() => {
+                messageArea.innerHTML = '';
+            }, 5000);
+        }
+
+        // Initialize
+        loadProducts();
+        loadBasket();
+    </script>
+</body>
+</html>

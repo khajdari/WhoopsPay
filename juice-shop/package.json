@@ -1,0 +1,13 @@
+{
+  "name": "juice-shop-sim",
+  "version": "1.0.0",
+  "description": "OWASP Juice Shop simulation for WhoopsPay integration",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "cors": "^2.8.5"
+  }
+}
