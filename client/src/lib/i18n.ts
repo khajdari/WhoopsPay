@@ -1234,3 +1234,20 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   return createElement(I18nContext.Provider, { value }, children);
 }
+
+/**
+ * useLanguage Hook - Access i18n context
+ * 
+ * Custom hook for accessing the internationalization context.
+ * Provides language state and translation functionality to components.
+ * 
+ * @returns I18nContext containing language, setLanguage, and t function
+ * @throws Error if used outside of I18nProvider
+ */
+export function useLanguage() {
+  const context = useContext(I18nContext);
+  if (!context) {
+    throw new Error('useLanguage must be used within an I18nProvider');
+  }
+  return context;
+}
