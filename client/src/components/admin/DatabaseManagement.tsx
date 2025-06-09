@@ -60,7 +60,7 @@ export function DatabaseManagement() {
 
   // Fetch table data
   const { data: tableData, isLoading: tableDataLoading, refetch: refetchTableData } = useQuery({
-    queryKey: ['/api/admin/database/table', selectedTable],
+    queryKey: [`/api/admin/database/table/${selectedTable}`],
     enabled: !!selectedTable,
     retry: false,
   });
