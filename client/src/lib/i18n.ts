@@ -794,9 +794,54 @@ const translations: Translations = {
     'en-GB': 'Pending Money Requests',
     'el-GR': 'Εκκρεμείς Αιτήσεις Χρημάτων'
   },
-  'transactions.subtitle': {
+  'transactionsSubtitle': {
     'en-GB': 'View all your payment activity',
     'el-GR': 'Δείτε όλη τη δραστηριότητα πληρωμών σας'
+  },
+  // Payment component translations
+  'verifyingPayment': {
+    'en-GB': 'Verifying payment...',
+    'el-GR': 'Επαλήθευση πληρωμής...'
+  },
+  'waitingForCallback': {
+    'en-GB': 'Waiting for payment callback...',
+    'el-GR': 'Αναμονή για callback πληρωμής...'
+  },
+  'listeningForPaymentConfirmation': {
+    'en-GB': 'Listening for payment confirmation from external service',
+    'el-GR': 'Αναμονή επιβεβαίωσης πληρωμής από εξωτερική υπηρεσία'
+  },
+  'paymentVerified': {
+    'en-GB': 'Payment verified successfully',
+    'el-GR': 'Η πληρωμή επαληθεύτηκε με επιτυχία'
+  },
+  'verificationFailed': {
+    'en-GB': 'Payment verification failed',
+    'el-GR': 'Η επαλήθευση πληρωμής απέτυχε'
+  },
+  'amountMismatch': {
+    'en-GB': 'Payment amount mismatch detected',
+    'el-GR': 'Ανιχνεύθηκε αναντιστοιχία ποσού πληρωμής'
+  },
+  'verificationPending': {
+    'en-GB': 'Payment verification pending',
+    'el-GR': 'Επαλήθευση πληρωμής σε εκκρεμότητα'
+  },
+  'transactionComplete': {
+    'en-GB': 'Transaction completed successfully',
+    'el-GR': 'Η συναλλαγή ολοκληρώθηκε με επιτυχία'
+  },
+  'transactionFailed': {
+    'en-GB': 'Transaction failed',
+    'el-GR': 'Η συναλλαγή απέτυχε'
+  },
+  'transactionProcessedSuccessfully': {
+    'en-GB': 'Your transaction has been processed successfully',
+    'el-GR': 'Η συναλλαγή σας έχει επεξεργαστεί με επιτυχία'
+  },
+  'transactionCouldNotBeCompleted': {
+    'en-GB': 'Your transaction could not be completed',
+    'el-GR': 'Η συναλλαγή σας δεν μπόρεσε να ολοκληρωθεί'
   },
   'dashboard.recentTransactions': {
     'en-GB': 'Recent Transactions',
