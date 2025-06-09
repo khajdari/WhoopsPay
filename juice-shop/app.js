@@ -1,149 +1,246 @@
-const express = require('express');
-const cors = require('cors');
+const http = require('http');
+const fs = require('fs');
 const path = require('path');
+const url = require('url');
 
-const app = express();
 const PORT = 3000;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.static('public'));
 
 // Mock product data
 const products = [
-  { id: 1, name: 'Apple Juice (1000ml)', price: 1.99, image: '/images/apple_juice.jpg', description: 'The all-time classic.' },
-  { id: 2, name: 'Orange Juice (1000ml)', price: 2.99, image: '/images/orange_juice.jpg', description: 'Made from oranges hand-picked by Uncle Dittmeyer.' },
-  { id: 3, name: 'Eggfruit Juice (500ml)', price: 8.99, image: '/images/eggfruit_juice.jpg', description: 'Now with even more exotic flavour.' },
-  { id: 4, name: 'Raspberry Juice (1000ml)', price: 4.99, image: '/images/raspberry_juice.jpg', description: 'Made from blended Raspberry Pi, water and sugar.' },
-  { id: 5, name: 'Lemon Juice (500ml)', price: 2.49, image: '/images/lemon_juice.jpg', description: 'Sour but full of vitamins.' }
+  { id: 1, name: 'Apple Juice (1000ml)', price: 1.99, description: 'The all-time classic.' },
+  { id: 2, name: 'Orange Juice (1000ml)', price: 2.99, description: 'Made from oranges hand-picked by Uncle Dittmeyer.' },
+  { id: 3, name: 'Eggfruit Juice (500ml)', price: 8.99, description: 'Now with even more exotic flavour.' },
+  { id: 4, name: 'Raspberry Juice (1000ml)', price: 4.99, description: 'Made from blended Raspberry Pi, water and sugar.' },
+  { id: 5, name: 'Lemon Juice (500ml)', price: 2.49, description: 'Sour but full of vitamins.' }
 ];
 
 // Mock basket data (in-memory for demo)
 let baskets = {};
 
-// Routes
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.get('/api/Products', (req, res) => {
-  res.json({ status: 'success', data: products });
-});
-
-app.get('/api/BasketItems', (req, res) => {
-  const basketId = req.query.basketId || 'default';
-  const basketItems = baskets[basketId] || [];
-  res.json({ status: 'success', data: basketItems });
-});
-
-app.post('/api/BasketItems', (req, res) => {
-  const { ProductId, quantity = 1, basketId = 'default' } = req.body;
-  
-  if (!baskets[basketId]) {
-    baskets[basketId] = [];
-  }
-  
-  const product = products.find(p => p.id === ProductId);
-  if (!product) {
-    return res.status(404).json({ error: 'Product not found' });
-  }
-  
-  const existingItem = baskets[basketId].find(item => item.ProductId === ProductId);
-  if (existingItem) {
-    existingItem.quantity += quantity;
-  } else {
-    baskets[basketId].push({
-      id: Date.now(),
-      ProductId,
-      quantity,
-      product
+// Helper function to parse JSON body
+function parseBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
     });
-  }
-  
-  res.json({ status: 'success', data: { ProductId, quantity } });
-});
-
-app.delete('/api/BasketItems/:id', (req, res) => {
-  const itemId = parseInt(req.params.id);
-  const basketId = req.query.basketId || 'default';
-  
-  if (baskets[basketId]) {
-    baskets[basketId] = baskets[basketId].filter(item => item.id !== itemId);
-  }
-  
-  res.json({ status: 'success' });
-});
-
-app.post('/api/checkout', async (req, res) => {
-  const { basketId = 'default', paymentMethod } = req.body;
-  const basketItems = baskets[basketId] || [];
-  
-  if (basketItems.length === 0) {
-    return res.status(400).json({ error: 'Empty basket' });
-  }
-  
-  const total = basketItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
-  const orderId = `JS-${Date.now()}`;
-  
-  // If WhoopsPay is selected, create payment request
-  if (paymentMethod === 'whoopspay') {
-    try {
-      // Create payment request to WhoopsPay
-      const paymentData = {
-        userId: '@james_chen', // Default user for demo
-        amount: total,
-        orderId: orderId,
-        description: `Juice Shop Order ${orderId} - ${basketItems.length} items`
-      };
-      
-      const response = await fetch('http://localhost:5000/api/external/juice-shop/payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(paymentData)
-      });
-      
-      const result = await response.json();
-      
-      if (response.ok) {
-        // Clear basket after successful payment request
-        baskets[basketId] = [];
-        res.json({ 
-          status: 'success', 
-          message: 'Payment request sent to WhoopsPay',
-          orderId: orderId,
-          total: total.toFixed(2),
-          paymentUrl: `http://localhost:5000/dashboard?highlight=${result.transactionId}`
-        });
-      } else {
-        res.status(400).json({ error: result.message || 'Payment failed' });
+    req.on('end', () => {
+      try {
+        resolve(body ? JSON.parse(body) : {});
+      } catch (error) {
+        reject(error);
       }
-    } catch (error) {
-      console.error('Payment error:', error);
-      res.status(500).json({ error: 'Payment service unavailable' });
-    }
-  } else {
-    // Simulate other payment methods
-    baskets[basketId] = [];
-    res.json({ 
-      status: 'success', 
-      message: 'Order completed successfully',
-      orderId: orderId,
-      total: total.toFixed(2)
     });
+  });
+}
+
+// Helper function to send JSON response
+function sendJSON(res, data, status = 200) {
+  res.writeHead(status, {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  });
+  res.end(JSON.stringify(data));
+}
+
+// Helper function to serve static files
+function serveStatic(res, filePath) {
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.writeHead(404);
+      res.end('File not found');
+      return;
+    }
+    
+    const ext = path.extname(filePath);
+    let contentType = 'text/html';
+    if (ext === '.css') contentType = 'text/css';
+    if (ext === '.js') contentType = 'application/javascript';
+    
+    res.writeHead(200, { 'Content-Type': contentType });
+    res.end(data);
+  });
+}
+
+// Create HTTP server
+const server = http.createServer(async (req, res) => {
+  const parsedUrl = url.parse(req.url, true);
+  const pathname = parsedUrl.pathname;
+  const method = req.method;
+
+  // Handle CORS preflight
+  if (method === 'OPTIONS') {
+    res.writeHead(200, {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    });
+    res.end();
+    return;
+  }
+
+  try {
+    // Routes
+    if (pathname === '/' && method === 'GET') {
+      serveStatic(res, path.join(__dirname, 'public', 'index.html'));
+    }
+    else if (pathname === '/api/Products' && method === 'GET') {
+      sendJSON(res, { status: 'success', data: products });
+    }
+    else if (pathname === '/api/BasketItems' && method === 'GET') {
+      const basketId = parsedUrl.query.basketId || 'default';
+      const basketItems = baskets[basketId] || [];
+      sendJSON(res, { status: 'success', data: basketItems });
+    }
+    else if (pathname === '/api/BasketItems' && method === 'POST') {
+      const body = await parseBody(req);
+      const { ProductId, quantity = 1, basketId = 'default' } = body;
+      
+      if (!baskets[basketId]) {
+        baskets[basketId] = [];
+      }
+      
+      const product = products.find(p => p.id === ProductId);
+      if (!product) {
+        sendJSON(res, { error: 'Product not found' }, 404);
+        return;
+      }
+      
+      const existingItem = baskets[basketId].find(item => item.ProductId === ProductId);
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        baskets[basketId].push({
+          id: Date.now(),
+          ProductId,
+          quantity,
+          product
+        });
+      }
+      
+      sendJSON(res, { status: 'success', data: { ProductId, quantity } });
+    }
+    else if (pathname.startsWith('/api/BasketItems/') && method === 'DELETE') {
+      const itemId = parseInt(pathname.split('/')[3]);
+      const basketId = parsedUrl.query.basketId || 'default';
+      
+      if (baskets[basketId]) {
+        baskets[basketId] = baskets[basketId].filter(item => item.id !== itemId);
+      }
+      
+      sendJSON(res, { status: 'success' });
+    }
+    else if (pathname === '/api/checkout' && method === 'POST') {
+      const body = await parseBody(req);
+      const { basketId = 'default', paymentMethod } = body;
+      const basketItems = baskets[basketId] || [];
+      
+      if (basketItems.length === 0) {
+        sendJSON(res, { error: 'Empty basket' }, 400);
+        return;
+      }
+      
+      const total = basketItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+      const orderId = `JS-${Date.now()}`;
+      
+      // If WhoopsPay is selected, create payment request
+      if (paymentMethod === 'whoopspay') {
+        try {
+          // Create payment request to WhoopsPay
+          const paymentData = {
+            userId: '@james_chen', // Default user for demo
+            amount: total,
+            orderId: orderId,
+            description: `Juice Shop Order ${orderId} - ${basketItems.length} items`
+          };
+          
+          const https = require('https');
+          const postData = JSON.stringify(paymentData);
+          
+          const options = {
+            hostname: 'localhost',
+            port: 5000,
+            path: '/api/external/juice-shop/payment',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Content-Length': Buffer.byteLength(postData)
+            },
+            rejectUnauthorized: false
+          };
+          
+          const whoopsPayReq = http.request(options, (whoopsPayRes) => {
+            let responseData = '';
+            whoopsPayRes.on('data', (chunk) => {
+              responseData += chunk;
+            });
+            
+            whoopsPayRes.on('end', () => {
+              try {
+                const result = JSON.parse(responseData);
+                
+                if (whoopsPayRes.statusCode === 200) {
+                  // Clear basket after successful payment request
+                  baskets[basketId] = [];
+                  sendJSON(res, { 
+                    status: 'success', 
+                    message: 'Payment request sent to WhoopsPay',
+                    orderId: orderId,
+                    total: total.toFixed(2),
+                    paymentUrl: `http://localhost:5000/dashboard?highlight=${result.transactionId}`
+                  });
+                } else {
+                  sendJSON(res, { error: result.message || 'Payment failed' }, 400);
+                }
+              } catch (error) {
+                sendJSON(res, { error: 'Payment service error' }, 500);
+              }
+            });
+          });
+          
+          whoopsPayReq.on('error', (error) => {
+            console.error('Payment error:', error);
+            sendJSON(res, { error: 'Payment service unavailable' }, 500);
+          });
+          
+          whoopsPayReq.write(postData);
+          whoopsPayReq.end();
+          
+        } catch (error) {
+          console.error('Payment error:', error);
+          sendJSON(res, { error: 'Payment service unavailable' }, 500);
+        }
+      } else {
+        // Simulate other payment methods
+        baskets[basketId] = [];
+        sendJSON(res, { 
+          status: 'success', 
+          message: 'Order completed successfully',
+          orderId: orderId,
+          total: total.toFixed(2)
+        });
+      }
+    }
+    else if (pathname === '/webhook/payment-status' && method === 'POST') {
+      const body = await parseBody(req);
+      const { orderId, status, transactionId } = body;
+      console.log(`Payment webhook received: Order ${orderId} - Status: ${status}`);
+      
+      sendJSON(res, { status: 'received' });
+    }
+    else {
+      res.writeHead(404);
+      res.end('Not found');
+    }
+  } catch (error) {
+    console.error('Server error:', error);
+    sendJSON(res, { error: 'Internal server error' }, 500);
   }
 });
 
-// Webhook endpoint for WhoopsPay payment status updates
-app.post('/webhook/payment-status', (req, res) => {
-  const { orderId, status, transactionId } = req.body;
-  console.log(`Payment webhook received: Order ${orderId} - Status: ${status}`);
-  
-  // In a real application, you would update the order status in your database
-  res.json({ status: 'received' });
-});
-
-app.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`🧃 OWASP Juice Shop running on http://localhost:${PORT}`);
   console.log(`🔗 Integration with WhoopsPay available at http://localhost:5000`);
 });
