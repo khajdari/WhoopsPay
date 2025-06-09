@@ -1285,6 +1285,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         updatedRequest = await storage.updateTransactionStatus(requestId, 'completed');
       }
       
+      // Debug information for redirect logic
+      console.log("Redirect check:", {
+        isMoneyRequest,
+        fromUserId: request.fromUserId,
+        type: request.type,
+        externalSource: request.externalSource,
+        returnUrl: request.returnUrl,
+        shouldRedirect: isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external")
+      });
+      
       // Handle external redirect for Juice Shop - always redirect external requests
       if (isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external")) {
         // Create proper Juice Shop redirect URL using dynamic configuration
