@@ -340,7 +340,7 @@ export default function Dashboard() {
                       <div 
                         key={request.id} 
                         className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer hover:shadow-md transition-shadow ${
-                          request.isExternal 
+                          request.type === 'external' 
                             ? 'bg-blue-50 border-blue-200 hover:bg-blue-100' 
                             : 'bg-orange-50 border-orange-200 hover:bg-orange-100'
                         }`}
@@ -348,11 +348,11 @@ export default function Dashboard() {
                       >
                         <div className="flex items-center space-x-3">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            request.isExternal 
+                            request.type === 'external' 
                               ? 'bg-blue-100' 
                               : 'bg-orange-100'
                           }`}>
-                            {request.isExternal ? (
+                            {request.type === 'external' ? (
                               <ExternalLink className="w-5 h-5 text-blue-600" />
                             ) : (
                               <span className="text-orange-600 font-medium">
@@ -365,9 +365,14 @@ export default function Dashboard() {
                               <p className="font-medium text-gray-900">
                                 ${request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
                               </p>
-                              {request.isExternal && (
+                              {request.type === 'external' && (
                                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                   External
+                                </span>
+                              )}
+                              {request.type === 'internal' && (
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                  Internal
                                 </span>
                               )}
                             </div>
