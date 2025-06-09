@@ -448,6 +448,56 @@ const translations: Translations = {
     'el-GR': 'Δεν βρέθηκε χρήστης'
   },
   
+  // External redirect translations
+  paymentApproved: {
+    'en-GB': 'Payment Approved',
+    'el-GR': 'Πληρωμή Εγκρίθηκε'
+  },
+  paymentRejected: {
+    'en-GB': 'Payment Rejected',
+    'el-GR': 'Πληρωμή Απορρίφθηκε'
+  },
+  approvedDescription: {
+    'en-GB': 'Your payment has been processed successfully',
+    'el-GR': 'Η πληρωμή σας επεξεργάστηκε επιτυχώς'
+  },
+  rejectedDescription: {
+    'en-GB': 'The payment request has been declined',
+    'el-GR': 'Το αίτημα πληρωμής απορρίφθηκε'
+  },
+  orderId: {
+    'en-GB': 'Order ID',
+    'el-GR': 'Αριθμός Παραγγελίας'
+  },
+  service: {
+    'en-GB': 'Service',
+    'el-GR': 'Υπηρεσία'
+  },
+  redirectingTo: {
+    'en-GB': 'Redirecting to external service',
+    'el-GR': 'Ανακατεύθυνση σε εξωτερική υπηρεσία'
+  },
+  redirectingIn: {
+    'en-GB': 'Redirecting in',
+    'el-GR': 'Ανακατεύθυνση σε'
+  },
+  seconds: {
+    'en-GB': 'seconds',
+    'el-GR': 'δευτερόλεπτα'
+  },
+  redirecting: {
+    'en-GB': 'Redirecting...',
+    'el-GR': 'Ανακατεύθυνση...'
+  },
+  stayHere: {
+    'en-GB': 'Stay Here',
+    'el-GR': 'Παραμονή Εδώ'
+  },
+  redirectNow: {
+    'en-GB': 'Go Now',
+    'el-GR': 'Μετάβαση Τώρα'
+  },
+  
   // Form validation
   required: {
     'en-GB': 'This field is required',
