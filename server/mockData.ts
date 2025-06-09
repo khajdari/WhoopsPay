@@ -1,8 +1,22 @@
 import { storage } from "./storage";
 
+// Flag to prevent duplicate seeding
+let isSeeded = false;
+
+// Function to reset seeding flag when database is cleared
+export function resetSeedingFlag() {
+  isSeeded = false;
+  console.log("Seeding flag reset - ready for fresh data");
+}
+
 // Mock data for testing vulnerabilities
 export async function seedMockData() {
   try {
+    if (isSeeded) {
+      console.log("Mock data already seeded, skipping...");
+      return;
+    }
+    
     console.log("Starting mock data seeding...");
     
     // Since database is already cleared by clearAndReinitializeDatabase, we don't need to clear again
@@ -302,6 +316,7 @@ export async function seedMockData() {
     });
 
     console.log("Mock data seeded successfully with new users, @ prefix IDs, and external money requests");
+    isSeeded = true;
   } catch (error) {
     console.error("Error seeding mock data:", error);
   }
