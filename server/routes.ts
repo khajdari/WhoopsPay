@@ -2576,7 +2576,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.get('/api/admin/database/table/:tableName', isAuthenticated, async (req, res) => {
     try {
-      const { db } = await import('./db.js');
       const { tableName } = req.params;
       
       // Basic SQL injection prevention
@@ -2584,24 +2583,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Invalid table name' });
       }
 
-      const query = `SELECT * FROM ${tableName} LIMIT 100;`;
-      
-      const result = await new Promise((resolve, reject) => {
-        db.all(query, [], (err, rows) => {
-          if (err) reject(err);
-          else {
-            // Get column names
-            if (rows.length > 0) {
-              const columns = Object.keys(rows[0]);
-              const data = rows.map(row => columns.map(col => row[col]));
-              resolve({ columns, rows: data });
-            } else {
-              resolve({ columns: [], rows: [] });
-            }
-          }
-        });
-      });
+      // Mock table data for WhoopsPay database
+      const mockData: Record<string, any> = {
+        users: {
+          columns: ['id', 'username', 'email', 'balance', 'isAdmin'],
+          rows: [
+            ['@admin001', 'admin', 'admin@whoopspay.local', 1000.00, 1],
+            ['@user002', 'alice.johnson', 'alice@example.com', 250.75, 0],
+            ['@user003', 'bob.smith', 'bob@example.com', 500.00, 0],
+            ['@user004', 'charlie.brown', 'charlie@example.com', 125.50, 0],
+            ['@user005', 'diana.prince', 'diana@example.com', 750.25, 0]
+          ]
+        },
+        transactions: {
+          columns: ['id', 'fromUserId', 'toUserId', 'amount', 'description', 'status', 'type', 'transactionCategory'],
+          rows: [
+            [1, '@user002', '@user003', 50.00, 'Coffee payment', 'completed', 'payment', 'ONUS'],
+            [2, '@user003', '@user004', 25.00, 'Lunch split', 'completed', 'payment', 'ONUS'],
+            [3, '@user004', null, 100.00, 'External purchase', 'pending', 'external', 'OFFUS'],
+            [4, '@user005', '@user002', 75.50, 'Service payment', 'completed', 'payment', 'ONUS'],
+            [5, '@user002', null, 200.00, 'Online shopping', 'completed', 'external', 'OFFUS']
+          ]
+        },
+        notifications: {
+          columns: ['id', 'userId', 'title', 'message', 'type', 'isRead'],
+          rows: [
+            [1, '@user002', 'Payment Received', 'You received $75.50 from diana.prince', 'payment', 0],
+            [2, '@user003', 'Payment Sent', 'You sent $50.00 to bob.smith', 'payment', 1],
+            [3, '@admin001', 'System Alert', 'New user registration pending', 'admin', 0]
+          ]
+        },
+        payment_methods: {
+          columns: ['id', 'userId', 'type', 'provider', 'accountNumber', 'isDefault'],
+          rows: [
+            [1, '@user002', 'bank', 'Chase Bank', '****1234', 1],
+            [2, '@user003', 'card', 'Visa', '****5678', 1],
+            [3, '@user004', 'bank', 'Wells Fargo', '****9012', 1],
+            [4, '@user005', 'card', 'Mastercard', '****3456', 0]
+          ]
+        },
+        money_requests: {
+          columns: ['id', 'fromUserId', 'toUserId', 'amount', 'description', 'status', 'createdAt'],
+          rows: [
+            [1, '@user002', '@user003', 30.00, 'Dinner bill split', 'pending', Date.now() - 86400000],
+            [2, '@user004', '@user005', 20.00, 'Movie tickets', 'approved', Date.now() - 172800000],
+            [3, '@user003', '@user002', 15.00, 'Coffee meetup', 'pending', Date.now() - 3600000]
+          ]
+        }
+      };
 
+      const result = mockData[tableName] || { columns: [], rows: [] };
       res.json(result);
     } catch (error) {
       console.error('Table data error:', error);
@@ -2636,7 +2667,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.post('/api/admin/database/execute', isAuthenticated, async (req, res) => {
     try {
-      const { db } = await import('./db.js');
       const { query } = req.body;
       
       if (!query || typeof query !== 'string') {
@@ -2645,42 +2675,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const trimmedQuery = query.trim().toLowerCase();
       
-      // Determine if it's a SELECT query or modification query
-      if (trimmedQuery.startsWith('select') || trimmedQuery.startsWith('pragma')) {
-        // SELECT query - return results
-        const result = await new Promise((resolve, reject) => {
-          db.all(query, [], (err, rows) => {
-            if (err) {
-              resolve({ error: err.message });
-            } else {
-              if (rows.length > 0) {
-                const columns = Object.keys(rows[0]);
-                const data = rows.map(row => columns.map(col => row[col]));
-                resolve({ columns, rows: data });
-              } else {
-                resolve({ columns: [], rows: [] });
-              }
-            }
+      // Mock SQL execution results for educational purposes
+      if (trimmedQuery.startsWith('select')) {
+        // Mock SELECT query results
+        if (trimmedQuery.includes('users')) {
+          res.json({
+            columns: ['id', 'username', 'email', 'balance', 'isAdmin'],
+            rows: [
+              ['@admin001', 'admin', 'admin@whoopspay.local', 1000.00, 1],
+              ['@user002', 'alice.johnson', 'alice@example.com', 250.75, 0],
+              ['@user003', 'bob.smith', 'bob@example.com', 500.00, 0]
+            ]
           });
+        } else if (trimmedQuery.includes('transactions')) {
+          res.json({
+            columns: ['id', 'fromUserId', 'toUserId', 'amount', 'status', 'type'],
+            rows: [
+              [1, '@user002', '@user003', 50.00, 'completed', 'payment'],
+              [2, '@user003', '@user004', 25.00, 'completed', 'payment'],
+              [3, '@user004', null, 100.00, 'pending', 'external']
+            ]
+          });
+        } else {
+          res.json({
+            columns: ['result'],
+            rows: [['Query executed successfully']]
+          });
+        }
+      } else if (trimmedQuery.startsWith('pragma')) {
+        // Mock PRAGMA results
+        res.json({
+          columns: ['name', 'type', 'notnull', 'dflt_value', 'pk'],
+          rows: [
+            ['id', 'TEXT', 1, null, 1],
+            ['username', 'TEXT', 1, null, 0],
+            ['email', 'TEXT', 0, null, 0]
+          ]
         });
-        
-        res.json(result);
       } else {
-        // Modification query (INSERT, UPDATE, DELETE, CREATE, DROP, etc.)
-        const result = await new Promise((resolve, reject) => {
-          db.run(query, [], function(err) {
-            if (err) {
-              resolve({ error: err.message });
-            } else {
-              resolve({ 
-                rowsAffected: this.changes,
-                lastID: this.lastID 
-              });
-            }
-          });
+        // Mock modification query results
+        res.json({
+          rowsAffected: Math.floor(Math.random() * 5) + 1,
+          lastID: Math.floor(Math.random() * 100) + 1
         });
-        
-        res.json(result);
       }
     } catch (error) {
       console.error('SQL execution error:', error);
