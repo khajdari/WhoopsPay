@@ -85,12 +85,12 @@ export default function ExternalRedirect() {
             )}
           </div>
           <CardTitle className="text-2xl text-yellow-400">
-            {isApproved ? t('external.paymentApproved') : t('external.paymentRejected')}
+            {isApproved ? t('paymentApproved') : t('paymentRejected')}
           </CardTitle>
           <CardDescription className="text-gray-300">
             {isApproved 
-              ? t('external.approvedDescription') 
-              : t('external.rejectedDescription')
+              ? t('approvedDescription') 
+              : t('rejectedDescription')
             }
           </CardDescription>
         </CardHeader>
@@ -99,17 +99,17 @@ export default function ExternalRedirect() {
           {/* Transaction Details */}
           <div className="bg-gray-700/50 rounded-lg p-4 space-y-2">
             <div className="flex justify-between">
-              <span className="text-gray-300">{t('external.orderId')}:</span>
+              <span className="text-gray-300">{t('orderId')}:</span>
               <span className="text-yellow-400 font-mono">{orderId}</span>
             </div>
             {amount && (
               <div className="flex justify-between">
-                <span className="text-gray-300">{t('external.amount')}:</span>
+                <span className="text-gray-300">Amount:</span>
                 <span className="text-yellow-400 font-bold">${amount}</span>
               </div>
             )}
             <div className="flex justify-between">
-              <span className="text-gray-300">{t('external.service')}:</span>
+              <span className="text-gray-300">{t('service')}:</span>
               <span className="text-yellow-400">
                 {returnTo === 'juice-shop' ? 'OWASP Juice Shop' : returnTo}
               </span>
@@ -121,7 +121,7 @@ export default function ExternalRedirect() {
             <div className="text-center space-y-4">
               <div className="flex items-center justify-center space-x-2 text-gray-300">
                 <ExternalLink className="h-4 w-4" />
-                <span>{t('external.redirectingTo')}</span>
+                <span>{t('redirectingTo')}</span>
               </div>
               
               <div className="bg-gray-700/30 rounded-lg p-3 text-xs font-mono text-gray-400 break-all">
@@ -131,14 +131,14 @@ export default function ExternalRedirect() {
               {countdown > 0 && !redirecting && (
                 <div className="flex items-center justify-center space-x-2 text-yellow-400">
                   <ArrowRight className="h-4 w-4" />
-                  <span>{t('external.redirectingIn')} {countdown} {t('external.seconds')}</span>
+                  <span>{t('redirectingIn')} {countdown} {t('seconds')}</span>
                 </div>
               )}
 
               {redirecting && (
                 <div className="flex items-center justify-center space-x-2 text-yellow-400">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>{t('external.redirecting')}</span>
+                  <span>{t('redirecting')}</span>
                 </div>
               )}
             </div>
@@ -151,7 +151,7 @@ export default function ExternalRedirect() {
               variant="outline" 
               className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-700"
             >
-              {t('external.stayHere')}
+              {t('stayHere')}
             </Button>
             {isExternal && redirectUrl && !redirecting && (
               <Button 
@@ -159,7 +159,7 @@ export default function ExternalRedirect() {
                 className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-gray-900"
               >
                 <ExternalLink className="h-4 w-4 mr-2" />
-                {t('external.redirectNow')}
+                {t('redirectNow')}
               </Button>
             )}
           </div>
