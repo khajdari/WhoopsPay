@@ -179,7 +179,6 @@ interface Translations {
   'dashboard.addMoney': TranslationKey;
   'dashboard.viewTransactions': TranslationKey;
   'dashboard.settings': TranslationKey;
-  'dashboard.pendingRequests': TranslationKey;
   'dashboard.recentTransactions': TranslationKey;
   'dashboard.noTransactions': TranslationKey;
   'dashboard.sendFirstPayment': TranslationKey;
@@ -244,6 +243,21 @@ interface Translations {
   'issues.reportStatus': TranslationKey;
   'issues.priority': TranslationKey;
   'issues.assignedTo': TranslationKey;
+
+  // External redirect page
+  'external.paymentApproved': TranslationKey;
+  'external.paymentRejected': TranslationKey;
+  'external.approvedDescription': TranslationKey;
+  'external.rejectedDescription': TranslationKey;
+  'external.orderId': TranslationKey;
+  'external.amount': TranslationKey;
+  'external.service': TranslationKey;
+  'external.redirectingTo': TranslationKey;
+  'external.redirectingIn': TranslationKey;
+  'external.seconds': TranslationKey;
+  'external.redirecting': TranslationKey;
+  'external.stayHere': TranslationKey;
+  'external.redirectNow': TranslationKey;
 
   // Send Money page
   'sendMoney.title': TranslationKey;
