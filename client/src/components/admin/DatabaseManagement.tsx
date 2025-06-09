@@ -185,7 +185,7 @@ export function DatabaseManagement() {
   return (
     <Card className="bg-slate-800 border border-slate-600">
       <CardHeader>
-        <CardTitle className="text-yellow-400 flex items-center">
+        <CardTitle className="text-white flex items-center">
           <Database className="h-5 w-5 mr-2" />
           Database Management
         </CardTitle>
@@ -193,13 +193,13 @@ export function DatabaseManagement() {
       <CardContent>
         <Tabs defaultValue="explorer" className="space-y-4">
           <TabsList className="bg-slate-700 border border-slate-600">
-            <TabsTrigger value="explorer" className="data-[state=active]:bg-yellow-400 data-[state=active]:text-black">
+            <TabsTrigger value="explorer" className="data-[state=active]:bg-cyan-400 data-[state=active]:text-black">
               Explorer
             </TabsTrigger>
-            <TabsTrigger value="query" className="data-[state=active]:bg-yellow-400 data-[state=active]:text-black">
+            <TabsTrigger value="query" className="data-[state=active]:bg-cyan-400 data-[state=active]:text-black">
               SQL Query
             </TabsTrigger>
-            <TabsTrigger value="management" className="data-[state=active]:bg-yellow-400 data-[state=active]:text-black">
+            <TabsTrigger value="management" className="data-[state=active]:bg-cyan-400 data-[state=active]:text-black">
               Management
             </TabsTrigger>
           </TabsList>

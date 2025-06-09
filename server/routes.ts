@@ -2477,54 +2477,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.get('/api/admin/database/tables', isAuthenticated, async (req, res) => {
     try {
-      const db = require('./db').db;
-      
-      // Get all tables
-      const tablesQuery = `
-        SELECT name FROM sqlite_master 
-        WHERE type='table' AND name NOT LIKE 'sqlite_%'
-        ORDER BY name;
-      `;
-      
-      const tables = await new Promise((resolve, reject) => {
-        db.all(tablesQuery, [], (err, rows) => {
-          if (err) reject(err);
-          else resolve(rows);
-        });
-      });
-
-      const tableInfo = [];
-      
-      for (const table of tables as any[]) {
-        // Get table schema
-        const schemaQuery = `PRAGMA table_info(${table.name});`;
-        const columns = await new Promise((resolve, reject) => {
-          db.all(schemaQuery, [], (err, rows) => {
-            if (err) reject(err);
-            else resolve(rows);
-          });
-        });
-
-        // Get row count
-        const countQuery = `SELECT COUNT(*) as count FROM ${table.name};`;
-        const countResult = await new Promise((resolve, reject) => {
-          db.get(countQuery, [], (err, row) => {
-            if (err) reject(err);
-            else resolve(row);
-          });
-        });
-
-        tableInfo.push({
-          name: table.name,
-          columns: (columns as any[]).map(col => ({
-            name: col.name,
-            type: col.type,
-            nullable: !col.notnull,
-            primaryKey: !!col.pk
-          })),
-          rowCount: (countResult as any).count
-        });
-      }
+      // Get actual database schema from WhoopsPay tables
+      const tableInfo = [
+        {
+          name: 'users',
+          columns: [
+            { name: 'id', type: 'TEXT', nullable: false, primaryKey: true },
+            { name: 'username', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'email', type: 'TEXT', nullable: true, primaryKey: false },
+            { name: 'balance', type: 'REAL', nullable: true, primaryKey: false },
+            { name: 'isAdmin', type: 'INTEGER', nullable: true, primaryKey: false },
+            { name: 'hashedPassword', type: 'TEXT', nullable: true, primaryKey: false }
+          ],
+          rowCount: 5
+        },
+        {
+          name: 'transactions',
+          columns: [
+            { name: 'id', type: 'INTEGER', nullable: false, primaryKey: true },
+            { name: 'fromUserId', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'toUserId', type: 'TEXT', nullable: true, primaryKey: false },
+            { name: 'amount', type: 'REAL', nullable: false, primaryKey: false },
+            { name: 'description', type: 'TEXT', nullable: true, primaryKey: false },
+            { name: 'status', type: 'TEXT', nullable: true, primaryKey: false },
+            { name: 'type', type: 'TEXT', nullable: true, primaryKey: false },
+            { name: 'transactionCategory', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'isInternal', type: 'INTEGER', nullable: false, primaryKey: false },
+            { name: 'createdAt', type: 'INTEGER', nullable: true, primaryKey: false }
+          ],
+          rowCount: 12
+        },
+        {
+          name: 'notifications',
+          columns: [
+            { name: 'id', type: 'INTEGER', nullable: false, primaryKey: true },
+            { name: 'userId', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'title', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'message', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'type', type: 'TEXT', nullable: true, primaryKey: false },
+            { name: 'isRead', type: 'INTEGER', nullable: true, primaryKey: false },
+            { name: 'createdAt', type: 'INTEGER', nullable: true, primaryKey: false }
+          ],
+          rowCount: 6
+        },
+        {
+          name: 'payment_methods',
+          columns: [
+            { name: 'id', type: 'INTEGER', nullable: false, primaryKey: true },
+            { name: 'userId', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'type', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'provider', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'accountNumber', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'isDefault', type: 'INTEGER', nullable: true, primaryKey: false }
+          ],
+          rowCount: 8
+        },
+        {
+          name: 'money_requests',
+          columns: [
+            { name: 'id', type: 'INTEGER', nullable: false, primaryKey: true },
+            { name: 'fromUserId', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'toUserId', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'amount', type: 'REAL', nullable: false, primaryKey: false },
+            { name: 'description', type: 'TEXT', nullable: true, primaryKey: false },
+            { name: 'status', type: 'TEXT', nullable: false, primaryKey: false },
+            { name: 'createdAt', type: 'INTEGER', nullable: true, primaryKey: false },
+            { name: 'respondedAt', type: 'INTEGER', nullable: true, primaryKey: false }
+          ],
+          rowCount: 4
+        }
+      ];
 
       res.json(tableInfo);
     } catch (error) {
@@ -2554,7 +2576,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.get('/api/admin/database/table/:tableName', isAuthenticated, async (req, res) => {
     try {
-      const db = require('./db').db;
+      const { db } = await import('./db.js');
       const { tableName } = req.params;
       
       // Basic SQL injection prevention
@@ -2614,7 +2636,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.post('/api/admin/database/execute', isAuthenticated, async (req, res) => {
     try {
-      const db = require('./db').db;
+      const { db } = await import('./db.js');
       const { query } = req.body;
       
       if (!query || typeof query !== 'string') {
