@@ -2461,6 +2461,211 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Database Administration Routes
+  /**
+   * @swagger
+   * /api/admin/database/tables:
+   *   get:
+   *     summary: Get database schema information
+   *     description: "🚨 VULNERABILITY: Direct database schema exposure"
+   *     tags: [Database Admin]
+   *     responses:
+   *       200:
+   *         description: Database tables and schema
+   *       401:
+   *         description: Unauthorized
+   */
+  app.get('/api/admin/database/tables', isAuthenticated, async (req, res) => {
+    try {
+      const db = require('./db').db;
+      
+      // Get all tables
+      const tablesQuery = `
+        SELECT name FROM sqlite_master 
+        WHERE type='table' AND name NOT LIKE 'sqlite_%'
+        ORDER BY name;
+      `;
+      
+      const tables = await new Promise((resolve, reject) => {
+        db.all(tablesQuery, [], (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        });
+      });
+
+      const tableInfo = [];
+      
+      for (const table of tables as any[]) {
+        // Get table schema
+        const schemaQuery = `PRAGMA table_info(${table.name});`;
+        const columns = await new Promise((resolve, reject) => {
+          db.all(schemaQuery, [], (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows);
+          });
+        });
+
+        // Get row count
+        const countQuery = `SELECT COUNT(*) as count FROM ${table.name};`;
+        const countResult = await new Promise((resolve, reject) => {
+          db.get(countQuery, [], (err, row) => {
+            if (err) reject(err);
+            else resolve(row);
+          });
+        });
+
+        tableInfo.push({
+          name: table.name,
+          columns: (columns as any[]).map(col => ({
+            name: col.name,
+            type: col.type,
+            nullable: !col.notnull,
+            primaryKey: !!col.pk
+          })),
+          rowCount: (countResult as any).count
+        });
+      }
+
+      res.json(tableInfo);
+    } catch (error) {
+      console.error('Database tables error:', error);
+      res.status(500).json({ error: 'Failed to fetch database schema' });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/admin/database/table/{tableName}:
+   *   get:
+   *     summary: Get table data
+   *     description: "🚨 VULNERABILITY: Direct table data access without authorization"
+   *     tags: [Database Admin]
+   *     parameters:
+   *       - in: path
+   *         name: tableName
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Table data
+   *       401:
+   *         description: Unauthorized
+   */
+  app.get('/api/admin/database/table/:tableName', isAuthenticated, async (req, res) => {
+    try {
+      const db = require('./db').db;
+      const { tableName } = req.params;
+      
+      // Basic SQL injection prevention
+      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(tableName)) {
+        return res.status(400).json({ error: 'Invalid table name' });
+      }
+
+      const query = `SELECT * FROM ${tableName} LIMIT 100;`;
+      
+      const result = await new Promise((resolve, reject) => {
+        db.all(query, [], (err, rows) => {
+          if (err) reject(err);
+          else {
+            // Get column names
+            if (rows.length > 0) {
+              const columns = Object.keys(rows[0]);
+              const data = rows.map(row => columns.map(col => row[col]));
+              resolve({ columns, rows: data });
+            } else {
+              resolve({ columns: [], rows: [] });
+            }
+          }
+        });
+      });
+
+      res.json(result);
+    } catch (error) {
+      console.error('Table data error:', error);
+      res.status(500).json({ error: 'Failed to fetch table data' });
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/admin/database/execute:
+   *   post:
+   *     summary: Execute SQL query
+   *     description: "🚨 CRITICAL VULNERABILITY: Direct SQL execution without validation"
+   *     tags: [Database Admin]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               query:
+   *                 type: string
+   *                 description: SQL query to execute
+   *     responses:
+   *       200:
+   *         description: Query results
+   *       400:
+   *         description: Invalid query
+   *       401:
+   *         description: Unauthorized
+   */
+  app.post('/api/admin/database/execute', isAuthenticated, async (req, res) => {
+    try {
+      const db = require('./db').db;
+      const { query } = req.body;
+      
+      if (!query || typeof query !== 'string') {
+        return res.status(400).json({ error: 'Query is required' });
+      }
+
+      const trimmedQuery = query.trim().toLowerCase();
+      
+      // Determine if it's a SELECT query or modification query
+      if (trimmedQuery.startsWith('select') || trimmedQuery.startsWith('pragma')) {
+        // SELECT query - return results
+        const result = await new Promise((resolve, reject) => {
+          db.all(query, [], (err, rows) => {
+            if (err) {
+              resolve({ error: err.message });
+            } else {
+              if (rows.length > 0) {
+                const columns = Object.keys(rows[0]);
+                const data = rows.map(row => columns.map(col => row[col]));
+                resolve({ columns, rows: data });
+              } else {
+                resolve({ columns: [], rows: [] });
+              }
+            }
+          });
+        });
+        
+        res.json(result);
+      } else {
+        // Modification query (INSERT, UPDATE, DELETE, CREATE, DROP, etc.)
+        const result = await new Promise((resolve, reject) => {
+          db.run(query, [], function(err) {
+            if (err) {
+              resolve({ error: err.message });
+            } else {
+              resolve({ 
+                rowsAffected: this.changes,
+                lastID: this.lastID 
+              });
+            }
+          });
+        });
+        
+        res.json(result);
+      }
+    } catch (error) {
+      console.error('SQL execution error:', error);
+      res.status(500).json({ error: 'Query execution failed' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

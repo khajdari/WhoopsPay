@@ -29,6 +29,7 @@ import Administration from "@/pages/administration";
 import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
 import IssueReporting from "@/pages/IssueReporting";
+import DatabaseAdmin from "@/pages/database-admin";
 
 // Special-purpose components
 import ExternalPayment from "@/pages/ExternalPayment";
@@ -74,6 +75,7 @@ function Router() {
           <Route path="/money" component={Wallet} />
           <Route path="/admin" component={Admin} />
           <Route path="/administration" component={Administration} />
+          <Route path="/database-admin" component={DatabaseAdmin} />
           <Route path="/profile" component={Profile} />
           <Route path="/account" component={Settings} />
           <Route path="/issues" component={IssueReporting} />
