@@ -99,7 +99,7 @@ export async function setupAuth(app: Express) {
       const { redirect, transactionId, amount, description, returnUrl, cancelUrl } = req.query;
       if (redirect === 'payment' && transactionId && amount) {
         try {
-          // Create pending money request for the logged-in user
+          // Create pending money request for the logged-in user - copy test transaction structure
           const moneyRequest = await storage.createMoneyRequest({
             fromUserId: "juice-shop",
             toUserId: user.id,
@@ -112,9 +112,8 @@ export async function setupAuth(app: Express) {
             returnUrl: returnUrl as string,
             cancelUrl: cancelUrl as string,
             externalMetadata: JSON.stringify({
-              source: "juice-shop",
-              orderId: transactionId,
-              timestamp: Date.now()
+              items: [{ name: "Manual Order", quantity: 1, price: parseFloat(amount as string) }],
+              merchant: "OWASP Juice Shop"
             })
           });
 
