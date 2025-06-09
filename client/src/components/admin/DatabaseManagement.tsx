@@ -525,31 +525,55 @@ export function DatabaseManagement() {
 
       {/* Add Row Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Row to {selectedTable}</DialogTitle>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="pb-6">
+            <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              ✨ Add New Row
+            </DialogTitle>
+            <p className="text-center text-gray-600 mt-2">
+              Adding new record to <span className="font-semibold text-blue-600">{selectedTable}</span> table
+            </p>
           </DialogHeader>
-          <div className="space-y-4">
-            {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
-              <div key={idx}>
-                <Label>{col.name} ({col.type})</Label>
-                <Input
-                  value={newRow[idx] || ''}
-                  onChange={(e) => {
-                    const updatedRow = [...newRow];
-                    updatedRow[idx] = e.target.value;
-                    setNewRow(updatedRow);
-                  }}
-                  placeholder={col.nullable ? 'Optional' : 'Required'}
-                />
-              </div>
-            ))}
-            <div className="flex gap-2 pt-4">
-              <Button onClick={handleSaveNewRow}>
-                <Save className="h-4 w-4 mr-2" />
-                Save Row
+          
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-100">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
+                <div key={idx} className="space-y-2">
+                  <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-400"></div>
+                    {col.name}
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                      {col.type}
+                    </span>
+                    {!col.nullable && <span className="text-red-500 text-xs">*</span>}
+                  </Label>
+                  <Input
+                    value={newRow[idx] || ''}
+                    onChange={(e) => {
+                      const updatedRow = [...newRow];
+                      updatedRow[idx] = e.target.value;
+                      setNewRow(updatedRow);
+                    }}
+                    placeholder={col.nullable ? 'Optional field' : 'Required field'}
+                    className="border-2 border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all duration-200"
+                  />
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex gap-3 pt-8 justify-center">
+              <Button 
+                onClick={handleSaveNewRow}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold"
+              >
+                <Save className="h-5 w-5 mr-2" />
+                Save New Row
               </Button>
-              <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowAddDialog(false)}
+                className="border-2 border-gray-300 hover:border-gray-400 px-8 py-3 rounded-xl transition-all duration-200 font-semibold"
+              >
                 Cancel
               </Button>
             </div>
@@ -559,31 +583,55 @@ export function DatabaseManagement() {
 
       {/* Edit Row Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Row in {selectedTable}</DialogTitle>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="pb-6">
+            <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              ✏️ Edit Row
+            </DialogTitle>
+            <p className="text-center text-gray-600 mt-2">
+              Modifying record in <span className="font-semibold text-purple-600">{selectedTable}</span> table
+            </p>
           </DialogHeader>
-          <div className="space-y-4">
-            {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
-              <div key={idx}>
-                <Label>{col.name} ({col.type})</Label>
-                <Input
-                  value={editRowData[idx] || ''}
-                  onChange={(e) => {
-                    const updatedRow = [...editRowData];
-                    updatedRow[idx] = e.target.value;
-                    setEditRowData(updatedRow);
-                  }}
-                  placeholder={col.nullable ? 'Optional' : 'Required'}
-                />
-              </div>
-            ))}
-            <div className="flex gap-2 pt-4">
-              <Button onClick={handleSaveEditedRow}>
-                <Save className="h-4 w-4 mr-2" />
+          
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border-2 border-purple-100">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
+                <div key={idx} className="space-y-2">
+                  <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"></div>
+                    {col.name}
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                      {col.type}
+                    </span>
+                    {!col.nullable && <span className="text-red-500 text-xs">*</span>}
+                  </Label>
+                  <Input
+                    value={editRowData[idx] || ''}
+                    onChange={(e) => {
+                      const updatedRow = [...editRowData];
+                      updatedRow[idx] = e.target.value;
+                      setEditRowData(updatedRow);
+                    }}
+                    placeholder={col.nullable ? 'Optional field' : 'Required field'}
+                    className="border-2 border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all duration-200"
+                  />
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex gap-3 pt-8 justify-center">
+              <Button 
+                onClick={handleSaveEditedRow}
+                className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold"
+              >
+                <Save className="h-5 w-5 mr-2" />
                 Save Changes
               </Button>
-              <Button variant="outline" onClick={() => setShowEditDialog(false)}>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowEditDialog(false)}
+                className="border-2 border-gray-300 hover:border-gray-400 px-8 py-3 rounded-xl transition-all duration-200 font-semibold"
+              >
                 Cancel
               </Button>
             </div>
