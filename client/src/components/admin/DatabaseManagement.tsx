@@ -366,48 +366,47 @@ export function DatabaseManagement() {
                                   )}
                                 </td>
                               ))}
-                              <td className="p-3 min-w-[120px]">
-                                {editingRow === rowIdx ? (
-                                  <div className="flex gap-2 items-center">
-                                    <Button
-                                      size="sm"
-                                      onClick={handleSaveRow}
-                                      disabled={executeQueryMutation.isPending}
-                                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1"
-                                    >
-                                      Save
-                                    </Button>
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={handleCancelEdit}
-                                      className="px-3 py-1"
-                                    >
-                                      Cancel
-                                    </Button>
-                                  </div>
-                                ) : (
-                                  <div className="flex gap-2 items-center">
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => handleEditRow(rowIdx, row)}
-                                      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1"
-                                      title="Edit Row"
-                                    >
-                                      Edit
-                                    </Button>
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => handleDeleteRow(rowIdx)}
-                                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1"
-                                      title="Delete Row"
-                                    >
-                                      Delete
-                                    </Button>
-                                  </div>
-                                )}
+                              <td className="p-3 bg-gray-50 border-l-2 border-blue-200" style={{ minWidth: '150px' }}>
+                                <div className="flex flex-col gap-1">
+                                  {editingRow === rowIdx ? (
+                                    <>
+                                      <button
+                                        onClick={handleSaveRow}
+                                        disabled={executeQueryMutation.isPending}
+                                        className="w-full bg-green-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-green-600"
+                                      >
+                                        💾 SAVE
+                                      </button>
+                                      <button
+                                        onClick={handleCancelEdit}
+                                        className="w-full bg-gray-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-gray-600"
+                                      >
+                                        ❌ CANCEL
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <button
+                                        onClick={() => {
+                                          console.log('Edit clicked for row:', rowIdx, row);
+                                          handleEditRow(rowIdx, row);
+                                        }}
+                                        className="w-full bg-blue-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-blue-600"
+                                      >
+                                        ✏️ EDIT
+                                      </button>
+                                      <button
+                                        onClick={() => {
+                                          console.log('Delete clicked for row:', rowIdx);
+                                          handleDeleteRow(rowIdx);
+                                        }}
+                                        className="w-full bg-red-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-red-600"
+                                      >
+                                        🗑️ DELETE
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
                               </td>
                             </tr>
                           ))}
