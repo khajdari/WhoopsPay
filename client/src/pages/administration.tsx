@@ -29,6 +29,7 @@ import { Input } from "@/components/ui/input";
 import { Shield, Database, FileText, Settings, AlertTriangle, RefreshCw, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { DatabaseManagement } from "@/components/admin/DatabaseManagement";
 
 /**
  * Administration Component - System administration interface
@@ -151,7 +152,7 @@ export default function Administration() {
 
         {/* Admin Tabs */}
         <Tabs defaultValue="swagger" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="swagger" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
               API Documentation
@@ -163,6 +164,10 @@ export default function Administration() {
             <TabsTrigger value="database" className="flex items-center gap-2">
               <Database className="w-4 h-4" />
               Database Logs
+            </TabsTrigger>
+            <TabsTrigger value="db-management" className="flex items-center gap-2">
+              <Database className="w-4 h-4" />
+              DB Management
             </TabsTrigger>
           </TabsList>
 
@@ -289,6 +294,11 @@ export default function Administration() {
                 </ScrollArea>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Database Management */}
+          <TabsContent value="db-management">
+            <DatabaseManagement />
           </TabsContent>
         </Tabs>
       </main>
