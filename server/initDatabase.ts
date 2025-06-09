@@ -31,6 +31,9 @@ export function clearAndReinitializeDatabase() {
   
   db.close();
   
+  // Reset seeding flag for fresh start
+  resetSeedingFlag();
+  
   // Now initialize with fresh tables
   initializeDatabase();
 }
@@ -181,4 +184,9 @@ export function initializeDatabase() {
 
   db.close();
   console.log('Database tables initialized successfully');
+  
+  // Seed mock data after database initialization
+  import('./mockData').then(({ seedMockData }) => {
+    seedMockData().catch(console.error);
+  });
 }
