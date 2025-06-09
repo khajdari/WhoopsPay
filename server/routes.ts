@@ -1294,7 +1294,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } else {
           // Clean the returnUrl to avoid double paths
           const cleanReturnUrl = request.returnUrl?.replace(/^\/juice-shop/, '') || '/#/order-completion';
-          const queryParams = `?payment=success&orderId=${request.externalOrderId}&amount=${requestAmount}`;
+          // Check if returnUrl already has query params
+          const separator = cleanReturnUrl.includes('?') ? '&' : '?';
+          const queryParams = `${separator}payment=success&orderId=${request.externalOrderId}&amount=${requestAmount}`;
           juiceShopUrl = getJuiceShopUrl(`${cleanReturnUrl}${queryParams}`);
         }
         
@@ -1383,7 +1385,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } else {
           // Clean the cancelUrl to avoid double paths
           const cleanCancelUrl = request.cancelUrl?.replace(/^\/juice-shop/, '') || '/#/basket';
-          const queryParams = `?payment=cancelled&orderId=${request.externalOrderId}&amount=${request.amount}`;
+          // Check if cancelUrl already has query params
+          const separator = cleanCancelUrl.includes('?') ? '&' : '?';
+          const queryParams = `${separator}payment=cancelled&orderId=${request.externalOrderId}&amount=${request.amount}`;
           juiceShopUrl = getJuiceShopUrl(`${cleanCancelUrl}${queryParams}`);
         }
         
