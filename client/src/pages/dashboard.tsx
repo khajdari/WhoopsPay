@@ -299,104 +299,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Pending Requests Dropdown - Only for regular users */}
-        {!isAdmin && (
-          <div className="mb-6">
-            <Card>
-              <div className="px-6 py-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium text-gray-900 flex items-center gap-2">
-                    <Clock className="h-5 w-5 text-orange-500" />
-                    {t('dashboard.pendingRequests')}
-                    {pendingRequests && pendingRequests.length > 0 && (
-                      <span className="ml-2 bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                        {pendingRequests.length}
-                      </span>
-                    )}
-                  </h3>
-                </div>
-                
-                {pendingRequestsLoading ? (
-                  <div className="mt-4 space-y-3">
-                    {[1, 2].map((i) => (
-                      <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center space-x-3">
-                          <Skeleton className="w-10 h-10 rounded-full" />
-                          <div>
-                            <Skeleton className="h-4 w-32 mb-2" />
-                            <Skeleton className="h-3 w-24" />
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <Skeleton className="h-8 w-20" />
-                          <Skeleton className="h-8 w-20" />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : Array.isArray(pendingRequests) && pendingRequests.length > 0 ? (
-                  <div className="mt-4 space-y-3">
-                    {pendingRequests.map((request: any) => (
-                      <div 
-                        key={request.id} 
-                        className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer hover:shadow-md transition-shadow ${
-                          request.isExternal 
-                            ? 'bg-blue-50 border-blue-200 hover:bg-blue-100' 
-                            : 'bg-orange-50 border-orange-200 hover:bg-orange-100'
-                        }`}
-                        onClick={() => handleRequestClick(request)}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            request.isExternal 
-                              ? 'bg-blue-100' 
-                              : 'bg-orange-100'
-                          }`}>
-                            {request.isExternal ? (
-                              <ExternalLink className="w-5 h-5 text-blue-600" />
-                            ) : (
-                              <span className="text-orange-600 font-medium">
-                                {request.fromUser?.firstName?.charAt(0) || request.fromUserId.charAt(0)}
-                              </span>
-                            )}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <p className="font-medium text-gray-900">
-                                ${request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
-                              </p>
-                              {request.isExternal && (
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                  External
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-sm text-gray-600">{request.description}</p>
-                            <p className="text-xs text-gray-500">
-                              {new Date(request.createdAt).toLocaleDateString()}
-                              {request.externalOrderId && (
-                                <span className="ml-2">• Order #{request.externalOrderId}</span>
-                              )}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="text-gray-400">
-                          <span className="text-sm">Click to review</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="mt-4 text-center py-6 text-gray-500">
-                    <Clock className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-                    <p>No pending money requests</p>
-                    <p className="text-sm">When someone requests money from you, it will appear here</p>
-                  </div>
-                )}
-              </div>
-            </Card>
-          </div>
-        )}
+
 
         {isAdmin ? (
           /* Admin Dashboard Content */
@@ -546,89 +449,190 @@ export default function Dashboard() {
           </>
         ) : (
           /* Regular User Dashboard Content */
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            {/* Recent Activity */}
-            <div className="lg:col-span-2">
+          <div className="space-y-6">
+            {/* Pending Money Requests */}
+            {pendingRequests && pendingRequests.length > 0 && (
               <Card>
                 <div className="px-6 py-4 border-b border-gray-200">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-medium text-gray-900">{t('recentActivity')}</h3>
-                    <Link href="/transactions">
-                      <Button variant="link" className="text-blue-600 hover:text-blue-700 p-0">
-                        See all
-                      </Button>
-                    </Link>
-                  </div>
+                  <h3 className="text-lg font-medium text-gray-900 flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-orange-500" />
+                    {t('dashboard.pendingRequests')}
+                    <span className="ml-2 bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      {pendingRequests.length}
+                    </span>
+                  </h3>
                 </div>
                 
-                <div className="divide-y divide-gray-200">
-                  {transactionsLoading ? (
-                    <div className="space-y-4 p-6">
-                      {[1, 2, 3].map((i) => (
-                        <div key={i} className="flex items-center space-x-4">
-                          <Skeleton className="w-10 h-10 rounded-full" />
-                          <div className="flex-1">
-                            <Skeleton className="h-4 w-32 mb-2" />
-                            <Skeleton className="h-3 w-24" />
+                <div className="p-6">
+                  {pendingRequestsLoading ? (
+                    <div className="space-y-3">
+                      {[1, 2].map((i) => (
+                        <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <Skeleton className="w-10 h-10 rounded-full" />
+                            <div>
+                              <Skeleton className="h-4 w-32 mb-2" />
+                              <Skeleton className="h-3 w-24" />
+                            </div>
                           </div>
-                          <Skeleton className="h-4 w-16" />
+                          <div className="flex gap-2">
+                            <Skeleton className="h-8 w-20" />
+                            <Skeleton className="h-8 w-20" />
+                          </div>
                         </div>
                       ))}
                     </div>
-                  ) : Array.isArray(transactions) && transactions.length > 0 ? (
-                    transactions.slice(0, 5).map((transaction: any) => (
-                      <TransactionItem key={transaction.id} transaction={transaction} />
-                    ))
                   ) : (
-                    <div className="px-6 py-8 text-center text-gray-500">
-                      <p>No transactions yet</p>
-                      <p className="text-sm">Send or request money to get started</p>
+                    <div className="space-y-3">
+                      {pendingRequests.map((request: any) => (
+                        <div 
+                          key={request.id} 
+                          className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer hover:shadow-md transition-shadow ${
+                            request.isExternal 
+                              ? 'bg-blue-50 border-blue-200 hover:bg-blue-100' 
+                              : 'bg-orange-50 border-orange-200 hover:bg-orange-100'
+                          }`}
+                          onClick={() => handleRequestClick(request)}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                              request.isExternal 
+                                ? 'bg-blue-100' 
+                                : 'bg-orange-100'
+                            }`}>
+                              {request.isExternal ? (
+                                <ExternalLink className="w-5 h-5 text-blue-600" />
+                              ) : (
+                                <span className="text-orange-600 font-medium">
+                                  {request.fromUser?.firstName?.charAt(0) || request.fromUserId.charAt(0)}
+                                </span>
+                              )}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <p className="font-medium text-gray-900">
+                                  ${request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
+                                </p>
+                                {request.isExternal && (
+                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    External
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-sm text-gray-600">{request.description}</p>
+                              <p className="text-xs text-gray-500">
+                                {new Date(request.createdAt).toLocaleDateString()}
+                                {request.externalOrderId && (
+                                  <span className="ml-2">• Order #{request.externalOrderId}</span>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-gray-400">
+                            <span className="text-sm">Click to review</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
               </Card>
-            </div>
+            )}
 
-            {/* Payment Methods */}
-            <div className="lg:col-span-1">
-              <Card>
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium text-gray-900">{t('paymentMethods')}</h3>
+            {/* Main Dashboard Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Recent Activity */}
+              <div className="lg:col-span-2">
+                <Card>
+                  <div className="px-6 py-4 border-b border-gray-200">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-lg font-medium text-gray-900">{t('recentActivity')}</h3>
+                      <Link href="/transactions">
+                        <Button variant="link" className="text-blue-600 hover:text-blue-700 p-0">
+                          See all
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="p-6 space-y-4">
-                  {paymentMethodsLoading ? (
-                    <div className="space-y-4">
-                      <Skeleton className="h-24 w-full rounded-xl" />
-                      <Skeleton className="h-24 w-full rounded-xl" />
-                    </div>
-                  ) : paymentMethods && paymentMethods.length > 0 ? (
-                    <div className="space-y-4">
-                      {paymentMethods.map((method: any) => (
-                        <div key={method.id} className="h-[172px] flex items-center justify-center">
-                          <PaymentCard
-                            type={method.type}
-                            cardNumber={method.cardNumber}
-                            cardName={method.cardName}
-                            bankName={method.bankName}
-                            accountNumber={method.accountNumber}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <CreditCard className="w-8 h-8 text-gray-400" />
+                  
+                  <div className="divide-y divide-gray-200">
+                    {transactionsLoading ? (
+                      <div className="space-y-4 p-6">
+                        {[1, 2, 3].map((i) => (
+                          <div key={i} className="flex items-center space-x-4">
+                            <Skeleton className="w-10 h-10 rounded-full" />
+                            <div className="flex-1">
+                              <Skeleton className="h-4 w-32 mb-2" />
+                              <Skeleton className="h-3 w-24" />
+                            </div>
+                            <Skeleton className="h-4 w-16" />
+                          </div>
+                        ))}
                       </div>
-                      <p className="text-sm text-gray-600">No payment methods added</p>
-                      <p className="text-xs text-gray-500 mt-2">Manage payment methods in your Wallet</p>
+                    ) : Array.isArray(transactions) && transactions.length > 0 ? (
+                      transactions.slice(0, 5).map((transaction: any) => (
+                        <TransactionItem key={transaction.id} transaction={transaction} />
+                      ))
+                    ) : (
+                      <div className="px-6 py-8 text-center text-gray-500">
+                        <p>No transactions yet</p>
+                        <p className="text-sm">Send or request money to get started</p>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              </div>
+
+              {/* Payment Methods */}
+              <div className="lg:col-span-1">
+                <Card>
+                  <div className="px-6 py-4 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-medium text-gray-900">{t('paymentMethods')}</h3>
                     </div>
-                  )}
-                </div>
-              </Card>
+                  </div>
+                  
+                  <div className="p-6 space-y-4">
+                    {paymentMethodsLoading ? (
+                      <div className="space-y-4">
+                        <Skeleton className="h-24 w-full rounded-xl" />
+                        <Skeleton className="h-24 w-full rounded-xl" />
+                      </div>
+                    ) : paymentMethods && paymentMethods.length > 0 ? (
+                      <div className="space-y-4">
+                        {paymentMethods.slice(0, 2).map((method: any) => (
+                          <div key={method.id} className="h-[120px] flex items-center justify-center">
+                            <PaymentCard
+                              type={method.type}
+                              cardNumber={method.cardNumber}
+                              cardName={method.cardName}
+                              bankName={method.bankName}
+                              accountNumber={method.accountNumber}
+                            />
+                          </div>
+                        ))}
+                        {paymentMethods.length > 2 && (
+                          <div className="text-center pt-2">
+                            <Link href="/money">
+                              <Button variant="link" className="text-blue-600 hover:text-blue-700 p-0 text-sm">
+                                View all {paymentMethods.length} methods
+                              </Button>
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <CreditCard className="w-8 h-8 text-gray-400" />
+                        </div>
+                        <p className="text-sm text-gray-600">No payment methods added</p>
+                        <p className="text-xs text-gray-500 mt-2">Manage payment methods in your Wallet</p>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              </div>
             </div>
           </div>
         )}
