@@ -46,13 +46,13 @@ export function DatabaseManagement() {
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   // Fetch database tables
-  const { data: tables, isLoading: tablesLoading, refetch: refetchTables } = useQuery({
+  const { data: tables, isLoading: tablesLoading, refetch: refetchTables } = useQuery<TableInfo[]>({
     queryKey: ['/api/admin/database/tables'],
     retry: false,
   });
 
   // Fetch table data
-  const { data: tableData, isLoading: tableDataLoading, refetch: refetchTableData } = useQuery({
+  const { data: tableData, isLoading: tableDataLoading, refetch: refetchTableData } = useQuery<QueryResult>({
     queryKey: ['/api/admin/database/table', selectedTable],
     enabled: !!selectedTable,
     retry: false,
