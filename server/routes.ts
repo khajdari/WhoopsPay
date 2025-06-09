@@ -1102,12 +1102,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "User ID required" });
       }
       
-      // Get both old transactions and new money requests
-      const pendingTransactions = await storage.getPendingTransactions(currentUserId);
+      // Get pending money requests only to avoid duplicates
       const pendingMoneyRequests = await storage.getPendingMoneyRequests(currentUserId);
       
-      // Combine and enrich with user data for display
-      const allRequests = [...pendingTransactions, ...pendingMoneyRequests];
+      // Use only money requests to prevent duplicates
+      const allRequests = pendingMoneyRequests;
       const enrichedRequests = await Promise.all(
         allRequests.map(async (request: any) => {
           // Handle both transaction and money request formats
@@ -1156,12 +1155,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "User ID required" });
       }
       
-      // Get both old transactions and new money requests
-      const pendingTransactions = await storage.getPendingTransactions(requestedUserId);
+      // Get pending money requests only to avoid duplicates
       const pendingMoneyRequests = await storage.getPendingMoneyRequests(requestedUserId);
       
-      // Combine and enrich with user data for display
-      const allRequests = [...pendingTransactions, ...pendingMoneyRequests];
+      // Use only money requests to prevent duplicates
+      const allRequests = pendingMoneyRequests;
       const enrichedRequests = await Promise.all(
         allRequests.map(async (request: any) => {
           // Handle both transaction and money request formats
