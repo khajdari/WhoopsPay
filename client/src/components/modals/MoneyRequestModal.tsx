@@ -44,17 +44,22 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
       
       if (data.redirect && data.redirectUrl) {
-        setRedirectData({
-          redirectUrl: data.redirectUrl,
-          isApproval: true,
-          orderInfo: {
-            description: request.description || 'Payment Request',
-            amount: request.amount,
-            orderId: request.externalOrderId || request.id.toString()
-          }
-        });
-        setShowRedirectModal(true);
+        // Close this modal immediately and show redirect modal
         onClose();
+        
+        // Small delay to ensure clean transition
+        setTimeout(() => {
+          setRedirectData({
+            redirectUrl: data.redirectUrl,
+            isApproval: true,
+            orderInfo: {
+              description: request.description || 'Payment Request',
+              amount: request.amount,
+              orderId: request.externalOrderId || request.id.toString()
+            }
+          });
+          setShowRedirectModal(true);
+        }, 100);
       } else {
         toast({
           title: "Payment Approved!",
@@ -82,17 +87,22 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
       
       if (data.redirect && data.redirectUrl) {
-        setRedirectData({
-          redirectUrl: data.redirectUrl,
-          isApproval: false,
-          orderInfo: {
-            description: request.description || 'Payment Request',
-            amount: request.amount,
-            orderId: request.externalOrderId || request.id.toString()
-          }
-        });
-        setShowRedirectModal(true);
+        // Close this modal immediately and show redirect modal
         onClose();
+        
+        // Small delay to ensure clean transition
+        setTimeout(() => {
+          setRedirectData({
+            redirectUrl: data.redirectUrl,
+            isApproval: false,
+            orderInfo: {
+              description: request.description || 'Payment Request',
+              amount: request.amount,
+              orderId: request.externalOrderId || request.id.toString()
+            }
+          });
+          setShowRedirectModal(true);
+        }, 100);
       } else {
         toast({
           title: "Payment Rejected",
@@ -318,6 +328,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         onClose={() => {
           setShowRedirectModal(false);
           setRedirectData(null);
+          onClose(); // Close the original request modal
         }}
         redirectUrl={redirectData.redirectUrl}
         isApproval={redirectData.isApproval}

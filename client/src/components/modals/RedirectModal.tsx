@@ -53,7 +53,7 @@ export function RedirectModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-yellow-400 text-white max-w-md">
+      <DialogContent className="bg-black border-yellow-400 text-white max-w-md z-[100]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-yellow-400">
             {isApproval ? (
