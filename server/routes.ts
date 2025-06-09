@@ -1283,10 +1283,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Handle external redirect for Juice Shop - always redirect external requests
       if (isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external")) {
-        // Create proper Juice Shop redirect URL with full domain
-        const juiceShopUrl = request.returnUrl?.includes('http://localhost:3000') 
+        // Create proper Juice Shop redirect URL with correct Replit domain
+        const juiceShopBaseUrl = 'https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/juice-shop';
+        const juiceShopUrl = request.returnUrl?.includes('https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev') 
           ? request.returnUrl 
-          : `http://localhost:3000${request.returnUrl || '/#/order-completion'}?payment=success&orderId=${request.externalOrderId}&amount=${requestAmount}`;
+          : `${juiceShopBaseUrl}${request.returnUrl || '/#/order-completion'}?payment=success&orderId=${request.externalOrderId}&amount=${requestAmount}`;
         
         const response = {
           message: "External payment approved successfully",
@@ -1366,10 +1367,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Handle external redirect for Juice Shop - always redirect external requests
       if (isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external")) {
-        // Create proper Juice Shop redirect URL with full domain
-        const juiceShopUrl = request.cancelUrl?.includes('http://localhost:3000') 
+        // Create proper Juice Shop redirect URL with correct Replit domain
+        const juiceShopBaseUrl = 'https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/juice-shop';
+        const juiceShopUrl = request.cancelUrl?.includes('https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev') 
           ? request.cancelUrl 
-          : `http://localhost:3000${request.cancelUrl || '/#/basket'}?payment=cancelled&orderId=${request.externalOrderId}&amount=${request.amount}`;
+          : `${juiceShopBaseUrl}${request.cancelUrl || '/#/basket'}?payment=cancelled&orderId=${request.externalOrderId}&amount=${request.amount}`;
         
         const response = {
           message: "External payment rejected successfully",
