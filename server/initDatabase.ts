@@ -1,4 +1,5 @@
 import Database from 'better-sqlite3';
+import { resetSeedingFlag } from './mockData';
 
 export function clearAndReinitializeDatabase() {
   const db = new Database('./data/whoopspay.db');
