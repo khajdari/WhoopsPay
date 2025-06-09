@@ -197,7 +197,7 @@ export default function Transactions() {
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
-                    placeholder="Search: @user for users, numbers for amounts, text for types..."
+                    placeholder={t('transactions.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => handleSearchChange(e.target.value)}
                     className="pl-10"
@@ -211,11 +211,11 @@ export default function Transactions() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All transactions</SelectItem>
-                    <SelectItem value="sent">Money sent</SelectItem>
-                    <SelectItem value="received">Money received</SelectItem>
-                    <SelectItem value="onus">ONUS (Internal)</SelectItem>
-                    <SelectItem value="offus">OFFUS (External)</SelectItem>
+                    <SelectItem value="all">{t('transactions.all')}</SelectItem>
+                    <SelectItem value="sent">{t('transactions.sent')}</SelectItem>
+                    <SelectItem value="received">{t('transactions.received')}</SelectItem>
+                    <SelectItem value="onus">{t('transactions.onus')}</SelectItem>
+                    <SelectItem value="offus">{t('transactions.offus')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
