@@ -82,7 +82,7 @@ export default function ExternalRedirect() {
           <div className="h-1 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full w-32 mx-auto"></div>
         </div>
 
-        <Card className="bg-gray-900 border-2 border-yellow-400/30 shadow-2xl shadow-yellow-400/10">
+        <Card className="bg-slate-700 border border-slate-600 shadow-2xl">
           <CardHeader className="text-center pb-6">
             <div className="flex justify-center mb-6">
               <div className="relative">
@@ -107,24 +107,24 @@ export default function ExternalRedirect() {
 
           <CardContent className="space-y-8">
             {/* Transaction Details */}
-            <div className="bg-black/50 border border-yellow-400/20 rounded-xl p-6 space-y-4">
+            <div className="bg-slate-800 border border-slate-600 rounded-lg p-6 space-y-4">
               <h3 className="text-yellow-400 font-semibold text-lg mb-4 flex items-center">
                 <div className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></div>
                 Transaction Details
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400 font-medium">{t('orderId')}:</span>
-                  <span className="text-yellow-400 font-mono text-sm bg-yellow-400/10 px-3 py-1 rounded-lg">{orderId}</span>
+                  <span className="text-gray-300 font-medium">{t('orderId')}:</span>
+                  <span className="text-yellow-400 font-mono text-sm bg-slate-600 px-3 py-1 rounded">{orderId}</span>
                 </div>
                 {amount && (
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400 font-medium">Amount:</span>
+                    <span className="text-gray-300 font-medium">Amount:</span>
                     <span className="text-yellow-400 font-bold text-xl">${amount}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400 font-medium">{t('service')}:</span>
+                  <span className="text-gray-300 font-medium">{t('service')}:</span>
                   <span className="text-yellow-400 font-semibold">
                     {returnTo === 'juice-shop' ? 'OWASP Juice Shop' : returnTo}
                   </span>
@@ -134,39 +134,32 @@ export default function ExternalRedirect() {
 
             {/* Redirect Information */}
             {isExternal && redirectUrl && (
-              <div className="text-center space-y-6">
-                <div className="flex items-center justify-center space-x-3 text-gray-300">
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-                  <ExternalLink className="h-5 w-5 text-yellow-400" />
-                  <span className="font-medium">{t('redirectingTo')}</span>
+              <div className="text-center space-y-4">
+                <div className="flex items-center justify-center space-x-2 text-gray-300">
+                  <ExternalLink className="h-4 w-4" />
+                  <span>{t('redirectingTo')}</span>
                 </div>
                 
-                <div className="bg-black/70 border border-yellow-400/20 rounded-lg p-4 text-xs font-mono text-gray-400 break-all max-h-20 overflow-y-auto">
+                <div className="bg-slate-800 border border-slate-600 rounded p-3 text-xs font-mono text-gray-400 break-all max-h-16 overflow-y-auto">
                   {redirectUrl}
                 </div>
 
                 {countdown > 0 && !redirecting && (
-                  <div className="bg-yellow-400/10 border border-yellow-400/30 rounded-xl p-4">
-                    <div className="flex items-center justify-center space-x-3 text-yellow-400">
-                      <ArrowRight className="h-5 w-5" />
-                      <span className="font-semibold text-lg">
-                        {t('redirectingIn')} <span className="text-2xl font-bold">{countdown}</span> {t('seconds')}
+                  <div className="bg-yellow-400/20 border border-yellow-400/40 rounded-lg p-3">
+                    <div className="flex items-center justify-center space-x-2 text-yellow-400">
+                      <ArrowRight className="h-4 w-4" />
+                      <span className="font-medium">
+                        {t('redirectingIn')} <span className="font-bold">{countdown}</span> {t('seconds')}
                       </span>
-                    </div>
-                    <div className="mt-3 w-full bg-black/50 rounded-full h-2">
-                      <div 
-                        className="bg-gradient-to-r from-yellow-400 to-yellow-600 h-2 rounded-full transition-all duration-1000"
-                        style={{ width: `${((5 - countdown) / 5) * 100}%` }}
-                      ></div>
                     </div>
                   </div>
                 )}
 
                 {redirecting && (
-                  <div className="bg-yellow-400/10 border border-yellow-400/30 rounded-xl p-4">
-                    <div className="flex items-center justify-center space-x-3 text-yellow-400">
-                      <Loader2 className="h-6 w-6 animate-spin" />
-                      <span className="font-semibold text-lg">{t('redirecting')}</span>
+                  <div className="bg-yellow-400/20 border border-yellow-400/40 rounded-lg p-3">
+                    <div className="flex items-center justify-center space-x-2 text-yellow-400">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span className="font-medium">{t('redirecting')}</span>
                     </div>
                   </div>
                 )}
@@ -174,20 +167,20 @@ export default function ExternalRedirect() {
             )}
 
             {/* Action Buttons */}
-            <div className="flex space-x-4 pt-4">
+            <div className="flex space-x-3 pt-4">
               <Button 
                 onClick={handleStay}
                 variant="outline" 
-                className="flex-1 border-2 border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500 h-12 font-semibold"
+                className="flex-1 border border-gray-500 text-gray-300 hover:bg-slate-600 bg-gray-600/30 h-10 font-medium"
               >
                 {t('stayHere')}
               </Button>
               {isExternal && redirectUrl && !redirecting && (
                 <Button 
                   onClick={handleManualRedirect}
-                  className="flex-1 bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-black font-bold h-12 shadow-lg shadow-yellow-400/25"
+                  className="flex-1 bg-cyan-400 hover:bg-cyan-300 text-black font-medium h-10"
                 >
-                  <ExternalLink className="h-5 w-5 mr-2" />
+                  <ExternalLink className="h-4 w-4 mr-2" />
                   {t('redirectNow')}
                 </Button>
               )}
