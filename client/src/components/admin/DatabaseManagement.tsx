@@ -366,45 +366,45 @@ export function DatabaseManagement() {
                                   )}
                                 </td>
                               ))}
-                              <td className="p-3 w-32">
+                              <td className="p-3 min-w-[120px]">
                                 {editingRow === rowIdx ? (
-                                  <div className="flex gap-1">
+                                  <div className="flex gap-2 items-center">
                                     <Button
                                       size="sm"
                                       onClick={handleSaveRow}
                                       disabled={executeQueryMutation.isPending}
-                                      className="h-8 w-8 p-0"
+                                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1"
                                     >
-                                      <Save className="h-4 w-4" />
+                                      Save
                                     </Button>
                                     <Button
                                       size="sm"
                                       variant="outline"
                                       onClick={handleCancelEdit}
-                                      className="h-8 w-8 p-0"
+                                      className="px-3 py-1"
                                     >
-                                      <X className="h-4 w-4" />
+                                      Cancel
                                     </Button>
                                   </div>
                                 ) : (
-                                  <div className="flex gap-1">
+                                  <div className="flex gap-2 items-center">
                                     <Button
                                       size="sm"
                                       variant="outline"
                                       onClick={() => handleEditRow(rowIdx, row)}
-                                      className="h-8 w-8 p-0"
+                                      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1"
                                       title="Edit Row"
                                     >
-                                      <Edit className="h-4 w-4" />
+                                      Edit
                                     </Button>
                                     <Button
                                       size="sm"
                                       variant="outline"
                                       onClick={() => handleDeleteRow(rowIdx)}
-                                      className="h-8 w-8 p-0"
+                                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1"
                                       title="Delete Row"
                                     >
-                                      <Trash2 className="h-4 w-4" />
+                                      Delete
                                     </Button>
                                   </div>
                                 )}
