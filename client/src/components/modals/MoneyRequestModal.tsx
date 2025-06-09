@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { formatDistanceToNow } from "date-fns";
+import { RedirectModal } from "./RedirectModal";
 import { 
   Check, 
   X, 
@@ -30,6 +31,8 @@ interface MoneyRequestModalProps {
 export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyRequestModalProps) {
   const [isApproving, setIsApproving] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);
+  const [showRedirectModal, setShowRedirectModal] = useState(false);
+  const [redirectData, setRedirectData] = useState<any>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -41,23 +44,25 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
       
       if (data.redirect && data.redirectUrl) {
-        toast({
-          title: "Payment Approved!",
-          description: "Payment processed successfully. Redirecting back to Juice Shop...",
-          className: "bg-black border-yellow-400 text-yellow-400",
+        setRedirectData({
+          redirectUrl: data.redirectUrl,
+          isApproval: true,
+          orderInfo: {
+            description: request.description || 'Payment Request',
+            amount: request.amount,
+            orderId: request.externalOrderId || request.id.toString()
+          }
         });
-        // Use the redirect URL directly from server (already properly formatted)
-        setTimeout(() => {
-          window.location.href = data.redirectUrl;
-        }, 1500);
+        setShowRedirectModal(true);
+        onClose();
       } else {
         toast({
           title: "Payment Approved!",
           description: `Payment of $${request.amount} has been processed successfully.`,
           className: "bg-black border-yellow-400 text-yellow-400",
         });
+        onClose();
       }
-      onClose();
     },
     onError: (error: any) => {
       toast({
@@ -77,23 +82,25 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
       
       if (data.redirect && data.redirectUrl) {
-        toast({
-          title: "Payment Rejected",
-          description: "Redirecting back to Juice Shop...",
-          className: "bg-red-900 border-red-500 text-red-100",
+        setRedirectData({
+          redirectUrl: data.redirectUrl,
+          isApproval: false,
+          orderInfo: {
+            description: request.description || 'Payment Request',
+            amount: request.amount,
+            orderId: request.externalOrderId || request.id.toString()
+          }
         });
-        // Use the redirect URL directly from server (already properly formatted)
-        setTimeout(() => {
-          window.location.href = data.redirectUrl;
-        }, 1500);
+        setShowRedirectModal(true);
+        onClose();
       } else {
         toast({
           title: "Payment Rejected",
           description: "The money request has been rejected.",
           className: "bg-red-900 border-red-500 text-red-100",
         });
+        onClose();
       }
-      onClose();
     },
     onError: (error: any) => {
       toast({
@@ -149,6 +156,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
   const typeInfo = getRequestTypeInfo();
 
   return (
+    <>
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md bg-black border-yellow-400 text-white">
         <DialogHeader>
@@ -302,5 +310,20 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         </div>
       </DialogContent>
     </Dialog>
+    
+    {/* Redirect Modal for External Payments */}
+    {redirectData && (
+      <RedirectModal
+        isOpen={showRedirectModal}
+        onClose={() => {
+          setShowRedirectModal(false);
+          setRedirectData(null);
+        }}
+        redirectUrl={redirectData.redirectUrl}
+        isApproval={redirectData.isApproval}
+        orderInfo={redirectData.orderInfo}
+      />
+    )}
+  </>
   );
 }
