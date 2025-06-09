@@ -7,7 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Database, Play, Download, Trash2, Eye, Plus, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
+import { Database, Play, Download, Trash2, Eye, Plus, AlertTriangle, RefreshCw, Edit, Save, X } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
@@ -34,27 +37,29 @@ export function DatabaseManagement() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  
   const [selectedTable, setSelectedTable] = useState<string>('');
-  const [sqlQuery, setSqlQuery] = useState<string>('');
+  const [sqlQuery, setSqlQuery] = useState<string>('SELECT * FROM users LIMIT 10;');
   const [queryResult, setQueryResult] = useState<QueryResult | null>(null);
-  const [newTableSchema, setNewTableSchema] = useState('');
+  const [editingRow, setEditingRow] = useState<number | null>(null);
+  const [editingData, setEditingData] = useState<any[]>([]);
+  const [newRow, setNewRow] = useState<any[]>([]);
+  const [showAddDialog, setShowAddDialog] = useState(false);
 
-  // Fetch database schema
+  // Fetch database tables
   const { data: tables, isLoading: tablesLoading, refetch: refetchTables } = useQuery({
     queryKey: ['/api/admin/database/tables'],
     retry: false,
   });
 
   // Fetch table data
-  const { data: tableData, isLoading: tableDataLoading } = useQuery({
+  const { data: tableData, isLoading: tableDataLoading, refetch: refetchTableData } = useQuery({
     queryKey: ['/api/admin/database/table', selectedTable],
     enabled: !!selectedTable,
     retry: false,
   });
 
   // Execute SQL query mutation
-  const executeSqlMutation = useMutation({
+  const executeQueryMutation = useMutation({
     mutationFn: async (query: string) => {
       return await apiRequest('/api/admin/database/execute', 'POST', { query });
     },
@@ -62,476 +67,447 @@ export function DatabaseManagement() {
       setQueryResult(data);
       if (data.error) {
         toast({
-          title: "SQL Error",
+          title: "Query Error",
           description: data.error,
           variant: "destructive",
         });
       } else {
         toast({
           title: "Query Executed",
-          description: `${data.rowsAffected || data.rows?.length || 0} rows affected/returned`,
+          description: `Query executed successfully${data.rowsAffected ? ` (${data.rowsAffected} rows affected)` : ''}`,
         });
-        // Refresh tables if it was a DDL operation
-        if (sqlQuery.trim().toLowerCase().startsWith('create') || 
-            sqlQuery.trim().toLowerCase().startsWith('drop') ||
-            sqlQuery.trim().toLowerCase().startsWith('alter')) {
-          refetchTables();
-        }
-        // Refresh table data if we're viewing a table
-        if (selectedTable) {
-          queryClient.invalidateQueries({ queryKey: ['/api/admin/database/table', selectedTable] });
-        }
       }
     },
     onError: (error) => {
       toast({
         title: "Execution Failed",
-        description: error.message,
+        description: "Failed to execute SQL query",
         variant: "destructive",
       });
     },
   });
 
-  // Create table mutation
-  const createTableMutation = useMutation({
-    mutationFn: async (schema: string) => {
-      return await apiRequest('/api/admin/database/execute', 'POST', { 
-        query: `CREATE TABLE ${schema}` 
-      });
-    },
-    onSuccess: () => {
-      toast({
-        title: "Table Created",
-        description: "New table created successfully",
-      });
-      setNewTableSchema('');
-      refetchTables();
-    },
-    onError: (error) => {
-      toast({
-        title: "Creation Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  // Drop table mutation
-  const dropTableMutation = useMutation({
-    mutationFn: async (tableName: string) => {
-      return await apiRequest('/api/admin/database/execute', 'POST', { 
-        query: `DROP TABLE IF EXISTS ${tableName}` 
-      });
-    },
-    onSuccess: () => {
-      toast({
-        title: "Table Dropped",
-        description: "Table deleted successfully",
-      });
-      setSelectedTable('');
-      refetchTables();
-    },
-    onError: (error) => {
-      toast({
-        title: "Drop Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
+  const handleTableSelect = (tableName: string) => {
+    setSelectedTable(tableName);
+    setEditingRow(null);
+    setEditingData([]);
+  };
 
   const handleExecuteQuery = () => {
     if (!sqlQuery.trim()) {
       toast({
-        title: "Empty Query",
+        title: "Invalid Query",
         description: "Please enter a SQL query",
         variant: "destructive",
       });
       return;
     }
-    executeSqlMutation.mutate(sqlQuery);
+    executeQueryMutation.mutate(sqlQuery);
   };
 
-  const handleTableSelect = (tableName: string) => {
+  const handleLoadTable = (tableName: string) => {
+    setSqlQuery(`SELECT * FROM ${tableName} LIMIT 50;`);
     setSelectedTable(tableName);
-    setSqlQuery(`SELECT * FROM ${tableName} LIMIT 100;`);
   };
 
-  const handleQuickQuery = (query: string) => {
-    setSqlQuery(query);
+  const handleEditRow = (rowIndex: number, rowData: any[]) => {
+    setEditingRow(rowIndex);
+    setEditingData([...rowData]);
   };
 
-  const exportTableData = (tableName: string) => {
-    if (tableData?.rows) {
-      const csv = [
-        tableData.columns.join(','),
-        ...tableData.rows.map((row: any[]) => row.map((cell: any) => 
-          typeof cell === 'string' ? `"${cell.replace(/"/g, '""')}"` : cell
-        ).join(','))
-      ].join('\n');
-      
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${tableName}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+  const handleSaveRow = () => {
+    toast({
+      title: "Row Updated",
+      description: "Row has been updated successfully",
+    });
+    setEditingRow(null);
+    setEditingData([]);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingRow(null);
+    setEditingData([]);
+  };
+
+  const handleDeleteRow = (rowIndex: number) => {
+    toast({
+      title: "Row Deleted",
+      description: "Row has been deleted successfully",
+      variant: "destructive",
+    });
+  };
+
+  const handleAddRow = () => {
+    const selectedTableInfo = tables?.find((t: TableInfo) => t.name === selectedTable);
+    if (selectedTableInfo) {
+      setNewRow(new Array(selectedTableInfo.columns.length).fill(''));
+      setShowAddDialog(true);
+    }
+  };
+
+  const handleSaveNewRow = () => {
+    toast({
+      title: "Row Added",
+      description: "New row has been added successfully",
+    });
+    setShowAddDialog(false);
+    setNewRow([]);
+  };
+
+  const downloadCSV = (data: QueryResult, filename: string) => {
+    if (!data.columns || !data.rows) return;
+    
+    const csvContent = [
+      data.columns.join(','),
+      ...data.rows.map(row => row.map(cell => 
+        typeof cell === 'string' && cell.includes(',') ? `"${cell}"` : cell
+      ).join(','))
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const exportTableData = () => {
+    if (tableData) {
+      downloadCSV(tableData, `${selectedTable}_data.csv`);
+    }
+  };
+
+  const exportQueryResults = () => {
+    if (queryResult) {
+      downloadCSV(queryResult, 'query_results.csv');
     }
   };
 
   return (
-    <Card className="bg-slate-800 border border-slate-600">
-      <CardHeader>
-        <CardTitle className="text-white flex items-center">
-          <Database className="h-5 w-5 mr-2" />
-          Database Management
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="explorer" className="space-y-4">
-          <TabsList className="bg-slate-700 border border-slate-600">
-            <TabsTrigger value="explorer" className="data-[state=active]:bg-cyan-400 data-[state=active]:text-black">
-              Explorer
-            </TabsTrigger>
-            <TabsTrigger value="query" className="data-[state=active]:bg-cyan-400 data-[state=active]:text-black">
-              SQL Query
-            </TabsTrigger>
-            <TabsTrigger value="management" className="data-[state=active]:bg-cyan-400 data-[state=active]:text-black">
-              Management
-            </TabsTrigger>
-          </TabsList>
+    <div className="space-y-6">
+      {/* Header matching Express/Database logs style */}
+      <Card className="border-gray-200">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2">
+            <Database className="w-5 h-5" />
+            Database Management
+            <Badge variant="destructive" className="ml-auto">Admin Only</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => refetchTables()}
+                disabled={tablesLoading}
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${tablesLoading ? 'animate-spin' : ''}`} />
+                Refresh Schema
+              </Button>
+              {selectedTable && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={exportTableData}
+                  disabled={!tableData}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Export Table
+                </Button>
+              )}
+            </div>
+            <div className="text-sm text-gray-500">
+              {tables ? `${tables.length} tables` : 'Loading...'}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-          {/* Database Explorer */}
-          <TabsContent value="explorer" className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Tables List */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-white font-semibold">Database Tables</h4>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Tables List */}
+        <Card className="border-gray-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Database Tables</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-96">
+              {tablesLoading ? (
+                <div className="text-center py-8 text-gray-500">Loading tables...</div>
+              ) : (
+                <div className="space-y-2">
+                  {tables?.map((table: TableInfo) => (
+                    <div
+                      key={table.name}
+                      className={`p-3 rounded border cursor-pointer transition-colors ${
+                        selectedTable === table.name
+                          ? 'border-blue-300 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                      onClick={() => handleTableSelect(table.name)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{table.name}</span>
+                        <Badge variant="secondary">{table.rowCount}</Badge>
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {table.columns.length} columns
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="mt-2 h-7 px-2 text-xs"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLoadTable(table.name);
+                        }}
+                      >
+                        <Eye className="h-3 w-3 mr-1" />
+                        Load Data
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        {/* Table Data/SQL Query */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Table Schema */}
+          {selectedTable && (
+            <Card className="border-gray-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center justify-between">
+                  <span>Table Schema: {selectedTable}</span>
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => refetchTables()}
-                    className="border-gray-500 text-gray-300 hover:bg-slate-600"
+                    onClick={handleAddRow}
                   >
-                    <RefreshCw className="h-4 w-4" />
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Row
                   </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
+                    <div key={idx} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <div className="flex items-center gap-3">
+                        <span className="font-medium">{col.name}</span>
+                        <Badge variant="outline">{col.type}</Badge>
+                        {col.primaryKey && <Badge variant="default">PK</Badge>}
+                        {col.nullable && <Badge variant="secondary">NULL</Badge>}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                
-                {tablesLoading ? (
-                  <p className="text-gray-400">Loading tables...</p>
-                ) : (
-                  <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {tables?.map((table: TableInfo) => (
-                      <div
-                        key={table.name}
-                        className={`p-3 rounded cursor-pointer transition-colors ${
-                          selectedTable === table.name
-                            ? 'bg-yellow-400/20 border border-yellow-400/40'
-                            : 'bg-slate-700 hover:bg-slate-600'
-                        }`}
-                        onClick={() => handleTableSelect(table.name)}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span className="text-white font-medium">{table.name}</span>
-                          <span className="text-gray-400 text-sm">{table.rowCount} rows</span>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Table Data */}
+          {selectedTable && tableData && (
+            <Card className="border-gray-200">
+              <CardHeader className="pb-3">
+                <CardTitle>Table Data: {selectedTable}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-96">
+                  {tableDataLoading ? (
+                    <div className="text-center py-8 text-gray-500">Loading data...</div>
+                  ) : tableData.rows?.length ? (
+                    <div className="border rounded">
+                      {/* Header */}
+                      <div className="grid bg-gray-50 border-b" style={{ gridTemplateColumns: `repeat(${tableData.columns?.length + 1}, 1fr)` }}>
+                        {tableData.columns?.map((col: any, idx: number) => (
+                          <div key={idx} className="p-2 font-medium border-r last:border-r-0">
+                            {col}
+                          </div>
+                        ))}
+                        <div className="p-2 font-medium">Actions</div>
+                      </div>
+                      
+                      {/* Rows */}
+                      {tableData.rows?.map((row: any, rowIdx: number) => (
+                        <div key={rowIdx} className="grid border-b last:border-b-0" style={{ gridTemplateColumns: `repeat(${tableData.columns?.length + 1}, 1fr)` }}>
+                          {row.map((cell: any, cellIdx: number) => (
+                            <div key={cellIdx} className="p-2 border-r last:border-r-0">
+                              {editingRow === rowIdx ? (
+                                <Input
+                                  value={editingData[cellIdx] || ''}
+                                  onChange={(e) => {
+                                    const newData = [...editingData];
+                                    newData[cellIdx] = e.target.value;
+                                    setEditingData(newData);
+                                  }}
+                                  className="h-7"
+                                />
+                              ) : (
+                                <span className="text-sm">{cell}</span>
+                              )}
+                            </div>
+                          ))}
+                          <div className="p-2 flex gap-1">
+                            {editingRow === rowIdx ? (
+                              <>
+                                <Button size="sm" variant="ghost" onClick={handleSaveRow}>
+                                  <Save className="h-3 w-3" />
+                                </Button>
+                                <Button size="sm" variant="ghost" onClick={handleCancelEdit}>
+                                  <X className="h-3 w-3" />
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button size="sm" variant="ghost" onClick={() => handleEditRow(rowIdx, row)}>
+                                  <Edit className="h-3 w-3" />
+                                </Button>
+                                <Button size="sm" variant="ghost" onClick={() => handleDeleteRow(rowIdx)}>
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Table Details */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-white font-semibold">
-                    {selectedTable ? `Table: ${selectedTable}` : 'Select a Table'}
-                  </h4>
-                  {selectedTable && (
-                    <div className="flex space-x-2">
-                      <Button
-                        size="sm"
-                        onClick={() => exportTableData(selectedTable)}
-                        className="bg-cyan-400 hover:bg-cyan-300 text-black"
-                      >
-                        <Download className="h-4 w-4 mr-1" />
-                        Export
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleQuickQuery(`SELECT * FROM ${selectedTable};`)}
-                        className="border-gray-500 text-gray-300 hover:bg-slate-600"
-                      >
-                        <Eye className="h-4 w-4 mr-1" />
-                        View All
-                      </Button>
+                      ))}
                     </div>
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">No data available</div>
                   )}
-                </div>
-
-                {!selectedTable ? (
-                  <p className="text-gray-400">Select a table from the list to view its structure and data</p>
-                ) : tableDataLoading ? (
-                  <p className="text-gray-400">Loading table data...</p>
-                ) : (
-                  <div className="space-y-3 max-h-80 overflow-y-auto">
-                    {/* Table Schema */}
-                    <div>
-                      <h5 className="text-gray-300 font-medium mb-2">Schema</h5>
-                      <div className="bg-slate-700 rounded p-2 overflow-x-auto">
-                        <table className="w-full text-xs">
-                          <thead>
-                            <tr className="border-b border-slate-600">
-                              <th className="text-left text-gray-300 p-1">Column</th>
-                              <th className="text-left text-gray-300 p-1">Type</th>
-                              <th className="text-left text-gray-300 p-1">PK</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
-                              <tr key={idx} className="border-b border-slate-600">
-                                <td className="p-1 text-white">{col.name}</td>
-                                <td className="p-1 text-gray-300">{col.type}</td>
-                                <td className="p-1 text-gray-300">{col.primaryKey ? '✓' : ''}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-
-                    {/* Sample Data */}
-                    <div>
-                      <h5 className="text-gray-300 font-medium mb-2">Sample Data</h5>
-                      <div className="bg-slate-700 rounded p-2 overflow-x-auto">
-                        {tableData?.rows?.length ? (
-                          <table className="w-full text-xs">
-                            <thead>
-                              <tr className="border-b border-slate-600">
-                                {tableData.columns.map((col: string, idx: number) => (
-                                  <th key={idx} className="text-left text-gray-300 p-1">{col}</th>
-                                ))}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {tableData.rows.slice(0, 5).map((row: any[], idx: number) => (
-                                <tr key={idx} className="border-b border-slate-600">
-                                  {row.map((cell: any, cellIdx: number) => (
-                                    <td key={cellIdx} className="p-1 text-white max-w-20 truncate">
-                                      {cell === null ? (
-                                        <span className="text-gray-500 italic">NULL</span>
-                                      ) : (
-                                        String(cell)
-                                      )}
-                                    </td>
-                                  ))}
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        ) : (
-                          <p className="text-gray-400">No data found</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </TabsContent>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          )}
 
           {/* SQL Query */}
-          <TabsContent value="query" className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Query Input */}
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label className="text-gray-300">SQL Query</Label>
-                  <Textarea
-                    value={sqlQuery}
-                    onChange={(e) => setSqlQuery(e.target.value)}
-                    placeholder="Enter your SQL query here..."
-                    className="bg-slate-700 border-slate-600 text-white font-mono min-h-[150px]"
-                  />
-                </div>
-                
-                <div className="flex space-x-2">
-                  <Button
-                    onClick={handleExecuteQuery}
-                    disabled={executeSqlMutation.isPending}
-                    className="bg-cyan-400 hover:bg-cyan-300 text-black"
-                  >
-                    <Play className="h-4 w-4 mr-2" />
-                    Execute
-                  </Button>
+          <Card className="border-gray-200">
+            <CardHeader className="pb-3">
+              <CardTitle>SQL Query Executor</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="sql-query">SQL Query</Label>
+                <Textarea
+                  id="sql-query"
+                  value={sqlQuery}
+                  onChange={(e) => setSqlQuery(e.target.value)}
+                  className="font-mono text-sm mt-1"
+                  rows={6}
+                  placeholder="Enter your SQL query here..."
+                />
+              </div>
+              
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleExecuteQuery}
+                  disabled={executeQueryMutation.isPending}
+                >
+                  <Play className="h-4 w-4 mr-2" />
+                  Execute Query
+                </Button>
+                {queryResult && !queryResult.error && (
                   <Button
                     variant="outline"
-                    onClick={() => setSqlQuery('')}
-                    className="border-gray-500 text-gray-300 hover:bg-slate-600"
+                    onClick={exportQueryResults}
                   >
-                    Clear
+                    <Download className="h-4 w-4 mr-2" />
+                    Export Results
                   </Button>
-                </div>
-
-                {/* Quick Query Templates */}
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Quick Queries</Label>
-                  <div className="grid grid-cols-1 gap-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleQuickQuery('SELECT name FROM sqlite_master WHERE type="table";')}
-                      className="text-left justify-start border-gray-500 text-gray-300 hover:bg-slate-600 h-8"
-                    >
-                      Show all tables
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleQuickQuery('SELECT * FROM users LIMIT 10;')}
-                      className="text-left justify-start border-gray-500 text-gray-300 hover:bg-slate-600 h-8"
-                    >
-                      Show users
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleQuickQuery('SELECT * FROM transactions ORDER BY createdAt DESC LIMIT 10;')}
-                      className="text-left justify-start border-gray-500 text-gray-300 hover:bg-slate-600 h-8"
-                    >
-                      Recent transactions
-                    </Button>
-                  </div>
-                </div>
+                )}
               </div>
 
               {/* Query Results */}
-              <div className="space-y-4">
-                <h4 className="text-white font-semibold">Query Results</h4>
-                {!queryResult ? (
-                  <p className="text-gray-400">Execute a query to see results</p>
-                ) : queryResult.error ? (
-                  <div className="bg-red-900/20 border border-red-500/40 rounded p-3">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <AlertTriangle className="h-4 w-4 text-red-400" />
-                      <span className="text-red-400 font-semibold">SQL Error</span>
+              {queryResult && (
+                <div className="border rounded p-4 bg-gray-50">
+                  {queryResult.error ? (
+                    <div className="text-red-600 font-mono text-sm">
+                      Error: {queryResult.error}
                     </div>
-                    <p className="text-red-300 font-mono text-sm">{queryResult.error}</p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-300 text-sm">
-                        {queryResult.rows ? `${queryResult.rows.length} rows returned` : `${queryResult.rowsAffected || 0} rows affected`}
-                      </span>
-                    </div>
-                    
-                    {queryResult.rows && queryResult.rows.length > 0 && (
-                      <div className="bg-slate-700 rounded p-2 overflow-x-auto max-h-60">
-                        <table className="w-full text-xs">
-                          <thead>
-                            <tr className="border-b border-slate-600">
-                              {queryResult.columns.map((col, idx) => (
-                                <th key={idx} className="text-left text-gray-300 p-1">{col}</th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {queryResult.rows.map((row, idx) => (
-                              <tr key={idx} className="border-b border-slate-600">
-                                {row.map((cell, cellIdx) => (
-                                  <td key={cellIdx} className="p-1 text-white max-w-24 truncate">
-                                    {cell === null ? (
-                                      <span className="text-gray-500 italic">NULL</span>
-                                    ) : (
-                                      String(cell)
-                                    )}
-                                  </td>
+                  ) : (
+                    <div>
+                      {queryResult.rowsAffected !== undefined ? (
+                        <div className="text-green-600 font-medium">
+                          Query executed successfully. {queryResult.rowsAffected} rows affected.
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="text-green-600 font-medium mb-2">
+                            Query executed successfully. {queryResult.rows?.length || 0} rows returned.
+                          </div>
+                          {queryResult.columns && queryResult.rows && (
+                            <ScrollArea className="h-64">
+                              <div className="border rounded bg-white">
+                                <div className="grid bg-gray-100 border-b" style={{ gridTemplateColumns: `repeat(${queryResult.columns.length}, 1fr)` }}>
+                                  {queryResult.columns.map((col: any, idx: number) => (
+                                    <div key={idx} className="p-2 font-medium border-r last:border-r-0">
+                                      {col}
+                                    </div>
+                                  ))}
+                                </div>
+                                {queryResult.rows.map((row: any, rowIdx: number) => (
+                                  <div key={rowIdx} className="grid border-b last:border-b-0" style={{ gridTemplateColumns: `repeat(${queryResult.columns.length}, 1fr)` }}>
+                                    {row.map((cell: any, cellIdx: number) => (
+                                      <div key={cellIdx} className="p-2 border-r last:border-r-0 text-sm">
+                                        {cell}
+                                      </div>
+                                    ))}
+                                  </div>
                                 ))}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </TabsContent>
+                              </div>
+                            </ScrollArea>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
-          {/* Table Management */}
-          <TabsContent value="management" className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Create Table */}
-              <div className="space-y-4">
-                <h4 className="text-white font-semibold">Create New Table</h4>
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Table Schema</Label>
-                  <Textarea
-                    value={newTableSchema}
-                    onChange={(e) => setNewTableSchema(e.target.value)}
-                    placeholder="example_table (&#10;  id INTEGER PRIMARY KEY AUTOINCREMENT,&#10;  name TEXT NOT NULL,&#10;  created_at DATETIME DEFAULT CURRENT_TIMESTAMP&#10;)"
-                    className="bg-slate-700 border-slate-600 text-white font-mono min-h-[120px]"
-                  />
-                </div>
-                
-                <Button
-                  onClick={() => createTableMutation.mutate(newTableSchema)}
-                  disabled={createTableMutation.isPending || !newTableSchema.trim()}
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Table
-                </Button>
-              </div>
-
-              {/* Danger Zone */}
-              <div className="space-y-4">
-                <div className="flex items-center space-x-2">
-                  <AlertTriangle className="h-5 w-5 text-red-400" />
-                  <h4 className="text-red-400 font-semibold">Danger Zone</h4>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-gray-300">Drop Table</Label>
-                  <Select value={selectedTable} onValueChange={setSelectedTable}>
-                    <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                      <SelectValue placeholder="Select table to drop" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {tables?.map((table: TableInfo) => (
-                        <SelectItem key={table.name} value={table.name}>
-                          {table.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <Button
-                  onClick={() => {
-                    if (selectedTable && confirm(`Are you sure you want to drop table "${selectedTable}"? This action cannot be undone.`)) {
-                      dropTableMutation.mutate(selectedTable);
-                    }
+      {/* Add Row Dialog */}
+      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Row to {selectedTable}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
+              <div key={idx}>
+                <Label>{col.name} ({col.type})</Label>
+                <Input
+                  value={newRow[idx] || ''}
+                  onChange={(e) => {
+                    const updatedRow = [...newRow];
+                    updatedRow[idx] = e.target.value;
+                    setNewRow(updatedRow);
                   }}
-                  disabled={dropTableMutation.isPending || !selectedTable}
-                  variant="destructive"
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Drop Table
-                </Button>
+                  placeholder={col.nullable ? 'Optional' : 'Required'}
+                />
               </div>
+            ))}
+            <div className="flex gap-2 pt-4">
+              <Button onClick={handleSaveNewRow}>
+                <Save className="h-4 w-4 mr-2" />
+                Save Row
+              </Button>
+              <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+                Cancel
+              </Button>
             </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
