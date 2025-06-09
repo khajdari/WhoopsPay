@@ -187,6 +187,7 @@ interface Translations {
 
   // Transactions page
   'transactions.title': TranslationKey;
+  'transactions.subtitle': TranslationKey;
   'transactions.overview': TranslationKey;
   'transactions.totalTransactions': TranslationKey;
   'transactions.totalSent': TranslationKey;
@@ -198,6 +199,18 @@ interface Translations {
   'transactions.noTransactionsFound': TranslationKey;
   'transactions.filterByStatus': TranslationKey;
   'transactions.searchTransactions': TranslationKey;
+  'transactions.all': TranslationKey;
+  'transactions.sent': TranslationKey;
+  'transactions.received': TranslationKey;
+  'transactions.onus': TranslationKey;
+  'transactions.offus': TranslationKey;
+  'transactions.searchPlaceholder': TranslationKey;
+  'transactions.filter': TranslationKey;
+  'transactions.previous': TranslationKey;
+  'transactions.next': TranslationKey;
+  'transactions.page': TranslationKey;
+  'transactions.of': TranslationKey;
+  'transactions.loading': TranslationKey;
 
   // Wallet page  
   'wallet.title': TranslationKey;
@@ -912,6 +925,58 @@ const translations: Translations = {
   'transactions.searchTransactions': {
     'en-GB': 'Search transactions...',
     'el-GR': 'Αναζήτηση συναλλαγών...'
+  },
+  'transactions.subtitle': {
+    'en-GB': 'View and manage your transaction history',
+    'el-GR': 'Προβολή και διαχείριση του ιστορικού συναλλαγών σας'
+  },
+  'transactions.all': {
+    'en-GB': 'All',
+    'el-GR': 'Όλες'
+  },
+  'transactions.sent': {
+    'en-GB': 'Sent',
+    'el-GR': 'Απεσταλμένες'
+  },
+  'transactions.received': {
+    'en-GB': 'Received',
+    'el-GR': 'Ληφθείσες'
+  },
+  'transactions.onus': {
+    'en-GB': 'ONUS',
+    'el-GR': 'ONUS'
+  },
+  'transactions.offus': {
+    'en-GB': 'OFFUS',
+    'el-GR': 'OFFUS'
+  },
+  'transactions.searchPlaceholder': {
+    'en-GB': 'Search: @user for users, numbers for amounts, text for types...',
+    'el-GR': 'Αναζήτηση: @χρήστης για χρήστες, αριθμοί για ποσά, κείμενο για τύπους...'
+  },
+  'transactions.filter': {
+    'en-GB': 'Filter',
+    'el-GR': 'Φίλτρο'
+  },
+  'transactions.previous': {
+    'en-GB': 'Previous',
+    'el-GR': 'Προηγούμενη'
+  },
+  'transactions.next': {
+    'en-GB': 'Next',
+    'el-GR': 'Επόμενη'
+  },
+  'transactions.page': {
+    'en-GB': 'Page',
+    'el-GR': 'Σελίδα'
+  },
+  'transactions.of': {
+    'en-GB': 'of',
+    'el-GR': 'από'
+  },
+  'transactions.loading': {
+    'en-GB': 'Loading transactions...',
+    'el-GR': 'Φόρτωση συναλλαγών...'
   },
 
   // Wallet page translations
