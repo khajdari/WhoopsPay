@@ -53,88 +53,137 @@ export function RedirectModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-yellow-400 text-white max-w-md z-[9999] fixed">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-yellow-400">
+      <DialogContent className="bg-black border-2 border-yellow-400 text-white max-w-lg z-[9999] fixed rounded-lg">
+        <DialogHeader className="relative">
+          <button 
+            onClick={onClose}
+            className="absolute -top-2 -right-2 w-6 h-6 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center text-gray-300 hover:text-white"
+          >
+            ×
+          </button>
+          <DialogTitle className="flex items-center gap-2 text-yellow-400 text-lg">
             {isApproval ? (
               <>
                 <CheckCircle className="h-5 w-5" />
-                Payment Approved!
+                External Payment Approved
               </>
             ) : (
               <>
                 <XCircle className="h-5 w-5" />
-                Payment Rejected
+                External Payment Rejected
               </>
             )}
           </DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4">
-          <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
-            <h3 className="font-semibold text-yellow-400 mb-2">Order Details:</h3>
-            <div className="space-y-1 text-sm">
-              <p><span className="text-gray-400">Item:</span> {orderInfo.description}</p>
-              <p><span className="text-gray-400">Amount:</span> ${orderInfo.amount}</p>
-              <p><span className="text-gray-400">Order ID:</span> {orderInfo.orderId}</p>
+        <div className="space-y-6">
+          {/* Status Badge */}
+          <div className="flex justify-center">
+            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+              External Payment Request
+            </span>
+          </div>
+
+          {/* Amount Display */}
+          <div className="bg-yellow-400 text-black p-4 rounded-lg text-center">
+            <div className="text-2xl font-bold">
+              $ {orderInfo.amount.toFixed(2)}
             </div>
           </div>
 
-          <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
-            <h3 className="font-semibold text-yellow-400 mb-2">Redirect URL:</h3>
-            <p className="text-xs text-gray-300 break-all font-mono bg-gray-800 p-2 rounded">
-              {redirectUrl}
-            </p>
+          {/* From Section */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-yellow-400">
+              <ExternalLink className="h-4 w-4" />
+              <span className="font-medium">From:</span>
+            </div>
+            <div className="ml-6">
+              <div className="text-white font-medium">Juice Shop</div>
+              <div className="text-gray-400 text-sm">External Merchant</div>
+            </div>
           </div>
 
-          {autoRedirect && countdown > 0 ? (
-            <div className="text-center">
-              <p className="text-yellow-400 mb-3">
-                Redirecting to Juice Shop in {countdown} seconds...
-              </p>
-              <div className="space-x-2">
-                <Button 
-                  onClick={handleManualRedirect}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-black"
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Redirect Now
-                </Button>
-                <Button 
-                  onClick={handleCancelAutoRedirect}
-                  variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-800"
-                >
-                  Cancel Auto-redirect
-                </Button>
+          {/* Description Section */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-yellow-400">
+              <span className="font-medium">Description:</span>
+            </div>
+            <div className="ml-6 text-white">
+              {orderInfo.description}
+            </div>
+          </div>
+
+          {/* External Details */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-yellow-400">
+              <span className="font-medium">External Details:</span>
+            </div>
+            <div className="ml-6 space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Order ID:</span>
+                <span className="text-white">{orderInfo.orderId}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Source:</span>
+                <span className="text-white">Juice-Shop</span>
+              </div>
+              <div className="flex justify-between items-start">
+                <span className="text-gray-400">Return URL:</span>
+                <span className="text-white text-xs font-mono break-all max-w-xs">
+                  {redirectUrl}
+                </span>
               </div>
             </div>
-          ) : (
-            <div className="text-center space-y-3">
-              <p className="text-gray-300">
-                {isApproval 
-                  ? "Payment processed successfully!" 
-                  : "Payment was rejected."
-                }
-              </p>
-              <div className="space-x-2">
+          </div>
+
+          {/* Status Message */}
+          <div className="text-center">
+            <p className="text-gray-300 mb-4">
+              {isApproval 
+                ? "Payment has been processed successfully. You will be redirected to complete your order." 
+                : "Payment was rejected. You will be redirected back to the merchant."
+              }
+            </p>
+            
+            {autoRedirect && countdown > 0 ? (
+              <div className="space-y-3">
+                <p className="text-yellow-400 font-medium">
+                  Redirecting to Juice Shop in {countdown} seconds...
+                </p>
+                <div className="flex justify-center gap-3">
+                  <Button 
+                    onClick={handleManualRedirect}
+                    className="bg-yellow-600 hover:bg-yellow-700 text-black font-medium px-6 py-2"
+                  >
+                    Continue to Juice Shop
+                  </Button>
+                  <Button 
+                    onClick={handleCancelAutoRedirect}
+                    variant="outline"
+                    className="border-red-600 text-red-400 hover:bg-red-900/20 px-6 py-2"
+                  >
+                    Cancel Auto-redirect
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-center gap-3">
                 <Button 
                   onClick={handleManualRedirect}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-black"
+                  className="bg-yellow-600 hover:bg-yellow-700 text-black font-medium px-6 py-2"
                 >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Go to Juice Shop
+                  Continue to Juice Shop
                 </Button>
                 <Button 
                   onClick={onClose}
                   variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-800"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-800 px-6 py-2"
                 >
                   Stay Here
                 </Button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
