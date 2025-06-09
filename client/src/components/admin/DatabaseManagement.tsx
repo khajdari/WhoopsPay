@@ -49,6 +49,8 @@ export function DatabaseManagement() {
   const [queryResult, setQueryResult] = useState<QueryResult | null>(null);
   const [editingRow, setEditingRow] = useState<number | null>(null);
   const [editingData, setEditingData] = useState<any[]>([]);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [editRowData, setEditRowData] = useState<any[]>([]);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newRow, setNewRow] = useState<any[]>([]);
 
@@ -193,6 +195,52 @@ export function DatabaseManagement() {
     setEditingData([]);
   };
 
+  const handleSaveEditedRow = async () => {
+    if (!selectedTable || !tableData?.columns || editingRow === null) return;
+    
+    try {
+      const columns = tableData.columns;
+      const primaryKeyCol = tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.find(col => col.primaryKey);
+      
+      if (!primaryKeyCol) {
+        toast({
+          title: "Error",
+          description: "Cannot update row: No primary key found",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const originalRow = tableData.rows?.[editingRow];
+      const primaryKeyIndex = columns.findIndex((col: any) => col === primaryKeyCol.name);
+      const primaryKeyValue = originalRow[primaryKeyIndex];
+
+      const setClauses = editRowData.map((value, idx) => 
+        `${columns[idx]} = ?`
+      ).join(', ');
+
+      const updateQuery = `UPDATE ${selectedTable} SET ${setClauses} WHERE ${primaryKeyCol.name} = ?`;
+      
+      await executeQueryMutation.mutateAsync(updateQuery + ` -- Values: [${editRowData.map(v => `'${v}'`).join(', ')}, '${primaryKeyValue}']`);
+      
+      await refetchTableData();
+      setShowEditDialog(false);
+      setEditingRow(null);
+      setEditRowData([]);
+      
+      toast({
+        title: "Success",
+        description: "Row updated successfully",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update row",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleSaveNewRow = async () => {
     if (!selectedTable || !newRow.length) return;
     
@@ -334,84 +382,46 @@ export function DatabaseManagement() {
                   </div>
                 ) : tableData?.rows && tableData.rows.length > 0 ? (
                   <ScrollArea className="h-96">
-                    <div className="border rounded bg-white overflow-x-auto">
-                      <table className="w-full">
-                        <thead className="bg-gray-100 sticky top-0">
-                          <tr>
-                            {tableData.columns?.map((col: any, idx: number) => (
-                              <th key={idx} className="p-3 text-left font-medium border-r">
-                                {col}
-                              </th>
-                            ))}
-                            <th className="p-3 text-left font-medium w-32">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {tableData.rows?.map((row: any, rowIdx: number) => (
-                            <tr key={rowIdx} className="border-b hover:bg-gray-50">
+                    <div className="space-y-3">
+                      {tableData.rows?.map((row: any, rowIdx: number) => (
+                        <div key={rowIdx} className="border rounded-lg p-4 bg-white hover:bg-gray-50">
+                          <div className="flex justify-between items-start gap-4">
+                            <div className="flex-1 grid grid-cols-2 gap-3">
                               {row.map((cell: any, cellIdx: number) => (
-                                <td key={cellIdx} className="p-3 border-r text-sm">
-                                  {editingRow === rowIdx ? (
-                                    <Input
-                                      value={editingData[cellIdx] || ''}
-                                      onChange={(e) => {
-                                        const newData = [...editingData];
-                                        newData[cellIdx] = e.target.value;
-                                        setEditingData(newData);
-                                      }}
-                                      className="h-8 text-sm"
-                                    />
-                                  ) : (
-                                    <div className="truncate max-w-xs">{String(cell)}</div>
-                                  )}
-                                </td>
-                              ))}
-                              <td className="p-3 bg-gray-50 border-l-2 border-blue-200" style={{ minWidth: '150px' }}>
-                                <div className="flex flex-col gap-1">
-                                  {editingRow === rowIdx ? (
-                                    <>
-                                      <button
-                                        onClick={handleSaveRow}
-                                        disabled={executeQueryMutation.isPending}
-                                        className="w-full bg-green-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-green-600"
-                                      >
-                                        💾 SAVE
-                                      </button>
-                                      <button
-                                        onClick={handleCancelEdit}
-                                        className="w-full bg-gray-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-gray-600"
-                                      >
-                                        ❌ CANCEL
-                                      </button>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <button
-                                        onClick={() => {
-                                          console.log('Edit clicked for row:', rowIdx, row);
-                                          handleEditRow(rowIdx, row);
-                                        }}
-                                        className="w-full bg-blue-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-blue-600"
-                                      >
-                                        ✏️ EDIT
-                                      </button>
-                                      <button
-                                        onClick={() => {
-                                          console.log('Delete clicked for row:', rowIdx);
-                                          handleDeleteRow(rowIdx);
-                                        }}
-                                        className="w-full bg-red-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-red-600"
-                                      >
-                                        🗑️ DELETE
-                                      </button>
-                                    </>
-                                  )}
+                                <div key={cellIdx} className="min-w-0">
+                                  <div className="text-xs font-medium text-gray-500 mb-1">
+                                    {tableData.columns?.[cellIdx]}
+                                  </div>
+                                  <div className="text-sm text-gray-900 break-words">
+                                    {String(cell)}
+                                  </div>
                                 </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                              ))}
+                            </div>
+                            <div className="flex flex-col gap-2 ml-4">
+                              <Button
+                                size="sm"
+                                onClick={() => {
+                                  setEditRowData([...row]);
+                                  setEditingRow(rowIdx);
+                                  setShowEditDialog(true);
+                                }}
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2"
+                              >
+                                Edit Row
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleDeleteRow(rowIdx)}
+                                className="border-red-300 text-red-600 hover:bg-red-50 px-4 py-2"
+                              >
+                                Delete
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </ScrollArea>
                 ) : (
@@ -540,6 +550,40 @@ export function DatabaseManagement() {
                 Save Row
               </Button>
               <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Row Dialog */}
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Row in {selectedTable}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
+              <div key={idx}>
+                <Label>{col.name} ({col.type})</Label>
+                <Input
+                  value={editRowData[idx] || ''}
+                  onChange={(e) => {
+                    const updatedRow = [...editRowData];
+                    updatedRow[idx] = e.target.value;
+                    setEditRowData(updatedRow);
+                  }}
+                  placeholder={col.nullable ? 'Optional' : 'Required'}
+                />
+              </div>
+            ))}
+            <div className="flex gap-2 pt-4">
+              <Button onClick={handleSaveEditedRow}>
+                <Save className="h-4 w-4 mr-2" />
+                Save Changes
+              </Button>
+              <Button variant="outline" onClick={() => setShowEditDialog(false)}>
                 Cancel
               </Button>
             </div>
