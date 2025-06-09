@@ -42,16 +42,22 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
       
       if (data.redirect && data.redirectUrl) {
         toast({
-          title: "External Payment Approved",
+          title: "Payment Approved!",
           description: "Payment processed successfully. Redirecting back to Juice Shop...",
+          className: "bg-black border-yellow-400 text-yellow-400",
         });
+        // Fix the redirect URL format for Juice Shop
+        const fixedUrl = data.redirectUrl.includes('http://localhost:3000') 
+          ? data.redirectUrl 
+          : `http://localhost:3000${data.redirectUrl.startsWith('/') ? '' : '/'}${data.redirectUrl}`;
         setTimeout(() => {
-          window.location.href = data.redirectUrl;
+          window.location.href = fixedUrl;
         }, 1500);
       } else {
         toast({
-          title: "Request Approved",
-          description: `Payment of $${request.amount} has been processed.`,
+          title: "Payment Approved!",
+          description: `Payment of $${request.amount} has been processed successfully.`,
+          className: "bg-black border-yellow-400 text-yellow-400",
         });
       }
       onClose();
@@ -61,6 +67,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         title: "Approval Failed",
         description: error.message || "Failed to approve request",
         variant: "destructive",
+        className: "bg-red-900 border-red-500 text-red-100",
       });
     },
   });
@@ -74,16 +81,22 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
       
       if (data.redirect && data.redirectUrl) {
         toast({
-          title: "External Payment Rejected",
+          title: "Payment Rejected",
           description: "Redirecting back to Juice Shop...",
+          className: "bg-red-900 border-red-500 text-red-100",
         });
+        // Fix the redirect URL format for Juice Shop
+        const fixedUrl = data.redirectUrl.includes('http://localhost:3000') 
+          ? data.redirectUrl 
+          : `http://localhost:3000${data.redirectUrl.startsWith('/') ? '' : '/'}${data.redirectUrl}`;
         setTimeout(() => {
-          window.location.href = data.redirectUrl;
+          window.location.href = fixedUrl;
         }, 1500);
       } else {
         toast({
-          title: "Request Rejected",
+          title: "Payment Rejected",
           description: "The money request has been rejected.",
+          className: "bg-red-900 border-red-500 text-red-100",
         });
       }
       onClose();
@@ -93,6 +106,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         title: "Rejection Failed",
         description: error.message || "Failed to reject request",
         variant: "destructive",
+        className: "bg-red-900 border-red-500 text-red-100",
       });
     },
   });
