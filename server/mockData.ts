@@ -315,7 +315,44 @@ export async function seedMockData() {
       })
     });
 
-    console.log("Mock data seeded successfully with new users, @ prefix IDs, and external money requests");
+    // Create internal money requests between users
+    await storage.createMoneyRequest({
+      fromUserId: "@sarah_wilson",
+      toUserId: "@james_chen",
+      amount: 45.00,
+      description: "Dinner split from last weekend",
+      status: "pending",
+      type: "internal"
+    });
+
+    await storage.createMoneyRequest({
+      fromUserId: "@elena_kowalski",
+      toUserId: "@james_chen",
+      amount: 22.50,
+      description: "Coffee shop bill share",
+      status: "pending", 
+      type: "internal"
+    });
+
+    await storage.createMoneyRequest({
+      fromUserId: "@admin_maria",
+      toUserId: "@sarah_wilson",
+      amount: 100.00,
+      description: "Project bonus payment",
+      status: "pending",
+      type: "internal"
+    });
+
+    await storage.createMoneyRequest({
+      fromUserId: "@james_chen",
+      toUserId: "@elena_kowalski", 
+      amount: 15.75,
+      description: "Book lending reimbursement",
+      status: "pending",
+      type: "internal"
+    });
+
+    console.log("Mock data seeded successfully with new users, @ prefix IDs, external money requests, and internal money requests");
     isSeeded = true;
   } catch (error) {
     console.error("Error seeding mock data:", error);
