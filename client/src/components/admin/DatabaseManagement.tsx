@@ -334,73 +334,85 @@ export function DatabaseManagement() {
                   </div>
                 ) : tableData?.rows && tableData.rows.length > 0 ? (
                   <ScrollArea className="h-96">
-                    <div className="border rounded bg-white">
-                      <div className="grid bg-gray-100 border-b sticky top-0" style={{ gridTemplateColumns: `repeat(${(tableData.columns?.length || 0) + 1}, minmax(120px, 1fr))` }}>
-                        {tableData.columns?.map((col: any, idx: number) => (
-                          <div key={idx} className="p-2 font-medium border-r last:border-r-0">
-                            {col}
-                          </div>
-                        ))}
-                        <div className="p-2 font-medium">Actions</div>
-                      </div>
-                      {tableData.rows?.map((row: any, rowIdx: number) => (
-                        <div key={rowIdx} className="grid border-b last:border-b-0" style={{ gridTemplateColumns: `repeat(${(tableData.columns?.length || 0) + 1}, minmax(120px, 1fr))` }}>
-                          {row.map((cell: any, cellIdx: number) => (
-                            <div key={cellIdx} className="p-2 border-r last:border-r-0 text-sm">
-                              {editingRow === rowIdx ? (
-                                <Input
-                                  value={editingData[cellIdx] || ''}
-                                  onChange={(e) => {
-                                    const newData = [...editingData];
-                                    newData[cellIdx] = e.target.value;
-                                    setEditingData(newData);
-                                  }}
-                                  className="h-8 text-sm"
-                                />
-                              ) : (
-                                <div className="truncate">{String(cell)}</div>
-                              )}
-                            </div>
+                    <div className="border rounded bg-white overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-gray-100 sticky top-0">
+                          <tr>
+                            {tableData.columns?.map((col: any, idx: number) => (
+                              <th key={idx} className="p-3 text-left font-medium border-r">
+                                {col}
+                              </th>
+                            ))}
+                            <th className="p-3 text-left font-medium w-32">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {tableData.rows?.map((row: any, rowIdx: number) => (
+                            <tr key={rowIdx} className="border-b hover:bg-gray-50">
+                              {row.map((cell: any, cellIdx: number) => (
+                                <td key={cellIdx} className="p-3 border-r text-sm">
+                                  {editingRow === rowIdx ? (
+                                    <Input
+                                      value={editingData[cellIdx] || ''}
+                                      onChange={(e) => {
+                                        const newData = [...editingData];
+                                        newData[cellIdx] = e.target.value;
+                                        setEditingData(newData);
+                                      }}
+                                      className="h-8 text-sm"
+                                    />
+                                  ) : (
+                                    <div className="truncate max-w-xs">{String(cell)}</div>
+                                  )}
+                                </td>
+                              ))}
+                              <td className="p-3 w-32">
+                                {editingRow === rowIdx ? (
+                                  <div className="flex gap-1">
+                                    <Button
+                                      size="sm"
+                                      onClick={handleSaveRow}
+                                      disabled={executeQueryMutation.isPending}
+                                      className="h-8 w-8 p-0"
+                                    >
+                                      <Save className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={handleCancelEdit}
+                                      className="h-8 w-8 p-0"
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                ) : (
+                                  <div className="flex gap-1">
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => handleEditRow(rowIdx, row)}
+                                      className="h-8 w-8 p-0"
+                                      title="Edit Row"
+                                    >
+                                      <Edit className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => handleDeleteRow(rowIdx)}
+                                      className="h-8 w-8 p-0"
+                                      title="Delete Row"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                )}
+                              </td>
+                            </tr>
                           ))}
-                          <div className="p-2 border-r last:border-r-0">
-                            {editingRow === rowIdx ? (
-                              <div className="flex gap-1">
-                                <Button
-                                  size="sm"
-                                  onClick={handleSaveRow}
-                                  disabled={executeQueryMutation.isPending}
-                                >
-                                  <Save className="h-3 w-3" />
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={handleCancelEdit}
-                                >
-                                  <X className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            ) : (
-                              <div className="flex gap-1">
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleEditRow(rowIdx, row)}
-                                >
-                                  <Edit className="h-3 w-3" />
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleDeleteRow(rowIdx)}
-                                >
-                                  <Trash2 className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                        </tbody>
+                      </table>
                     </div>
                   </ScrollArea>
                 ) : (
