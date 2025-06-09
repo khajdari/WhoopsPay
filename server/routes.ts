@@ -2477,76 +2477,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.get('/api/admin/database/tables', isAuthenticated, async (req, res) => {
     try {
-      // Get actual database schema from WhoopsPay tables
-      const tableInfo = [
-        {
-          name: 'users',
-          columns: [
-            { name: 'id', type: 'TEXT', nullable: false, primaryKey: true },
-            { name: 'username', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'email', type: 'TEXT', nullable: true, primaryKey: false },
-            { name: 'balance', type: 'REAL', nullable: true, primaryKey: false },
-            { name: 'isAdmin', type: 'INTEGER', nullable: true, primaryKey: false },
-            { name: 'hashedPassword', type: 'TEXT', nullable: true, primaryKey: false }
-          ],
-          rowCount: 5
-        },
-        {
-          name: 'transactions',
-          columns: [
-            { name: 'id', type: 'INTEGER', nullable: false, primaryKey: true },
-            { name: 'fromUserId', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'toUserId', type: 'TEXT', nullable: true, primaryKey: false },
-            { name: 'amount', type: 'REAL', nullable: false, primaryKey: false },
-            { name: 'description', type: 'TEXT', nullable: true, primaryKey: false },
-            { name: 'status', type: 'TEXT', nullable: true, primaryKey: false },
-            { name: 'type', type: 'TEXT', nullable: true, primaryKey: false },
-            { name: 'transactionCategory', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'isInternal', type: 'INTEGER', nullable: false, primaryKey: false },
-            { name: 'createdAt', type: 'INTEGER', nullable: true, primaryKey: false }
-          ],
-          rowCount: 12
-        },
-        {
-          name: 'notifications',
-          columns: [
-            { name: 'id', type: 'INTEGER', nullable: false, primaryKey: true },
-            { name: 'userId', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'title', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'message', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'type', type: 'TEXT', nullable: true, primaryKey: false },
-            { name: 'isRead', type: 'INTEGER', nullable: true, primaryKey: false },
-            { name: 'createdAt', type: 'INTEGER', nullable: true, primaryKey: false }
-          ],
-          rowCount: 6
-        },
-        {
-          name: 'payment_methods',
-          columns: [
-            { name: 'id', type: 'INTEGER', nullable: false, primaryKey: true },
-            { name: 'userId', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'type', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'provider', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'accountNumber', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'isDefault', type: 'INTEGER', nullable: true, primaryKey: false }
-          ],
-          rowCount: 8
-        },
-        {
-          name: 'money_requests',
-          columns: [
-            { name: 'id', type: 'INTEGER', nullable: false, primaryKey: true },
-            { name: 'fromUserId', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'toUserId', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'amount', type: 'REAL', nullable: false, primaryKey: false },
-            { name: 'description', type: 'TEXT', nullable: true, primaryKey: false },
-            { name: 'status', type: 'TEXT', nullable: false, primaryKey: false },
-            { name: 'createdAt', type: 'INTEGER', nullable: true, primaryKey: false },
-            { name: 'respondedAt', type: 'INTEGER', nullable: true, primaryKey: false }
-          ],
-          rowCount: 4
+      const { db } = await import('./db.js');
+      
+      // Get actual table names from SQLite
+      const tablesResult = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name").all();
+      
+      const tableInfo = tablesResult.map((table: any) => {
+        try {
+          // Get table schema
+          const schemaResult = db.prepare(`PRAGMA table_info(${table.name})`).all();
+          // Get row count
+          const countResult = db.prepare(`SELECT COUNT(*) as count FROM ${table.name}`).get() as any;
+          
+          return {
+            name: table.name,
+            columns: schemaResult.map((col: any) => ({
+              name: col.name,
+              type: col.type,
+              nullable: !col.notnull,
+              primaryKey: !!col.pk
+            })),
+            rowCount: countResult?.count || 0
+          };
+        } catch (err) {
+          console.error(`Error getting schema for table ${table.name}:`, err);
+          return {
+            name: table.name,
+            columns: [],
+            rowCount: 0
+          };
         }
-      ];
+      });
 
       res.json(tableInfo);
     } catch (error) {
@@ -2576,6 +2537,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.get('/api/admin/database/table/:tableName', isAuthenticated, async (req, res) => {
     try {
+      const { db } = await import('./db.js');
       const { tableName } = req.params;
       
       // Basic SQL injection prevention
@@ -2583,57 +2545,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Invalid table name' });
       }
 
-      // Mock table data for WhoopsPay database
-      const mockData: Record<string, any> = {
-        users: {
-          columns: ['id', 'username', 'email', 'balance', 'isAdmin'],
-          rows: [
-            ['@admin001', 'admin', 'admin@whoopspay.local', 1000.00, 1],
-            ['@user002', 'alice.johnson', 'alice@example.com', 250.75, 0],
-            ['@user003', 'bob.smith', 'bob@example.com', 500.00, 0],
-            ['@user004', 'charlie.brown', 'charlie@example.com', 125.50, 0],
-            ['@user005', 'diana.prince', 'diana@example.com', 750.25, 0]
-          ]
-        },
-        transactions: {
-          columns: ['id', 'fromUserId', 'toUserId', 'amount', 'description', 'status', 'type', 'transactionCategory'],
-          rows: [
-            [1, '@user002', '@user003', 50.00, 'Coffee payment', 'completed', 'payment', 'ONUS'],
-            [2, '@user003', '@user004', 25.00, 'Lunch split', 'completed', 'payment', 'ONUS'],
-            [3, '@user004', null, 100.00, 'External purchase', 'pending', 'external', 'OFFUS'],
-            [4, '@user005', '@user002', 75.50, 'Service payment', 'completed', 'payment', 'ONUS'],
-            [5, '@user002', null, 200.00, 'Online shopping', 'completed', 'external', 'OFFUS']
-          ]
-        },
-        notifications: {
-          columns: ['id', 'userId', 'title', 'message', 'type', 'isRead'],
-          rows: [
-            [1, '@user002', 'Payment Received', 'You received $75.50 from diana.prince', 'payment', 0],
-            [2, '@user003', 'Payment Sent', 'You sent $50.00 to bob.smith', 'payment', 1],
-            [3, '@admin001', 'System Alert', 'New user registration pending', 'admin', 0]
-          ]
-        },
-        payment_methods: {
-          columns: ['id', 'userId', 'type', 'provider', 'accountNumber', 'isDefault'],
-          rows: [
-            [1, '@user002', 'bank', 'Chase Bank', '****1234', 1],
-            [2, '@user003', 'card', 'Visa', '****5678', 1],
-            [3, '@user004', 'bank', 'Wells Fargo', '****9012', 1],
-            [4, '@user005', 'card', 'Mastercard', '****3456', 0]
-          ]
-        },
-        money_requests: {
-          columns: ['id', 'fromUserId', 'toUserId', 'amount', 'description', 'status', 'createdAt'],
-          rows: [
-            [1, '@user002', '@user003', 30.00, 'Dinner bill split', 'pending', Date.now() - 86400000],
-            [2, '@user004', '@user005', 20.00, 'Movie tickets', 'approved', Date.now() - 172800000],
-            [3, '@user003', '@user002', 15.00, 'Coffee meetup', 'pending', Date.now() - 3600000]
-          ]
-        }
-      };
-
-      const result = mockData[tableName] || { columns: [], rows: [] };
-      res.json(result);
+      // Get actual data from the database
+      const query = `SELECT * FROM ${tableName} LIMIT 100`;
+      const rows = db.prepare(query).all();
+      
+      if (rows.length > 0) {
+        const columns = Object.keys(rows[0]);
+        const data = rows.map((row: any) => columns.map(col => row[col]));
+        res.json({ columns, rows: data });
+      } else {
+        // If no data, get columns from schema
+        const schemaResult = db.prepare(`PRAGMA table_info(${tableName})`).all();
+        const columns = schemaResult.map((col: any) => col.name);
+        res.json({ columns, rows: [] });
+      }
     } catch (error) {
       console.error('Table data error:', error);
       res.status(500).json({ error: 'Failed to fetch table data' });
@@ -2667,6 +2592,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.post('/api/admin/database/execute', isAuthenticated, async (req, res) => {
     try {
+      const { db } = await import('./db.js');
       const { query } = req.body;
       
       if (!query || typeof query !== 'string') {
@@ -2675,48 +2601,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const trimmedQuery = query.trim().toLowerCase();
       
-      // Mock SQL execution results for educational purposes
-      if (trimmedQuery.startsWith('select')) {
-        // Mock SELECT query results
-        if (trimmedQuery.includes('users')) {
-          res.json({
-            columns: ['id', 'username', 'email', 'balance', 'isAdmin'],
-            rows: [
-              ['@admin001', 'admin', 'admin@whoopspay.local', 1000.00, 1],
-              ['@user002', 'alice.johnson', 'alice@example.com', 250.75, 0],
-              ['@user003', 'bob.smith', 'bob@example.com', 500.00, 0]
-            ]
-          });
-        } else if (trimmedQuery.includes('transactions')) {
-          res.json({
-            columns: ['id', 'fromUserId', 'toUserId', 'amount', 'status', 'type'],
-            rows: [
-              [1, '@user002', '@user003', 50.00, 'completed', 'payment'],
-              [2, '@user003', '@user004', 25.00, 'completed', 'payment'],
-              [3, '@user004', null, 100.00, 'pending', 'external']
-            ]
-          });
+      try {
+        // Execute the actual SQL query
+        if (trimmedQuery.startsWith('select') || trimmedQuery.startsWith('pragma')) {
+          // For SELECT and PRAGMA queries, return rows
+          const rows = await db.all(query);
+          
+          if (rows.length > 0) {
+            const columns = Object.keys(rows[0]);
+            const data = rows.map(row => columns.map(col => (row as any)[col]));
+            res.json({ columns, rows: data });
+          } else {
+            // If no rows, try to get column info for PRAGMA queries
+            if (trimmedQuery.startsWith('pragma')) {
+              res.json({ columns: [], rows: [] });
+            } else {
+              res.json({ columns: ['result'], rows: [['No results found']] });
+            }
+          }
         } else {
+          // For INSERT, UPDATE, DELETE queries
+          const result = await db.run(query);
           res.json({
-            columns: ['result'],
-            rows: [['Query executed successfully']]
+            rowsAffected: result.changes || 0,
+            lastID: result.lastInsertRowid || null
           });
         }
-      } else if (trimmedQuery.startsWith('pragma')) {
-        // Mock PRAGMA results
+      } catch (sqlError: any) {
+        // Return the actual SQL error for educational purposes
         res.json({
-          columns: ['name', 'type', 'notnull', 'dflt_value', 'pk'],
-          rows: [
-            ['id', 'TEXT', 1, null, 1],
-            ['username', 'TEXT', 1, null, 0],
-            ['email', 'TEXT', 0, null, 0]
-          ]
-        });
-      } else {
-        // Mock modification query results
-        res.json({
-          rowsAffected: Math.floor(Math.random() * 5) + 1,
-          lastID: Math.floor(Math.random() * 100) + 1
+          error: sqlError.message || 'SQL execution error',
+          columns: ['error'],
+          rows: [[sqlError.message || 'Unknown SQL error']]
         });
       }
     } catch (error) {
