@@ -53,6 +53,8 @@ export function DatabaseManagement() {
   const [editRowData, setEditRowData] = useState<any[]>([]);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newRow, setNewRow] = useState<any[]>([]);
+  const [formErrors, setFormErrors] = useState<{[key: number]: string}>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch tables
   const { data: tables, isLoading: tablesLoading, refetch: refetchTables } = useQuery({
@@ -195,12 +197,62 @@ export function DatabaseManagement() {
     setEditingData([]);
   };
 
+  const validateForm = (data: any[], columns: any[]) => {
+    const errors: {[key: number]: string} = {};
+    
+    columns.forEach((col, idx) => {
+      const value = data[idx]?.toString().trim();
+      
+      // Check required fields
+      if (!col.nullable && (!value || value === '')) {
+        errors[idx] = `${col.name} is required`;
+        return;
+      }
+      
+      // Type validation
+      if (value && value !== '') {
+        switch (col.type.toLowerCase()) {
+          case 'integer':
+            if (!/^\d+$/.test(value)) {
+              errors[idx] = `${col.name} must be a valid integer`;
+            }
+            break;
+          case 'real':
+            if (!/^\d*\.?\d+$/.test(value)) {
+              errors[idx] = `${col.name} must be a valid number`;
+            }
+            break;
+          case 'text':
+            if (value.length > 500) {
+              errors[idx] = `${col.name} must be less than 500 characters`;
+            }
+            break;
+        }
+      }
+    });
+    
+    return errors;
+  };
+
   const handleSaveEditedRow = async () => {
     if (!selectedTable || !tableData?.columns || editingRow === null) return;
     
+    setIsSubmitting(true);
+    
     try {
       const columns = tableData.columns;
-      const primaryKeyCol = tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.find(col => col.primaryKey);
+      const tableInfo = tables?.find((t: TableInfo) => t.name === selectedTable);
+      const primaryKeyCol = tableInfo?.columns.find(col => col.primaryKey);
+      
+      // Validate form
+      const validationErrors = validateForm(editRowData, tableInfo?.columns || []);
+      if (Object.keys(validationErrors).length > 0) {
+        setFormErrors(validationErrors);
+        setIsSubmitting(false);
+        return;
+      }
+      
+      setFormErrors({});
       
       if (!primaryKeyCol) {
         toast({
@@ -208,6 +260,7 @@ export function DatabaseManagement() {
           description: "Cannot update row: No primary key found",
           variant: "destructive",
         });
+        setIsSubmitting(false);
         return;
       }
 
@@ -238,15 +291,33 @@ export function DatabaseManagement() {
         description: error.message || "Failed to update row",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleSaveNewRow = async () => {
     if (!selectedTable || !newRow.length) return;
     
+    setIsSubmitting(true);
+    
     try {
-      const columns = tables?.find((t: TableInfo) => t.name === selectedTable)?.columns;
-      if (!columns) return;
+      const tableInfo = tables?.find((t: TableInfo) => t.name === selectedTable);
+      const columns = tableInfo?.columns;
+      if (!columns) {
+        setIsSubmitting(false);
+        return;
+      }
+      
+      // Validate form
+      const validationErrors = validateForm(newRow, columns);
+      if (Object.keys(validationErrors).length > 0) {
+        setFormErrors(validationErrors);
+        setIsSubmitting(false);
+        return;
+      }
+      
+      setFormErrors({});
       
       const columnNames = columns.map(col => col.name);
       const values = newRow.map(val => 
@@ -270,6 +341,8 @@ export function DatabaseManagement() {
         description: "Failed to add new row",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -525,27 +598,27 @@ export function DatabaseManagement() {
 
       {/* Add Row Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="pb-6">
-            <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              ✨ Add New Row
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto border-2 border-blue-200">
+          <DialogHeader className="pb-6 border-b border-blue-100">
+            <DialogTitle className="text-2xl font-bold text-center text-[hsl(var(--whoopspay-blue))]">
+              💎 Add New Database Record
             </DialogTitle>
             <p className="text-center text-gray-600 mt-2">
-              Adding new record to <span className="font-semibold text-blue-600">{selectedTable}</span> table
+              Creating new entry in <span className="font-bold text-[hsl(var(--whoopspay-darkblue))]">{selectedTable}</span> table
             </p>
           </DialogHeader>
           
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-100">
+          <div className="bg-gradient-to-br from-blue-50/70 to-sky-50/70 rounded-xl p-6 border border-blue-200">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
-                <div key={idx} className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-400"></div>
+                <div key={idx} className="space-y-3">
+                  <Label className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-[hsl(var(--whoopspay-blue))]"></div>
                     {col.name}
-                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                    <span className="text-xs text-white bg-[hsl(var(--whoopspay-gold))] px-3 py-1 rounded-full font-semibold">
                       {col.type}
                     </span>
-                    {!col.nullable && <span className="text-red-500 text-xs">*</span>}
+                    {!col.nullable && <span className="text-red-600 text-sm font-bold">*</span>}
                   </Label>
                   <Input
                     value={newRow[idx] || ''}
@@ -553,26 +626,56 @@ export function DatabaseManagement() {
                       const updatedRow = [...newRow];
                       updatedRow[idx] = e.target.value;
                       setNewRow(updatedRow);
+                      // Clear error when user types
+                      if (formErrors[idx]) {
+                        const newErrors = { ...formErrors };
+                        delete newErrors[idx];
+                        setFormErrors(newErrors);
+                      }
                     }}
                     placeholder={col.nullable ? 'Optional field' : 'Required field'}
-                    className="border-2 border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all duration-200"
+                    className={`border-2 transition-all duration-200 ${
+                      formErrors[idx] 
+                        ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100' 
+                        : 'border-blue-200 focus:border-[hsl(var(--whoopspay-blue))] focus:ring-2 focus:ring-blue-100'
+                    }`}
                   />
+                  {formErrors[idx] && (
+                    <p className="text-red-600 text-sm font-semibold flex items-center gap-1">
+                      <span className="text-red-500">⚠</span>
+                      {formErrors[idx]}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
             
-            <div className="flex gap-3 pt-8 justify-center">
+            <div className="flex gap-4 pt-8 justify-center">
               <Button 
                 onClick={handleSaveNewRow}
-                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold"
+                disabled={isSubmitting}
+                className="bg-[hsl(var(--whoopspay-blue))] hover:bg-[hsl(var(--whoopspay-darkblue))] text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-bold text-base"
               >
-                <Save className="h-5 w-5 mr-2" />
-                Save New Row
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5 mr-2" />
+                    Create Record
+                  </>
+                )}
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => setShowAddDialog(false)}
-                className="border-2 border-gray-300 hover:border-gray-400 px-8 py-3 rounded-xl transition-all duration-200 font-semibold"
+                onClick={() => {
+                  setShowAddDialog(false);
+                  setFormErrors({});
+                }}
+                disabled={isSubmitting}
+                className="border-2 border-[hsl(var(--whoopspay-blue))] text-[hsl(var(--whoopspay-blue))] hover:bg-[hsl(var(--whoopspay-blue))] hover:text-white px-8 py-3 rounded-xl transition-all duration-200 font-bold"
               >
                 Cancel
               </Button>
@@ -583,27 +686,27 @@ export function DatabaseManagement() {
 
       {/* Edit Row Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="pb-6">
-            <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              ✏️ Edit Row
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto border-2 border-orange-200">
+          <DialogHeader className="pb-6 border-b border-orange-100">
+            <DialogTitle className="text-2xl font-bold text-center text-[hsl(var(--whoopspay-orange))]">
+              🔧 Edit Database Record
             </DialogTitle>
             <p className="text-center text-gray-600 mt-2">
-              Modifying record in <span className="font-semibold text-purple-600">{selectedTable}</span> table
+              Modifying entry in <span className="font-bold text-[hsl(var(--whoopspay-darkblue))]">{selectedTable}</span> table
             </p>
           </DialogHeader>
           
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border-2 border-purple-100">
+          <div className="bg-gradient-to-br from-orange-50/70 to-amber-50/70 rounded-xl p-6 border border-orange-200">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
-                <div key={idx} className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"></div>
+                <div key={idx} className="space-y-3">
+                  <Label className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-[hsl(var(--whoopspay-orange))]"></div>
                     {col.name}
-                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                    <span className="text-xs text-white bg-[hsl(var(--whoopspay-gold))] px-3 py-1 rounded-full font-semibold">
                       {col.type}
                     </span>
-                    {!col.nullable && <span className="text-red-500 text-xs">*</span>}
+                    {!col.nullable && <span className="text-red-600 text-sm font-bold">*</span>}
                   </Label>
                   <Input
                     value={editRowData[idx] || ''}
@@ -611,26 +714,56 @@ export function DatabaseManagement() {
                       const updatedRow = [...editRowData];
                       updatedRow[idx] = e.target.value;
                       setEditRowData(updatedRow);
+                      // Clear error when user types
+                      if (formErrors[idx]) {
+                        const newErrors = { ...formErrors };
+                        delete newErrors[idx];
+                        setFormErrors(newErrors);
+                      }
                     }}
                     placeholder={col.nullable ? 'Optional field' : 'Required field'}
-                    className="border-2 border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all duration-200"
+                    className={`border-2 transition-all duration-200 ${
+                      formErrors[idx] 
+                        ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100' 
+                        : 'border-orange-200 focus:border-[hsl(var(--whoopspay-orange))] focus:ring-2 focus:ring-orange-100'
+                    }`}
                   />
+                  {formErrors[idx] && (
+                    <p className="text-red-600 text-sm font-semibold flex items-center gap-1">
+                      <span className="text-red-500">⚠</span>
+                      {formErrors[idx]}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
             
-            <div className="flex gap-3 pt-8 justify-center">
+            <div className="flex gap-4 pt-8 justify-center">
               <Button 
                 onClick={handleSaveEditedRow}
-                className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold"
+                disabled={isSubmitting}
+                className="bg-[hsl(var(--whoopspay-orange))] hover:bg-[hsl(var(--whoopspay-darkblue))] text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-bold text-base"
               >
-                <Save className="h-5 w-5 mr-2" />
-                Save Changes
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5 mr-2" />
+                    Update Record
+                  </>
+                )}
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => setShowEditDialog(false)}
-                className="border-2 border-gray-300 hover:border-gray-400 px-8 py-3 rounded-xl transition-all duration-200 font-semibold"
+                onClick={() => {
+                  setShowEditDialog(false);
+                  setFormErrors({});
+                }}
+                disabled={isSubmitting}
+                className="border-2 border-[hsl(var(--whoopspay-orange))] text-[hsl(var(--whoopspay-orange))] hover:bg-[hsl(var(--whoopspay-orange))] hover:text-white px-8 py-3 rounded-xl transition-all duration-200 font-bold"
               >
                 Cancel
               </Button>
