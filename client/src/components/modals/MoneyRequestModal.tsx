@@ -328,7 +328,6 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         onClose={() => {
           setShowRedirectModal(false);
           setRedirectData(null);
-          onClose(); // Close the original request modal
         }}
         redirectUrl={redirectData.redirectUrl}
         isApproval={redirectData.isApproval}
