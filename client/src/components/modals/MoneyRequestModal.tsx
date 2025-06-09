@@ -46,12 +46,9 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
           description: "Payment processed successfully. Redirecting back to Juice Shop...",
           className: "bg-black border-yellow-400 text-yellow-400",
         });
-        // Fix the redirect URL format for Juice Shop
-        const fixedUrl = data.redirectUrl.includes('http://localhost:3000') 
-          ? data.redirectUrl 
-          : `http://localhost:3000${data.redirectUrl.startsWith('/') ? '' : '/'}${data.redirectUrl}`;
+        // Use the redirect URL directly from server (already properly formatted)
         setTimeout(() => {
-          window.location.href = fixedUrl;
+          window.location.href = data.redirectUrl;
         }, 1500);
       } else {
         toast({
@@ -85,12 +82,9 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
           description: "Redirecting back to Juice Shop...",
           className: "bg-red-900 border-red-500 text-red-100",
         });
-        // Fix the redirect URL format for Juice Shop
-        const fixedUrl = data.redirectUrl.includes('http://localhost:3000') 
-          ? data.redirectUrl 
-          : `http://localhost:3000${data.redirectUrl.startsWith('/') ? '' : '/'}${data.redirectUrl}`;
+        // Use the redirect URL directly from server (already properly formatted)
         setTimeout(() => {
-          window.location.href = fixedUrl;
+          window.location.href = data.redirectUrl;
         }, 1500);
       } else {
         toast({

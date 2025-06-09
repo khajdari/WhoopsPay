@@ -1292,8 +1292,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (request.returnUrl?.includes('http')) {
           juiceShopUrl = request.returnUrl;
         } else {
-          // Clean the returnUrl to avoid double paths
-          const cleanReturnUrl = request.returnUrl?.replace(/^\/juice-shop/, '') || '/#/order-completion';
+          // Clean the returnUrl to avoid double paths and handle query parameters properly
+          let cleanReturnUrl = request.returnUrl?.replace(/^\/juice-shop/, '') || '/#/order-completion';
+          
+          // If cleanReturnUrl starts with '?', it means the original was '/juice-shop?...'
+          // We need to convert this to a proper path
+          if (cleanReturnUrl.startsWith('?')) {
+            cleanReturnUrl = '/' + cleanReturnUrl; // Convert '?success=1' to '/?success=1'
+          }
+          
           // Check if returnUrl already has query params
           const separator = cleanReturnUrl.includes('?') ? '&' : '?';
           const queryParams = `${separator}payment=success&orderId=${request.externalOrderId}&amount=${requestAmount}`;
@@ -1383,8 +1390,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (request.cancelUrl?.includes('http')) {
           juiceShopUrl = request.cancelUrl;
         } else {
-          // Clean the cancelUrl to avoid double paths
-          const cleanCancelUrl = request.cancelUrl?.replace(/^\/juice-shop/, '') || '/#/basket';
+          // Clean the cancelUrl to avoid double paths and handle query parameters properly
+          let cleanCancelUrl = request.cancelUrl?.replace(/^\/juice-shop/, '') || '/#/basket';
+          
+          // If cleanCancelUrl starts with '?', it means the original was '/juice-shop?...'
+          // We need to convert this to a proper path
+          if (cleanCancelUrl.startsWith('?')) {
+            cleanCancelUrl = '/' + cleanCancelUrl; // Convert '?cancelled=1' to '/?cancelled=1'
+          }
+          
           // Check if cancelUrl already has query params
           const separator = cleanCancelUrl.includes('?') ? '&' : '?';
           const queryParams = `${separator}payment=cancelled&orderId=${request.externalOrderId}&amount=${request.amount}`;
