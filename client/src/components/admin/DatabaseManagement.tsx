@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Database, 
@@ -19,9 +18,7 @@ import {
   Edit, 
   Save, 
   X, 
-  Eye,
-  ChevronDown,
-  ChevronRight
+  Trash2
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -75,7 +72,6 @@ export function DatabaseManagement() {
     },
     onSuccess: (data) => {
       setQueryResult(data);
-      // Refresh tables if the query might have changed schema
       if (sqlQuery.toLowerCase().includes('create') || sqlQuery.toLowerCase().includes('drop')) {
         refetchTables();
       }
@@ -103,11 +99,7 @@ export function DatabaseManagement() {
 
   const handleTableSelect = (tableName: string) => {
     setSelectedTable(tableName);
-  };
-
-  const handleLoadTable = (tableName: string) => {
     setSqlQuery(`SELECT * FROM ${tableName} LIMIT 50;`);
-    setSelectedTable(tableName);
   };
 
   const handleEditRow = (rowIndex: number, rowData: any[]) => {
@@ -119,7 +111,6 @@ export function DatabaseManagement() {
     if (!selectedTable || !tableData?.columns || editingRow === null) return;
     
     try {
-      // Build UPDATE query based on edited data
       const columns = tableData.columns;
       const primaryKeyCol = tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.find(col => col.primaryKey);
       
@@ -135,9 +126,8 @@ export function DatabaseManagement() {
       const primaryKeyIndex = columns.indexOf(primaryKeyCol.name);
       const primaryKeyValue = tableData.rows[editingRow][primaryKeyIndex];
       
-      // Build SET clause
       const setClauses = columns.map((col, idx) => {
-        if (idx === primaryKeyIndex) return null; // Skip primary key
+        if (idx === primaryKeyIndex) return null;
         const value = editingData[idx];
         return `${col} = ${typeof value === 'string' ? `'${value.replace(/'/g, "''")}'` : value}`;
       }).filter(Boolean);
@@ -145,8 +135,6 @@ export function DatabaseManagement() {
       const updateQuery = `UPDATE ${selectedTable} SET ${setClauses.join(', ')} WHERE ${primaryKeyCol.name} = ${typeof primaryKeyValue === 'string' ? `'${primaryKeyValue}'` : primaryKeyValue}`;
       
       await executeQueryMutation.mutateAsync(updateQuery);
-      
-      // Refresh table data
       refetchTableData();
       
       toast({
@@ -159,6 +147,42 @@ export function DatabaseManagement() {
       toast({
         title: "Update Failed",
         description: "Failed to update row",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteRow = async (rowIndex: number) => {
+    if (!selectedTable || !tableData?.columns) return;
+    
+    try {
+      const primaryKeyCol = tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.find(col => col.primaryKey);
+      
+      if (!primaryKeyCol) {
+        toast({
+          title: "Error",
+          description: "Cannot delete row: No primary key found",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      const primaryKeyIndex = tableData.columns.indexOf(primaryKeyCol.name);
+      const primaryKeyValue = tableData.rows[rowIndex][primaryKeyIndex];
+      
+      const deleteQuery = `DELETE FROM ${selectedTable} WHERE ${primaryKeyCol.name} = ${typeof primaryKeyValue === 'string' ? `'${primaryKeyValue}'` : primaryKeyValue}`;
+      
+      await executeQueryMutation.mutateAsync(deleteQuery);
+      refetchTableData();
+      
+      toast({
+        title: "Row Deleted",
+        description: "Row has been deleted successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Delete Failed",
+        description: "Failed to delete row",
         variant: "destructive",
       });
     }
@@ -184,7 +208,6 @@ export function DatabaseManagement() {
       const insertQuery = `INSERT INTO ${selectedTable} (${columnNames.join(', ')}) VALUES (${values.join(', ')})`;
       
       await executeQueryMutation.mutateAsync(insertQuery);
-      
       refetchTableData();
       setShowAddDialog(false);
       setNewRow([]);
@@ -205,19 +228,9 @@ export function DatabaseManagement() {
   const exportQueryResults = () => {
     if (!queryResult?.columns || !queryResult?.rows) return;
     
-    downloadCSV(queryResult, 'query_results.csv');
-  };
-
-  const exportTableData = () => {
-    if (!tableData?.columns || !tableData?.rows || !selectedTable) return;
-    
-    downloadCSV(tableData, `${selectedTable}_data.csv`);
-  };
-
-  const downloadCSV = (data: QueryResult, filename: string) => {
     const csvContent = [
-      data.columns.join(','),
-      ...data.rows.map((row: any[]) => 
+      queryResult.columns.join(','),
+      ...queryResult.rows.map((row: any[]) => 
         row.map(cell => 
           typeof cell === 'string' ? `"${cell.replace(/"/g, '""')}"` : cell
         ).join(',')
@@ -228,7 +241,7 @@ export function DatabaseManagement() {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', filename);
+    link.setAttribute('download', 'query_results.csv');
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -237,7 +250,7 @@ export function DatabaseManagement() {
 
   return (
     <div className="space-y-6">
-      {/* Header matching Express/Database logs style */}
+      {/* Header */}
       <Card className="border-gray-200">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2">
@@ -246,38 +259,166 @@ export function DatabaseManagement() {
             <Badge variant="destructive" className="ml-auto">Admin Only</Badge>
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => refetchTables()}
-                disabled={tablesLoading}
-              >
-                <RefreshCw className={`h-4 w-4 mr-2 ${tablesLoading ? 'animate-spin' : ''}`} />
-                Refresh Schema
-              </Button>
-              {selectedTable && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={exportTableData}
-                  disabled={!tableData}
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Export Table
-                </Button>
-              )}
-            </div>
-            <div className="text-sm text-gray-500">
-              {tables ? `${tables.length} tables` : 'Loading...'}
-            </div>
-          </div>
-        </CardContent>
       </Card>
 
-      {/* SQL Query Executor - Primary Interface */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Tables List */}
+        <Card className="border-gray-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Tables</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-96">
+              {tablesLoading ? (
+                <div className="text-center py-8 text-gray-500">Loading...</div>
+              ) : (
+                <div className="space-y-2">
+                  {tables?.map((table: TableInfo) => (
+                    <div
+                      key={table.name}
+                      className={`p-3 rounded border cursor-pointer transition-colors ${
+                        selectedTable === table.name
+                          ? 'border-blue-300 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                      onClick={() => handleTableSelect(table.name)}
+                    >
+                      <div className="font-medium">{table.name}</div>
+                      <div className="text-xs text-gray-500">
+                        {table.rowCount} rows
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        {/* Table Data */}
+        <div className="lg:col-span-3">
+          <Card className="border-gray-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center justify-between">
+                <span>
+                  {selectedTable ? `${selectedTable} Data` : 'Select a Table'}
+                </span>
+                {selectedTable && (
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => refetchTableData()}
+                      disabled={tableDataLoading}
+                    >
+                      <RefreshCw className={`h-4 w-4 mr-2 ${tableDataLoading ? 'animate-spin' : ''}`} />
+                      Refresh
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setShowAddDialog(true)}
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Row
+                    </Button>
+                  </div>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {selectedTable ? (
+                tableDataLoading ? (
+                  <div className="flex items-center justify-center h-96">
+                    <RefreshCw className="h-6 w-6 animate-spin" />
+                  </div>
+                ) : tableData?.rows && tableData.rows.length > 0 ? (
+                  <ScrollArea className="h-96">
+                    <div className="border rounded bg-white">
+                      <div className="grid bg-gray-100 border-b sticky top-0" style={{ gridTemplateColumns: `repeat(${(tableData.columns?.length || 0) + 1}, minmax(120px, 1fr))` }}>
+                        {tableData.columns?.map((col: any, idx: number) => (
+                          <div key={idx} className="p-2 font-medium border-r last:border-r-0">
+                            {col}
+                          </div>
+                        ))}
+                        <div className="p-2 font-medium">Actions</div>
+                      </div>
+                      {tableData.rows?.map((row: any, rowIdx: number) => (
+                        <div key={rowIdx} className="grid border-b last:border-b-0" style={{ gridTemplateColumns: `repeat(${(tableData.columns?.length || 0) + 1}, minmax(120px, 1fr))` }}>
+                          {row.map((cell: any, cellIdx: number) => (
+                            <div key={cellIdx} className="p-2 border-r last:border-r-0 text-sm">
+                              {editingRow === rowIdx ? (
+                                <Input
+                                  value={editingData[cellIdx] || ''}
+                                  onChange={(e) => {
+                                    const newData = [...editingData];
+                                    newData[cellIdx] = e.target.value;
+                                    setEditingData(newData);
+                                  }}
+                                  className="h-8 text-sm"
+                                />
+                              ) : (
+                                <div className="truncate">{String(cell)}</div>
+                              )}
+                            </div>
+                          ))}
+                          <div className="p-2 border-r last:border-r-0">
+                            {editingRow === rowIdx ? (
+                              <div className="flex gap-1">
+                                <Button
+                                  size="sm"
+                                  onClick={handleSaveRow}
+                                  disabled={executeQueryMutation.isPending}
+                                >
+                                  <Save className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={handleCancelEdit}
+                                >
+                                  <X className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            ) : (
+                              <div className="flex gap-1">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleEditRow(rowIdx, row)}
+                                >
+                                  <Edit className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleDeleteRow(rowIdx)}
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                ) : (
+                  <div className="flex items-center justify-center h-96 text-gray-500">
+                    No data available
+                  </div>
+                )
+              ) : (
+                <div className="flex items-center justify-center h-96 text-gray-500">
+                  Select a table to view data
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* SQL Query Executor */}
       <Card className="border-gray-200">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
@@ -333,7 +474,7 @@ export function DatabaseManagement() {
                       {queryResult.columns && queryResult.rows && (
                         <ScrollArea className="h-64">
                           <div className="border rounded bg-white">
-                            <div className="grid bg-gray-100 border-b" style={{ gridTemplateColumns: `repeat(${queryResult.columns.length}, 1fr)` }}>
+                            <div className="grid bg-gray-100 border-b" style={{ gridTemplateColumns: `repeat(${queryResult.columns.length}, minmax(120px, 1fr))` }}>
                               {queryResult.columns.map((col: any, idx: number) => (
                                 <div key={idx} className="p-2 font-medium border-r last:border-r-0">
                                   {col}
@@ -341,10 +482,10 @@ export function DatabaseManagement() {
                               ))}
                             </div>
                             {queryResult.rows.map((row: any, rowIdx: number) => (
-                              <div key={rowIdx} className="grid border-b last:border-b-0" style={{ gridTemplateColumns: `repeat(${queryResult.columns.length}, 1fr)` }}>
+                              <div key={rowIdx} className="grid border-b last:border-b-0" style={{ gridTemplateColumns: `repeat(${queryResult.columns.length}, minmax(120px, 1fr))` }}>
                                 {row.map((cell: any, cellIdx: number) => (
                                   <div key={cellIdx} className="p-2 border-r last:border-r-0 text-sm">
-                                    {cell}
+                                    <div className="truncate">{String(cell)}</div>
                                   </div>
                                 ))}
                               </div>
@@ -360,215 +501,6 @@ export function DatabaseManagement() {
           )}
         </CardContent>
       </Card>
-
-      {/* Collapsible Section for Table Management */}
-      <Collapsible>
-        <CollapsibleTrigger className="w-full">
-          <Card className="border-gray-200 hover:bg-gray-50 cursor-pointer">
-            <CardContent className="py-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Table Management & Schema</h3>
-                <ChevronDown className="h-5 w-5" />
-              </div>
-            </CardContent>
-          </Card>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
-            {/* Tables List */}
-            <Card className="border-gray-200">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Database Tables</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-96">
-                  {tablesLoading ? (
-                    <div className="text-center py-8 text-gray-500">Loading tables...</div>
-                  ) : (
-                    <div className="space-y-2">
-                      {tables?.map((table: TableInfo) => (
-                        <div
-                          key={table.name}
-                          className={`p-3 rounded border cursor-pointer transition-colors ${
-                            selectedTable === table.name
-                              ? 'border-blue-300 bg-blue-50'
-                              : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                          }`}
-                          onClick={() => handleTableSelect(table.name)}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-medium">{table.name}</span>
-                            <Badge variant="secondary">{table.rowCount}</Badge>
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {table.columns.length} columns
-                          </div>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="mt-2 h-7 px-2 text-xs"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleLoadTable(table.name);
-                            }}
-                          >
-                            <Eye className="h-3 w-3 mr-1" />
-                            Load Data
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </ScrollArea>
-              </CardContent>
-            </Card>
-
-            {/* Table Schema */}
-            <Card className="border-gray-200">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">
-                  Table Schema
-                  {selectedTable && <span className="text-sm font-normal text-gray-500 ml-2">({selectedTable})</span>}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {selectedTable ? (
-                  <ScrollArea className="h-96">
-                    <div className="space-y-3">
-                      {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
-                        <div key={idx} className="flex items-center justify-between p-3 border rounded">
-                          <div className="flex flex-col">
-                            <span className="font-medium">{col.name}</span>
-                            <span className="text-xs text-gray-500">{col.type}</span>
-                          </div>
-                          <div className="flex gap-1">
-                            {col.primaryKey && <Badge variant="default" className="text-xs">PK</Badge>}
-                            {!col.nullable && <Badge variant="secondary" className="text-xs">NOT NULL</Badge>}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                ) : (
-                  <div className="flex items-center justify-center h-96 text-gray-500">
-                    Select a table to view schema
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Table Data with Edit Functionality */}
-            <Card className="border-gray-200">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">
-                  Table Data
-                  {selectedTable && <span className="text-sm font-normal text-gray-500 ml-2">({selectedTable})</span>}
-                </CardTitle>
-                {selectedTable && (
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => refetchTableData()}
-                      disabled={tableDataLoading}
-                    >
-                      <RefreshCw className={`h-4 w-4 mr-2 ${tableDataLoading ? 'animate-spin' : ''}`} />
-                      Refresh
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setShowAddDialog(true)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Row
-                    </Button>
-                  </div>
-                )}
-              </CardHeader>
-              <CardContent>
-                {selectedTable ? (
-                  tableDataLoading ? (
-                    <div className="flex items-center justify-center h-96">
-                      <RefreshCw className="h-6 w-6 animate-spin" />
-                    </div>
-                  ) : tableData?.rows && tableData.rows.length > 0 ? (
-                    <ScrollArea className="h-96">
-                      <div className="border rounded bg-white">
-                        <div className="grid bg-gray-100 border-b" style={{ gridTemplateColumns: `repeat(${(tableData.columns?.length || 0) + 1}, 1fr)` }}>
-                          {tableData.columns?.map((col: any, idx: number) => (
-                            <div key={idx} className="p-2 font-medium border-r last:border-r-0">
-                              {col}
-                            </div>
-                          ))}
-                          <div className="p-2 font-medium">Actions</div>
-                        </div>
-                        {tableData.rows?.map((row: any, rowIdx: number) => (
-                          <div key={rowIdx} className="grid border-b last:border-b-0" style={{ gridTemplateColumns: `repeat(${(tableData.columns?.length || 0) + 1}, 1fr)` }}>
-                            {row.map((cell: any, cellIdx: number) => (
-                              <div key={cellIdx} className="p-2 border-r last:border-r-0 text-sm">
-                                {editingRow === rowIdx ? (
-                                  <Input
-                                    value={editingData[cellIdx] || ''}
-                                    onChange={(e) => {
-                                      const newData = [...editingData];
-                                      newData[cellIdx] = e.target.value;
-                                      setEditingData(newData);
-                                    }}
-                                    className="h-8 text-sm"
-                                  />
-                                ) : (
-                                  String(cell)
-                                )}
-                              </div>
-                            ))}
-                            <div className="p-2 border-r last:border-r-0">
-                              {editingRow === rowIdx ? (
-                                <div className="flex gap-1">
-                                  <Button
-                                    size="sm"
-                                    onClick={handleSaveRow}
-                                    disabled={executeQueryMutation.isPending}
-                                  >
-                                    <Save className="h-3 w-3" />
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={handleCancelEdit}
-                                  >
-                                    <X className="h-3 w-3" />
-                                  </Button>
-                                </div>
-                              ) : (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleEditRow(rowIdx, row)}
-                                >
-                                  <Edit className="h-3 w-3" />
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  ) : (
-                    <div className="flex items-center justify-center h-96 text-gray-500">
-                      No data available
-                    </div>
-                  )
-                ) : (
-                  <div className="flex items-center justify-center h-96 text-gray-500">
-                    Select a table to view data
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
 
       {/* Add Row Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
