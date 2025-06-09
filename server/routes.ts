@@ -2479,15 +2479,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { db } = await import('./db.js');
       
-      // Get actual table names from SQLite
-      const tablesResult = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name").all();
+      // Get actual table names from SQLite using raw client access
+      const sqlite = db.$client;
+      const tablesResult = sqlite.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name").all();
       
       const tableInfo = tablesResult.map((table: any) => {
         try {
           // Get table schema
-          const schemaResult = db.prepare(`PRAGMA table_info(${table.name})`).all();
+          const schemaResult = sqlite.prepare(`PRAGMA table_info(${table.name})`).all();
           // Get row count
-          const countResult = db.prepare(`SELECT COUNT(*) as count FROM ${table.name}`).get() as any;
+          const countResult = sqlite.prepare(`SELECT COUNT(*) as count FROM ${table.name}`).get() as any;
           
           return {
             name: table.name,
@@ -2545,9 +2546,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Invalid table name' });
       }
 
-      // Get actual data from the database
+      // Get actual data from the database using SQLite client
+      const sqlite = db.$client;
       const query = `SELECT * FROM ${tableName} LIMIT 100`;
-      const rows = db.prepare(query).all();
+      const rows = sqlite.prepare(query).all();
       
       if (rows.length > 0) {
         const columns = Object.keys(rows[0]);
@@ -2555,7 +2557,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.json({ columns, rows: data });
       } else {
         // If no data, get columns from schema
-        const schemaResult = db.prepare(`PRAGMA table_info(${tableName})`).all();
+        const schemaResult = sqlite.prepare(`PRAGMA table_info(${tableName})`).all();
         const columns = schemaResult.map((col: any) => col.name);
         res.json({ columns, rows: [] });
       }
@@ -2602,14 +2604,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const trimmedQuery = query.trim().toLowerCase();
       
       try {
-        // Execute the actual SQL query
+        // Execute the actual SQL query using SQLite client
+        const sqlite = db.$client;
+        
         if (trimmedQuery.startsWith('select') || trimmedQuery.startsWith('pragma')) {
           // For SELECT and PRAGMA queries, return rows
-          const rows = await db.all(query);
+          const rows = sqlite.prepare(query).all();
           
           if (rows.length > 0) {
             const columns = Object.keys(rows[0]);
-            const data = rows.map(row => columns.map(col => (row as any)[col]));
+            const data = rows.map((row: any) => columns.map(col => row[col]));
             res.json({ columns, rows: data });
           } else {
             // If no rows, try to get column info for PRAGMA queries
@@ -2621,7 +2625,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         } else {
           // For INSERT, UPDATE, DELETE queries
-          const result = await db.run(query);
+          const result = sqlite.prepare(query).run();
           res.json({
             rowsAffected: result.changes || 0,
             lastID: result.lastInsertRowid || null
