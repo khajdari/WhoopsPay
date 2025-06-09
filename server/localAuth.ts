@@ -100,7 +100,6 @@ export async function setupAuth(app: Express) {
       if (redirect === 'payment' && transactionId && amount) {
         try {
           // Create pending money request for the logged-in user
-          const { storage } = require('./storage');
           const moneyRequest = await storage.createMoneyRequest({
             fromUserId: "juice-shop",
             toUserId: user.id,
