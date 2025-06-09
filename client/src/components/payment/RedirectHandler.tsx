@@ -51,13 +51,25 @@ export function RedirectHandler() {
     if (!redirectUrl) return;
     setRedirecting(true);
     setTimeout(() => {
-      window.location.href = redirectUrl;
+      // For Juice Shop, construct the correct URL
+      if (returnTo === 'juice-shop') {
+        const juiceShopUrl = `/juice-shop?success=1&orderId=${orderId}&amount=${amount}`;
+        window.location.href = juiceShopUrl;
+      } else {
+        window.location.href = redirectUrl;
+      }
     }, 500);
   };
 
   const handleManualRedirect = () => {
     if (!redirectUrl) return;
-    window.location.href = redirectUrl;
+    // For Juice Shop, construct the correct URL
+    if (returnTo === 'juice-shop') {
+      const juiceShopUrl = `/juice-shop?success=1&orderId=${orderId}&amount=${amount}`;
+      window.location.href = juiceShopUrl;
+    } else {
+      window.location.href = redirectUrl;
+    }
   };
 
   const handleStay = () => {
