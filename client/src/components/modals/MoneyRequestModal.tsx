@@ -64,7 +64,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         toast({
           title: "Payment Approved!",
           description: `Payment of $${request.amount} has been processed successfully.`,
-          className: "bg-black border-yellow-400 text-yellow-400",
+          className: "bg-blue-50 border-blue-600 text-blue-800",
         });
         onClose();
       }
@@ -74,7 +74,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         title: "Approval Failed",
         description: error.message || "Failed to approve request",
         variant: "destructive",
-        className: "bg-red-900 border-red-500 text-red-100",
+        className: "bg-red-50 border-red-600 text-red-800",
       });
     },
   });
@@ -107,7 +107,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         toast({
           title: "Payment Rejected",
           description: "The money request has been rejected.",
-          className: "bg-red-900 border-red-500 text-red-100",
+          className: "bg-red-50 border-red-600 text-red-800",
         });
         onClose();
       }
@@ -117,7 +117,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         title: "Rejection Failed",
         description: error.message || "Failed to reject request",
         variant: "destructive",
-        className: "bg-red-900 border-red-500 text-red-100",
+        className: "bg-red-50 border-red-600 text-red-800",
       });
     },
   });
@@ -151,15 +151,15 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         label: "External Payment Request",
         bgColor: "bg-blue-50",
         borderColor: "border-blue-200",
-        badgeColor: "bg-blue-100 text-blue-800"
+        badgeColor: "bg-blue-600 text-white"
       };
     }
     return {
-      icon: <User className="w-5 h-5 text-orange-600" />,
+      icon: <User className="w-5 h-5 text-blue-600" />,
       label: "Internal Money Request",
-      bgColor: "bg-orange-50", 
-      borderColor: "border-orange-200",
-      badgeColor: "bg-orange-100 text-orange-800"
+      bgColor: "bg-blue-50", 
+      borderColor: "border-blue-200",
+      badgeColor: "bg-blue-100 text-blue-800"
     };
   };
 
@@ -168,9 +168,15 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
   return (
     <>
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md bg-black border-yellow-400 text-white">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-yellow-400">
+      <DialogContent className="max-w-md bg-white border-2 border-blue-600 text-gray-900">
+        <DialogHeader className="relative">
+          <button 
+            onClick={onClose}
+            className="absolute -top-2 -right-2 w-6 h-6 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800"
+          >
+            ×
+          </button>
+          <DialogTitle className="flex items-center gap-2 text-blue-600">
             {typeInfo.icon}
             Money Request Details
           </DialogTitle>
@@ -179,16 +185,16 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         <div className="space-y-4">
           {/* Request Type Badge */}
           <div className="flex justify-center">
-            <Badge className={typeInfo.badgeColor}>
+            <Badge className="bg-blue-600 text-white">
               {typeInfo.label}
             </Badge>
           </div>
 
           {/* Amount */}
-          <div className="p-4 rounded-lg bg-yellow-400 border border-yellow-500">
+          <div className="p-4 rounded-lg bg-blue-600 text-white">
             <div className="flex items-center justify-center gap-2">
-              <DollarSign className="w-6 h-6 text-black" />
-              <span className="text-2xl font-bold text-black">
+              <DollarSign className="w-6 h-6" />
+              <span className="text-2xl font-bold">
                 ${request.amount?.toFixed(2)}
               </span>
             </div>
@@ -196,65 +202,65 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
 
           {/* From Information */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-yellow-400">
+            <div className="flex items-center gap-2 text-sm text-blue-600">
               <User className="w-4 h-4" />
               <span className="font-medium">From:</span>
             </div>
             {request.isExternal ? (
               <div className="pl-6">
-                <p className="font-medium text-white">
+                <p className="font-medium text-gray-900">
                   {request.fromUser?.firstName} {request.fromUser?.lastName}
                 </p>
-                <p className="text-sm text-gray-300">External Merchant</p>
+                <p className="text-sm text-gray-600">External Merchant</p>
               </div>
             ) : (
               <div className="pl-6">
-                <p className="font-medium text-white">
+                <p className="font-medium text-gray-900">
                   {request.fromUser?.firstName} {request.fromUser?.lastName}
                 </p>
-                <p className="text-sm text-gray-300">{request.fromUser?.email}</p>
-                <p className="text-xs text-gray-400">{request.fromUserId}</p>
+                <p className="text-sm text-gray-600">{request.fromUser?.email}</p>
+                <p className="text-xs text-gray-500">{request.fromUserId}</p>
               </div>
             )}
           </div>
 
-          <Separator />
+          <Separator className="bg-gray-300" />
 
           {/* Description */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-yellow-400">
+            <div className="flex items-center gap-2 text-sm text-blue-600">
               <FileText className="w-4 h-4" />
               <span className="font-medium">Description:</span>
             </div>
-            <p className="pl-6 text-white">{request.description}</p>
+            <p className="pl-6 text-gray-900">{request.description}</p>
           </div>
 
           {/* External Details */}
           {request.isExternal && (
             <>
-              <Separator className="bg-gray-700" />
+              <Separator className="bg-gray-300" />
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-sm text-yellow-400">
+                <div className="flex items-center gap-2 text-sm text-blue-600">
                   <Globe className="w-4 h-4" />
                   <span className="font-medium">External Details:</span>
                 </div>
                 <div className="pl-6 space-y-2">
                   {request.externalOrderId && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-300">Order ID:</span>
-                      <span className="font-mono text-white">{request.externalOrderId}</span>
+                      <span className="text-gray-600">Order ID:</span>
+                      <span className="font-mono text-gray-900">{request.externalOrderId}</span>
                     </div>
                   )}
                   {request.externalSource && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-300">Source:</span>
-                      <span className="text-white capitalize">{request.externalSource}</span>
+                      <span className="text-gray-600">Source:</span>
+                      <span className="text-gray-900 capitalize">{request.externalSource}</span>
                     </div>
                   )}
                   {request.returnUrl && (
                     <div className="text-sm">
-                      <span className="text-gray-300">Return URL:</span>
-                      <p className="text-xs text-gray-400 break-all mt-1">{request.returnUrl}</p>
+                      <span className="text-gray-600">Return URL:</span>
+                      <p className="text-xs text-gray-500 break-all mt-1">{request.returnUrl}</p>
                     </div>
                   )}
                 </div>
@@ -262,18 +268,18 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
             </>
           )}
 
-          <Separator className="bg-gray-700" />
+          <Separator className="bg-gray-300" />
 
           {/* Timestamp */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-yellow-400">
+            <div className="flex items-center gap-2 text-sm text-blue-600">
               <Clock className="w-4 h-4" />
               <span className="font-medium">Requested:</span>
             </div>
-            <p className="pl-6 text-sm text-white">
+            <p className="pl-6 text-sm text-gray-900">
               {formatDistanceToNow(new Date(request.createdAt), { addSuffix: true })}
             </p>
-            <p className="pl-6 text-xs text-gray-400">
+            <p className="pl-6 text-xs text-gray-500">
               {new Date(request.createdAt).toLocaleString()}
             </p>
           </div>
@@ -283,7 +289,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
             <Button
               onClick={handleReject}
               variant="outline"
-              className="flex-1 border-red-500 text-red-400 hover:bg-red-900/20 bg-transparent"
+              className="flex-1 border-red-600 text-red-600 hover:bg-red-50"
               disabled={isRejecting || isApproving}
             >
               {isRejecting ? (
@@ -301,7 +307,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
             
             <Button
               onClick={handleApprove}
-              className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
               disabled={isApproving || isRejecting}
             >
               {isApproving ? (
