@@ -1,0 +1,94 @@
+# WhoopsPay - Educational Security Training Platform
+
+## Overview
+
+WhoopsPay is a comprehensive educational cybersecurity training platform built as a realistic financial application. It demonstrates common security vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10 in a controlled environment. The platform combines interactive security learning with intelligent transaction processing, featuring a full-stack architecture with React frontend, Express backend, and SQLite database.
+
+The application serves as a training tool for security professionals, developers, students, and penetration testers to understand web application vulnerabilities and secure coding practices. It includes intentional security flaws such as broken access control, cryptographic failures, injection vulnerabilities, and insecure design patterns.
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+### Frontend Architecture
+- **React 18** with TypeScript for type-safe component development and modern hooks
+- **Vite** as the build tool for fast development and optimized production builds
+- **Tailwind CSS** for utility-first styling with design system consistency
+- **Wouter** for lightweight client-side routing
+- **TanStack Query** for server state management, caching, and real-time data synchronization
+- **Shadcn/ui** component library with Radix UI primitives for accessible, customizable components
+
+### Backend Architecture
+- **Express.js** server with TypeScript for type-safe API development
+- **MVC pattern** with controllers, models, and services for clean separation of concerns
+- **Session-based authentication** using express-session with bcrypt password hashing
+- **RESTful API design** with comprehensive CRUD operations and business logic endpoints
+- **Middleware stack** including CORS, request logging, error handling, and admin authorization
+
+### Database Architecture
+- **SQLite** with better-sqlite3 for reliable local development and educational purposes
+- **Drizzle ORM** with schema definitions for type-safe database operations
+- **Intentionally vulnerable schema** with plain text sensitive data storage for educational demonstration
+- **In-memory caching** for performance optimization of frequently accessed data
+
+### Authentication & Authorization
+- **Session-based authentication** with secure cookie configuration
+- **Role-based access control** with admin and user privilege levels
+- **bcrypt password hashing** for credential storage (some plain text for vulnerability demonstration)
+- **Session middleware** for request authentication and user context management
+
+### Security Training Features
+- **Intentional OWASP Top 10 vulnerabilities** including broken access control, injection flaws, and cryptographic failures
+- **API Security vulnerabilities** demonstrating broken authorization and excessive data exposure
+- **Verbose error handling** and insufficient logging for educational security analysis
+- **Direct object references** without proper authorization checks
+
+### External Integrations
+- **Juice Shop integration** for cross-platform payment processing demonstration
+- **PayPal SDK integration** for external payment gateway simulation
+- **Replit environment detection** with dynamic configuration management
+
+### Development Tools
+- **TypeScript** throughout for enhanced developer experience and type safety
+- **ESBuild** for fast server-side bundling and production builds
+- **Hot module replacement** with Vite for rapid development iteration
+- **Component architecture** with reusable UI components and custom hooks
+
+## External Dependencies
+
+### Core Framework Dependencies
+- **React 18** - Frontend UI framework with modern hooks and concurrent features
+- **Express.js** - Backend web application framework for Node.js
+- **TypeScript** - Type-safe JavaScript development across frontend and backend
+- **Vite** - Modern build tool and development server
+
+### Database & ORM
+- **better-sqlite3** - Embedded SQLite database for local development
+- **Drizzle ORM** - Type-safe SQL query builder and schema management
+- **drizzle-kit** - Database migration and schema management tools
+
+### UI & Styling
+- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
+- **Radix UI** - Unstyled, accessible UI primitives for component foundation
+- **Lucide React** - Icon library with consistent SVG icons
+- **date-fns** - Modern JavaScript date utility library
+
+### State Management & Data Fetching
+- **TanStack Query** - Powerful data synchronization for server state management
+- **React Hook Form** - Performant forms with easy validation
+- **Zod** - TypeScript-first schema validation library
+
+### Authentication & Security
+- **bcrypt** - Password hashing library for credential security
+- **express-session** - Session middleware for Express applications
+
+### Development & Build Tools
+- **ESBuild** - Fast JavaScript bundler for production builds
+- **tsx** - TypeScript execution environment for development
+- **nanoid** - URL-safe unique string ID generator
+
+### External Services
+- **PayPal Server SDK** - Payment processing integration for external transactions
+- **Juice Shop simulation** - External e-commerce platform for payment flow demonstration
