@@ -109,9 +109,35 @@ interface Translations {
   recentTransactions: TranslationKey;
   whoopsPayBalance: TranslationKey;
   paymentMethods: TranslationKey;
-  issueReportingCenter: TranslationKey;
   
-
+  // Issue Reporting
+  issueReportingCenter: TranslationKey;
+  submitNewIssue: TranslationKey;
+  createIssueReport: TranslationKey;
+  submitIssueReport: TranslationKey;
+  yourIssueReports: TranslationKey;
+  openIssues: TranslationKey;
+  inProgress: TranslationKey;
+  resolved: TranslationKey;
+  totalIssues: TranslationKey;
+  noIssueReports: TranslationKey;
+  createFirstIssue: TranslationKey;
+  reportProblems: TranslationKey;
+  trackIssueStatus: TranslationKey;
+  detailedInformation: TranslationKey;
+  submitTrackIssues: TranslationKey;
+  
+  // Status labels
+  open: TranslationKey;
+  inProgressStatus: TranslationKey;
+  resolvedStatus: TranslationKey;
+  closed: TranslationKey;
+  
+  // Priority labels
+  critical: TranslationKey;
+  high: TranslationKey;
+  medium: TranslationKey;
+  low: TranslationKey;
   
   // Landing page
   signIn: TranslationKey;
@@ -448,6 +474,102 @@ const translations: Translations = {
     'el-GR': 'Απορρίφθηκε'
   },
   
+  // Issue Reporting
+  issueReportingCenter: {
+    'en-GB': 'Issue Reporting Center',
+    'el-GR': 'Κέντρο Αναφοράς Προβλημάτων'
+  },
+  submitNewIssue: {
+    'en-GB': 'Submit New Issue',
+    'el-GR': 'Υποβολή Νέου Προβλήματος'
+  },
+  createIssueReport: {
+    'en-GB': 'Create Issue Report',
+    'el-GR': 'Δημιουργία Αναφοράς Προβλήματος'
+  },
+  submitIssueReport: {
+    'en-GB': 'Submit Issue Report',
+    'el-GR': 'Υποβολή Αναφοράς Προβλήματος'
+  },
+  yourIssueReports: {
+    'en-GB': 'Your Issue Reports',
+    'el-GR': 'Οι Αναφορές Σας'
+  },
+  openIssues: {
+    'en-GB': 'Open Issues:',
+    'el-GR': 'Ανοιχτά Προβλήματα:'
+  },
+  inProgress: {
+    'en-GB': 'In Progress:',
+    'el-GR': 'Σε Εξέλιξη:'
+  },
+  resolved: {
+    'en-GB': 'Resolved:',
+    'el-GR': 'Επιλύθηκαν:'
+  },
+  totalIssues: {
+    'en-GB': 'Total Issues:',
+    'el-GR': 'Συνολικά Προβλήματα:'
+  },
+  noIssueReports: {
+    'en-GB': 'No issue reports found.',
+    'el-GR': 'Δε βρέθηκαν αναφορές προβλημάτων.'
+  },
+  createFirstIssue: {
+    'en-GB': 'Create your first issue report to get started.',
+    'el-GR': 'Δημιουργήστε την πρώτη σας αναφορά για να ξεκινήσετε.'
+  },
+  reportProblems: {
+    'en-GB': 'Report any problems or concerns you encounter',
+    'el-GR': 'Αναφέρετε οποιαδήποτε προβλήματα ή ανησυχίες αντιμετωπίζετε'
+  },
+  trackIssueStatus: {
+    'en-GB': 'Track the status and progress of your submitted issues',
+    'el-GR': 'Παρακολουθήστε την κατάσταση των αναφορών σας'
+  },
+  detailedInformation: {
+    'en-GB': 'Provide detailed information about the issue you\'re experiencing',
+    'el-GR': 'Παρέχετε λεπτομερείς πληροφορίες για το πρόβλημα που αντιμετωπίζετε'
+  },
+  submitTrackIssues: {
+    'en-GB': 'Submit and track issue reports for bugs, security concerns, and other platform issues',
+    'el-GR': 'Υποβολή και παρακολούθηση αναφορών για σφάλματα, ζητήματα ασφαλείας και άλλα προβλήματα πλατφόρμας'
+  },
+  // Status labels
+  open: {
+    'en-GB': 'Open',
+    'el-GR': 'Ανοιχτό'
+  },
+  inProgressStatus: {
+    'en-GB': 'In Progress',
+    'el-GR': 'Σε Εξέλιξη'
+  },
+  resolvedStatus: {
+    'en-GB': 'Resolved',
+    'el-GR': 'Επιλύθηκε'
+  },
+  closed: {
+    'en-GB': 'Closed',
+    'el-GR': 'Κλειστό'
+  },
+  // Priority labels
+  critical: {
+    'en-GB': 'Critical',
+    'el-GR': 'Κρίσιμο'
+  },
+  high: {
+    'en-GB': 'High',
+    'el-GR': 'Υψηλό'
+  },
+  medium: {
+    'en-GB': 'Medium',
+    'el-GR': 'Μέτριο'
+  },
+  low: {
+    'en-GB': 'Low',
+    'el-GR': 'Χαμηλό'
+  },
+
   // Messages
   moneyRequestSent: {
     'en-GB': 'Money request sent successfully!',
@@ -564,10 +686,6 @@ const translations: Translations = {
   paymentMethods: {
     'en-GB': 'Payment Methods',
     'el-GR': 'Μέθοδοι Πληρωμής'
-  },
-  issueReportingCenter: {
-    'en-GB': 'Issue Reporting Center',
-    'el-GR': 'Κέντρο Αναφοράς Προβλημάτων'
   },
   
   // Landing page
@@ -807,10 +925,7 @@ const translations: Translations = {
     'en-GB': 'Pending Money Requests',
     'el-GR': 'Εκκρεμείς Αιτήσεις Χρημάτων'
   },
-  'transactionsSubtitle': {
-    'en-GB': 'View all your payment activity',
-    'el-GR': 'Δείτε όλη τη δραστηριότητα πληρωμών σας'
-  },
+
   // Payment component translations
   'verifyingPayment': {
     'en-GB': 'Verifying payment...',

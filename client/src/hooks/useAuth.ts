@@ -1,5 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import type { users } from "@shared/schema";
+
+type User = typeof users.$inferSelect;
 
 /**
  * useAuth Hook - Authentication state management
@@ -13,7 +16,7 @@ export function useAuth() {
   
   // Query current user authentication status from server
   // Disabled retry to prevent infinite loops on 401 responses
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading } = useQuery<User>({
     queryKey: ["/api/auth/user"],
     retry: false,
   });
