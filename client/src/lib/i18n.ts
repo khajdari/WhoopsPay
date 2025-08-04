@@ -139,6 +139,39 @@ interface Translations {
   medium: TranslationKey;
   low: TranslationKey;
   
+  // Transaction status and types
+  onus: TranslationKey;
+  offus: TranslationKey;
+  completed: TranslationKey;
+  pending: TranslationKey;
+  
+  // Administration
+  accountInformation: TranslationKey;
+  administration: TranslationKey;
+  adminPanel: TranslationKey;
+  systemHealth: TranslationKey;
+  systemHealthDashboard: TranslationKey;
+  serverStatus: TranslationKey;
+  databaseHealth: TranslationKey;
+  apiDocumentation: TranslationKey;
+  systemLogs: TranslationKey;
+  expressLogs: TranslationKey;
+  databaseLogs: TranslationKey;
+  userManagement: TranslationKey;
+  issueManagement: TranslationKey;
+  systemOverview: TranslationKey;
+  uptime: TranslationKey;
+  memoryUsage: TranslationKey;
+  cpuUsage: TranslationKey;
+  activeConnections: TranslationKey;
+  totalUsers: TranslationKey;
+  totalTransactions: TranslationKey;
+  pendingIssues: TranslationKey;
+  online: TranslationKey;
+  offline: TranslationKey;
+  healthy: TranslationKey;
+  warning: TranslationKey;
+  
   // Greetings and common UI
   hi: TranslationKey;
   issueReports: TranslationKey;
@@ -497,14 +530,8 @@ const translations: Translations = {
     'en-GB': 'Request',
     'el-GR': 'Αίτημα'
   },
-  completed: {
-    'en-GB': 'Completed',
-    'el-GR': 'Ολοκληρώθηκε'
-  },
-  pending: {
-    'en-GB': 'Pending',
-    'el-GR': 'Εκκρεμεί'
-  },
+
+
   rejected: {
     'en-GB': 'Rejected',
     'el-GR': 'Απορρίφθηκε'
@@ -589,10 +616,6 @@ const translations: Translations = {
     'el-GR': 'Κλειστό'
   },
   // Priority labels
-  critical: {
-    'en-GB': 'Critical',
-    'el-GR': 'Κρίσιμο'
-  },
   high: {
     'en-GB': 'High',
     'el-GR': 'Υψηλό'
@@ -1010,6 +1033,125 @@ const translations: Translations = {
   featuresTitle: {
     'en-GB': 'Why Choose WhoopsPay?',
     'el-GR': 'Γιατί να επιλέξετε το WhoopsPay;'
+  },
+  
+  // Transaction status and types
+  onus: {
+    'en-GB': 'ONUS',
+    'el-GR': 'ΕΣΩΤΕΡΙΚΗ'
+  },
+  offus: {
+    'en-GB': 'OFFUS', 
+    'el-GR': 'ΕΞΩΤΕΡΙΚΗ'
+  },
+
+  
+  // Account Information
+  accountInformation: {
+    'en-GB': 'Account Information',
+    'el-GR': 'Πληροφορίες Λογαριασμού'
+  },
+  
+  // Administration menu and content
+  administration: {
+    'en-GB': 'Administration',
+    'el-GR': 'Διαχείριση'
+  },
+  adminPanel: {
+    'en-GB': 'Admin Panel',
+    'el-GR': 'Πίνακας Διαχείρισης'
+  },
+  systemHealth: {
+    'en-GB': 'System Health',
+    'el-GR': 'Υγεία Συστήματος'
+  },
+  systemHealthDashboard: {
+    'en-GB': 'System Health Dashboard',
+    'el-GR': 'Πίνακας Ελέγχου Υγείας Συστήματος'
+  },
+  serverStatus: {
+    'en-GB': 'Server Status',
+    'el-GR': 'Κατάσταση Διακομιστή'
+  },
+  databaseHealth: {
+    'en-GB': 'Database Health',
+    'el-GR': 'Υγεία Βάσης Δεδομένων'
+  },
+  apiDocumentation: {
+    'en-GB': 'API Documentation',
+    'el-GR': 'Τεκμηρίωση API'
+  },
+  systemLogs: {
+    'en-GB': 'System Logs',
+    'el-GR': 'Αρχεία Καταγραφής Συστήματος'
+  },
+  expressLogs: {
+    'en-GB': 'Express Logs',
+    'el-GR': 'Αρχεία Καταγραφής Express'
+  },
+  databaseLogs: {
+    'en-GB': 'Database Logs',
+    'el-GR': 'Αρχεία Καταγραφής Βάσης Δεδομένων'
+  },
+  userManagement: {
+    'en-GB': 'User Management',
+    'el-GR': 'Διαχείριση Χρηστών'
+  },
+  issueManagement: {
+    'en-GB': 'Issue Management',
+    'el-GR': 'Διαχείριση Ζητημάτων'
+  },
+  systemOverview: {
+    'en-GB': 'System Overview',
+    'el-GR': 'Επισκόπηση Συστήματος'
+  },
+  uptime: {
+    'en-GB': 'Uptime',
+    'el-GR': 'Χρόνος Λειτουργίας'
+  },
+  memoryUsage: {
+    'en-GB': 'Memory Usage',
+    'el-GR': 'Χρήση Μνήμης'
+  },
+  cpuUsage: {
+    'en-GB': 'CPU Usage',
+    'el-GR': 'Χρήση CPU'
+  },
+  activeConnections: {
+    'en-GB': 'Active Connections',
+    'el-GR': 'Ενεργές Συνδέσεις'
+  },
+  totalUsers: {
+    'en-GB': 'Total Users',
+    'el-GR': 'Σύνολο Χρηστών'
+  },
+  totalTransactions: {
+    'en-GB': 'Total Transactions',
+    'el-GR': 'Σύνολο Συναλλαγών'
+  },
+  pendingIssues: {
+    'en-GB': 'Pending Issues',
+    'el-GR': 'Εκκρεμή Ζητήματα'
+  },
+  online: {
+    'en-GB': 'Online',
+    'el-GR': 'Σε Σύνδεση'
+  },
+  offline: {
+    'en-GB': 'Offline', 
+    'el-GR': 'Εκτός Σύνδεσης'
+  },
+  healthy: {
+    'en-GB': 'Healthy',
+    'el-GR': 'Υγιής'
+  },
+  warning: {
+    'en-GB': 'Warning',
+    'el-GR': 'Προειδοποίηση'
+  },
+  critical: {
+    'en-GB': 'Critical',
+    'el-GR': 'Κρίσιμο'
   },
   featuresSubtitle: {
     'en-GB': 'Discover the features that make WhoopsPay the preferred choice for secure digital payments.',
