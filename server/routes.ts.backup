@@ -26,7 +26,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertTransactionSchema, insertPaymentMethodSchema } from "@shared/schema";
 import { seedMockData } from "./mockData";
-import { requireAdmin, logStore, expressLogger } from "./adminMiddleware";
+import { requireAdmin, logStore, expressLogger } from "./middleware/adminMiddleware";
 import { isAuthenticated, setupAuth } from "./localAuth";
 import { getJuiceShopUrl, logCurrentConfig } from "./config";
 import { URLAdapter } from "./utils/urlAdapter";

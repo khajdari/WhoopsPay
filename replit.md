@@ -2,9 +2,19 @@
 
 ## Overview
 
-WhoopsPay is a comprehensive educational cybersecurity training platform built as a realistic financial application. It demonstrates common security vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10 in a controlled environment. The platform combines interactive security learning with intelligent transaction processing, featuring a full-stack architecture with React frontend, Express backend, and SQLite database.
+WhoopsPay is a comprehensive educational cybersecurity training platform built as a realistic financial application with proper MVC architecture. It demonstrates common security vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10 in a controlled environment. The platform combines interactive security learning with intelligent transaction processing, featuring a full-stack architecture with React frontend, Express backend using MVC design patterns, and SQLite database.
 
 The application serves as a training tool for security professionals, developers, students, and penetration testers to understand web application vulnerabilities and secure coding practices. It includes intentional security flaws such as broken access control, cryptographic failures, injection vulnerabilities, and insecure design patterns.
+
+## Recent Changes (December 2024)
+
+- **MVC Architecture Implementation**: Refactored monolithic routes.ts into proper MVC structure with dedicated controllers
+- **Modular Organization**: Moved Juice Shop integration into separate modules/juice-shop directory  
+- **Controller Layer**: Created dedicated controllers for Auth, User, Transaction, MoneyRequest, Notification, and Admin operations
+- **Middleware Organization**: Moved middleware into dedicated middleware/ directory
+- **Service Layer**: Prepared structure for business logic separation
+- **URL Adapter**: Dynamic URL adaptation now works across localhost, Replit, and production environments
+- **Clean Project Structure**: Removed unnecessary documentation files and organized codebase
 
 ## User Preferences
 
@@ -20,12 +30,17 @@ Preferred communication style: Simple, everyday language.
 - **TanStack Query** for server state management, caching, and real-time data synchronization
 - **Shadcn/ui** component library with Radix UI primitives for accessible, customizable components
 
-### Backend Architecture
+### Backend Architecture (MVC Pattern)
 - **Express.js** server with TypeScript for type-safe API development
-- **MVC pattern** with controllers, models, and services for clean separation of concerns
+- **MVC Architecture**:
+  - **Controllers**: `server/controllers/` - AuthController, UserController, TransactionController, MoneyRequestController, NotificationController, AdminController
+  - **Models**: `shared/schema.ts` - Database schema definitions with Drizzle ORM
+  - **Services**: `server/services/` - Business logic layer (prepared for future expansion)
+  - **Middleware**: `server/middleware/` - Authentication, authorization, and logging middleware
+  - **Modules**: `server/modules/` - External integrations (Juice Shop, PayPal, etc.)
 - **Session-based authentication** using express-session with bcrypt password hashing
 - **RESTful API design** with comprehensive CRUD operations and business logic endpoints
-- **Middleware stack** including CORS, request logging, error handling, and admin authorization
+- **Organized route structure** in `server/routes/index.ts` with controller-based handling
 
 ### Database Architecture
 - **SQLite** with better-sqlite3 for reliable local development and educational purposes
