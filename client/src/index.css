@@ -204,6 +204,24 @@ footer {
   .mobile-nav-spacing {
     padding-bottom: 80px;
   }
+  
+  /* Ensure mobile nav text is properly sized and centered */
+  .mobile-nav-item {
+    min-height: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+  }
+  
+  .mobile-nav-text {
+    font-size: 10px;
+    line-height: 1.2;
+    text-align: center;
+    word-break: break-word;
+    max-width: 100%;
+  }
 }
 
 /* WhoopsPay-style gradient backgrounds */

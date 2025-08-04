@@ -45,20 +45,22 @@ export function MobileNav() {
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40">
-      <div className="grid grid-cols-5 h-16">
+      <div className="grid grid-cols-5 h-16 w-full">
         {navigation.map((item) => {
           const Icon = item.icon;
           return (
             <Link key={item.name} href={item.href}>
               <div
-                className={`flex flex-col items-center justify-center h-full transition-colors cursor-pointer ${
+                className={`flex flex-col items-center justify-center h-full transition-colors cursor-pointer px-1 ${
                   item.current
                     ? "whoopspay-blue"
                     : "text-gray-500 hover:whoopspay-blue"
                 }`}
               >
-                <Icon size={20} className="mb-1" />
-                <span className="text-xs">{item.name}</span>
+                <Icon size={20} className={`mb-1 ${item.current ? "text-current" : ""}`} />
+                <span className={`text-xs text-center leading-tight ${item.current ? "font-medium text-current" : ""}`}>
+                  {item.name}
+                </span>
               </div>
             </Link>
           );
