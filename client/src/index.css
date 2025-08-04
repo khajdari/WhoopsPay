@@ -199,6 +199,21 @@ footer {
   }
 }
 
+/* Desktop navigation responsive adjustments */
+@media (max-width: 1024px) {
+  .desktop-nav-compact {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .desktop-nav-compact {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+}
+
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
   .mobile-nav-spacing {
