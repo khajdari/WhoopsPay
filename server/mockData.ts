@@ -1,4 +1,5 @@
 import { storage } from "./storage";
+import { URLAdapter } from "./utils/urlAdapter";
 
 // Flag to prevent duplicate seeding
 let isSeeded = false;
@@ -273,8 +274,8 @@ export async function seedMockData() {
       type: "external",
       externalOrderId: "JS-2024-001",
       externalSource: "juice-shop",
-      returnUrl: "http://localhost:3000/#/basket?payment=success&orderId=JS-2024-001",
-      cancelUrl: "http://localhost:3000/#/basket?payment=cancelled&orderId=JS-2024-001",
+      returnUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=success&orderId=JS-2024-001"),
+      cancelUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=cancelled&orderId=JS-2024-001"),
       externalMetadata: JSON.stringify({
         items: [{ name: "Apple Juice", quantity: 2, price: 12.495 }],
         merchant: "OWASP Juice Shop"
@@ -290,8 +291,8 @@ export async function seedMockData() {
       type: "external",
       externalOrderId: "JS-2024-002",
       externalSource: "juice-shop",
-      returnUrl: "http://localhost:3000/#/basket?payment=success&orderId=JS-2024-002",
-      cancelUrl: "http://localhost:3000/#/basket?payment=cancelled&orderId=JS-2024-002",
+      returnUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=success&orderId=JS-2024-002"),
+      cancelUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=cancelled&orderId=JS-2024-002"),
       externalMetadata: JSON.stringify({
         items: [{ name: "Green Smoothie", quantity: 1, price: 15.50 }],
         merchant: "OWASP Juice Shop"
@@ -307,8 +308,8 @@ export async function seedMockData() {
       type: "external",
       externalOrderId: "JS-2024-003",
       externalSource: "juice-shop",
-      returnUrl: "http://localhost:3000/#/basket?payment=success&orderId=JS-2024-003",
-      cancelUrl: "http://localhost:3000/#/basket?payment=cancelled&orderId=JS-2024-003",
+      returnUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=success&orderId=JS-2024-003"),
+      cancelUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=cancelled&orderId=JS-2024-003"),
       externalMetadata: JSON.stringify({
         items: [{ name: "Orange Juice", quantity: 1, price: 8.25 }],
         merchant: "OWASP Juice Shop"
