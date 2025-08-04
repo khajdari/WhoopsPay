@@ -60,7 +60,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 overflow-visible">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center flex-shrink-0">
             <Link href="/dashboard">
               <div className="flex items-center space-x-2 cursor-pointer">
                 <CreditCard className="h-6 w-6 text-blue-600" />
@@ -72,7 +72,7 @@ export function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-4 lg:space-x-8">
+          <nav className="hidden md:flex space-x-4 lg:space-x-8 ml-8 lg:ml-12">
             {navigation.map((item) => (
               <Link key={item.name} href={item.href}>
                 <span
