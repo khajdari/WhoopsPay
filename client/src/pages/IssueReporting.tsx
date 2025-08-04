@@ -44,20 +44,20 @@ export default function IssueReporting() {
   const { t } = useI18n();
   const [showForm, setShowForm] = useState(false);
 
-  const { data: userIssues = [], isLoading } = useQuery({
+  const { data: userIssues = [], isLoading } = useQuery<IssueReport[]>({
     queryKey: ["/api/issues"],
   });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "open":
-        return <Badge variant="destructive" className="flex items-center gap-1"><AlertTriangle className="h-3 w-3" />Open</Badge>;
+        return <Badge variant="destructive" className="flex items-center gap-1"><AlertTriangle className="h-3 w-3" />{t('open')}</Badge>;
       case "in_progress":
-        return <Badge variant="default" className="flex items-center gap-1"><Clock className="h-3 w-3" />In Progress</Badge>;
+        return <Badge variant="default" className="flex items-center gap-1"><Clock className="h-3 w-3" />{t('inProgressStatus')}</Badge>;
       case "resolved":
-        return <Badge variant="outline" className="flex items-center gap-1 text-green-600"><CheckCircle className="h-3 w-3" />Resolved</Badge>;
+        return <Badge variant="outline" className="flex items-center gap-1 text-green-600"><CheckCircle className="h-3 w-3" />{t('resolvedStatus')}</Badge>;
       case "closed":
-        return <Badge variant="secondary" className="flex items-center gap-1"><XCircle className="h-3 w-3" />Closed</Badge>;
+        return <Badge variant="secondary" className="flex items-center gap-1"><XCircle className="h-3 w-3" />{t('closed')}</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -66,13 +66,13 @@ export default function IssueReporting() {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case "critical":
-        return <Badge className="bg-red-600 text-white">Critical</Badge>;
+        return <Badge className="bg-red-600 text-white">{t('critical')}</Badge>;
       case "high":
-        return <Badge className="bg-orange-600 text-white">High</Badge>;
+        return <Badge className="bg-orange-600 text-white">{t('high')}</Badge>;
       case "medium":
-        return <Badge className="bg-yellow-600 text-white">Medium</Badge>;
+        return <Badge className="bg-yellow-600 text-white">{t('medium')}</Badge>;
       case "low":
-        return <Badge className="bg-green-600 text-white">Low</Badge>;
+        return <Badge className="bg-green-600 text-white">{t('low')}</Badge>;
       default:
         return <Badge variant="outline">{priority}</Badge>;
     }
@@ -99,10 +99,10 @@ export default function IssueReporting() {
   };
 
   const groupedIssues = {
-    open: userIssues.filter((issue: IssueReport) => issue.status === "open"),
-    in_progress: userIssues.filter((issue: IssueReport) => issue.status === "in_progress"),
-    resolved: userIssues.filter((issue: IssueReport) => issue.status === "resolved"),
-    closed: userIssues.filter((issue: IssueReport) => issue.status === "closed"),
+    open: userIssues?.filter((issue: IssueReport) => issue.status === "open") || [],
+    in_progress: userIssues?.filter((issue: IssueReport) => issue.status === "in_progress") || [],
+    resolved: userIssues?.filter((issue: IssueReport) => issue.status === "resolved") || [],
+    closed: userIssues?.filter((issue: IssueReport) => issue.status === "closed") || [],
   };
 
   // If admin, show AdminIssueMonitor component instead of regular user interface
@@ -139,7 +139,7 @@ export default function IssueReporting() {
 {t('issueReportingCenter')}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Submit and track issue reports for bugs, security concerns, and other platform issues
+            {t('submitTrackIssues')}
           </p>
         </div>
 
@@ -150,10 +150,10 @@ export default function IssueReporting() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Plus className="h-5 w-5" />
-                  Submit New Issue
+                  {t('submitNewIssue')}
                 </CardTitle>
                 <CardDescription>
-                  Report any problems or concerns you encounter
+                  {t('reportProblems')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -161,14 +161,14 @@ export default function IssueReporting() {
                   <DialogTrigger asChild>
                     <Button className="w-full flex items-center gap-2">
                       <FileText className="h-4 w-4" />
-                      Create Issue Report
+                      {t('createIssueReport')}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-3xl max-h-[90vh]">
                     <DialogHeader>
-                      <DialogTitle>Submit Issue Report</DialogTitle>
+                      <DialogTitle>{t('submitIssueReport')}</DialogTitle>
                       <DialogDescription>
-                        Provide detailed information about the issue you're experiencing
+                        {t('detailedInformation')}
                       </DialogDescription>
                     </DialogHeader>
                     <ScrollArea className="max-h-[calc(90vh-120px)]">
@@ -180,20 +180,20 @@ export default function IssueReporting() {
                 {/* Quick Stats */}
                 <div className="mt-6 space-y-3">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Open Issues:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('openIssues')}</span>
                     <Badge variant="destructive">{groupedIssues.open.length}</Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">In Progress:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('inProgress')}</span>
                     <Badge variant="default">{groupedIssues.in_progress.length}</Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Resolved:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('resolved')}</span>
                     <Badge variant="outline" className="text-green-600">{groupedIssues.resolved.length}</Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Total Issues:</span>
-                    <Badge variant="secondary">{userIssues.length}</Badge>
+                    <span className="text-gray-600 dark:text-gray-400">{t('totalIssues')}</span>
+                    <Badge variant="secondary">{userIssues?.length || 0}</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -206,10 +206,10 @@ export default function IssueReporting() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5" />
-                  Your Issue Reports
+                  {t('yourIssueReports')}
                 </CardTitle>
                 <CardDescription>
-                  Track the status and progress of your submitted issues
+                  {t('trackIssueStatus')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -217,16 +217,16 @@ export default function IssueReporting() {
                   <div className="flex items-center justify-center py-8">
                     <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
                   </div>
-                ) : userIssues.length === 0 ? (
+                ) : !userIssues || userIssues.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
                     <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No issue reports found.</p>
-                    <p className="text-sm">Create your first issue report to get started.</p>
+                    <p>{t('noIssueReports')}</p>
+                    <p className="text-sm">{t('createFirstIssue')}</p>
                   </div>
                 ) : (
                   <Tabs defaultValue="all" className="w-full">
                     <TabsList className="grid w-full grid-cols-5">
-                      <TabsTrigger value="all">All ({userIssues.length})</TabsTrigger>
+                      <TabsTrigger value="all">All ({userIssues?.length || 0})</TabsTrigger>
                       <TabsTrigger value="open">Open ({groupedIssues.open.length})</TabsTrigger>
                       <TabsTrigger value="in_progress">In Progress ({groupedIssues.in_progress.length})</TabsTrigger>
                       <TabsTrigger value="resolved">Resolved ({groupedIssues.resolved.length})</TabsTrigger>
@@ -234,7 +234,7 @@ export default function IssueReporting() {
                     </TabsList>
                     
                     <TabsContent value="all">
-                      <IssueList issues={userIssues} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} />
+                      <IssueList issues={userIssues || []} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} />
                     </TabsContent>
                     <TabsContent value="open">
                       <IssueList issues={groupedIssues.open} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} />

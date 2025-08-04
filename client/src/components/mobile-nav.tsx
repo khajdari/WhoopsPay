@@ -34,7 +34,7 @@ export function MobileNav() {
   const [location] = useLocation();
 
   const navigation = [
-    { name: "Summary", href: "/summary", icon: Home, current: location === "/" || location === "/summary" },
+    { name: "Dashboard", href: "/dashboard", icon: Home, current: location === "/" || location === "/dashboard" },
     { name: "Transfer", href: "/transfer", icon: Send, current: location === "/transfer" },
     { name: "Transactions", href: "/transactions", icon: List, current: location === "/transactions" },
     { name: "Money", href: "/money", icon: WalletIcon, current: location === "/money" },

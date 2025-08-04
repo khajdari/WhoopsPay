@@ -61,7 +61,7 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/summary">
+            <Link href="/dashboard">
               <div className="flex items-center space-x-2 cursor-pointer">
                 <CreditCard className="h-6 w-6 text-blue-600" />
                 <h1 className="text-2xl font-bold whoopspay-blue">
