@@ -18,6 +18,7 @@
  */
 import { Home, Send, List, Wallet as WalletIcon, User } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { useI18n } from "@/lib/i18n";
 
 /**
  * MobileNav Component - Touch-optimized mobile navigation
@@ -32,13 +33,14 @@ import { Link, useLocation } from "wouter";
  */
 export function MobileNav() {
   const [location] = useLocation();
+  const { t } = useI18n();
 
   const navigation = [
-    { name: "Dashboard", href: "/dashboard", icon: Home, current: location === "/" || location === "/dashboard" },
-    { name: "Transfer", href: "/transfer", icon: Send, current: location === "/transfer" },
-    { name: "Transactions", href: "/transactions", icon: List, current: location === "/transactions" },
-    { name: "Money", href: "/money", icon: WalletIcon, current: location === "/money" },
-    { name: "Account", href: "/account", icon: User, current: location === "/account" },
+    { name: t('dashboard'), href: "/dashboard", icon: Home, current: location === "/" || location === "/dashboard" },
+    { name: t('sendMoney'), href: "/transfer", icon: Send, current: location === "/transfer" },
+    { name: t('transactions'), href: "/transactions", icon: List, current: location === "/transactions" },
+    { name: t('wallet'), href: "/money", icon: WalletIcon, current: location === "/money" },
+    { name: t('settings'), href: "/account", icon: User, current: location === "/account" },
   ];
 
   return (
@@ -51,8 +53,8 @@ export function MobileNav() {
               <div
                 className={`flex flex-col items-center justify-center h-full transition-colors cursor-pointer ${
                   item.current
-                    ? "paypal-blue"
-                    : "text-gray-500 hover:paypal-blue"
+                    ? "whoopspay-blue"
+                    : "text-gray-500 hover:whoopspay-blue"
                 }`}
               >
                 <Icon size={20} className="mb-1" />
