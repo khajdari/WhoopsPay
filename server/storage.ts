@@ -47,7 +47,7 @@ import {
 import { db } from "./db";
 import { eq, desc, and, or } from "drizzle-orm";
 import bcrypt from "bcrypt";
-import { logStore } from "./adminMiddleware";
+import { logStore } from "./middleware/adminMiddleware";
 
 // Database-only storage - all data operations use SQLite
 

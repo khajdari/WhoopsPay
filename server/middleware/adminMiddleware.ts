@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { storage } from "./storage";
+import { storage } from "../storage";
 
 // Admin middleware to check if user has admin privileges
 export const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
