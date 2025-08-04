@@ -143,7 +143,7 @@ export default function Profile() {
             <ArrowLeft className="w-4 h-4 mr-2" />
 {t('backToDashboard')}
           </Button>
-          <h1 className="text-3xl font-bold text-gray-900">{t('profileSettings')}</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('accountInformation')}</h1>
         </div>
 
         <div className="grid gap-6">

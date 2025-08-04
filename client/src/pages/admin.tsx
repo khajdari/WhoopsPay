@@ -60,10 +60,10 @@ export default function Admin() {
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t('admin.title')}
+            {t('systemHealthDashboard')}
           </h1>
           <p className="text-gray-600">
-            {t('admin.systemStats')}
+            {t('systemOverview')}
           </p>
           <div className="mt-4">
             <Button

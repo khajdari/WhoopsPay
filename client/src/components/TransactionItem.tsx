@@ -1,12 +1,14 @@
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpRight, ArrowDownLeft, ExternalLink, Users } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { useI18n } from '@/lib/i18n';
 
 interface TransactionItemProps {
   transaction: any;
 }
 
 export default function TransactionItem({ transaction }: TransactionItemProps) {
+  const { t } = useI18n();
   const isReceived = transaction.toUserId && transaction.toUserId.startsWith('@');
   const isONUS = transaction.transactionCategory === 'ONUS';
   const isOFFUS = transaction.transactionCategory === 'OFFUS';
@@ -35,9 +37,22 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
       external_pending: "bg-blue-100 text-blue-800"
     };
     
+    const getStatusText = () => {
+      switch(transaction.status) {
+        case 'completed':
+          return t('completed');
+        case 'pending':
+          return t('pending');
+        case 'rejected':
+          return t('rejected');
+        default:
+          return transaction.status?.toUpperCase() || '';
+      }
+    };
+    
     return (
       <Badge className={`${statusColors[transaction.status as keyof typeof statusColors] || "bg-gray-100 text-gray-800"} text-xs`}>
-        {transaction.status?.toUpperCase()}
+        {getStatusText()}
       </Badge>
     );
   };
@@ -47,7 +62,7 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
       return (
         <Badge className="bg-blue-100 text-blue-800 text-xs flex items-center gap-1">
           <Users className="w-3 h-3" />
-          ONUS
+          {t('onus')}
         </Badge>
       );
     }
@@ -55,7 +70,7 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
       return (
         <Badge className="bg-orange-100 text-orange-800 text-xs flex items-center gap-1">
           <ExternalLink className="w-3 h-3" />
-          OFFUS
+          {t('offus')}
         </Badge>
       );
     }

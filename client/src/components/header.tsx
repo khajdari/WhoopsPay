@@ -45,7 +45,7 @@ export function Header() {
 
   const navigation = user?.isAdmin ? [
     { name: t('dashboard'), href: "/dashboard", current: location === "/" || location === "/dashboard" },
-    { name: "Administration", href: "/administration", current: location === "/administration" },
+    { name: t('administration'), href: "/administration", current: location === "/administration" },
     { name: t('issueReports'), href: "/issues", current: location === "/issues" },
   ] : [
     { name: t('dashboard'), href: "/dashboard", current: location === "/" || location === "/dashboard" },
@@ -130,7 +130,7 @@ export function Header() {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/account" className="w-full cursor-pointer">
-                    {t('settings')}
+                    {t('accountInformation')}
                   </Link>
                 </DropdownMenuItem>
 
