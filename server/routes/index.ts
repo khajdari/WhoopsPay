@@ -61,7 +61,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.post('/api/login', AuthController.login);
   app.post('/api/logout', AuthController.logout);
-  app.get('/api/auth/user', AuthController.getCurrentUser);
+  app.get('/api/auth/user', isAuthenticated, (req, res) => {
+    // Use the user set by isAuthenticated middleware
+    const user = (req as any).user;
+    res.json({
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      balance: user.balance,
+      isAdmin: user.isAdmin
+    });
+  });
 
   // ============================================================================
   // USER ROUTES

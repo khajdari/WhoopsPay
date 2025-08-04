@@ -42,7 +42,14 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   try {
     // Check if session exists and contains user ID
     if (req.session && req.session.userId) {
-      req.user = { id: req.session.userId }; // Attach user to request object
+      // Fetch full user data from storage
+      const user = await storage.getUser(req.session.userId);
+      if (!user) {
+        return res.status(401).json({ message: "User not found" });
+      }
+      
+      // Attach user to request object
+      (req as any).user = user;
       return next();
     }
     
