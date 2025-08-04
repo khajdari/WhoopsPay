@@ -14,6 +14,7 @@ import { TransactionItem } from "@/components/transaction-item";
 import { PaymentCard } from "@/components/payment-card";
 import { PaymentRequestList } from "@/components/business/PaymentRequestList";
 import MoneyRequestModal from "@/components/modals/MoneyRequestModal";
+import { RedirectModal } from "@/components/modals/RedirectModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -42,6 +43,8 @@ export default function Dashboard() {
   const [showSendModal, setShowSendModal] = useState(false); // Send money modal state
   const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
   const [showRequestModal, setShowRequestModal] = useState(false);
+  const [showRedirectModal, setShowRedirectModal] = useState(false);
+  const [redirectData, setRedirectData] = useState<any>(null);
 
   // Server status data for admin dashboard
   const { data: serverStatus } = useQuery({
@@ -223,6 +226,15 @@ export default function Dashboard() {
   const handleRequestClick = (request: any) => {
     setSelectedRequest(request);
     setShowRequestModal(true);
+  };
+
+  const handleExternalRedirect = (redirectUrl: string, isApproval: boolean, orderInfo: any) => {
+    setRedirectData({
+      redirectUrl,
+      isApproval,
+      orderInfo
+    });
+    setShowRedirectModal(true);
   };
 
   const handleCloseRequestModal = () => {
@@ -648,6 +660,20 @@ export default function Dashboard() {
           request={selectedRequest}
           isOpen={showRequestModal}
           onClose={handleCloseRequestModal}
+          onExternalRedirect={handleExternalRedirect}
+        />
+      )}
+      
+      {redirectData && (
+        <RedirectModal
+          isOpen={showRedirectModal}
+          onClose={() => {
+            setShowRedirectModal(false);
+            setRedirectData(null);
+          }}
+          redirectUrl={redirectData.redirectUrl}
+          isApproval={redirectData.isApproval}
+          orderInfo={redirectData.orderInfo}
         />
       )}
       

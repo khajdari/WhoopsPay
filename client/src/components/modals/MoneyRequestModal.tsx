@@ -7,7 +7,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { formatDistanceToNow } from "date-fns";
-import { RedirectModal } from "./RedirectModal";
 import { 
   Check, 
   X, 
@@ -26,13 +25,12 @@ interface MoneyRequestModalProps {
   request: any;
   isOpen: boolean;
   onClose: () => void;
+  onExternalRedirect?: (redirectUrl: string, isApproval: boolean, orderInfo: any) => void;
 }
 
-export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyRequestModalProps) {
+export default function MoneyRequestModal({ request, isOpen, onClose, onExternalRedirect }: MoneyRequestModalProps) {
   const [isApproving, setIsApproving] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);
-  const [showRedirectModal, setShowRedirectModal] = useState(false);
-  const [redirectData, setRedirectData] = useState<any>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -43,22 +41,17 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
     onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
       
-      if (data.redirect && data.redirectUrl) {
-        // Close this modal immediately and show redirect modal
+      if (data.redirect && data.redirectUrl && onExternalRedirect) {
+        // Close this modal and trigger redirect from parent
         onClose();
         
         // Small delay to ensure clean transition
         setTimeout(() => {
-          setRedirectData({
-            redirectUrl: data.redirectUrl,
-            isApproval: true,
-            orderInfo: {
-              description: request.description || 'Payment Request',
-              amount: request.amount,
-              orderId: request.externalOrderId || request.id.toString()
-            }
+          onExternalRedirect(data.redirectUrl, true, {
+            description: request.description || 'Payment Request',
+            amount: request.amount,
+            orderId: request.externalOrderId || request.id.toString()
           });
-          setShowRedirectModal(true);
         }, 100);
       } else {
         toast({
@@ -86,22 +79,17 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
     onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
       
-      if (data.redirect && data.redirectUrl) {
-        // Close this modal immediately and show redirect modal
+      if (data.redirect && data.redirectUrl && onExternalRedirect) {
+        // Close this modal and trigger redirect from parent
         onClose();
         
         // Small delay to ensure clean transition
         setTimeout(() => {
-          setRedirectData({
-            redirectUrl: data.redirectUrl,
-            isApproval: false,
-            orderInfo: {
-              description: request.description || 'Payment Request',
-              amount: request.amount,
-              orderId: request.externalOrderId || request.id.toString()
-            }
+          onExternalRedirect(data.redirectUrl, false, {
+            description: request.description || 'Payment Request',
+            amount: request.amount,
+            orderId: request.externalOrderId || request.id.toString()
           });
-          setShowRedirectModal(true);
         }, 100);
       } else {
         toast({
@@ -166,7 +154,6 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
   const typeInfo = getRequestTypeInfo();
 
   return (
-    <>
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md bg-white border-2 border-blue-600 text-gray-900">
         <DialogHeader className="relative">
@@ -326,20 +313,5 @@ export default function MoneyRequestModal({ request, isOpen, onClose }: MoneyReq
         </div>
       </DialogContent>
     </Dialog>
-    
-    {/* Redirect Modal for External Payments */}
-    {redirectData && (
-      <RedirectModal
-        isOpen={showRedirectModal}
-        onClose={() => {
-          setShowRedirectModal(false);
-          setRedirectData(null);
-        }}
-        redirectUrl={redirectData.redirectUrl}
-        isApproval={redirectData.isApproval}
-        orderInfo={redirectData.orderInfo}
-      />
-    )}
-  </>
   );
 }
