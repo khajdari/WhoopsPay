@@ -29,6 +29,7 @@ import { seedMockData } from "./mockData";
 import { requireAdmin, logStore, expressLogger } from "./adminMiddleware";
 import { isAuthenticated, setupAuth } from "./localAuth";
 import { getJuiceShopUrl, logCurrentConfig } from "./config";
+import { URLAdapter } from "./utils/urlAdapter";
 import { serverStartTime } from "./index";
 import { z } from "zod";
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -1287,25 +1288,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Handle external redirect for Juice Shop - always redirect external requests
       if (isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external" || request.externalSource === "juice-shop")) {
-        // Create proper Juice Shop redirect URL using dynamic configuration
-        let juiceShopUrl;
-        if (request.returnUrl?.includes('http')) {
-          juiceShopUrl = request.returnUrl;
-        } else {
-          // Clean the returnUrl to avoid double paths and handle query parameters properly
-          let cleanReturnUrl = request.returnUrl?.replace(/^\/juice-shop/, '') || '/#/order-completion';
-          
-          // If cleanReturnUrl starts with '?', it means the original was '/juice-shop?...'
-          // We need to convert this to a proper path
-          if (cleanReturnUrl.startsWith('?')) {
-            cleanReturnUrl = '/' + cleanReturnUrl; // Convert '?success=1' to '/?success=1'
-          }
-          
-          // Check if returnUrl already has query params
-          const separator = cleanReturnUrl.includes('?') ? '&' : '?';
-          const queryParams = `${separator}payment=success&orderId=${request.externalOrderId}&amount=${requestAmount}`;
-          juiceShopUrl = getJuiceShopUrl(`${cleanReturnUrl}${queryParams}`);
-        }
+        // Use URLAdapter to adapt the return URL to current environment
+        const juiceShopUrl = request.returnUrl ? URLAdapter.adaptExternalUrl(request.returnUrl) : URLAdapter.buildJuiceShopUrl('#/basket?payment=success');
         
         const response = {
           message: "External payment approved successfully",
@@ -1385,25 +1369,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Handle external redirect for Juice Shop - always redirect external requests
       if (isMoneyRequest && (request.fromUserId === "juice-shop" || request.type === "external" || request.externalSource === "juice-shop")) {
-        // Create proper Juice Shop redirect URL using dynamic configuration
-        let juiceShopUrl;
-        if (request.cancelUrl?.includes('http')) {
-          juiceShopUrl = request.cancelUrl;
-        } else {
-          // Clean the cancelUrl to avoid double paths and handle query parameters properly
-          let cleanCancelUrl = request.cancelUrl?.replace(/^\/juice-shop/, '') || '/#/basket';
-          
-          // If cleanCancelUrl starts with '?', it means the original was '/juice-shop?...'
-          // We need to convert this to a proper path
-          if (cleanCancelUrl.startsWith('?')) {
-            cleanCancelUrl = '/' + cleanCancelUrl; // Convert '?cancelled=1' to '/?cancelled=1'
-          }
-          
-          // Check if cancelUrl already has query params
-          const separator = cleanCancelUrl.includes('?') ? '&' : '?';
-          const queryParams = `${separator}payment=cancelled&orderId=${request.externalOrderId}&amount=${request.amount}`;
-          juiceShopUrl = getJuiceShopUrl(`${cleanCancelUrl}${queryParams}`);
-        }
+        // Use URLAdapter to adapt the cancel URL to current environment
+        const juiceShopUrl = request.cancelUrl ? URLAdapter.adaptExternalUrl(request.cancelUrl) : URLAdapter.buildJuiceShopUrl('#/basket?payment=cancelled');
         
         const response = {
           message: "External payment rejected successfully",
