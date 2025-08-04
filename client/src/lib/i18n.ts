@@ -139,6 +139,42 @@ interface Translations {
   medium: TranslationKey;
   low: TranslationKey;
   
+  // Greetings and common UI
+  hi: TranslationKey;
+  issueReports: TranslationKey;
+  noPendingRequests: TranslationKey;
+  noPendingRequestsDesc: TranslationKey;
+  
+  // Profile and Settings
+  profileSettings: TranslationKey;
+  accountSettings: TranslationKey;
+  backToDashboard: TranslationKey;
+  firstName: TranslationKey;
+  lastName: TranslationKey;
+  email: TranslationKey;
+  address: TranslationKey;
+  nationality: TranslationKey;
+  gender: TranslationKey;
+  security: TranslationKey;
+  changePassword: TranslationKey;
+  currentPassword: TranslationKey;
+  newPassword: TranslationKey;
+  confirmPassword: TranslationKey;
+  updatePassword: TranslationKey;
+  passwordChangedSuccess: TranslationKey;
+  passwordChangedDesc: TranslationKey;
+  passwordChangeError: TranslationKey;
+  passwordsDontMatch: TranslationKey;
+  passwordsDontMatchDesc: TranslationKey;
+  passwordTooShort: TranslationKey;
+  passwordTooShortDesc: TranslationKey;
+  profileUpdatedSuccess: TranslationKey;
+  profileUpdatedDesc: TranslationKey;
+  profileUpdateError: TranslationKey;
+  enterCurrentPassword: TranslationKey;
+  enterNewPassword: TranslationKey;
+  confirmNewPassword: TranslationKey;
+  
   // Landing page
   signIn: TranslationKey;
   getStarted: TranslationKey;
@@ -569,6 +605,138 @@ const translations: Translations = {
     'en-GB': 'Low',
     'el-GR': 'Χαμηλό'
   },
+  
+  // Greetings and common UI
+  hi: {
+    'en-GB': 'Hi',
+    'el-GR': 'Γεια σας'
+  },
+  issueReports: {
+    'en-GB': 'Issue Reports',
+    'el-GR': 'Αναφορές Προβλημάτων'
+  },
+  noPendingRequests: {
+    'en-GB': 'No pending money requests',
+    'el-GR': 'Δεν υπάρχουν εκκρεμείς αιτήσεις χρημάτων'
+  },
+  noPendingRequestsDesc: {
+    'en-GB': 'When someone requests money from you, it will appear here',
+    'el-GR': 'Όταν κάποιος σας ζητήσει χρήματα, θα εμφανιστεί εδώ'
+  },
+  
+  // Profile and Settings
+  profileSettings: {
+    'en-GB': 'Profile Settings',
+    'el-GR': 'Ρυθμίσεις Προφίλ'
+  },
+  accountSettings: {
+    'en-GB': 'Account Settings',
+    'el-GR': 'Ρυθμίσεις Λογαριασμού'
+  },
+  backToDashboard: {
+    'en-GB': 'Back to Dashboard',
+    'el-GR': 'Επιστροφή στον Πίνακα Ελέγχου'
+  },
+  firstName: {
+    'en-GB': 'First Name',
+    'el-GR': 'Όνομα'
+  },
+  lastName: {
+    'en-GB': 'Last Name',
+    'el-GR': 'Επώνυμο'
+  },
+  email: {
+    'en-GB': 'Email',
+    'el-GR': 'Email'
+  },
+  address: {
+    'en-GB': 'Address',
+    'el-GR': 'Διεύθυνση'
+  },
+  nationality: {
+    'en-GB': 'Nationality',
+    'el-GR': 'Εθνικότητα'
+  },
+  gender: {
+    'en-GB': 'Gender',
+    'el-GR': 'Φύλο'
+  },
+  security: {
+    'en-GB': 'Security',
+    'el-GR': 'Ασφάλεια'
+  },
+  changePassword: {
+    'en-GB': 'Change Password',
+    'el-GR': 'Αλλαγή Κωδικού'
+  },
+  currentPassword: {
+    'en-GB': 'Current Password',
+    'el-GR': 'Τρέχων Κωδικός'
+  },
+  newPassword: {
+    'en-GB': 'New Password',
+    'el-GR': 'Νέος Κωδικός'
+  },
+  confirmPassword: {
+    'en-GB': 'Confirm New Password',
+    'el-GR': 'Επιβεβαίωση Νέου Κωδικού'
+  },
+  updatePassword: {
+    'en-GB': 'Update Password',
+    'el-GR': 'Ενημέρωση Κωδικού'
+  },
+  passwordChangedSuccess: {
+    'en-GB': 'Password changed successfully!',
+    'el-GR': 'Ο κωδικός άλλαξε επιτυχώς!'
+  },
+  passwordChangedDesc: {
+    'en-GB': 'Your password has been updated.',
+    'el-GR': 'Ο κωδικός σας ενημερώθηκε.'
+  },
+  passwordChangeError: {
+    'en-GB': 'Failed to change password',
+    'el-GR': 'Αποτυχία αλλαγής κωδικού'
+  },
+  passwordsDontMatch: {
+    'en-GB': 'Passwords don\'t match',
+    'el-GR': 'Οι κωδικοί δεν ταιριάζουν'
+  },
+  passwordsDontMatchDesc: {
+    'en-GB': 'Please make sure your new passwords match.',
+    'el-GR': 'Παρακαλώ βεβαιωθείτε ότι οι νέοι κωδικοί ταιριάζουν.'
+  },
+  passwordTooShort: {
+    'en-GB': 'Password too short',
+    'el-GR': 'Ο κωδικός είναι πολύ μικρός'
+  },
+  passwordTooShortDesc: {
+    'en-GB': 'Password must be at least 6 characters long.',
+    'el-GR': 'Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες.'
+  },
+  profileUpdatedSuccess: {
+    'en-GB': 'Profile updated successfully!',
+    'el-GR': 'Το προφίλ ενημερώθηκε επιτυχώς!'
+  },
+  profileUpdatedDesc: {
+    'en-GB': 'Your changes have been saved.',
+    'el-GR': 'Οι αλλαγές σας αποθηκεύτηκαν.'
+  },
+  profileUpdateError: {
+    'en-GB': 'Failed to update profile',
+    'el-GR': 'Αποτυχία ενημέρωσης προφίλ'
+  },
+  enterCurrentPassword: {
+    'en-GB': 'Enter current password',
+    'el-GR': 'Εισάγετε τον τρέχοντα κωδικό'
+  },
+  enterNewPassword: {
+    'en-GB': 'Enter new password',
+    'el-GR': 'Εισάγετε νέο κωδικό'
+  },
+  confirmNewPassword: {
+    'en-GB': 'Confirm new password',
+    'el-GR': 'Επιβεβαιώστε τον νέο κωδικό'
+  },
 
   // Messages
   moneyRequestSent: {
@@ -812,18 +980,6 @@ const translations: Translations = {
   createAccount: {
     'en-GB': 'Create Account',
     'el-GR': 'Δημιουργία Λογαριασμού'
-  },
-  firstName: {
-    'en-GB': 'First Name',
-    'el-GR': 'Όνομα'
-  },
-  lastName: {
-    'en-GB': 'Last Name',
-    'el-GR': 'Επώνυμο'
-  },
-  email: {
-    'en-GB': 'Email',
-    'el-GR': 'Email'
   },
   enterFirstName: {
     'en-GB': 'Enter your first name',

@@ -274,7 +274,7 @@ export default function Dashboard() {
         <div className="mb-8 flex justify-between items-start">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {isAdmin ? `${t('admin.title')} - Hi ${(user as any)?.firstName || 'Admin'}` : `Hi ${(user as any)?.firstName || 'there'}`}
+              {isAdmin ? `${t('admin.title')} - ${t('hi')} ${(user as any)?.firstName || 'Admin'}` : `${t('hi')} ${(user as any)?.firstName || 'there'}`}
             </h2>
             <p className="text-gray-600">
               {isAdmin ? t('admin.userManagement') : t('dashboard.subtitle')}
@@ -406,8 +406,8 @@ export default function Dashboard() {
                 ) : (
                   <div className="mt-4 text-center py-6 text-gray-500">
                     <Clock className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-                    <p>No pending money requests</p>
-                    <p className="text-sm">When someone requests money from you, it will appear here</p>
+                    <p>{t('noPendingRequests')}</p>
+                    <p className="text-sm">{t('noPendingRequestsDesc')}</p>
                   </div>
                 )}
               </div>

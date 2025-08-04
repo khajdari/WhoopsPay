@@ -83,15 +83,15 @@ export default function Profile() {
     },
     onSuccess: () => {
       toast({
-        title: "Profile updated successfully!",
-        description: "Your changes have been saved.",
+        title: t('profileUpdatedSuccess'),
+        description: t('profileUpdatedDesc'),
       });
       setIsEditing(false);
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
     },
     onError: (error: Error) => {
       toast({
-        title: "Failed to update profile",
+        title: t('profileUpdateError'),
         description: error.message,
         variant: "destructive",
       });
@@ -141,9 +141,9 @@ export default function Profile() {
             className="mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
+{t('backToDashboard')}
           </Button>
-          <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('profileSettings')}</h1>
         </div>
 
         <div className="grid gap-6">
@@ -199,7 +199,7 @@ export default function Profile() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <Label htmlFor="firstName">First Name</Label>
+                    <Label htmlFor="firstName">{t('firstName')}</Label>
                     <Input
                       id="firstName"
                       value={formData.firstName}
@@ -208,7 +208,7 @@ export default function Profile() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="lastName">Last Name</Label>
+                    <Label htmlFor="lastName">{t('lastName')}</Label>
                     <Input
                       id="lastName"
                       value={formData.lastName}
@@ -219,7 +219,7 @@ export default function Profile() {
                 </div>
                 
                 <div>
-                  <Label htmlFor="email">Email Address</Label>
+                  <Label htmlFor="email">{t('email')}</Label>
                   <Input
                     id="email"
                     type="email"
@@ -230,7 +230,7 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="address">{t('address')}</Label>
                   <Input
                     id="address"
                     value={formData.address}
@@ -242,7 +242,7 @@ export default function Profile() {
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <Label htmlFor="nationality">Nationality</Label>
+                    <Label htmlFor="nationality">{t('nationality')}</Label>
                     <Input
                       id="nationality"
                       value={formData.nationality}
@@ -252,7 +252,7 @@ export default function Profile() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="gender">Gender</Label>
+                    <Label htmlFor="gender">{t('gender')}</Label>
                     <Input
                       id="gender"
                       value={formData.gender}

@@ -27,6 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ArrowLeft, Shield } from "lucide-react";
 import { useLocation } from "wouter";
+import { useI18n } from "@/lib/i18n";
 
 /**
  * Settings Component - User account settings management interface
@@ -42,6 +43,7 @@ import { useLocation } from "wouter";
 export default function Settings() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useI18n();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
   
@@ -76,8 +78,8 @@ export default function Settings() {
     },
     onSuccess: () => {
       toast({
-        title: "Password changed successfully!",
-        description: "Your password has been updated.",
+        title: t('passwordChangedSuccess'),
+        description: t('passwordChangedDesc'),
       });
       setCurrentPassword("");
       setNewPassword("");
@@ -85,7 +87,7 @@ export default function Settings() {
     },
     onError: (error: Error) => {
       toast({
-        title: "Failed to change password",
+        title: t('passwordChangeError'),
         description: error.message,
         variant: "destructive",
       });
@@ -105,8 +107,8 @@ export default function Settings() {
     
     if (newPassword !== confirmPassword) {
       toast({
-        title: "Passwords don't match",
-        description: "Please make sure your new passwords match.",
+        title: t('passwordsDontMatch'),
+        description: t('passwordsDontMatchDesc'),
         variant: "destructive",
       });
       return;
@@ -114,8 +116,8 @@ export default function Settings() {
 
     if (newPassword.length < 6) {
       toast({
-        title: "Password too short",
-        description: "Password must be at least 6 characters long.",
+        title: t('passwordTooShort'),
+        description: t('passwordTooShortDesc'),
         variant: "destructive",
       });
       return;
@@ -139,9 +141,9 @@ export default function Settings() {
             className="mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
+{t('backToDashboard')}
           </Button>
-          <h1 className="text-3xl font-bold text-gray-900">Account Settings</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('accountSettings')}</h1>
         </div>
 
         <div className="grid gap-6">
@@ -150,43 +152,43 @@ export default function Settings() {
             <CardHeader className="flex flex-row items-center space-y-0 pb-2">
               <div className="flex items-center space-x-2">
                 <Shield className="w-5 h-5 text-blue-600" />
-                <CardTitle>Security</CardTitle>
+                <CardTitle>{t('security')}</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <form onSubmit={handlePasswordChange} className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900">Change Password</h3>
+                <h3 className="text-lg font-medium text-gray-900">{t('changePassword')}</h3>
                 
                 <div>
-                  <Label htmlFor="currentPassword">Current Password</Label>
+                  <Label htmlFor="currentPassword">{t('currentPassword')}</Label>
                   <Input
                     id="currentPassword"
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    placeholder="Enter current password"
+                    placeholder={t('enterCurrentPassword')}
                   />
                 </div>
                 
                 <div>
-                  <Label htmlFor="newPassword">New Password</Label>
+                  <Label htmlFor="newPassword">{t('newPassword')}</Label>
                   <Input
                     id="newPassword"
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter new password"
+                    placeholder={t('enterNewPassword')}
                   />
                 </div>
                 
                 <div>
-                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                  <Label htmlFor="confirmPassword">{t('confirmPassword')}</Label>
                   <Input
                     id="confirmPassword"
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm new password"
+                    placeholder={t('confirmNewPassword')}
                   />
                 </div>
                 
@@ -195,7 +197,7 @@ export default function Settings() {
                   className="bg-whoopspay-blue hover:bg-whoopspay-darkblue text-white"
                   disabled={changePasswordMutation.isPending || !currentPassword || !newPassword || !confirmPassword}
                 >
-                  Update Password
+{t('updatePassword')}
                 </Button>
               </form>
             </CardContent>
