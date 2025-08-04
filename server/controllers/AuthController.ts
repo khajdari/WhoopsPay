@@ -35,14 +35,8 @@ export class AuthController {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      // Store user in session
-      (req as any).session.user = {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        isAdmin: user.isAdmin
-      };
+      // Store user in session (using the same format as localAuth.ts)
+      (req as any).session.userId = user.id;
 
       res.json({
         message: "Login successful",
@@ -84,13 +78,13 @@ export class AuthController {
    */
   static async getCurrentUser(req: Request, res: Response) {
     try {
-      const sessionUser = (req as any).session?.user;
-      if (!sessionUser) {
+      const userId = (req as any).session?.userId;
+      if (!userId) {
         return res.status(401).json({ message: "Unauthorized - Please log in" });
       }
 
       // Get fresh user data from storage
-      const user = await storage.getUser(sessionUser.id);
+      const user = await storage.getUser(userId);
       if (!user) {
         return res.status(401).json({ message: "User not found" });
       }
