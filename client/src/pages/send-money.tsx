@@ -30,7 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { ArrowLeft, Send, DollarSign, CreditCard, Banknote } from "lucide-react";
+import { ArrowLeft, Send, HandCoins, CreditCard, Banknote } from "lucide-react";
 import { useLocation } from "wouter";
 import type { PaymentMethod } from "@shared/schema";
 import { useNotifications } from "@/hooks/useNotifications";
@@ -302,7 +302,7 @@ export default function SendMoney() {
               {t('sendMoney.send')}
             </TabsTrigger>
             <TabsTrigger value="request" className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4" />
+              <HandCoins className="w-4 h-4" />
               {t('sendMoney.request')}
             </TabsTrigger>
             <TabsTrigger value="add" className="flex items-center gap-2">
