@@ -229,6 +229,16 @@ interface Translations {
   administration: TranslationKey;
   issueReports: TranslationKey;
   
+  // Administration panel specific
+  administrationPanel: TranslationKey;
+  systemMonitoringApi: TranslationKey;
+  sensitiveInfoWarning: TranslationKey;
+  apiDocumentation: TranslationKey;
+  expressLogs: TranslationKey;
+  databaseLogs: TranslationKey;
+  dbManagement: TranslationKey;
+  apiDocumentationSwagger: TranslationKey;
+  
   // Landing page
   signIn: TranslationKey;
   getStarted: TranslationKey;
@@ -868,6 +878,40 @@ const translations: Translations = {
   issueReports: {
     'en-GB': 'Issue Reports',
     'el-GR': 'Αναφορές Προβλημάτων'
+  },
+  
+  // Administration panel specific
+  administrationPanel: {
+    'en-GB': 'Administration Panel',
+    'el-GR': 'Πάνελ Διαχείρισης'
+  },
+  systemMonitoringApi: {
+    'en-GB': 'System monitoring and API documentation',
+    'el-GR': 'Παρακολούθηση συστήματος και τεκμηρίωση API'
+  },
+  sensitiveInfoWarning: {
+    'en-GB': 'Warning: This panel contains sensitive system information and API documentation. Access is logged and monitored.',
+    'el-GR': 'Προειδοποίηση: Αυτό το πάνελ περιέχει ευαίσθητες πληροφορίες συστήματος και τεκμηρίωση API. Η πρόσβαση καταγράφεται και παρακολουθείται.'
+  },
+  apiDocumentation: {
+    'en-GB': 'API Documentation',
+    'el-GR': 'Τεκμηρίωση API'
+  },
+  expressLogs: {
+    'en-GB': 'Express Logs',
+    'el-GR': 'Αρχεία Express'
+  },
+  databaseLogs: {
+    'en-GB': 'Database Logs',
+    'el-GR': 'Αρχεία Βάσης Δεδομένων'
+  },
+  dbManagement: {
+    'en-GB': 'DB Management',
+    'el-GR': 'Διαχείριση ΒΔ'
+  },
+  apiDocumentationSwagger: {
+    'en-GB': 'API Documentation (Swagger UI)',
+    'el-GR': 'Τεκμηρίωση API (Swagger UI)'
   },
 
   // Messages
