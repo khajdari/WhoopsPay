@@ -136,8 +136,8 @@ export default function Administration() {
           <div className="flex items-center gap-3 mb-4">
             <Shield className="h-8 w-8 text-red-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Administration Panel</h1>
-              <p className="text-gray-600">System monitoring and API documentation</p>
+              <h1 className="text-3xl font-bold text-gray-900">{t('administrationPanel')}</h1>
+              <p className="text-gray-600">{t('systemMonitoringApi')}</p>
             </div>
             <Badge variant="destructive" className="ml-auto">Admin Only</Badge>
           </div>
@@ -145,7 +145,7 @@ export default function Administration() {
           <Alert className="border-amber-200 bg-amber-50">
             <AlertTriangle className="h-4 w-4 text-amber-600" />
             <AlertDescription className="text-amber-700">
-              <strong>Warning:</strong> This panel contains sensitive system information and API documentation. Access is logged and monitored.
+              {t('sensitiveInfoWarning')}
             </AlertDescription>
           </Alert>
         </div>
@@ -155,19 +155,19 @@ export default function Administration() {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="swagger" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
-              API Documentation
+              {t('apiDocumentation')}
             </TabsTrigger>
             <TabsTrigger value="express" className="flex items-center gap-2">
               <Settings className="w-4 h-4" />
-              Express Logs
+              {t('expressLogs')}
             </TabsTrigger>
             <TabsTrigger value="database" className="flex items-center gap-2">
               <Database className="w-4 h-4" />
-              Database Logs
+              {t('databaseLogs')}
             </TabsTrigger>
             <TabsTrigger value="db-management" className="flex items-center gap-2">
               <Database className="w-4 h-4" />
-              DB Management
+              {t('dbManagement')}
             </TabsTrigger>
           </TabsList>
 
@@ -177,7 +177,7 @@ export default function Administration() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="w-5 h-5" />
-                  API Documentation (Swagger UI)
+                  {t('apiDocumentationSwagger')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
