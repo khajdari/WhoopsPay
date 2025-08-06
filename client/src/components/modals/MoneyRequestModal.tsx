@@ -138,7 +138,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
         label: "Off-Us Payment Request",
         bgColor: "bg-orange-50",
         borderColor: "border-orange-200",
-        badgeColor: "bg-orange-600 text-white"
+        badgeColor: "bg-orange-100 text-orange-800"
       };
     }
     return {
@@ -146,7 +146,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
       label: "On-Us Money Request",
       bgColor: "bg-blue-50", 
       borderColor: "border-blue-200",
-      badgeColor: "bg-blue-600 text-white"
+      badgeColor: "bg-blue-100 text-blue-800"
     };
   };
 
@@ -177,8 +177,10 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
           </div>
 
           {/* Amount */}
-          <div className={`p-4 rounded-lg text-white ${
-            (request.isExternal || request.type === 'external') ? 'bg-orange-600' : 'bg-blue-600'
+          <div className={`p-4 rounded-lg ${
+            (request.isExternal || request.type === 'external') 
+              ? 'bg-orange-100 text-orange-800' 
+              : 'bg-blue-100 text-blue-800'
           }`}>
             <div className="flex items-center justify-center">
               <span className="text-2xl font-bold">
