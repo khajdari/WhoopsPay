@@ -160,7 +160,7 @@ export function ExternalPaymentModal({ isOpen, onClose, paymentData }: ExternalP
                 <div className="flex justify-between">
                   <span className="text-gray-600">Amount:</span>
                   <span className="font-semibold text-2xl text-gray-900">
-                    ${paymentData.amount}
+                    ¤{paymentData.amount}
                   </span>
                 </div>
                 
@@ -203,7 +203,7 @@ export function ExternalPaymentModal({ isOpen, onClose, paymentData }: ExternalP
               ) : (
                 <div className="flex items-center space-x-2">
                   <Check className="h-5 w-5" />
-                  <span>Approve Payment - ${paymentData.amount}</span>
+                  <span>Approve Payment - ¤{paymentData.amount}</span>
                 </div>
               )}
             </Button>

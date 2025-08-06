@@ -56,7 +56,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
       } else {
         toast({
           title: "Payment Approved!",
-          description: `Payment of $${request.amount} has been processed successfully.`,
+          description: `Payment of ¤${request.amount} has been processed successfully.`,
           className: "bg-blue-50 border-blue-600 text-blue-800",
         });
         onClose();
@@ -182,7 +182,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
             <div className="flex items-center justify-center gap-2">
               <DollarSign className="w-6 h-6" />
               <span className="text-2xl font-bold">
-                ${request.amount?.toFixed(2)}
+                ¤{request.amount?.toFixed(2)}
               </span>
             </div>
           </div>

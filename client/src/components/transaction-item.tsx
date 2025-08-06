@@ -55,7 +55,7 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
   
   const isOutgoing = transaction.fromUserId === user?.id;
   const amount = parseFloat(transaction.amount);
-  const formattedAmount = `${isOutgoing ? '-' : '+'}$${Math.abs(amount).toFixed(2)}`;
+  const formattedAmount = `${isOutgoing ? '-' : '+'}¤${Math.abs(amount).toFixed(2)}`;
   
   const getTransactionIcon = () => {
     if (transaction.description?.toLowerCase().includes('amazon') || 
