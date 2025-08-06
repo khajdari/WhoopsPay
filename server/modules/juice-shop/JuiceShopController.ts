@@ -225,7 +225,8 @@ export class JuiceShopController {
    */
   static async getBasketItems(req: Request, res: Response) {
     try {
-      const sessionId = req.sessionID || 'default';
+      // Use the same global basket for demo consistency
+      const sessionId = 'global-demo-basket';
       const basketItems = baskets[sessionId] || [];
 
       // Transform items to include product details
@@ -262,7 +263,8 @@ export class JuiceShopController {
   static async addToBasket(req: Request, res: Response) {
     try {
       const { ProductId, quantity = 1 } = req.body;
-      const sessionId = req.sessionID || 'default';
+      // Use a more reliable session approach for demo - use a global basket since session might not work consistently
+      const sessionId = 'global-demo-basket';
       
       if (!ProductId) {
         return res.status(400).json({
@@ -308,7 +310,7 @@ export class JuiceShopController {
   static async removeFromBasket(req: Request, res: Response) {
     try {
       const { itemId } = req.params;
-      const sessionId = req.sessionID || 'default';
+      const sessionId = 'global-demo-basket';
 
       if (!baskets[sessionId]) {
         return res.status(404).json({
@@ -339,7 +341,7 @@ export class JuiceShopController {
   static async checkout(req: Request, res: Response) {
     try {
       const { paymentMethod } = req.body;
-      const sessionId = req.sessionID || 'default';
+      const sessionId = 'global-demo-basket';
       const basketItems = baskets[sessionId] || [];
 
       if (basketItems.length === 0) {
