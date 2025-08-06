@@ -13,7 +13,6 @@ import {
   Loader2, 
   ExternalLink, 
   User, 
-  Coins, 
   Clock,
   FileText,
   Globe,
@@ -133,10 +132,10 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
   };
 
   const getRequestTypeInfo = () => {
-    if (request.isExternal) {
+    if (request.isExternal || request.type === 'external') {
       return {
         icon: <ExternalLink className="w-5 h-5 text-blue-600" />,
-        label: "External Payment Request",
+        label: "Off-Us Payment Request",
         bgColor: "bg-blue-50",
         borderColor: "border-blue-200",
         badgeColor: "bg-blue-600 text-white"
@@ -144,7 +143,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
     }
     return {
       icon: <User className="w-5 h-5 text-blue-600" />,
-      label: "Internal Money Request",
+      label: "On-Us Money Request",
       bgColor: "bg-blue-50", 
       borderColor: "border-blue-200",
       badgeColor: "bg-blue-100 text-blue-800"
@@ -179,8 +178,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
 
           {/* Amount */}
           <div className="p-4 rounded-lg bg-blue-600 text-white">
-            <div className="flex items-center justify-center gap-2">
-              <Coins className="w-6 h-6" />
+            <div className="flex items-center justify-center">
               <span className="text-2xl font-bold">
                 ¤{request.amount?.toFixed(2)}
               </span>
