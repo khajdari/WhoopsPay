@@ -255,7 +255,7 @@ export default function Dashboard() {
 
   // Pending requests data for regular users
   const { data: pendingRequests, isLoading: pendingRequestsLoading } = useQuery({
-    queryKey: ["/api/pending-requests", user?.id],
+    queryKey: ["/api/pending-requests"],
     enabled: !!user && (user as any)?.isAdmin !== 1,
   });
 

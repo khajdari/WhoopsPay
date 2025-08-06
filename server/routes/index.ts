@@ -400,7 +400,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // MONEY REQUEST ROUTES (External Payments)
   // ============================================================================
   
-  app.get('/api/pending-requests', MoneyRequestController.getPendingRequests);
+  app.get('/api/pending-requests', isAuthenticated, MoneyRequestController.getPendingRequests);
   app.post('/api/requests/:requestId/approve', MoneyRequestController.approveRequest);
   app.post('/api/requests/:requestId/reject', MoneyRequestController.rejectRequest);
   app.post('/api/external-payment-request', MoneyRequestController.createExternalRequest);
