@@ -11,8 +11,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import { 
   Database, 
-  Play, 
-  Download, 
   RefreshCw, 
   Plus, 
   Edit, 
@@ -33,20 +31,13 @@ interface TableInfo {
   rowCount: number;
 }
 
-interface QueryResult {
-  columns: string[];
-  rows: any[][];
-  rowsAffected?: number;
-  error?: string;
-}
+
 
 export function DatabaseManagement() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
-  const [sqlQuery, setSqlQuery] = useState("SELECT * FROM users LIMIT 10;");
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
-  const [queryResult, setQueryResult] = useState<QueryResult | null>(null);
   const [editingRow, setEditingRow] = useState<number | null>(null);
   const [editingData, setEditingData] = useState<any[]>([]);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -69,41 +60,12 @@ export function DatabaseManagement() {
     retry: false,
   });
 
-  // Execute SQL query mutation
-  const executeQueryMutation = useMutation({
-    mutationFn: async (query: string) => {
-      return await apiRequest('/api/admin/database/execute', 'POST', { query });
-    },
-    onSuccess: (data) => {
-      setQueryResult(data);
-      if (sqlQuery.toLowerCase().includes('create') || sqlQuery.toLowerCase().includes('drop')) {
-        refetchTables();
-      }
-    },
-    onError: (error: any) => {
-      setQueryResult({
-        columns: ['error'],
-        rows: [[error.message || 'Query execution failed']],
-        error: error.message || 'Query execution failed'
-      });
-    },
-  });
 
-  const handleExecuteQuery = () => {
-    if (!sqlQuery.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a SQL query",
-        variant: "destructive",
-      });
-      return;
-    }
-    executeQueryMutation.mutate(sqlQuery);
-  };
+
+
 
   const handleTableSelect = (tableName: string) => {
     setSelectedTable(tableName);
-    setSqlQuery(`SELECT * FROM ${tableName} LIMIT 50;`);
   };
 
   const handleEditRow = (rowIndex: number, rowData: any[]) => {
@@ -512,89 +474,7 @@ export function DatabaseManagement() {
         </div>
       </div>
 
-      {/* SQL Query Executor */}
-      <Card className="border-gray-200">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Play className="w-5 h-5" />
-            SQL Query Executor
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Textarea
-            placeholder="Enter your SQL query here..."
-            value={sqlQuery}
-            onChange={(e) => setSqlQuery(e.target.value)}
-            className="font-mono text-sm min-h-32"
-          />
-          
-          <div className="flex gap-2">
-            <Button
-              onClick={handleExecuteQuery}
-              disabled={executeQueryMutation.isPending}
-            >
-              <Play className="h-4 w-4 mr-2" />
-              Execute Query
-            </Button>
-            {queryResult && !queryResult.error && (
-              <Button
-                variant="outline"
-                onClick={exportQueryResults}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Export Results
-              </Button>
-            )}
-          </div>
 
-          {/* Query Results */}
-          {queryResult && (
-            <div className="border rounded p-4 bg-gray-50">
-              {queryResult.error ? (
-                <div className="text-red-600 font-mono text-sm">
-                  Error: {queryResult.error}
-                </div>
-              ) : (
-                <div>
-                  {queryResult.rowsAffected !== undefined ? (
-                    <div className="text-green-600 font-medium">
-                      Query executed successfully. {queryResult.rowsAffected} rows affected.
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="text-green-600 font-medium mb-2">
-                        Query executed successfully. {queryResult.rows?.length || 0} rows returned.
-                      </div>
-                      {queryResult.columns && queryResult.rows && (
-                        <ScrollArea className="h-64">
-                          <div className="border rounded bg-white">
-                            <div className="grid bg-gray-100 border-b" style={{ gridTemplateColumns: `repeat(${queryResult.columns.length}, minmax(120px, 1fr))` }}>
-                              {queryResult.columns.map((col: any, idx: number) => (
-                                <div key={idx} className="p-2 font-medium border-r last:border-r-0">
-                                  {col}
-                                </div>
-                              ))}
-                            </div>
-                            {queryResult.rows.map((row: any, rowIdx: number) => (
-                              <div key={rowIdx} className="grid border-b last:border-b-0" style={{ gridTemplateColumns: `repeat(${queryResult.columns.length}, minmax(120px, 1fr))` }}>
-                                {row.map((cell: any, cellIdx: number) => (
-                                  <div key={cellIdx} className="p-2 border-r last:border-r-0 text-sm">
-                                    <div className="truncate">{String(cell)}</div>
-                                  </div>
-                                ))}
-                              </div>
-                            ))}
-                          </div>
-                        </ScrollArea>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Add Row Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
