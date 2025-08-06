@@ -103,12 +103,13 @@ export class UserController {
    */
   static async getUserNotifications(req: Request, res: Response) {
     try {
-      const sessionUser = (req as any).session?.user;
-      if (!sessionUser) {
+      // Use the user set by isAuthenticated middleware
+      const user = (req as any).user;
+      if (!user) {
         return res.status(401).json({ message: "Unauthorized - Please log in" });
       }
 
-      const notifications = await storage.getUserNotifications(sessionUser.id);
+      const notifications = await storage.getUserNotifications(user.id);
       res.json(notifications);
     } catch (error) {
       console.error("Error fetching notifications:", error);
@@ -122,9 +123,10 @@ export class UserController {
   static async markNotificationRead(req: Request, res: Response) {
     try {
       const { notificationId } = req.params;
-      const sessionUser = (req as any).session?.user;
+      // Use the user set by isAuthenticated middleware
+      const user = (req as any).user;
       
-      if (!sessionUser) {
+      if (!user) {
         return res.status(401).json({ message: "Unauthorized - Please log in" });
       }
 
@@ -143,12 +145,13 @@ export class UserController {
    */
   static async getUserPaymentMethods(req: Request, res: Response) {
     try {
-      const sessionUser = (req as any).session?.user;
-      if (!sessionUser) {
+      // Use the user set by isAuthenticated middleware
+      const user = (req as any).user;
+      if (!user) {
         return res.status(401).json({ message: "Unauthorized - Please log in" });
       }
 
-      const paymentMethods = await storage.getUserPaymentMethods(sessionUser.id);
+      const paymentMethods = await storage.getUserPaymentMethods(user.id);
       res.json(paymentMethods);
     } catch (error) {
       console.error("Error fetching payment methods:", error);
