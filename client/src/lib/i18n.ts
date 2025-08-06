@@ -1391,12 +1391,12 @@ const translations: Translations = {
     'el-GR': 'Ληφθείσες'
   },
   'transactions.onus': {
-    'en-GB': 'ONUS',
-    'el-GR': 'Εσωτερική'
+    'en-GB': 'On-Us',
+    'el-GR': 'On-Us'
   },
   'transactions.offus': {
-    'en-GB': 'OFFUS',
-    'el-GR': 'Εξωτερική'
+    'en-GB': 'Off-Us',
+    'el-GR': 'Off-Us'
   },
   'transactions.searchPlaceholder': {
     'en-GB': 'Search: @user for users, numbers for amounts, text for types...',
