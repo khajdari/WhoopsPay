@@ -277,11 +277,11 @@ export default function Profile() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <Label className="text-sm font-medium text-gray-500">User ID</Label>
+                  <Label className="text-sm font-medium text-gray-500">{t('userId')}</Label>
                   <p className="mt-1 text-sm text-gray-900">{user?.id}</p>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-gray-500">Account Created</Label>
+                  <Label className="text-sm font-medium text-gray-500">{t('accountCreated')}</Label>
                   <p className="mt-1 text-sm text-gray-900">
                     {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
                   </p>
