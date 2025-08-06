@@ -280,30 +280,31 @@
         .whoopspay-logo {
             width: 16px;
             height: 12px;
-            background: #3b82f6;
+            border: 2px solid #3b82f6;
             border-radius: 2px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            background: transparent;
         }
         
         .whoopspay-logo::before {
             content: '';
             position: absolute;
-            width: 10px;
+            width: 8px;
             height: 1px;
-            background: white;
-            top: 3px;
+            background: #3b82f6;
+            top: 2px;
         }
         
         .whoopspay-logo::after {
             content: '';
             position: absolute;
-            width: 10px;
+            width: 6px;
             height: 1px;
-            background: white;
-            bottom: 3px;
+            background: #3b82f6;
+            bottom: 2px;
         }
         
         .total {
