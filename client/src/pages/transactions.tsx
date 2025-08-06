@@ -226,7 +226,7 @@ export default function Transactions() {
         {/* Transactions List */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Transactions</CardTitle>
+            <CardTitle>{t('transactions.title')}</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             {isLoading ? (
