@@ -28,6 +28,8 @@ import { apiRequest } from "@/lib/queryClient";
 import { ArrowLeft, Shield } from "lucide-react";
 import { useLocation } from "wouter";
 import { useI18n } from "@/lib/i18n";
+import { Footer } from "@/components/footer";
+import { MobileNav } from "@/components/mobile-nav";
 
 /**
  * Settings Component - User account settings management interface
@@ -204,6 +206,9 @@ export default function Settings() {
           </Card>
         </div>
       </main>
+
+      <MobileNav />
+      <Footer />
     </div>
   );
 }
