@@ -72,7 +72,7 @@ export function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-6 lg:space-x-8 ml-8 lg:ml-12 flex-1 justify-center">
+          <nav className="hidden md:flex space-x-6 lg:space-x-8 ml-8 lg:ml-12">
             {navigation.map((item) => (
               <Link key={item.name} href={item.href}>
                 <span
@@ -89,7 +89,7 @@ export function Header() {
           </nav>
 
           {/* User Profile */}
-          <div className="flex items-center space-x-3 lg:space-x-4">
+          <div className="flex items-center space-x-3 lg:space-x-4 ml-6 lg:ml-8">
             {/* Language Selector */}
             <LanguageSelector />
             
