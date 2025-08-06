@@ -123,7 +123,7 @@ export function RedirectHandler() {
                 {amount && (
                   <div className="flex justify-between items-center">
                     <span className="text-gray-300 font-medium">Amount:</span>
-                    <span className="text-yellow-400 font-bold text-xl">${amount}</span>
+                    <span className="text-yellow-400 font-bold text-xl">¤{amount}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center">

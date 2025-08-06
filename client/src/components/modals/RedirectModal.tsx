@@ -87,7 +87,7 @@ export function RedirectModal({
           {/* Amount Display */}
           <div className="bg-blue-600 text-white p-4 rounded-lg text-center">
             <div className="text-2xl font-bold">
-              $ {orderInfo.amount.toFixed(2)}
+              ¤ {orderInfo.amount.toFixed(2)}
             </div>
           </div>
 

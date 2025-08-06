@@ -114,7 +114,7 @@ export function useNotifications() {
       ? {
           type: "payment",
           title: "Payment Sent",
-          message: `You sent $${amount} to ${otherUser}`,
+          message: `You sent ¤${amount} to ${otherUser}`,
           time: "Just now",
           read: false,
           icon: DollarSign,
@@ -123,7 +123,7 @@ export function useNotifications() {
       : {
           type: "payment", 
           title: "Payment Received",
-          message: `You received $${amount} from ${otherUser}`,
+          message: `You received ¤${amount} from ${otherUser}`,
           time: "Just now",
           read: false,
           icon: DollarSign,
