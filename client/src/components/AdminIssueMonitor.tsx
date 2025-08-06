@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useI18n } from "@/lib/i18n";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -53,6 +54,7 @@ export function AdminIssueMonitor() {
   const [adminNotes, setAdminNotes] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
   const { toast } = useToast();
+  const { t } = useI18n();
   const queryClient = useQueryClient();
 
   const { data: issues = [], isLoading } = useQuery({
@@ -193,20 +195,20 @@ export function AdminIssueMonitor() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5" />
-          Issue Reports Monitor
+          {t('issueReportsMonitor')}
         </CardTitle>
         <CardDescription>
-          Monitor and manage user-submitted issue reports
+          {t('monitorManageIssueReports')}
         </CardDescription>
         
         {/* Filters */}
         <div className="flex flex-wrap gap-2 pt-4">
           <Select value={selectedStatus} onValueChange={setSelectedStatus}>
             <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="All Status" />
+              <SelectValue placeholder={t('allStatus')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="all">{t('allStatus')}</SelectItem>
               <SelectItem value="open">Open</SelectItem>
               <SelectItem value="in_progress">In Progress</SelectItem>
               <SelectItem value="resolved">Resolved</SelectItem>
@@ -216,10 +218,10 @@ export function AdminIssueMonitor() {
 
           <Select value={selectedPriority} onValueChange={setSelectedPriority}>
             <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="All Priority" />
+              <SelectValue placeholder={t('allPriority')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Priority</SelectItem>
+              <SelectItem value="all">{t('allPriority')}</SelectItem>
               <SelectItem value="critical">Critical</SelectItem>
               <SelectItem value="high">High</SelectItem>
               <SelectItem value="medium">Medium</SelectItem>
@@ -229,10 +231,10 @@ export function AdminIssueMonitor() {
 
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="All Categories" />
+              <SelectValue placeholder={t('allCategories')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">{t('allCategories')}</SelectItem>
               <SelectItem value="technical">Technical</SelectItem>
               <SelectItem value="payment">Payment</SelectItem>
               <SelectItem value="security">Security</SelectItem>
@@ -246,7 +248,7 @@ export function AdminIssueMonitor() {
         {filteredIssues.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>No issue reports found matching the current filters.</p>
+            <p>{t('noIssueReportsFound')}</p>
           </div>
         ) : (
           <ScrollArea className="h-[600px]">

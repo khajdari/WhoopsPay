@@ -239,6 +239,14 @@ interface Translations {
   dbManagement: TranslationKey;
   apiDocumentationSwagger: TranslationKey;
   
+  // Issue reporting page
+  issueReportsMonitor: TranslationKey;
+  monitorManageIssueReports: TranslationKey;
+  allStatus: TranslationKey;
+  allPriority: TranslationKey;
+  allCategories: TranslationKey;
+  noIssueReportsFound: TranslationKey;
+  
   // Landing page
   signIn: TranslationKey;
   getStarted: TranslationKey;
@@ -912,6 +920,32 @@ const translations: Translations = {
   apiDocumentationSwagger: {
     'en-GB': 'API Documentation (Swagger UI)',
     'el-GR': 'Τεκμηρίωση API (Swagger UI)'
+  },
+  
+  // Issue reporting page
+  issueReportsMonitor: {
+    'en-GB': 'Issue Reports Monitor',
+    'el-GR': 'Παρακολούθηση Αναφορών Προβλημάτων'
+  },
+  monitorManageIssueReports: {
+    'en-GB': 'Monitor and manage user-submitted issue reports',
+    'el-GR': 'Παρακολούθηση και διαχείριση αναφορών προβλημάτων χρηστών'
+  },
+  allStatus: {
+    'en-GB': 'All Status',
+    'el-GR': 'Όλες οι Καταστάσεις'
+  },
+  allPriority: {
+    'en-GB': 'All Priority',
+    'el-GR': 'Όλες οι Προτεραιότητες'
+  },
+  allCategories: {
+    'en-GB': 'All Categories',
+    'el-GR': 'Όλες οι Κατηγορίες'
+  },
+  noIssueReportsFound: {
+    'en-GB': 'No issue reports found matching the current filters',
+    'el-GR': 'Δεν βρέθηκαν αναφορές προβλημάτων που να ταιριάζουν με τα τρέχοντα φίλτρα'
   },
 
   // Messages
