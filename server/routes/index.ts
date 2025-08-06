@@ -48,6 +48,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
           description: 'Development server',
         },
       ],
+      components: {
+        securitySchemes: {
+          sessionAuth: {
+            type: 'apiKey',
+            in: 'cookie',
+            name: 'connect.sid',
+            description: 'Session-based authentication'
+          }
+        }
+      }
     },
     apis: ['./server/routes/*.ts', './server/controllers/*.ts'], // paths to files containing OpenAPI definitions
   };
@@ -59,8 +69,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AUTHENTICATION ROUTES
   // ============================================================================
   
+  /**
+   * @swagger
+   * /api/login:
+   *   post:
+   *     summary: User login
+   *     description: Authenticate user with email and password
+   *     tags: [Authentication]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Login successful
+   *       401:
+   *         description: Invalid credentials
+   */
   app.post('/api/login', AuthController.login);
+  
+  /**
+   * @swagger
+   * /api/logout:
+   *   post:
+   *     summary: User logout
+   *     description: Logout current user and destroy session
+   *     tags: [Authentication]
+   *     responses:
+   *       200:
+   *         description: Logout successful
+   */
   app.post('/api/logout', AuthController.logout);
+  
+  /**
+   * @swagger
+   * /api/auth/user:
+   *   get:
+   *     summary: Get current user
+   *     description: Get information about the currently authenticated user
+   *     tags: [Authentication]
+   *     security:
+   *       - sessionAuth: []
+   *     responses:
+   *       200:
+   *         description: User information
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *                 email:
+   *                   type: string
+   *                 firstName:
+   *                   type: string
+   *                 lastName:
+   *                   type: string
+   *                 balance:
+   *                   type: number
+   *                 isAdmin:
+   *                   type: boolean
+   *       401:
+   *         description: Not authenticated
+   */
   app.get('/api/auth/user', isAuthenticated, (req, res) => {
     // Use the user set by isAuthenticated middleware
     const user = (req as any).user;
@@ -78,19 +157,238 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // USER ROUTES
   // ============================================================================
   
+  /**
+   * @swagger
+   * /api/users/{userId}/profile:
+   *   get:
+   *     summary: Get user profile
+   *     description: Get profile information for a specific user
+   *     tags: [Users]
+   *     parameters:
+   *       - in: path
+   *         name: userId
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: User ID
+   *     responses:
+   *       200:
+   *         description: User profile data
+   *       404:
+   *         description: User not found
+   */
   app.get('/api/users/:userId/profile', UserController.getUserProfile);
+  
+  /**
+   * @swagger
+   * /api/users/{userId}/profile:
+   *   patch:
+   *     summary: Update user profile
+   *     description: Update profile information for a specific user
+   *     tags: [Users]
+   *     parameters:
+   *       - in: path
+   *         name: userId
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: User ID
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               firstName:
+   *                 type: string
+   *               lastName:
+   *                 type: string
+   *               email:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Profile updated successfully
+   *       404:
+   *         description: User not found
+   */
   app.patch('/api/users/:userId/profile', UserController.updateUserProfile);
+  
+  /**
+   * @swagger
+   * /api/test-accounts:
+   *   get:
+   *     summary: Get test accounts
+   *     description: Get list of available test accounts for demonstration
+   *     tags: [Users]
+   *     responses:
+   *       200:
+   *         description: List of test accounts
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 type: object
+   *                 properties:
+   *                   id:
+   *                     type: string
+   *                   email:
+   *                     type: string
+   *                   firstName:
+   *                     type: string
+   *                   lastName:
+   *                     type: string
+   */
   app.get('/api/test-accounts', UserController.getTestAccounts);
+  
+  /**
+   * @swagger
+   * /api/payments:
+   *   get:
+   *     summary: Get user payment methods
+   *     description: Get payment methods for the authenticated user
+   *     tags: [Payments]
+   *     security:
+   *       - sessionAuth: []
+   *     responses:
+   *       200:
+   *         description: List of payment methods
+   *       401:
+   *         description: Not authenticated
+   */
   app.get('/api/payments', isAuthenticated, UserController.getUserPaymentMethods);
 
   // ============================================================================
   // TRANSACTION ROUTES
   // ============================================================================
   
+  /**
+   * @swagger
+   * /api/transactions:
+   *   post:
+   *     summary: Create transaction
+   *     description: Create a new transaction between users
+   *     tags: [Transactions]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               fromUserId:
+   *                 type: string
+   *               toUserId:
+   *                 type: string
+   *               amount:
+   *                 type: number
+   *               description:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Transaction created successfully
+   *       400:
+   *         description: Invalid transaction data
+   */
   app.post('/api/transactions', TransactionController.createTransaction);
+  
+  /**
+   * @swagger
+   * /api/transactions:
+   *   get:
+   *     summary: Get all transactions
+   *     description: Retrieve all transactions (with potential security vulnerabilities)
+   *     tags: [Transactions]
+   *     responses:
+   *       200:
+   *         description: List of transactions
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 type: object
+   *                 properties:
+   *                   id:
+   *                     type: integer
+   *                   fromUserId:
+   *                     type: string
+   *                   toUserId:
+   *                     type: string
+   *                   amount:
+   *                     type: number
+   *                   description:
+   *                     type: string
+   *                   status:
+   *                     type: string
+   *                   createdAt:
+   *                     type: string
+   */
   app.get('/api/transactions', TransactionController.getAllTransactions);
+  
+  /**
+   * @swagger
+   * /api/transactions/pending/{userId}:
+   *   get:
+   *     summary: Get pending transactions for user
+   *     description: Get all pending transactions for a specific user
+   *     tags: [Transactions]
+   *     parameters:
+   *       - in: path
+   *         name: userId
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: User ID
+   *     responses:
+   *       200:
+   *         description: List of pending transactions
+   */
   app.get('/api/transactions/pending/:userId', TransactionController.getPendingTransactions);
+  
+  /**
+   * @swagger
+   * /api/transactions/{transactionId}/approve:
+   *   post:
+   *     summary: Approve transaction
+   *     description: Approve a pending transaction
+   *     tags: [Transactions]
+   *     parameters:
+   *       - in: path
+   *         name: transactionId
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: Transaction ID
+   *     responses:
+   *       200:
+   *         description: Transaction approved successfully
+   *       404:
+   *         description: Transaction not found
+   */
   app.post('/api/transactions/:transactionId/approve', TransactionController.approveTransaction);
+  
+  /**
+   * @swagger
+   * /api/transactions/{transactionId}/reject:
+   *   post:
+   *     summary: Reject transaction
+   *     description: Reject a pending transaction
+   *     tags: [Transactions]
+   *     parameters:
+   *       - in: path
+   *         name: transactionId
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: Transaction ID
+   *     responses:
+   *       200:
+   *         description: Transaction rejected successfully
+   *       404:
+   *         description: Transaction not found
+   */
   app.post('/api/transactions/:transactionId/reject', TransactionController.rejectTransaction);
 
   // ============================================================================
