@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { storage } from '../storage';
+import { logStore } from '../middleware/adminMiddleware';
 
 export class AdminController {
   /**
@@ -176,6 +177,44 @@ export class AdminController {
     } catch (error) {
       console.error("Error fetching system stats:", error);
       res.status(500).json({ message: "Failed to fetch system statistics" });
+    }
+  }
+
+  /**
+   * Get Express server logs
+   */
+  static async getExpressLogs(req: Request, res: Response) {
+    try {
+      const sessionUser = (req as any).session?.user;
+      
+      if (!sessionUser?.isAdmin) {
+        return res.status(403).json({ message: "Access denied - Admin only" });
+      }
+
+      const logs = logStore.getExpressLogs();
+      res.json({ logs });
+    } catch (error) {
+      console.error("Error fetching Express logs:", error);
+      res.status(500).json({ message: "Failed to fetch Express logs" });
+    }
+  }
+
+  /**
+   * Get database logs
+   */
+  static async getDatabaseLogs(req: Request, res: Response) {
+    try {
+      const sessionUser = (req as any).session?.user;
+      
+      if (!sessionUser?.isAdmin) {
+        return res.status(403).json({ message: "Access denied - Admin only" });
+      }
+
+      const logs = logStore.getDbLogs();
+      res.json({ logs });
+    } catch (error) {
+      console.error("Error fetching database logs:", error);
+      res.status(500).json({ message: "Failed to fetch database logs" });
     }
   }
 }
