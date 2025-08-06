@@ -404,6 +404,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/requests/:requestId/approve', MoneyRequestController.approveRequest);
   app.post('/api/requests/:requestId/reject', MoneyRequestController.rejectRequest);
   app.post('/api/external-payment-request', MoneyRequestController.createExternalRequest);
+  app.post('/api/assign-external-request', isAuthenticated, MoneyRequestController.assignExternalRequestToUser);
 
   // ============================================================================
   // NOTIFICATION ROUTES
