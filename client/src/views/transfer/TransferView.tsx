@@ -106,7 +106,7 @@ export function TransferView({
     if (!transferData.amount || transferData.amount <= 0) {
       errors.push('Valid amount is required');
     } else if (transferData.amount > 10000) {
-      errors.push('Amount cannot exceed $10,000');
+      errors.push('Amount cannot exceed ¤10,000');
     }
 
     if (walletBalance && transferData.amount > walletBalance.available) {

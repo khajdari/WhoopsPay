@@ -37,12 +37,10 @@ export function PaymentRequestCard({
   const isExternal = !!(request.isExternal || request.source);
   const source = request.source || 'External';
   
-  const formatAmount = (amount: string, currency = "USD"): string => {
+  const formatAmount = (amount: string, currency = "GCU"): string => {
     const numAmount = parseFloat(amount);
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-    }).format(numAmount);
+    // Use generic currency symbol instead of specific currency
+    return `¤${numAmount.toFixed(2)}`;
   };
 
   const formatStatus = (status: string): string => {
