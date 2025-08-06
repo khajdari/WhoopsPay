@@ -106,10 +106,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // NOTIFICATION ROUTES
   // ============================================================================
   
-  app.get('/api/notifications', NotificationController.getUserNotifications);
-  app.patch('/api/notifications/:notificationId/read', NotificationController.markNotificationRead);
-  app.delete('/api/notifications/:notificationId', NotificationController.deleteNotification);
-  app.post('/api/notifications', NotificationController.createNotification);
+  app.get('/api/notifications', isAuthenticated, NotificationController.getUserNotifications);
+  app.patch('/api/notifications/:notificationId/read', isAuthenticated, NotificationController.markNotificationRead);
+  app.delete('/api/notifications/:notificationId', isAuthenticated, NotificationController.deleteNotification);
+  app.post('/api/notifications', isAuthenticated, NotificationController.createNotification);
 
   // ============================================================================
   // ADMIN ROUTES
