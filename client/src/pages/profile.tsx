@@ -26,6 +26,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { useToast } from "@/hooks/use-toast";
+import { MobileNav } from "@/components/mobile-nav";
+import { Footer } from "@/components/footer";
 import { apiRequest } from "@/lib/queryClient";
 import { ArrowLeft, Edit2, Save } from "lucide-react";
 import { useLocation } from "wouter";
@@ -270,7 +272,7 @@ export default function Profile() {
           {/* Account Information */}
           <Card>
             <CardHeader>
-              <CardTitle>Account Information</CardTitle>
+              <CardTitle>{t('accountInformation')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -289,6 +291,9 @@ export default function Profile() {
           </Card>
         </div>
       </main>
+
+      <MobileNav />
+      <Footer />
     </div>
   );
 }

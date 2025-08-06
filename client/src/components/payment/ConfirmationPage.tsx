@@ -122,7 +122,7 @@ export function ConfirmationPage({
                   <div className="flex justify-between">
                     <span className="text-gray-300">Amount:</span>
                     <span className={`font-bold text-xl ${isSuccess ? 'text-green-400' : 'text-red-400'}`}>
-                      ${amount}
+                      ¤{amount}
                     </span>
                   </div>
                   

@@ -130,7 +130,7 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
         </div>
         <div className="flex-shrink-0">
           <p className={`text-sm font-semibold ${getTransactionColor()}`}>
-            {isReceived ? '+' : '-'}${transaction.amount.toFixed(2)}
+            {isReceived ? '+' : '-'}¤{transaction.amount.toFixed(2)}
           </p>
         </div>
       </div>

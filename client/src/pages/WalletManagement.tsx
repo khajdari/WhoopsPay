@@ -32,7 +32,7 @@ export default function WalletManagement() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
-  const [showBalance, setShowBalance] = useState(true);
+  const [showBalance, setShowBalance] = useState(false);
   const [showAddCard, setShowAddCard] = useState(false);
   const [showSendMoney, setShowSendMoney] = useState(false);
   const [selectedTab, setSelectedTab] = useState("overview");
@@ -132,10 +132,10 @@ export default function WalletManagement() {
           <div>
             <h1 className="text-3xl font-bold text-yellow-400 flex items-center">
               <Wallet className="w-8 h-8 mr-3" />
-              Wallet Management
+              {t('wallet')}
             </h1>
             <p className="text-gray-400 mt-1">
-              Manage your payment methods and wallet balance
+              {t('manageBalance')}
             </p>
           </div>
           
@@ -145,7 +145,7 @@ export default function WalletManagement() {
               className="bg-yellow-400 hover:bg-yellow-500 text-black font-medium"
             >
               <ArrowUpDown className="w-4 h-4 mr-2" />
-              Send Money
+              {t('sendMoney')}
             </Button>
             
             <Button
@@ -154,7 +154,7 @@ export default function WalletManagement() {
               className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Add Payment Method
+              {t('paymentMethod')}
             </Button>
           </div>
         </div>
@@ -166,7 +166,7 @@ export default function WalletManagement() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <DollarSign className="w-5 h-5" />
-                  <span className="text-sm font-medium opacity-80">Total Balance</span>
+                  <span className="text-sm font-medium opacity-80">{t('balance')}</span>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -183,7 +183,7 @@ export default function WalletManagement() {
                 </div>
                 
                 <div className="text-sm opacity-80">
-                  Available: {showBalance ? WalletService.formatCurrency(balance?.available || 0) : "••••••"}
+                  {t('availableBalance')}: {showBalance ? WalletService.formatCurrency(balance?.available || 0) : "••••••"}
                   {balance?.pending > 0 && (
                     <span className="ml-3">
                       Pending: {showBalance ? WalletService.formatCurrency(balance.pending) : "••••••"}
@@ -214,7 +214,7 @@ export default function WalletManagement() {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">Total Methods</p>
+                  <p className="text-gray-400 text-sm">{t('paymentMethods')}</p>
                   <p className="text-2xl font-bold text-white">{totalMethods}</p>
                 </div>
                 <CreditCard className="w-8 h-8 text-yellow-400" />
