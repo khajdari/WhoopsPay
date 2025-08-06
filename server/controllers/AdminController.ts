@@ -185,9 +185,10 @@ export class AdminController {
    */
   static async getExpressLogs(req: Request, res: Response) {
     try {
-      const sessionUser = (req as any).session?.user;
+      // Get user from request (set by isAuthenticated middleware)
+      const user = (req as any).user;
       
-      if (!sessionUser?.isAdmin) {
+      if (!user?.isAdmin) {
         return res.status(403).json({ message: "Access denied - Admin only" });
       }
 
@@ -204,9 +205,10 @@ export class AdminController {
    */
   static async getDatabaseLogs(req: Request, res: Response) {
     try {
-      const sessionUser = (req as any).session?.user;
+      // Get user from request (set by isAuthenticated middleware)
+      const user = (req as any).user;
       
-      if (!sessionUser?.isAdmin) {
+      if (!user?.isAdmin) {
         return res.status(403).json({ message: "Access denied - Admin only" });
       }
 
