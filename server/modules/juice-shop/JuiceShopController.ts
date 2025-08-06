@@ -402,7 +402,7 @@ export class JuiceShopController {
             status: 'success',
             orderId: orderId,
             requestId: request.id,
-            paymentUrl: URLAdapter.adaptExternalUrl(`/dashboard?highlight=request-${request.id}`),
+            paymentUrl: URLAdapter.adaptExternalUrl('/'),  // Redirect to main WhoopsPay page for login
             message: 'Payment request sent to WhoopsPay'
           });
         } catch (storageError) {

@@ -390,9 +390,10 @@
 
                 if (response.ok) {
                     if (selectedPayment === 'whoopspay') {
-                        showMessage(`Payment request sent to WhoopsPay! Order ID: ${result.orderId}. Check your WhoopsPay dashboard to approve the payment.`, 'success');
+                        showMessage(`Payment request sent to WhoopsPay! Redirecting to WhoopsPay to approve payment...`, 'success');
                         setTimeout(() => {
-                            window.open(result.paymentUrl || 'http://localhost:5000/dashboard', '_blank');
+                            // Redirect to WhoopsPay main page since user needs to login first
+                            window.location.href = result.paymentUrl || window.location.origin;
                         }, 2000);
                     } else {
                         showMessage(`Order completed! Order ID: ${result.orderId}. Total: $${result.total}`, 'success');
