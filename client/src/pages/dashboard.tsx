@@ -572,7 +572,7 @@ export default function Dashboard() {
                     <h3 className="text-lg font-medium text-gray-900">{t('recentActivity')}</h3>
                     <Link href="/transactions">
                       <Button variant="link" className="text-blue-600 hover:text-blue-700 p-0">
-                        See all
+                        {t('seeAll')}
                       </Button>
                     </Link>
                   </div>
