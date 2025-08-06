@@ -75,8 +75,8 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
       toast({
         title: isRequest ? "Money request sent!" : "Money sent successfully!",
         description: isRequest 
-          ? `Request for $${amount} has been sent to ${recipient}` 
-          : `$${amount} has been sent to ${recipient}`,
+          ? `Request for ¤${amount} has been sent to ${recipient}` 
+          : `¤${amount} has been sent to ${recipient}`,
       });
       
       // Add live notification only for direct transfers
@@ -175,7 +175,7 @@ export function SendMoneyModal({ onClose }: SendMoneyModalProps) {
           <div>
             <Label htmlFor="amount">Amount</Label>
             <div className="relative">
-              <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+              <span className="absolute left-3 top-2.5 text-gray-500">¤</span>
               <Input
                 id="amount"
                 type="number"

@@ -153,7 +153,7 @@ export class TransactionController extends BaseController {
       const transactionData = {
         ...data,
         status: 'pending',
-        currency: data.currency || 'USD',
+        currency: data.currency || 'GCU',
         type: data.type || 'transfer',
         createdAt: new Date()
       };
@@ -400,7 +400,7 @@ export class TransactionController extends BaseController {
 
     // Amount validation
     if (data.amount && data.amount > 1000000) {
-      errors.amount = 'Amount cannot exceed $1,000,000';
+      errors.amount = 'Amount cannot exceed ¤1,000,000';
     }
 
     // Self-transaction check
@@ -463,11 +463,11 @@ export class TransactionController extends BaseController {
     // Standard fee calculation
     switch (type) {
       case 'transfer':
-        return Math.max(0.30, amount * 0.029); // 2.9% + $0.30
+        return Math.max(0.30, amount * 0.029); // 2.9% + ¤0.30
       case 'external':
-        return Math.max(0.50, amount * 0.035); // 3.5% + $0.50
+        return Math.max(0.50, amount * 0.035); // 3.5% + ¤0.50
       case 'withdrawal':
-        return Math.max(1.00, amount * 0.01); // 1% minimum $1.00
+        return Math.max(1.00, amount * 0.01); // 1% minimum ¤1.00
       case 'deposit':
         return 0; // No fee for deposits
       default:

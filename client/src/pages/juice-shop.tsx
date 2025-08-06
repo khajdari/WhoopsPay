@@ -74,7 +74,7 @@ export default function JuiceShop() {
     // Create external payment request
     const paymentData = {
       amount: totalAmount.toFixed(2),
-      currency: "USD",
+      currency: "GCU",
       description: "Juice Shop Purchase",
       items: cartItems,
       returnUrl: `${window.location.origin}/juice-shop?status=success`,
@@ -159,7 +159,7 @@ export default function JuiceShop() {
                     Fiber-rich apple pomace is what remains after processing apple juice
                   </p>
                   <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-green-600">$0.89</span>
+                    <span className="text-2xl font-bold text-green-600">¤0.89</span>
                     <Button 
                       onClick={() => updateQuantity(1, cartItems[0]?.quantity + 1 || 1)}
                       className="bg-green-600 hover:bg-green-700"
@@ -178,7 +178,7 @@ export default function JuiceShop() {
                     Fresh carrot juice packed with vitamins
                   </p>
                   <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-gray-400">$2.99</span>
+                    <span className="text-2xl font-bold text-gray-400">¤2.99</span>
                     <Button disabled className="bg-gray-300">
                       Out of Stock
                     </Button>

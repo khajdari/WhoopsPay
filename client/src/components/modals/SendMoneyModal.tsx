@@ -56,7 +56,7 @@ export function SendMoneyModal({ isOpen, onClose, onSuccess, recipientId }: Send
           return "Please enter a valid amount";
         }
         if (amount > 10000) {
-          return "Amount cannot exceed $10,000";
+          return "Amount cannot exceed ¤10,000";
         }
         if (walletBalance && amount > walletBalance.available) {
           return "Insufficient funds";

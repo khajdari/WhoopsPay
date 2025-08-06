@@ -125,7 +125,7 @@ export class ProfileController extends BaseController {
         },
         preferences: this.extractData(preferences) || {
           language: 'en',
-          currency: 'USD',
+          currency: 'GCU',
           notifications: { email: true, sms: false, push: true },
           privacy: { profileVisibility: 'private', transactionVisibility: 'private' }
         },
@@ -383,7 +383,7 @@ export class ProfileController extends BaseController {
 
       return {
         language: 'en',
-        currency: 'USD',
+        currency: 'GCU',
         notifications: { email: true, sms: false, push: true },
         privacy: { profileVisibility: 'private', transactionVisibility: 'private' }
       };
@@ -391,7 +391,7 @@ export class ProfileController extends BaseController {
     } catch (error) {
       return {
         language: 'en',
-        currency: 'USD',
+        currency: 'GCU',
         notifications: { email: true, sms: false, push: true },
         privacy: { profileVisibility: 'private', transactionVisibility: 'private' }
       };

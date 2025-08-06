@@ -72,7 +72,7 @@ export class WalletController extends BaseController {
         current,
         available: current, // In real implementation, subtract holds/reserves
         pending,
-        currency: 'USD',
+        currency: 'GCU',
         lastUpdated: new Date()
       };
 
@@ -298,7 +298,7 @@ export class WalletController extends BaseController {
         fromUserId: 'system',
         toUserId: userId,
         amount: operation.amount,
-        currency: 'USD',
+        currency: 'GCU',
         status: 'pending',
         type: 'deposit',
         description: operation.description || 'Add funds to wallet',
@@ -369,7 +369,7 @@ export class WalletController extends BaseController {
         fromUserId: userId,
         toUserId: 'system',
         amount: operation.amount,
-        currency: 'USD',
+        currency: 'GCU',
         status: 'pending',
         type: 'withdrawal',
         description: operation.description || 'Withdraw funds from wallet',
@@ -540,7 +540,7 @@ export class WalletController extends BaseController {
     }
 
     if (operation.amount > 50000) {
-      errors.amount = 'Amount cannot exceed $50,000';
+      errors.amount = 'Amount cannot exceed ¤50,000';
     }
 
     if (!operation.paymentMethodId) {
@@ -554,12 +554,12 @@ export class WalletController extends BaseController {
   }
 
   private calculateAddFundsFee(amount: number): number {
-    // Standard fee: 2.9% + $0.30
+    // Standard fee: 2.9% + ¤0.30
     return Math.max(0.30, amount * 0.029);
   }
 
   private calculateWithdrawalFee(amount: number): number {
-    // Standard withdrawal fee: 1% minimum $1.00
+    // Standard withdrawal fee: 1% minimum ¤1.00
     return Math.max(1.00, amount * 0.01);
   }
 

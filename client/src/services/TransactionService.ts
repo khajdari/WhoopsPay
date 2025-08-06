@@ -119,12 +119,10 @@ export class TransactionService {
     });
   }
 
-  static formatAmount(amount: string | number, currency = "USD"): string {
+  static formatAmount(amount: string | number, currency = "GCU"): string {
     const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-    }).format(numAmount);
+    // Use generic currency symbol instead of specific currency
+    return `¤${numAmount.toFixed(2)}`;
   }
 
   static formatStatus(status: string): string {

@@ -138,7 +138,7 @@ export class CommonValidation {
         return 'Please enter a valid amount';
       }
       if (amount > 1000000) {
-        return 'Amount cannot exceed $1,000,000';
+        return 'Amount cannot exceed ¤1,000,000';
       }
       return null;
     }
@@ -190,11 +190,9 @@ export class CommonValidation {
 }
 
 export class CurrencyFormatter {
-  static format(amount: number, currency = 'USD'): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-    }).format(amount);
+  static format(amount: number, currency = 'GCU'): string {
+    // Use generic currency symbol instead of specific currency
+    return `¤${amount.toFixed(2)}`;
   }
 
   static parse(value: string): number {

@@ -454,7 +454,7 @@ export class TransactionModel extends BaseModel {
     fromUserId: string,
     toUserId: string,
     amount: number,
-    currency: string = 'USD',
+    currency: string = 'GCU',
     description?: string
   ): TransactionModel {
     return new TransactionModel({
@@ -482,7 +482,7 @@ export class TransactionModel extends BaseModel {
       fromUserId,
       toUserId,
       amount,
-      currency: 'USD',
+      currency: 'GCU',
       status: 'pending',
       type: 'external',
       externalOrderId: orderId,

@@ -244,14 +244,14 @@ export function WalletView({
                 </div>
                 
                 <div className="text-3xl font-bold mb-1">
-                  {showBalance ? (balance ? `$${balance.current.toFixed(2)}` : '$0.00') : '••••••'}
+                  {showBalance ? (balance ? `¤${balance.current.toFixed(2)}` : '¤0.00') : '••••••'}
                 </div>
                 
                 <div className="text-sm opacity-80">
-                  Available: {showBalance ? (balance ? `$${balance.available.toFixed(2)}` : '$0.00') : '••••••'}
+                  Available: {showBalance ? (balance ? `¤${balance.available.toFixed(2)}` : '¤0.00') : '••••••'}
                   {balance && balance.pending > 0 && (
                     <span className="ml-3">
-                      Pending: {showBalance ? `$${balance.pending.toFixed(2)}` : '••••••'}
+                      Pending: {showBalance ? `¤${balance.pending.toFixed(2)}` : '••••••'}
                     </span>
                   )}
                 </div>

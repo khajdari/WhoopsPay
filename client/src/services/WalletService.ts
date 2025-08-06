@@ -79,7 +79,7 @@ export class WalletService {
 
   static async getWalletBalance(userId: string): Promise<WalletBalance> {
     const response = await apiRequest(`/api/wallet/${userId}/balance`, "GET");
-    return response || { current: 0, available: 0, pending: 0, currency: "USD" };
+    return response || { current: 0, available: 0, pending: 0, currency: "GCU" };
   }
 
   static formatPaymentMethod(method: PaymentMethod): string {
@@ -177,20 +177,18 @@ export class WalletService {
     return cleaned.length >= 4 && cleaned.length <= 17;
   }
 
-  static formatCurrency(amount: number, currency = "USD"): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-    }).format(amount);
+  static formatCurrency(amount: number, currency = "GCU"): string {
+    // Use generic currency symbol instead of specific currency
+    return `¤${amount.toFixed(2)}`;
   }
 
   static calculateFees(amount: number, type: 'add' | 'withdraw'): number {
     // Example fee structure
     if (type === 'add') {
-      return Math.max(0.30, amount * 0.029); // 2.9% + $0.30
+      return Math.max(0.30, amount * 0.029); // 2.9% + ¤0.30
     }
     if (type === 'withdraw') {
-      return Math.max(1.00, amount * 0.01); // 1% minimum $1.00
+      return Math.max(1.00, amount * 0.01); // 1% minimum ¤1.00
     }
     return 0;
   }

@@ -121,12 +121,10 @@ export class PaymentService {
     return apiRequest(`/api/external/payment/${transactionId}/status`, "GET");
   }
 
-  static formatAmount(amount: string | number, currency = "USD"): string {
+  static formatAmount(amount: string | number, currency = "GCU"): string {
     const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-    }).format(numAmount);
+    // Use generic currency symbol instead of specific currency
+    return `¤${numAmount.toFixed(2)}`;
   }
 
   static formatStatus(status: string): string {
@@ -180,7 +178,7 @@ export class PaymentService {
   }
 
   static calculateTransactionFee(amount: number): number {
-    // Standard transaction fee: 2.9% + $0.30, minimum $0.50
+    // Standard transaction fee: 2.9% + ¤0.30, minimum ¤0.50
     const percentageFee = amount * 0.029;
     const totalFee = percentageFee + 0.30;
     return Math.max(totalFee, 0.50);
