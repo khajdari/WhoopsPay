@@ -129,7 +129,7 @@ export default function SendMoney() {
     onSuccess: () => {
       toast({
         title: "Request sent successfully!",
-        description: `$${requestAmount} has been requested from ${requestFrom}`,
+        description: `¤${requestAmount} has been requested from ${requestFrom}`,
       });
       // Add live notification for request
       addTransactionNotification('sent', requestAmount, `request from ${requestFrom}`);
@@ -156,7 +156,7 @@ export default function SendMoney() {
     onSuccess: () => {
       toast({
         title: "Money added successfully!",
-        description: `$${addAmount} added to your account`,
+        description: `¤${addAmount} added to your account`,
       });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
       setAddAmount("");
@@ -178,7 +178,7 @@ export default function SendMoney() {
     onSuccess: () => {
       toast({
         title: "Withdrawal initiated!",
-        description: `$${withdrawAmount} withdrawal request submitted`,
+        description: `¤${withdrawAmount} withdrawal request submitted`,
       });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
       setWithdrawAmount("");
