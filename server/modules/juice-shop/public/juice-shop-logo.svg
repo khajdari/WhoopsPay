@@ -1,0 +1,23 @@
+<svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Juice box container -->
+  <g transform="translate(15, 10)">
+    <!-- Main box -->
+    <path d="M10 15 L60 15 L65 20 L65 75 L10 75 Z" fill="#F4CD41"/>
+    <!-- Side panel -->
+    <path d="M60 15 L65 20 L65 75 L60 70 L60 15" fill="#E6B800"/>
+    <!-- Top panel -->
+    <path d="M10 15 L60 15 L65 20 L15 20 Z" fill="#FFE066"/>
+    
+    <!-- Red cap -->
+    <ellipse cx="37" cy="10" rx="8" ry="5" fill="#D32F2F"/>
+    <rect x="29" y="5" width="16" height="8" rx="3" fill="#D32F2F"/>
+    
+    <!-- JS letters -->
+    <text x="20" y="45" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white">J</text>
+    <text x="35" y="60" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white">S</text>
+    
+    <!-- Spill -->
+    <ellipse cx="37" cy="80" rx="15" ry="6" fill="#E74C3C"/>
+    <ellipse cx="32" cy="82" rx="8" ry="3" fill="#C0392B"/>
+  </g>
+</svg>
