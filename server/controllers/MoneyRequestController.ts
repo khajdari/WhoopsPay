@@ -4,13 +4,18 @@ import { URLAdapter } from '../utils/urlAdapter';
 
 export class MoneyRequestController {
   /**
-   * Get all pending external payment requests
-   * VULNERABILITY: No authentication check
+   * Get pending payment requests for the current user
    */
-  static async getPendingRequests(req: Request, res: Response) {
+  static async getPendingRequests(req: any, res: Response) {
     try {
-      // VULNERABLE: No authentication check - returns all pending requests
-      const pendingRequests = await storage.getPendingMoneyRequests("all");
+      const userId = req.user?.id;
+      
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      // Get pending requests specifically for this user
+      const pendingRequests = await storage.getPendingMoneyRequests(userId);
       res.json(pendingRequests);
     } catch (error) {
       console.error("Error fetching pending requests:", error);
