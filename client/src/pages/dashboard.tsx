@@ -19,7 +19,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Send, HandCoins, Plus, University, Wallet, CreditCard, Users, Shield, Activity, AlertTriangle, Clock, Check, X, Loader2, ExternalLink } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -52,6 +52,35 @@ export default function Dashboard() {
     enabled: !!user && (user as any)?.isAdmin === 1,
     refetchInterval: 30000, // Refetch every 30 seconds
   });
+
+  // Handle external payment request assignment when arriving from Juice Shop
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('orderId');
+    
+    if (orderId && user) {
+      // Assign the external payment request to this user
+      fetch('/api/assign-external-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId })
+      }).then(response => {
+        if (response.ok) {
+          toast({
+            title: "External Payment Request",
+            description: "A payment request from Juice Shop has been added to your pending requests.",
+            variant: "default",
+          });
+          // Refresh pending requests to show the new one
+          queryClient.invalidateQueries({ queryKey: ['/api/pending-requests'] });
+          // Clear the orderId from URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      }).catch(error => {
+        console.error('Error assigning external request:', error);
+      });
+    }
+  }, [user, toast]);
 
   // System Failures Count Component
   const SystemFailuresCount = () => {

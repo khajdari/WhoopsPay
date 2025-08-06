@@ -376,34 +376,36 @@ export class JuiceShopController {
       const orderId = `JS-${Date.now()}`;
 
       if (paymentMethod === 'whoopspay') {
-        // Create external payment request in WhoopsPay system
+        // Create external payment request in WhoopsPay system - will be pending until user approves
         try {
+          // Create the money request that will appear in user's pending requests
           const request = await storage.createMoneyRequest({
-            fromUserId: "juice-shop",
-            toUserId: "user", // VULNERABLE: hardcoded user ID
+            fromUserId: "juice-shop",  // External merchant
+            toUserId: "pending-user-selection", // Will be updated when user logs in
             amount: total,
-            description: `Juice Shop Order #${orderId}`,
+            description: `OWASP Juice Shop Order #${orderId} - ${orderItems.map(item => `${item.quantity}x ${item.name}`).join(', ')}`,
             status: "pending",
             type: "external",
             externalOrderId: orderId,
             externalSource: "juice-shop",
-            returnUrl: URLAdapter.adaptExternalUrl('/juice-shop?success=1'),
-            cancelUrl: URLAdapter.adaptExternalUrl('/juice-shop?cancelled=1'),
+            returnUrl: URLAdapter.adaptExternalUrl(`/juice-shop?success=1&orderId=${orderId}`),
+            cancelUrl: URLAdapter.adaptExternalUrl(`/juice-shop?cancelled=1&orderId=${orderId}`),
             externalMetadata: JSON.stringify({
               items: orderItems,
-              merchant: "OWASP Juice Shop"
+              merchant: "OWASP Juice Shop",
+              total: total.toFixed(2)
             })
           });
 
-          // Clear basket
+          // Clear basket after successful order
           delete baskets[sessionId];
 
           res.json({
             status: 'success',
             orderId: orderId,
             requestId: request.id,
-            paymentUrl: URLAdapter.adaptExternalUrl('/'),  // Redirect to main WhoopsPay page for login
-            message: 'Payment request sent to WhoopsPay'
+            paymentUrl: URLAdapter.adaptExternalUrl('/'),  // Redirect to WhoopsPay login
+            message: 'Payment request created - login to WhoopsPay to approve'
           });
         } catch (storageError) {
           console.error("Error creating payment request:", storageError);

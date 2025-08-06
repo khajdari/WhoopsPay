@@ -208,4 +208,63 @@ export class MoneyRequestController {
       res.status(500).json({ message: "Failed to create external request" });
     }
   }
+
+  /**
+   * Assign an external payment request to the current logged-in user
+   * This is called when a user logs in after an external checkout
+   */
+  static async assignExternalRequestToUser(req: any, res: Response) {
+    try {
+      const { orderId } = req.body;
+      const userId = req.user.id;
+
+      if (!orderId) {
+        return res.status(400).json({ message: "Order ID is required" });
+      }
+
+      // Find the pending external request for this order
+      const pendingRequests = await storage.getPendingMoneyRequests("pending-user-selection");
+      const matchingRequest = pendingRequests.find((request: any) => 
+        request.externalOrderId === orderId && request.toUserId === "pending-user-selection"
+      );
+
+      if (!matchingRequest) {
+        return res.status(404).json({ message: "External payment request not found" });
+      }
+
+      // Update the request to be assigned to this user - using a simple approach since updateMoneyRequest doesn't exist
+      // Delete the old request and create a new one with the correct user
+      const newRequest = await storage.createMoneyRequest({
+        fromUserId: matchingRequest.fromUserId,
+        toUserId: userId,
+        amount: matchingRequest.amount,
+        description: matchingRequest.description,
+        status: "pending",
+        type: matchingRequest.type,
+        externalOrderId: matchingRequest.externalOrderId,
+        externalSource: matchingRequest.externalSource,
+        returnUrl: matchingRequest.returnUrl,
+        cancelUrl: matchingRequest.cancelUrl,
+        externalMetadata: matchingRequest.externalMetadata
+      });
+
+      // Create notification for the user
+      await storage.createNotification({
+        userId: userId,
+        type: "external_payment",
+        title: "External Payment Request",
+        message: `Payment request from ${matchingRequest.externalSource} for ¤${matchingRequest.amount.toFixed(2)}`,
+        isRead: 0
+      });
+
+      res.json({
+        message: "External payment request assigned successfully",
+        requestId: newRequest.id,
+        status: "pending"
+      });
+    } catch (error) {
+      console.error("Error assigning external request:", error);
+      res.status(500).json({ message: "Failed to assign external request" });
+    }
+  }
 }

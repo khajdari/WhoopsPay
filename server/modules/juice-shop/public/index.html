@@ -222,6 +222,51 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            margin: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .modal-content h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-content p {
+            margin-bottom: 1.5rem;
+            color: #666;
+        }
+        
+        .countdown {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 1rem 0;
+        }
     </style>
 </head>
 <body>
@@ -255,6 +300,17 @@
         <button class="checkout-btn" onclick="checkout()">Checkout</button>
         
         <div id="message-area"></div>
+    </div>
+
+    <!-- Modal for checkout redirect -->
+    <div id="redirect-modal" class="modal">
+        <div class="modal-content">
+            <h3>Processing Payment Request</h3>
+            <p>Your order has been sent to WhoopsPay for approval.</p>
+            <p>Redirecting to WhoopsPay in:</p>
+            <div class="countdown" id="countdown">3</div>
+            <p>Please login to approve the payment request.</p>
+        </div>
     </div>
 
     <script>
@@ -390,11 +446,8 @@
 
                 if (response.ok) {
                     if (selectedPayment === 'whoopspay') {
-                        showMessage(`Payment request sent to WhoopsPay! Redirecting to WhoopsPay to approve payment...`, 'success');
-                        setTimeout(() => {
-                            // Redirect to WhoopsPay main page since user needs to login first
-                            window.location.href = result.paymentUrl || window.location.origin;
-                        }, 2000);
+                        // Show modal and redirect after countdown
+                        showRedirectModal(result.paymentUrl || window.location.origin, result.orderId);
                     } else {
                         showMessage(`Order completed! Order ID: ${result.orderId}. Total: $${result.total}`, 'success');
                     }
@@ -414,6 +467,28 @@
             setTimeout(() => {
                 messageArea.innerHTML = '';
             }, 5000);
+        }
+
+        function showRedirectModal(redirectUrl, orderId) {
+            const modal = document.getElementById('redirect-modal');
+            const countdownEl = document.getElementById('countdown');
+            modal.classList.add('show');
+            
+            let countdown = 3;
+            countdownEl.textContent = countdown;
+            
+            const interval = setInterval(() => {
+                countdown--;
+                countdownEl.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    modal.classList.remove('show');
+                    // Add order ID as URL parameter to help identify the request
+                    const redirectUrlWithParams = redirectUrl + (redirectUrl.includes('?') ? '&' : '?') + 'orderId=' + orderId;
+                    window.location.href = redirectUrlWithParams;
+                }
+            }, 1000);
         }
 
         // Initialize
