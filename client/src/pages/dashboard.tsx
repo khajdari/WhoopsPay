@@ -419,14 +419,14 @@ export default function Dashboard() {
                               <p className="font-medium text-gray-900">
                                 ¤{request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
                               </p>
-                              {request.type === 'external' && (
+                              {(request.type === 'external' || request.isExternal) && (
                                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                  External
+                                  Off-Us
                                 </span>
                               )}
-                              {request.type === 'internal' && (
+                              {(request.type === 'internal' || (!request.type && !request.isExternal)) && (
                                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                                  Internal
+                                  On-Us
                                 </span>
                               )}
                             </div>
