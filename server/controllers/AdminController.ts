@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { storage } from '../storage';
 import { logStore } from '../middleware/adminMiddleware';
 import { db } from '../db';
+import { sql } from 'drizzle-orm';
+import Database from 'better-sqlite3';
 
 export class AdminController {
   /**
@@ -233,6 +235,9 @@ export class AdminController {
         return res.status(403).json({ message: "Access denied - Admin only" });
       }
 
+      // Get the raw SQLite database connection
+      const sqlite = (db as any).$client as Database.Database;
+      
       // Get all table information from SQLite
       const tablesQuery = `
         SELECT name, sql 
@@ -242,18 +247,18 @@ export class AdminController {
         ORDER BY name
       `;
 
-      const tablesResult = db.prepare(tablesQuery).all();
+      const tablesResult = sqlite.prepare(tablesQuery).all();
       
       const tables = [];
       
-      for (const table of tablesResult) {
+      for (const table of tablesResult as Array<{name: string, sql: string}>) {
         // Get column information
         const columnsQuery = `PRAGMA table_info(${table.name})`;
-        const columns = db.prepare(columnsQuery).all();
+        const columns = sqlite.prepare(columnsQuery).all();
         
         // Get row count
         const countQuery = `SELECT COUNT(*) as count FROM ${table.name}`;
-        const countResult = db.prepare(countQuery).get() as { count: number };
+        const countResult = sqlite.prepare(countQuery).get() as { count: number };
         
         tables.push({
           name: table.name,
@@ -290,13 +295,16 @@ export class AdminController {
       const limit = parseInt(req.query.limit as string) || 50;
       const offset = parseInt(req.query.offset as string) || 0;
 
+      // Get the raw SQLite database connection
+      const sqlite = (db as any).$client as Database.Database;
+      
       // Validate table name to prevent injection
       const validTableQuery = `
         SELECT name FROM sqlite_master 
         WHERE type='table' AND name=? AND name NOT LIKE 'sqlite_%'
       `;
       
-      const tableExists = db.prepare(validTableQuery).get(tableName);
+      const tableExists = sqlite.prepare(validTableQuery).get(tableName);
       
       if (!tableExists) {
         return res.status(404).json({ message: "Table not found" });
@@ -304,11 +312,11 @@ export class AdminController {
 
       // Get table data
       const dataQuery = `SELECT * FROM ${tableName} LIMIT ? OFFSET ?`;
-      const rows = db.prepare(dataQuery).all(limit, offset);
+      const rows = sqlite.prepare(dataQuery).all(limit, offset);
       
       // Get column information
       const columnsQuery = `PRAGMA table_info(${tableName})`;
-      const columnInfo = db.prepare(columnsQuery).all();
+      const columnInfo = sqlite.prepare(columnsQuery).all();
       
       const columns = columnInfo.map((col: any) => col.name);
 
@@ -343,14 +351,17 @@ export class AdminController {
         return res.status(400).json({ message: "SQL query is required" });
       }
 
+      // Get the raw SQLite database connection
+      const sqlite = (db as any).$client as Database.Database;
+      
       // Log the database operation
-      logStore.logDb(`Admin ${user.id} executed query: ${query.substring(0, 100)}...`);
+      logStore.addDbLog(`Admin ${user.id} executed query: ${query.substring(0, 100)}...`);
 
       const trimmedQuery = query.trim().toLowerCase();
       
       if (trimmedQuery.startsWith('select') || trimmedQuery.startsWith('with')) {
         // For SELECT queries, return the results
-        const stmt = db.prepare(query);
+        const stmt = sqlite.prepare(query);
         const rows = stmt.all();
         
         let columns: string[] = [];
@@ -365,7 +376,7 @@ export class AdminController {
         });
       } else {
         // For INSERT, UPDATE, DELETE, CREATE, DROP, etc.
-        const stmt = db.prepare(query);
+        const stmt = sqlite.prepare(query);
         const result = stmt.run();
         
         res.json({
@@ -379,7 +390,7 @@ export class AdminController {
       console.error("Error executing SQL query:", error);
       
       // Log the error
-      logStore.logDb(`SQL query error: ${error.message}`);
+      logStore.addDbLog(`SQL query error: ${error.message}`);
       
       res.json({
         columns: ['Error'],
