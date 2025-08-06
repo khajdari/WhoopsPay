@@ -134,7 +134,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
   const getRequestTypeInfo = () => {
     if (request.isExternal || request.type === 'external') {
       return {
-        icon: <ExternalLink className="w-5 h-5 text-orange-600" />,
+        icon: <ExternalLink className="w-5 h-5 text-orange-800" />,
         label: "Off-Us Payment Request",
         bgColor: "bg-orange-50",
         borderColor: "border-orange-200",
@@ -164,7 +164,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
           </button>
           <DialogTitle className={`flex items-center gap-2 ${
             (request.isExternal || request.type === 'external') 
-              ? 'text-orange-600' 
+              ? 'text-orange-800' 
               : 'text-blue-600'
           }`}>
             {typeInfo.icon}
@@ -197,7 +197,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
           <div className="space-y-2">
             <div className={`flex items-center gap-2 text-sm ${
               (request.isExternal || request.type === 'external') 
-                ? 'text-orange-600' 
+                ? 'text-orange-800' 
                 : 'text-blue-600'
             }`}>
               <User className="w-4 h-4" />
@@ -227,7 +227,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
           <div className="space-y-2">
             <div className={`flex items-center gap-2 text-sm ${
               (request.isExternal || request.type === 'external') 
-                ? 'text-orange-600' 
+                ? 'text-orange-800' 
                 : 'text-blue-600'
             }`}>
               <FileText className="w-4 h-4" />
@@ -241,7 +241,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
             <>
               <Separator className="bg-gray-300" />
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-sm text-orange-600">
+                <div className="flex items-center gap-2 text-sm text-orange-800">
                   <Globe className="w-4 h-4" />
                   <span className="font-medium">External Details:</span>
                 </div>
@@ -275,7 +275,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
           <div className="space-y-2">
             <div className={`flex items-center gap-2 text-sm ${
               (request.isExternal || request.type === 'external') 
-                ? 'text-orange-600' 
+                ? 'text-orange-800' 
                 : 'text-blue-600'
             }`}>
               <Clock className="w-4 h-4" />
@@ -312,7 +312,11 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
             
             <Button
               onClick={handleApprove}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+              className={`flex-1 text-white font-semibold ${
+                (request.isExternal || request.type === 'external')
+                  ? 'bg-orange-800 hover:bg-orange-900'
+                  : 'bg-blue-600 hover:bg-blue-700'
+              }`}
               disabled={isApproving || isRejecting}
             >
               {isApproving ? (
