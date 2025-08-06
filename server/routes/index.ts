@@ -420,6 +420,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/admin/notifications/system', AdminController.createSystemNotification);
   app.get('/api/admin/stats', AdminController.getSystemStats);
 
+  // Admin log endpoints
+  app.get('/api/admin/logs/express', AdminController.getExpressLogs);
+  app.get('/api/admin/logs/database', AdminController.getDatabaseLogs);
+
   // ============================================================================
   // JUICE SHOP MODULE ROUTES
   // ============================================================================
