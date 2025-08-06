@@ -491,9 +491,64 @@
             }, 1000);
         }
 
+        // Check for payment result on page load
+        function checkPaymentResult() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+            const cancelled = urlParams.get('cancelled');
+            const orderId = urlParams.get('orderId');
+            
+            if (success === '1' && orderId) {
+                showPaymentSuccess(orderId);
+            } else if (cancelled === '1' && orderId) {
+                showPaymentCancelled(orderId);
+            }
+        }
+
+        function showPaymentSuccess(orderId) {
+            document.body.innerHTML = `
+                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div style="background: white; padding: 3rem; border-radius: 20px; text-align: center; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+                        <div style="width: 80px; height: 80px; background: #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;">✓</div>
+                        <h1 style="color: #333; margin-bottom: 1rem; font-size: 2rem;">Payment Approved!</h1>
+                        <p style="color: #666; margin-bottom: 2rem; font-size: 1.1rem;">Your WhoopsPay payment has been successfully approved.</p>
+                        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                            <p style="color: #495057; margin: 0;"><strong>Order ID:</strong> ${orderId}</p>
+                            <p style="color: #495057; margin: 0.5rem 0 0 0;"><strong>Status:</strong> <span style="color: #28a745;">Completed</span></p>
+                        </div>
+                        <p style="color: #666; margin-bottom: 2rem;">Thank you for using WhoopsPay! Your order has been processed successfully.</p>
+                        <button onclick="window.location.href='/juice-shop'" style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-right: 1rem;">Continue Shopping</button>
+                        <button onclick="window.location.href='/'" style="background: transparent; color: #667eea; border: 2px solid #667eea; padding: 12px 24px; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">Back to WhoopsPay</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showPaymentCancelled(orderId) {
+            document.body.innerHTML = `
+                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);">
+                    <div style="background: white; padding: 3rem; border-radius: 20px; text-align: center; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+                        <div style="width: 80px; height: 80px; background: #f44336; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;">×</div>
+                        <h1 style="color: #333; margin-bottom: 1rem; font-size: 2rem;">Payment Cancelled</h1>
+                        <p style="color: #666; margin-bottom: 2rem; font-size: 1.1rem;">Your payment request was cancelled or rejected.</p>
+                        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                            <p style="color: #495057; margin: 0;"><strong>Order ID:</strong> ${orderId}</p>
+                            <p style="color: #495057; margin: 0.5rem 0 0 0;"><strong>Status:</strong> <span style="color: #dc3545;">Cancelled</span></p>
+                        </div>
+                        <p style="color: #666; margin-bottom: 2rem;">No charges were made. You can try again with a different payment method.</p>
+                        <button onclick="window.location.href='/juice-shop'" style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-right: 1rem;">Try Again</button>
+                        <button onclick="window.location.href='/'" style="background: transparent; color: #667eea; border: 2px solid #667eea; padding: 12px 24px; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">Back to WhoopsPay</button>
+                    </div>
+                </div>
+            `;
+        }
+
         // Initialize
-        loadProducts();
-        loadBasket();
+        checkPaymentResult();
+        if (!window.location.search.includes('success') && !window.location.search.includes('cancelled')) {
+            loadProducts();
+            loadBasket();
+        }
     </script>
 </body>
 </html>
