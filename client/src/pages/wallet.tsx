@@ -152,8 +152,8 @@ export default function Wallet() {
       
       <main className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8 mobile-nav-spacing">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Wallet</h1>
-          <p className="text-gray-600">Manage your balance and payment methods</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('wallet')}</h1>
+          <p className="text-gray-600">{t('manageBalance')}</p>
         </div>
 
         {/* Balance Card */}
@@ -182,7 +182,7 @@ export default function Wallet() {
                   <p className="text-3xl font-bold text-green-600">
                     {showBalance ? `¤${balance}` : "••••••"}
                   </p>
-                  <p className="text-sm text-gray-500 mt-1">Available balance</p>
+                  <p className="text-sm text-gray-500 mt-1">{t('availableBalance')}</p>
                 </div>
 
               </div>
@@ -194,7 +194,7 @@ export default function Wallet() {
         <Card className="mb-6">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Payment Methods</CardTitle>
+              <CardTitle>{t('paymentMethods')}</CardTitle>
               <div className="flex space-x-2">
                 <Button 
                   size="sm" 
@@ -202,7 +202,7 @@ export default function Wallet() {
                   onClick={() => setShowAddCardModal(true)}
                 >
                   <CreditCard className="w-4 h-4 mr-1" />
-                  Add Card
+                  {t('addCard')}
                 </Button>
                 <Button 
                   size="sm" 
@@ -210,7 +210,7 @@ export default function Wallet() {
                   onClick={() => setShowAddBankModal(true)}
                 >
                   <University className="w-4 h-4 mr-1" />
-                  Add Bank
+                  {t('addBank')}
                 </Button>
               </div>
             </div>
