@@ -60,6 +60,7 @@ interface Translations {
   delete: TranslationKey;
   approve: TranslationKey;
   reject: TranslationKey;
+  seeAll: TranslationKey;
   
   // Money operations
   sendMoney: TranslationKey;
@@ -459,6 +460,10 @@ const translations: Translations = {
   reject: {
     'en-GB': 'Reject',
     'el-GR': 'Απόρριψη'
+  },
+  seeAll: {
+    'en-GB': 'See all',
+    'el-GR': 'Δείτε όλα'
   },
   
   // Money operations
