@@ -1037,12 +1037,12 @@ const translations: Translations = {
   
   // Transaction status and types
   onus: {
-    'en-GB': 'ONUS',
-    'el-GR': 'ΕΣΩΤΕΡΙΚΗ'
+    'en-GB': 'On-Us',
+    'el-GR': 'Εσωτερική συναλλαγή'
   },
   offus: {
-    'en-GB': 'OFFUS', 
-    'el-GR': 'ΕΞΩΤΕΡΙΚΗ'
+    'en-GB': 'Off-Us', 
+    'el-GR': 'Εξωτερική συναλλαγή'
   },
 
   
