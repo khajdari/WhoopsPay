@@ -251,28 +251,45 @@
             width: 100%;
             padding: 0.75rem;
             margin: 0.5rem 0;
-            background: white;
-            border: 2px solid #ddd;
+            background: #667eea;
+            border: 2px solid #667eea;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .payment-method:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
+            background: #5a6fd8;
+            border-color: #5a6fd8;
         }
         
         .payment-method.selected {
-            border-color: #667eea;
             background: #667eea;
+            border-color: #667eea;
             color: white;
+        }
+        
+        .whoopspay-logo {
+            width: 16px;
+            height: 16px;
+            background: #ff9800;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
         }
         
         .total {
             font-size: 1.3rem;
             font-weight: bold;
-            color: #333;
+            color: white;
             margin: 1rem 0;
             text-align: center;
         }
@@ -377,9 +394,10 @@
         
         <div class="payment-methods">
             <h3>Payment Method</h3>
-            <button class="payment-method" data-method="card" onclick="selectPayment('card')">💳 Credit Card</button>
-            <button class="payment-method selected" data-method="whoopspay" onclick="selectPayment('whoopspay')">💰 WhoopsPay</button>
-            <button class="payment-method" data-method="paypal" onclick="selectPayment('paypal')">🅿️ PayPal</button>
+            <button class="payment-method selected" data-method="whoopspay" onclick="selectPayment('whoopspay')">
+                <span class="whoopspay-logo">💰</span>
+                WhoopsPay
+            </button>
         </div>
         
         <button class="checkout-btn" onclick="checkout()">Checkout</button>
