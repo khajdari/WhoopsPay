@@ -53,6 +53,17 @@ function Router() {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
+  // Check if user has external order ID and is not authenticated
+  const urlParams = new URLSearchParams(window.location.search);
+  const orderId = urlParams.get('orderId');
+  
+  if (orderId && !isAuthenticated && window.location.pathname === '/') {
+    // Store the order ID for after login and redirect to login
+    sessionStorage.setItem('pendingOrderId', orderId);
+    window.location.href = '/login';
+    return <div className="min-h-screen flex items-center justify-center">Redirecting to login...</div>;
+  }
+
   return (
     <Switch>
       {/* Always available routes */}

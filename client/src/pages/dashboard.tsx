@@ -55,10 +55,21 @@ export default function Dashboard() {
 
   // Handle external payment request assignment when arriving from Juice Shop
   useEffect(() => {
+    if (!user) return;
+
+    // Check for orderId in URL first (direct link)
     const urlParams = new URLSearchParams(window.location.search);
-    const orderId = urlParams.get('orderId');
+    let orderId = urlParams.get('orderId');
     
-    if (orderId && user) {
+    // If not in URL, check session storage (after login redirect)
+    if (!orderId) {
+      orderId = sessionStorage.getItem('pendingOrderId');
+      if (orderId) {
+        sessionStorage.removeItem('pendingOrderId');
+      }
+    }
+    
+    if (orderId) {
       // Assign the external payment request to this user
       fetch('/api/assign-external-request', {
         method: 'POST',
@@ -73,8 +84,10 @@ export default function Dashboard() {
           });
           // Refresh pending requests to show the new one
           queryClient.invalidateQueries({ queryKey: ['/api/pending-requests'] });
-          // Clear the orderId from URL
-          window.history.replaceState({}, document.title, window.location.pathname);
+          // Clear the orderId from URL if it was there
+          if (urlParams.get('orderId')) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
         }
       }).catch(error => {
         console.error('Error assigning external request:', error);
