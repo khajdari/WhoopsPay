@@ -303,7 +303,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-blue-100 text-sm mb-2">{t('balance')}</p>
-              <h3 className="text-3xl font-bold">${balance}</h3>
+              <h3 className="text-3xl font-bold">¤{balance}</h3>
             </div>
             <div className="text-right">
               <Wallet className="text-2xl text-blue-200" size={32} />
@@ -375,7 +375,7 @@ export default function Dashboard() {
                           <div>
                             <div className="flex items-center gap-2">
                               <p className="font-medium text-gray-900">
-                                ${request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
+                                ¤{request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
                               </p>
                               {request.type === 'external' && (
                                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
