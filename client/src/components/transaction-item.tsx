@@ -73,7 +73,7 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
     // VULNERABLE: This could expose user information through client-side logic
     if (transaction.description?.includes('Amazon')) return 'Amazon.com';
     if (transaction.description?.includes('Bank')) return 'Bank Transfer';
-    return isOutgoing ? `User ${transaction.toUserId}` : `User ${transaction.fromUserId}`;
+    return isOutgoing ? transaction.toUserId : transaction.fromUserId;
   };
 
   return (
