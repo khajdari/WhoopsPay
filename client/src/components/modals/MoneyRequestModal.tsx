@@ -134,11 +134,11 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
   const getRequestTypeInfo = () => {
     if (request.isExternal || request.type === 'external') {
       return {
-        icon: <ExternalLink className="w-5 h-5 text-blue-600" />,
+        icon: <ExternalLink className="w-5 h-5 text-orange-600" />,
         label: "Off-Us Payment Request",
-        bgColor: "bg-blue-50",
-        borderColor: "border-blue-200",
-        badgeColor: "bg-blue-600 text-white"
+        bgColor: "bg-orange-50",
+        borderColor: "border-orange-200",
+        badgeColor: "bg-orange-600 text-white"
       };
     }
     return {
@@ -146,7 +146,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
       label: "On-Us Money Request",
       bgColor: "bg-blue-50", 
       borderColor: "border-blue-200",
-      badgeColor: "bg-blue-100 text-blue-800"
+      badgeColor: "bg-blue-600 text-white"
     };
   };
 

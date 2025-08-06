@@ -394,22 +394,22 @@ export default function Dashboard() {
                       <div 
                         key={request.id} 
                         className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer hover:shadow-md transition-shadow ${
-                          request.type === 'external' 
-                            ? 'bg-blue-50 border-blue-200 hover:bg-blue-100' 
-                            : 'bg-orange-50 border-orange-200 hover:bg-orange-100'
+                          (request.type === 'external' || request.isExternal)
+                            ? 'bg-orange-50 border-orange-200 hover:bg-orange-100' 
+                            : 'bg-blue-50 border-blue-200 hover:bg-blue-100'
                         }`}
                         onClick={() => handleRequestClick(request)}
                       >
                         <div className="flex items-center space-x-3">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            request.type === 'external' 
-                              ? 'bg-blue-100' 
-                              : 'bg-orange-100'
+                            (request.type === 'external' || request.isExternal)
+                              ? 'bg-orange-100' 
+                              : 'bg-blue-100'
                           }`}>
-                            {request.type === 'external' ? (
-                              <ExternalLink className="w-5 h-5 text-blue-600" />
+                            {(request.type === 'external' || request.isExternal) ? (
+                              <ExternalLink className="w-5 h-5 text-orange-600" />
                             ) : (
-                              <span className="text-orange-600 font-medium">
+                              <span className="text-blue-600 font-medium">
                                 {request.fromUser?.firstName?.charAt(0) || request.fromUserId.charAt(0)}
                               </span>
                             )}
@@ -420,12 +420,12 @@ export default function Dashboard() {
                                 ¤{request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
                               </p>
                               {(request.type === 'external' || request.isExternal) && (
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                                   Off-Us
                                 </span>
                               )}
                               {(request.type === 'internal' || (!request.type && !request.isExternal)) && (
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                   On-Us
                                 </span>
                               )}
