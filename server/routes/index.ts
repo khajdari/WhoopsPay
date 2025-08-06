@@ -7,6 +7,11 @@
 
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { expressLogger } from "../middleware/adminMiddleware";
 import { isAuthenticated, setupAuth } from "../localAuth";
 import { logCurrentConfig } from "../config";
@@ -21,7 +26,7 @@ import { TransactionController } from '../controllers/TransactionController';
 import { MoneyRequestController } from '../controllers/MoneyRequestController';
 import { NotificationController } from '../controllers/NotificationController';
 import { AdminController } from '../controllers/AdminController';
-import { juiceShopRoutes } from '../modules/juice-shop/index';
+import { juiceShopRoutes, JuiceShopController } from '../modules/juice-shop/index';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Log current domain configuration
@@ -433,6 +438,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // JUICE SHOP MODULE ROUTES
   // ============================================================================
   
+  // Serve Juice Shop static HTML interface
+  app.get('/juice-shop', (req, res) => {
+    res.sendFile(path.join(__dirname, '../modules/juice-shop/public/index.html'));
+  });
+  
+  // Juice Shop API routes for the frontend interface
+  app.get('/api/Products', JuiceShopController.getProducts);
+  app.get('/api/BasketItems', JuiceShopController.getBasketItems);
+  app.post('/api/BasketItems', JuiceShopController.addToBasket);
+  app.delete('/api/BasketItems/:itemId', JuiceShopController.removeFromBasket);
+  app.post('/api/checkout', JuiceShopController.checkout);
+  
+  // Juice Shop module API routes (for integration)
   app.use('/api/juice-shop', juiceShopRoutes);
 
   // ============================================================================
