@@ -246,6 +246,25 @@ interface Translations {
   allPriority: TranslationKey;
   allCategories: TranslationKey;
   noIssueReportsFound: TranslationKey;
+
+  // Status options
+  open: TranslationKey;
+  inProgress: TranslationKey;
+  resolved: TranslationKey;
+  closed: TranslationKey;
+
+  // Priority options
+  critical: TranslationKey;
+  high: TranslationKey;
+  medium: TranslationKey;
+  low: TranslationKey;
+
+  // Category options
+  technical: TranslationKey;
+  payment: TranslationKey;
+  security: TranslationKey;
+  account: TranslationKey;
+  other: TranslationKey;
   
   // Landing page
   signIn: TranslationKey;
@@ -946,6 +965,64 @@ const translations: Translations = {
   noIssueReportsFound: {
     'en-GB': 'No issue reports found matching the current filters',
     'el-GR': 'Δεν βρέθηκαν αναφορές προβλημάτων που να ταιριάζουν με τα τρέχοντα φίλτρα'
+  },
+
+  // Status options
+  open: {
+    'en-GB': 'Open',
+    'el-GR': 'Ανοιχτό'
+  },
+  inProgress: {
+    'en-GB': 'In Progress',
+    'el-GR': 'Σε Εξέλιξη'
+  },
+  resolved: {
+    'en-GB': 'Resolved',
+    'el-GR': 'Επιλυμένο'
+  },
+  closed: {
+    'en-GB': 'Closed',
+    'el-GR': 'Κλειστό'
+  },
+
+  // Priority options
+  critical: {
+    'en-GB': 'Critical',
+    'el-GR': 'Κρίσιμη'
+  },
+  high: {
+    'en-GB': 'High',
+    'el-GR': 'Υψηλή'
+  },
+  medium: {
+    'en-GB': 'Medium',
+    'el-GR': 'Μεσαία'
+  },
+  low: {
+    'en-GB': 'Low',
+    'el-GR': 'Χαμηλή'
+  },
+
+  // Category options
+  technical: {
+    'en-GB': 'Technical',
+    'el-GR': 'Τεχνικό'
+  },
+  payment: {
+    'en-GB': 'Payment',
+    'el-GR': 'Πληρωμή'
+  },
+  security: {
+    'en-GB': 'Security',
+    'el-GR': 'Ασφάλεια'
+  },
+  account: {
+    'en-GB': 'Account',
+    'el-GR': 'Λογαριασμός'
+  },
+  other: {
+    'en-GB': 'Other',
+    'el-GR': 'Άλλο'
   },
 
   // Messages
