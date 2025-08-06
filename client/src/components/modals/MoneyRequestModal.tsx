@@ -171,13 +171,15 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
         <div className="space-y-4">
           {/* Request Type Badge */}
           <div className="flex justify-center">
-            <Badge className="bg-blue-600 text-white">
+            <Badge className={typeInfo.badgeColor}>
               {typeInfo.label}
             </Badge>
           </div>
 
           {/* Amount */}
-          <div className="p-4 rounded-lg bg-blue-600 text-white">
+          <div className={`p-4 rounded-lg text-white ${
+            (request.isExternal || request.type === 'external') ? 'bg-orange-600' : 'bg-blue-600'
+          }`}>
             <div className="flex items-center justify-center">
               <span className="text-2xl font-bold">
                 ¤{request.amount?.toFixed(2)}
