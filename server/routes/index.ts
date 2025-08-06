@@ -81,7 +81,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/users/:userId/profile', UserController.getUserProfile);
   app.patch('/api/users/:userId/profile', UserController.updateUserProfile);
   app.get('/api/test-accounts', UserController.getTestAccounts);
-  app.get('/api/payments', UserController.getUserPaymentMethods);
+  app.get('/api/payments', isAuthenticated, UserController.getUserPaymentMethods);
 
   // ============================================================================
   // TRANSACTION ROUTES
