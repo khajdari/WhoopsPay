@@ -209,10 +209,10 @@ export function AdminIssueMonitor() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t('allStatus')}</SelectItem>
-              <SelectItem value="open">Open</SelectItem>
-              <SelectItem value="in_progress">In Progress</SelectItem>
-              <SelectItem value="resolved">Resolved</SelectItem>
-              <SelectItem value="closed">Closed</SelectItem>
+              <SelectItem value="open">{t('open')}</SelectItem>
+              <SelectItem value="in_progress">{t('inProgress')}</SelectItem>
+              <SelectItem value="resolved">{t('resolved')}</SelectItem>
+              <SelectItem value="closed">{t('closed')}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -222,10 +222,10 @@ export function AdminIssueMonitor() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t('allPriority')}</SelectItem>
-              <SelectItem value="critical">Critical</SelectItem>
-              <SelectItem value="high">High</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="low">Low</SelectItem>
+              <SelectItem value="critical">{t('critical')}</SelectItem>
+              <SelectItem value="high">{t('high')}</SelectItem>
+              <SelectItem value="medium">{t('medium')}</SelectItem>
+              <SelectItem value="low">{t('low')}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -235,11 +235,11 @@ export function AdminIssueMonitor() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t('allCategories')}</SelectItem>
-              <SelectItem value="technical">Technical</SelectItem>
-              <SelectItem value="payment">Payment</SelectItem>
-              <SelectItem value="security">Security</SelectItem>
-              <SelectItem value="account">Account</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
+              <SelectItem value="technical">{t('technical')}</SelectItem>
+              <SelectItem value="payment">{t('payment')}</SelectItem>
+              <SelectItem value="security">{t('security')}</SelectItem>
+              <SelectItem value="account">{t('account')}</SelectItem>
+              <SelectItem value="other">{t('other')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
