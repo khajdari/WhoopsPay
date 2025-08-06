@@ -803,7 +803,7 @@ const translations: Translations = {
   },
   accountCreated: {
     'en-GB': 'Account Created',
-    'el-GR': 'Λογαριασμός Δημιουργήθηκε'
+    'el-GR': 'Δημιουργία Λογαριασμού'
   },
 
   // Messages
