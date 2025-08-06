@@ -17,4 +17,4 @@ router.get('/order/:orderId', JuiceShopController.getOrder);
 router.post('/order/:orderId/payment', JuiceShopController.processPayment);
 
 export { router as juiceShopRoutes };
-export * from './JuiceShopController';
+export { JuiceShopController } from './JuiceShopController';

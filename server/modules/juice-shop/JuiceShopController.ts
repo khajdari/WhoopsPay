@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { storage } from '../../storage';
 import { URLAdapter } from '../../utils/urlAdapter';
 
+// In-memory basket storage for demo (in real app, would use session or database)
+const baskets: { [sessionId: string]: any[] } = {};
+
 /**
  * Juice Shop Controller - External E-commerce Integration
  * 
@@ -212,6 +215,217 @@ export class JuiceShopController {
       res.status(500).json({
         status: 'error',
         message: "Failed to process payment"
+      });
+    }
+  }
+
+  /**
+   * Get basket items for current session
+   * VULNERABILITY: Session-based but insecure
+   */
+  static async getBasketItems(req: Request, res: Response) {
+    try {
+      const sessionId = req.sessionID || 'default';
+      const basketItems = baskets[sessionId] || [];
+
+      // Transform items to include product details
+      const products = [
+        { id: 1, name: "Apple Juice (1000ml)", price: 1.99, description: "The all-time classic." },
+        { id: 2, name: "Orange Juice (1000ml)", price: 2.99, description: "Made from oranges hand-picked by the shop manager." },
+        { id: 3, name: "Eggfruit Juice (500ml)", price: 8.99, description: "Now with even more exotic flavour." },
+        { id: 4, name: "Raspberry Juice (1000ml)", price: 4.99, description: "Made from blended Raspberry Pi, water and sugar." }
+      ];
+
+      const itemsWithProducts = basketItems.map((item: any) => ({
+        id: item.id,
+        quantity: item.quantity,
+        product: products.find(p => p.id === item.productId) || { id: item.productId, name: 'Unknown Product', price: 0, description: '' }
+      }));
+
+      res.json({
+        status: 'success',
+        data: itemsWithProducts
+      });
+    } catch (error) {
+      console.error("Error fetching basket items:", error);
+      res.status(500).json({
+        status: 'error',
+        message: "Failed to fetch basket items"
+      });
+    }
+  }
+
+  /**
+   * Add item to basket
+   * VULNERABILITY: No validation on product ID or quantity
+   */
+  static async addToBasket(req: Request, res: Response) {
+    try {
+      const { ProductId, quantity = 1 } = req.body;
+      const sessionId = req.sessionID || 'default';
+      
+      if (!ProductId) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'ProductId is required'
+        });
+      }
+
+      if (!baskets[sessionId]) {
+        baskets[sessionId] = [];
+      }
+
+      // Check if item already exists in basket
+      const existingItem = baskets[sessionId].find((item: any) => item.productId === ProductId);
+      
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        baskets[sessionId].push({
+          id: Date.now(),
+          productId: ProductId,
+          quantity: quantity
+        });
+      }
+
+      res.json({
+        status: 'success',
+        message: 'Item added to basket'
+      });
+    } catch (error) {
+      console.error("Error adding to basket:", error);
+      res.status(500).json({
+        status: 'error',
+        message: "Failed to add item to basket"
+      });
+    }
+  }
+
+  /**
+   * Remove item from basket
+   * VULNERABILITY: No authorization check
+   */
+  static async removeFromBasket(req: Request, res: Response) {
+    try {
+      const { itemId } = req.params;
+      const sessionId = req.sessionID || 'default';
+
+      if (!baskets[sessionId]) {
+        return res.status(404).json({
+          status: 'error',
+          message: 'Basket not found'
+        });
+      }
+
+      baskets[sessionId] = baskets[sessionId].filter((item: any) => item.id !== parseInt(itemId));
+
+      res.json({
+        status: 'success',
+        message: 'Item removed from basket'
+      });
+    } catch (error) {
+      console.error("Error removing from basket:", error);
+      res.status(500).json({
+        status: 'error',
+        message: "Failed to remove item from basket"
+      });
+    }
+  }
+
+  /**
+   * Checkout and process payment
+   * VULNERABILITY: Multiple security issues
+   */
+  static async checkout(req: Request, res: Response) {
+    try {
+      const { paymentMethod } = req.body;
+      const sessionId = req.sessionID || 'default';
+      const basketItems = baskets[sessionId] || [];
+
+      if (basketItems.length === 0) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Basket is empty'
+        });
+      }
+
+      // Calculate total
+      const products = [
+        { id: 1, name: "Apple Juice (1000ml)", price: 1.99 },
+        { id: 2, name: "Orange Juice (1000ml)", price: 2.99 },
+        { id: 3, name: "Eggfruit Juice (500ml)", price: 8.99 },
+        { id: 4, name: "Raspberry Juice (1000ml)", price: 4.99 }
+      ];
+
+      let total = 0;
+      const orderItems = basketItems.map((item: any) => {
+        const product = products.find(p => p.id === item.productId);
+        const itemTotal = (product?.price || 0) * item.quantity;
+        total += itemTotal;
+        return {
+          productId: item.productId,
+          name: product?.name || 'Unknown Product',
+          quantity: item.quantity,
+          price: product?.price || 0,
+          total: itemTotal
+        };
+      });
+
+      const orderId = `JS-${Date.now()}`;
+
+      if (paymentMethod === 'whoopspay') {
+        // Create external payment request in WhoopsPay system
+        try {
+          const request = await storage.createMoneyRequest({
+            fromUserId: "juice-shop",
+            toUserId: "user", // VULNERABLE: hardcoded user ID
+            amount: total,
+            description: `Juice Shop Order #${orderId}`,
+            status: "pending",
+            type: "external",
+            externalOrderId: orderId,
+            externalSource: "juice-shop",
+            returnUrl: URLAdapter.adaptExternalUrl('/juice-shop?success=1'),
+            cancelUrl: URLAdapter.adaptExternalUrl('/juice-shop?cancelled=1'),
+            externalMetadata: JSON.stringify({
+              items: orderItems,
+              merchant: "OWASP Juice Shop"
+            })
+          });
+
+          // Clear basket
+          delete baskets[sessionId];
+
+          res.json({
+            status: 'success',
+            orderId: orderId,
+            requestId: request.id,
+            paymentUrl: URLAdapter.adaptExternalUrl(`/dashboard?highlight=request-${request.id}`),
+            message: 'Payment request sent to WhoopsPay'
+          });
+        } catch (storageError) {
+          console.error("Error creating payment request:", storageError);
+          res.status(500).json({
+            status: 'error',
+            message: "Failed to create payment request"
+          });
+        }
+      } else {
+        // Handle other payment methods (mock)
+        delete baskets[sessionId];
+        
+        res.json({
+          status: 'success',
+          orderId: orderId,
+          total: total.toFixed(2),
+          message: `Payment processed with ${paymentMethod}`
+        });
+      }
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      res.status(500).json({
+        status: 'error',
+        message: "Checkout failed"
       });
     }
   }
