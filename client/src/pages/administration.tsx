@@ -18,6 +18,7 @@
  */
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useI18n } from "@/lib/i18n";
 import { Header } from "@/components/header";
 import { MobileNav } from "@/components/mobile-nav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,6 +46,7 @@ import { DatabaseManagement } from "@/components/admin/DatabaseManagement";
 export default function Administration() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useI18n();
   const [expressLogs, setExpressLogs] = useState<string[]>([]);
   const [dbLogs, setDbLogs] = useState<string[]>([]);
   const [autoRefresh, setAutoRefresh] = useState(false);
