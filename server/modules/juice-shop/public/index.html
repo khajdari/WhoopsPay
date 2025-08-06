@@ -12,121 +12,145 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+            background-color: #303030;
             min-height: 100vh;
+            color: #ffffff;
         }
         
         .header {
-            background: rgba(255, 255, 255, 0.95);
+            background: #673ab7;
             padding: 1rem 2rem;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .header h1 {
-            color: #333;
-            font-size: 2rem;
-            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 500;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+        
+        .header h1::before {
+            content: "🧃";
+            background: #ff9800;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 16px;
         }
         
         .header p {
-            text-align: center;
-            color: #666;
+            color: rgba(255,255,255,0.7);
             margin-top: 0.5rem;
+            font-size: 0.9rem;
         }
         
         .container {
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .section-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
         }
         
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
             margin-bottom: 3rem;
         }
         
         .product-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            backdrop-filter: blur(10px);
+            background: #424242;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transition: box-shadow 0.3s ease;
         }
         
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
         }
         
         .product-image {
             width: 100%;
-            height: 200px;
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-            border-radius: 10px;
+            height: 180px;
+            background: #616161;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 3rem;
-            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .product-content {
+            padding: 1rem;
         }
         
         .product-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #333;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #ffffff;
             margin-bottom: 0.5rem;
         }
         
         .product-description {
-            color: #666;
+            color: #bdbdbd;
             margin-bottom: 1rem;
+            font-size: 0.875rem;
             line-height: 1.4;
         }
         
         .product-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #ffffff;
             margin-bottom: 1rem;
         }
         
         .add-to-basket {
             width: 100%;
-            padding: 0.75rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px 16px;
+            background: #607d8b;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
         
         .add-to-basket:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: #546e7a;
         }
         
         .basket {
             position: fixed;
-            top: 50%;
+            top: 0;
             right: -400px;
-            transform: translateY(-50%);
             width: 380px;
-            height: 80vh;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px 0 0 20px;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+            height: 100vh;
+            background: #424242;
+            box-shadow: -4px 0 8px rgba(0,0,0,0.3);
             padding: 2rem;
             transition: right 0.3s ease;
-            backdrop-filter: blur(10px);
             overflow-y: auto;
+            z-index: 1000;
         }
         
         .basket.open {
@@ -135,18 +159,24 @@
         
         .basket-toggle {
             position: fixed;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            top: 20px;
+            right: 20px;
+            background: #673ab7;
             color: white;
             border: none;
-            padding: 1rem;
-            border-radius: 50%;
-            font-size: 1.2rem;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 1rem;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 1001;
+        }
+        
+        .basket h3 {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
         }
         
         .basket-item {
@@ -154,19 +184,26 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #616161;
+            color: white;
         }
         
         .checkout-btn {
             width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            padding: 12px;
+            background: #607d8b;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            font-weight: 500;
             cursor: pointer;
             margin-top: 1rem;
+        }
+        
+        .checkout-btn:hover {
+            background: #546e7a;
         }
         
         .payment-methods {
@@ -276,6 +313,7 @@
     </div>
 
     <div class="container">
+        <h2 class="section-title">All Products</h2>
         <div class="products-grid" id="products-grid">
             <!-- Products will be loaded here -->
         </div>
@@ -284,7 +322,7 @@
     <button class="basket-toggle" onclick="toggleBasket()">🛒 <span id="basket-count">0</span></button>
 
     <div class="basket" id="basket">
-        <h2>Shopping Basket</h2>
+        <h3>Shopping Basket</h3>
         <div id="basket-items">
             <!-- Basket items will appear here -->
         </div>
@@ -336,10 +374,12 @@
             grid.innerHTML = products.map((product, index) => `
                 <div class="product-card">
                     <div class="product-image">${fruitIcons[index % fruitIcons.length]}</div>
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-description">${product.description}</div>
-                    <div class="product-price">$${product.price.toFixed(2)}</div>
-                    <button class="add-to-basket" onclick="addToBasket(${product.id})">Add to Basket</button>
+                    <div class="product-content">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                        <button class="add-to-basket" onclick="addToBasket(${product.id})">Add to Basket</button>
+                    </div>
                 </div>
             `).join('');
         }
@@ -507,18 +547,18 @@
 
         function showPaymentSuccess(orderId) {
             document.body.innerHTML = `
-                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <div style="background: white; padding: 3rem; border-radius: 20px; text-align: center; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+                <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #303030; font-family: 'Roboto', sans-serif;">
+                    <div style="background: #424242; padding: 3rem; border-radius: 4px; text-align: center; max-width: 500px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
                         <div style="width: 80px; height: 80px; background: #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;">✓</div>
-                        <h1 style="color: #333; margin-bottom: 1rem; font-size: 2rem;">Payment Approved!</h1>
-                        <p style="color: #666; margin-bottom: 2rem; font-size: 1.1rem;">Your WhoopsPay payment has been successfully approved.</p>
-                        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
-                            <p style="color: #495057; margin: 0;"><strong>Order ID:</strong> ${orderId}</p>
-                            <p style="color: #495057; margin: 0.5rem 0 0 0;"><strong>Status:</strong> <span style="color: #28a745;">Completed</span></p>
+                        <h1 style="color: white; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 400;">Payment Approved!</h1>
+                        <p style="color: #bdbdbd; margin-bottom: 2rem; font-size: 0.9rem;">Your WhoopsPay payment has been successfully approved.</p>
+                        <div style="background: #616161; padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem;">
+                            <p style="color: white; margin: 0; font-size: 0.875rem;"><strong>Order ID:</strong> ${orderId}</p>
+                            <p style="color: white; margin: 0.5rem 0 0 0; font-size: 0.875rem;"><strong>Status:</strong> <span style="color: #4CAF50;">Completed</span></p>
                         </div>
-                        <p style="color: #666; margin-bottom: 2rem;">Thank you for using WhoopsPay! Your order has been processed successfully.</p>
-                        <button onclick="window.location.href='/juice-shop'" style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-right: 1rem;">Continue Shopping</button>
-                        <button onclick="window.location.href='/'" style="background: transparent; color: #667eea; border: 2px solid #667eea; padding: 12px 24px; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">Back to WhoopsPay</button>
+                        <p style="color: #bdbdbd; margin-bottom: 2rem; font-size: 0.875rem;">Thank you for using WhoopsPay! Your order has been processed successfully.</p>
+                        <button onclick="window.location.href='/juice-shop'" style="background: #607d8b; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer; margin-right: 1rem;">Continue Shopping</button>
+                        <button onclick="window.location.href='/'" style="background: transparent; color: #607d8b; border: 2px solid #607d8b; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer;">Back to WhoopsPay</button>
                     </div>
                 </div>
             `;
@@ -526,18 +566,18 @@
 
         function showPaymentCancelled(orderId) {
             document.body.innerHTML = `
-                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);">
-                    <div style="background: white; padding: 3rem; border-radius: 20px; text-align: center; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+                <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #303030; font-family: 'Roboto', sans-serif;">
+                    <div style="background: #424242; padding: 3rem; border-radius: 4px; text-align: center; max-width: 500px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
                         <div style="width: 80px; height: 80px; background: #f44336; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;">×</div>
-                        <h1 style="color: #333; margin-bottom: 1rem; font-size: 2rem;">Payment Cancelled</h1>
-                        <p style="color: #666; margin-bottom: 2rem; font-size: 1.1rem;">Your payment request was cancelled or rejected.</p>
-                        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
-                            <p style="color: #495057; margin: 0;"><strong>Order ID:</strong> ${orderId}</p>
-                            <p style="color: #495057; margin: 0.5rem 0 0 0;"><strong>Status:</strong> <span style="color: #dc3545;">Cancelled</span></p>
+                        <h1 style="color: white; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 400;">Payment Cancelled</h1>
+                        <p style="color: #bdbdbd; margin-bottom: 2rem; font-size: 0.9rem;">Your payment request was cancelled or rejected.</p>
+                        <div style="background: #616161; padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem;">
+                            <p style="color: white; margin: 0; font-size: 0.875rem;"><strong>Order ID:</strong> ${orderId}</p>
+                            <p style="color: white; margin: 0.5rem 0 0 0; font-size: 0.875rem;"><strong>Status:</strong> <span style="color: #f44336;">Cancelled</span></p>
                         </div>
-                        <p style="color: #666; margin-bottom: 2rem;">No charges were made. You can try again with a different payment method.</p>
-                        <button onclick="window.location.href='/juice-shop'" style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-right: 1rem;">Try Again</button>
-                        <button onclick="window.location.href='/'" style="background: transparent; color: #667eea; border: 2px solid #667eea; padding: 12px 24px; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">Back to WhoopsPay</button>
+                        <p style="color: #bdbdbd; margin-bottom: 2rem; font-size: 0.875rem;">No charges were made. You can try again with a different payment method.</p>
+                        <button onclick="window.location.href='/juice-shop'" style="background: #607d8b; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer; margin-right: 1rem;">Try Again</button>
+                        <button onclick="window.location.href='/'" style="background: transparent; color: #607d8b; border: 2px solid #607d8b; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer;">Back to WhoopsPay</button>
                     </div>
                 </div>
             `;
