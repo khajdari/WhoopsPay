@@ -13,7 +13,7 @@ import {
   Loader2, 
   ExternalLink, 
   User, 
-  DollarSign, 
+  Coins, 
   Clock,
   FileText,
   Globe,
@@ -180,7 +180,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
           {/* Amount */}
           <div className="p-4 rounded-lg bg-blue-600 text-white">
             <div className="flex items-center justify-center gap-2">
-              <DollarSign className="w-6 h-6" />
+              <Coins className="w-6 h-6" />
               <span className="text-2xl font-bold">
                 ¤{request.amount?.toFixed(2)}
               </span>
