@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { storage } from '../storage';
 import { logStore } from '../middleware/adminMiddleware';
+import { db } from '../db';
 
 export class AdminController {
   /**
@@ -217,6 +218,174 @@ export class AdminController {
     } catch (error) {
       console.error("Error fetching database logs:", error);
       res.status(500).json({ message: "Failed to fetch database logs" });
+    }
+  }
+
+  /**
+   * Get database tables with metadata
+   */
+  static async getDatabaseTables(req: Request, res: Response) {
+    try {
+      // Get user from request (set by isAuthenticated middleware)
+      const user = (req as any).user;
+      
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access denied - Admin only" });
+      }
+
+      // Get all table information from SQLite
+      const tablesQuery = `
+        SELECT name, sql 
+        FROM sqlite_master 
+        WHERE type='table' 
+        AND name NOT LIKE 'sqlite_%'
+        ORDER BY name
+      `;
+
+      const tablesResult = db.prepare(tablesQuery).all();
+      
+      const tables = [];
+      
+      for (const table of tablesResult) {
+        // Get column information
+        const columnsQuery = `PRAGMA table_info(${table.name})`;
+        const columns = db.prepare(columnsQuery).all();
+        
+        // Get row count
+        const countQuery = `SELECT COUNT(*) as count FROM ${table.name}`;
+        const countResult = db.prepare(countQuery).get() as { count: number };
+        
+        tables.push({
+          name: table.name,
+          columns: columns.map((col: any) => ({
+            name: col.name,
+            type: col.type,
+            nullable: !col.notnull,
+            primaryKey: col.pk === 1
+          })),
+          rowCount: countResult.count
+        });
+      }
+
+      res.json(tables);
+    } catch (error) {
+      console.error("Error fetching database tables:", error);
+      res.status(500).json({ message: "Failed to fetch database tables" });
+    }
+  }
+
+  /**
+   * Get table data
+   */
+  static async getTableData(req: Request, res: Response) {
+    try {
+      // Get user from request (set by isAuthenticated middleware)
+      const user = (req as any).user;
+      
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access denied - Admin only" });
+      }
+
+      const { tableName } = req.params;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const offset = parseInt(req.query.offset as string) || 0;
+
+      // Validate table name to prevent injection
+      const validTableQuery = `
+        SELECT name FROM sqlite_master 
+        WHERE type='table' AND name=? AND name NOT LIKE 'sqlite_%'
+      `;
+      
+      const tableExists = db.prepare(validTableQuery).get(tableName);
+      
+      if (!tableExists) {
+        return res.status(404).json({ message: "Table not found" });
+      }
+
+      // Get table data
+      const dataQuery = `SELECT * FROM ${tableName} LIMIT ? OFFSET ?`;
+      const rows = db.prepare(dataQuery).all(limit, offset);
+      
+      // Get column information
+      const columnsQuery = `PRAGMA table_info(${tableName})`;
+      const columnInfo = db.prepare(columnsQuery).all();
+      
+      const columns = columnInfo.map((col: any) => col.name);
+
+      res.json({
+        columns,
+        rows: rows.map((row: any) => columns.map(col => row[col])),
+        totalRows: rows.length,
+        limit,
+        offset
+      });
+    } catch (error) {
+      console.error("Error fetching table data:", error);
+      res.status(500).json({ message: "Failed to fetch table data" });
+    }
+  }
+
+  /**
+   * Execute SQL query
+   */
+  static async executeSqlQuery(req: Request, res: Response) {
+    try {
+      // Get user from request (set by isAuthenticated middleware)
+      const user = (req as any).user;
+      
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access denied - Admin only" });
+      }
+
+      const { query } = req.body;
+
+      if (!query || typeof query !== 'string') {
+        return res.status(400).json({ message: "SQL query is required" });
+      }
+
+      // Log the database operation
+      logStore.logDb(`Admin ${user.id} executed query: ${query.substring(0, 100)}...`);
+
+      const trimmedQuery = query.trim().toLowerCase();
+      
+      if (trimmedQuery.startsWith('select') || trimmedQuery.startsWith('with')) {
+        // For SELECT queries, return the results
+        const stmt = db.prepare(query);
+        const rows = stmt.all();
+        
+        let columns: string[] = [];
+        if (rows.length > 0) {
+          columns = Object.keys(rows[0]);
+        }
+
+        res.json({
+          columns,
+          rows: rows.map((row: any) => columns.map(col => row[col])),
+          rowsAffected: rows.length
+        });
+      } else {
+        // For INSERT, UPDATE, DELETE, CREATE, DROP, etc.
+        const stmt = db.prepare(query);
+        const result = stmt.run();
+        
+        res.json({
+          columns: ['Result'],
+          rows: [['Query executed successfully']],
+          rowsAffected: result.changes || 0,
+          lastInsertRowid: result.lastInsertRowid
+        });
+      }
+    } catch (error: any) {
+      console.error("Error executing SQL query:", error);
+      
+      // Log the error
+      logStore.logDb(`SQL query error: ${error.message}`);
+      
+      res.json({
+        columns: ['Error'],
+        rows: [[error.message]],
+        error: error.message
+      });
     }
   }
 }

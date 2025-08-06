@@ -424,6 +424,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/admin/logs/express', isAuthenticated, AdminController.getExpressLogs);
   app.get('/api/admin/logs/database', isAuthenticated, AdminController.getDatabaseLogs);
 
+  // Admin database management endpoints
+  app.get('/api/admin/database/tables', isAuthenticated, AdminController.getDatabaseTables);
+  app.get('/api/admin/database/table/:tableName', isAuthenticated, AdminController.getTableData);
+  app.post('/api/admin/database/execute', isAuthenticated, AdminController.executeSqlQuery);
+
   // ============================================================================
   // JUICE SHOP MODULE ROUTES
   // ============================================================================
