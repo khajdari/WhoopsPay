@@ -103,7 +103,7 @@ export default function SendMoney() {
     onSuccess: () => {
       toast({
         title: "Money sent successfully!",
-        description: `$${sendAmount} has been sent to ${sendRecipient}`,
+        description: `¤${sendAmount} has been sent to ${sendRecipient}`,
       });
       // Add live notification
       addTransactionNotification('sent', sendAmount, sendRecipient);
@@ -341,7 +341,7 @@ export default function SendMoney() {
                   <div>
                     <Label htmlFor="send-amount">{t('sendMoney.amount')}</Label>
                     <div className="relative">
-                      <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                      <span className="absolute left-3 top-2.5 text-gray-500">¤</span>
                       <Input
                         id="send-amount"
                         type="number"
@@ -405,7 +405,7 @@ export default function SendMoney() {
                   <div>
                     <Label htmlFor="request-amount">{t('sendMoney.amount')}</Label>
                     <div className="relative">
-                      <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                      <span className="absolute left-3 top-2.5 text-gray-500">¤</span>
                       <Input
                         id="request-amount"
                         type="number"
@@ -454,7 +454,7 @@ export default function SendMoney() {
                   <div>
                     <Label htmlFor="add-amount">{t('sendMoney.amount')}</Label>
                     <div className="relative">
-                      <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                      <span className="absolute left-3 top-2.5 text-gray-500">¤</span>
                       <Input
                         id="add-amount"
                         type="number"
@@ -512,7 +512,7 @@ export default function SendMoney() {
                   <div>
                     <Label htmlFor="withdraw-amount">{t('sendMoney.amount')}</Label>
                     <div className="relative">
-                      <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                      <span className="absolute left-3 top-2.5 text-gray-500">¤</span>
                       <Input
                         id="withdraw-amount"
                         type="number"
