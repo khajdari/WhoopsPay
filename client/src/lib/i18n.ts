@@ -215,6 +215,20 @@ interface Translations {
   userId: TranslationKey;
   accountCreated: TranslationKey;
   
+  // Admin dashboard specific
+  systemHealthDashboardTitle: TranslationKey;
+  monitorApplicationHealth: TranslationKey;
+  database: TranslationKey;
+  online: TranslationKey;
+  apiServer: TranslationKey;
+  running: TranslationKey;
+  totalUsers: TranslationKey;
+  systemFailures: TranslationKey;
+  accessAdminPanel: TranslationKey;
+  monitorIssues: TranslationKey;
+  administration: TranslationKey;
+  issueReports: TranslationKey;
+  
   // Landing page
   signIn: TranslationKey;
   getStarted: TranslationKey;
@@ -804,6 +818,56 @@ const translations: Translations = {
   accountCreated: {
     'en-GB': 'Account Created',
     'el-GR': 'Δημιουργία Λογαριασμού'
+  },
+  
+  // Admin dashboard specific
+  systemHealthDashboardTitle: {
+    'en-GB': 'System Health Dashboard',
+    'el-GR': 'Πίνακας Υγείας Συστήματος'
+  },
+  monitorApplicationHealth: {
+    'en-GB': 'Monitor application health and system status',
+    'el-GR': 'Παρακολούθηση υγείας εφαρμογής και κατάστασης συστήματος'
+  },
+  database: {
+    'en-GB': 'Database',
+    'el-GR': 'Βάση Δεδομένων'
+  },
+  online: {
+    'en-GB': 'Online',
+    'el-GR': 'Σε Λειτουργία'
+  },
+  apiServer: {
+    'en-GB': 'API Server',
+    'el-GR': 'Διακομιστής API'
+  },
+  running: {
+    'en-GB': 'Running',
+    'el-GR': 'Εκτελείται'
+  },
+  totalUsers: {
+    'en-GB': 'Total Users',
+    'el-GR': 'Σύνολο Χρηστών'
+  },
+  systemFailures: {
+    'en-GB': 'System Failures',
+    'el-GR': 'Σφάλματα Συστήματος'
+  },
+  accessAdminPanel: {
+    'en-GB': 'Access Admin Panel',
+    'el-GR': 'Πρόσβαση στο Πάνελ Διαχειριστή'
+  },
+  monitorIssues: {
+    'en-GB': 'Monitor Issues',
+    'el-GR': 'Παρακολούθηση Ζητημάτων'
+  },
+  administration: {
+    'en-GB': 'Administration',
+    'el-GR': 'Διαχείριση'
+  },
+  issueReports: {
+    'en-GB': 'Issue Reports',
+    'el-GR': 'Αναφορές Προβλημάτων'
   },
 
   // Messages

@@ -81,10 +81,10 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto p-6">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              System Health Dashboard
+              {t('systemHealthDashboardTitle')}
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Monitor application health and system status
+              {t('monitorApplicationHealth')}
             </p>
           </div>
 
@@ -94,8 +94,8 @@ export default function Dashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Database</p>
-                    <p className="text-2xl font-bold text-green-600">Online</p>
+                    <p className="text-sm font-medium text-gray-600">{t('database')}</p>
+                    <p className="text-2xl font-bold text-green-600">{t('online')}</p>
                   </div>
                   <Activity className="h-8 w-8 text-green-600" />
                 </div>
@@ -106,7 +106,7 @@ export default function Dashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">API Server</p>
+                    <p className="text-sm font-medium text-gray-600">{t('apiServer')}</p>
                     {serverStatus ? (
                       <div className="flex flex-col">
                         <p className="text-sm font-medium text-green-600">
@@ -115,7 +115,7 @@ export default function Dashboard() {
                         <span className="text-xs text-gray-500">(4 services running)</span>
                       </div>
                     ) : (
-                      <p className="text-2xl font-bold text-green-600">Running</p>
+                      <p className="text-2xl font-bold text-green-600">{t('running')}</p>
                     )}
                   </div>
                   <Shield className="h-8 w-8 text-green-600" />
@@ -127,7 +127,7 @@ export default function Dashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Total Users</p>
+                    <p className="text-sm font-medium text-gray-600">{t('totalUsers')}</p>
                     <p className="text-2xl font-bold text-blue-600">4</p>
                   </div>
                   <Users className="h-8 w-8 text-blue-600" />
@@ -139,7 +139,7 @@ export default function Dashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">System Failures</p>
+                    <p className="text-sm font-medium text-gray-600">{t('systemFailures')}</p>
                     <SystemFailuresCount />
                   </div>
                   <AlertTriangle className="h-8 w-8 text-red-600" />
@@ -152,11 +152,11 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Administration</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('administration')}</h3>
                 <Link href="/administration">
                   <Button className="w-full">
                     <Shield className="h-4 w-4 mr-2" />
-                    Access Admin Panel
+                    {t('accessAdminPanel')}
                   </Button>
                 </Link>
               </CardContent>
@@ -164,11 +164,11 @@ export default function Dashboard() {
 
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Issue Reports</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('issueReports')}</h3>
                 <Link href="/issues">
                   <Button className="w-full" variant="outline">
                     <AlertTriangle className="h-4 w-4 mr-2" />
-                    Monitor Issues
+                    {t('monitorIssues')}
                   </Button>
                 </Link>
               </CardContent>
