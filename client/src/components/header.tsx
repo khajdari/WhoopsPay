@@ -72,11 +72,11 @@ export function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-4 lg:space-x-8 ml-8 lg:ml-12">
+          <nav className="hidden md:flex space-x-6 lg:space-x-8 ml-8 lg:ml-12 flex-1 justify-center">
             {navigation.map((item) => (
               <Link key={item.name} href={item.href}>
                 <span
-                  className={`px-2 lg:px-3 py-2 text-sm font-medium transition-colors cursor-pointer whitespace-nowrap ${
+                  className={`px-3 lg:px-4 py-2 text-sm font-medium transition-colors cursor-pointer whitespace-nowrap ${
                     item.current
                       ? "whoopspay-blue border-b-2 border-blue-600"
                       : "text-gray-700 hover:whoopspay-blue"
@@ -89,7 +89,7 @@ export function Header() {
           </nav>
 
           {/* User Profile */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3 lg:space-x-4">
             {/* Language Selector */}
             <LanguageSelector />
             
