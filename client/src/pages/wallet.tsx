@@ -180,7 +180,7 @@ export default function Wallet() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-3xl font-bold text-green-600">
-                    {showBalance ? `$${balance}` : "••••••"}
+                    {showBalance ? `¤${balance}` : "••••••"}
                   </p>
                   <p className="text-sm text-gray-500 mt-1">Available balance</p>
                 </div>
