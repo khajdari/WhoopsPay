@@ -1392,11 +1392,11 @@ const translations: Translations = {
   },
   'transactions.onus': {
     'en-GB': 'ONUS',
-    'el-GR': 'ONUS'
+    'el-GR': 'Εσωτερική'
   },
   'transactions.offus': {
     'en-GB': 'OFFUS',
-    'el-GR': 'OFFUS'
+    'el-GR': 'Εξωτερική'
   },
   'transactions.searchPlaceholder': {
     'en-GB': 'Search: @user for users, numbers for amounts, text for types...',
