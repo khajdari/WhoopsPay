@@ -266,10 +266,10 @@ export default function Transactions() {
                           className="flex items-center space-x-1"
                         >
                           <ChevronLeft className="h-4 w-4" />
-                          <span>Previous</span>
+                          <span>{t('transactions.previous')}</span>
                         </Button>
                         <span className="text-sm text-gray-500">
-                          Page {currentPage} of {totalPages}
+                          {t('transactions.page')} {currentPage} {t('transactions.of')} {totalPages}
                         </span>
                         <Button
                           variant="outline"
@@ -278,7 +278,7 @@ export default function Transactions() {
                           disabled={currentPage === totalPages}
                           className="flex items-center space-x-1"
                         >
-                          <span>Next</span>
+                          <span>{t('transactions.next')}</span>
                           <ChevronRight className="h-4 w-4" />
                         </Button>
                       </div>
@@ -288,12 +288,12 @@ export default function Transactions() {
               </>
             ) : (
               <div className="px-6 py-12 text-center text-gray-500">
-                <p className="text-lg font-medium">No transactions found</p>
+                <p className="text-lg font-medium">{t('transactions.noTransactionsFound')}</p>
                 <p className="text-sm mt-1">
                   {searchQuery ? "Try adjusting your search" : "You haven't made any transactions yet"}
                 </p>
                 <Button className="mt-4 bg-paypal-blue hover:bg-paypal-darkblue text-white">
-                  Send Money
+                  {t('sendMoney')}
                 </Button>
               </div>
             )}

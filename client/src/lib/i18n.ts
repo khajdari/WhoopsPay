@@ -109,6 +109,10 @@ interface Translations {
   recentTransactions: TranslationKey;
   whoopsPayBalance: TranslationKey;
   paymentMethods: TranslationKey;
+  addCard: TranslationKey;
+  addBank: TranslationKey;
+  availableBalance: TranslationKey;
+  manageBalance: TranslationKey;
   
   // Issue Reporting
   issueReportingCenter: TranslationKey;
@@ -485,6 +489,24 @@ const translations: Translations = {
   balance: {
     'en-GB': 'Balance',
     'el-GR': 'Υπόλοιπο'
+  },
+  
+  // Additional wallet translations
+  addCard: {
+    'en-GB': 'Add Card',
+    'el-GR': 'Προσθήκη Κάρτας'
+  },
+  addBank: {
+    'en-GB': 'Add Bank',
+    'el-GR': 'Προσθήκη Τράπεζας'
+  },
+  availableBalance: {
+    'en-GB': 'Available balance',
+    'el-GR': 'Διαθέσιμο υπόλοιπο'
+  },
+  manageBalance: {
+    'en-GB': 'Manage your balance and payment methods',
+    'el-GR': 'Διαχειριστείτε το υπόλοιπό σας και τις μεθόδους πληρωμής'
   },
   
   // Notifications

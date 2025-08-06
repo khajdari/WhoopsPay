@@ -255,7 +255,7 @@ export default function ExternalPayment() {
               {/* Amount */}
               <div className="text-center py-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-lg">
                 <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">
-                  ${transaction.amount.toFixed(2)}
+                  ¤{transaction.amount.toFixed(2)}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   Payment Amount

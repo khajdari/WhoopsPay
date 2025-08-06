@@ -142,7 +142,7 @@ export default function PaymentResult() {
                 {paymentData.amount && (
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Amount:</span>
-                    <span className="font-medium">${paymentData.amount}</span>
+                    <span className="font-medium">¤{paymentData.amount}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
