@@ -536,6 +536,14 @@ const translations: Translations = {
     'en-GB': 'Rejected',
     'el-GR': 'Απορρίφθηκε'
   },
+  completed: {
+    'en-GB': 'Completed',
+    'el-GR': 'Ολοκληρώθηκε'
+  },
+  pending: {
+    'en-GB': 'Pending',
+    'el-GR': 'Εκκρεμεί'
+  },
   
   // Issue Reporting
   issueReportingCenter: {
@@ -1038,11 +1046,11 @@ const translations: Translations = {
   // Transaction status and types
   onus: {
     'en-GB': 'On-Us',
-    'el-GR': 'Εσωτερική συναλλαγή'
+    'el-GR': 'Εσωτερική'
   },
   offus: {
     'en-GB': 'Off-Us', 
-    'el-GR': 'Εξωτερική συναλλαγή'
+    'el-GR': 'Εξωτερική'
   },
 
   
