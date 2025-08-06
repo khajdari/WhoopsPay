@@ -15,7 +15,7 @@ import {
   Settings,
   Eye,
   EyeOff,
-  DollarSign
+  Coins
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
@@ -165,7 +165,7 @@ export default function WalletManagement() {
             <div className="flex justify-between items-start">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <DollarSign className="w-5 h-5" />
+                  <Coins className="w-5 h-5" />
                   <span className="text-sm font-medium opacity-80">{t('balance')}</span>
                   <Button
                     variant="ghost"
