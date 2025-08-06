@@ -20,36 +20,68 @@
         
         .header {
             background: #673ab7;
-            padding: 1rem 2rem;
+            padding: 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         
-        .header h1 {
+        .header-left {
+            display: flex;
+            align-items: center;
+            padding-left: 16px;
+        }
+        
+        .menu-icon {
+            background: none;
+            border: none;
             color: white;
-            font-size: 1.5rem;
-            font-weight: 500;
-            text-align: left;
+            font-size: 24px;
+            margin-right: 16px;
+            cursor: pointer;
+            padding: 8px;
+        }
+        
+        .logo {
             display: flex;
             align-items: center;
         }
         
-        .header h1::before {
-            content: "🧃";
+        .logo-icon {
             background: #ff9800;
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
             font-size: 16px;
         }
         
-        .header p {
-            color: rgba(255,255,255,0.7);
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
+        .logo-text {
+            color: white;
+            font-size: 20px;
+            font-weight: 400;
+            margin: 0;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            padding-right: 16px;
+        }
+        
+        .header-icon {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            margin-left: 16px;
+            cursor: pointer;
+            padding: 8px;
         }
         
         .container {
@@ -158,18 +190,7 @@
         }
         
         .basket-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #673ab7;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            z-index: 1001;
+            display: none;
         }
         
         .basket h3 {
@@ -308,8 +329,18 @@
 </head>
 <body>
     <div class="header">
-        <h1>OWASP Juice Shop</h1>
-        <p>Probably the most modern and sophisticated insecure web application</p>
+        <div class="header-left">
+            <button class="menu-icon">☰</button>
+            <div class="logo">
+                <div class="logo-icon">🧃</div>
+                <h1 class="logo-text">OWASP Juice Shop</h1>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="header-icon">🔍</button>
+            <button class="header-icon">👤</button>
+            <button class="header-icon" onclick="toggleBasket()">🛒 <span id="basket-count-header">0</span></button>
+        </div>
     </div>
 
     <div class="container">
@@ -319,7 +350,7 @@
         </div>
     </div>
 
-    <button class="basket-toggle" onclick="toggleBasket()">🛒 <span id="basket-count">0</span></button>
+
 
     <div class="basket" id="basket">
         <h3>Shopping Basket</h3>
@@ -413,7 +444,7 @@
 
         function renderBasket() {
             const basketItems = document.getElementById('basket-items');
-            const basketCount = document.getElementById('basket-count');
+            const basketCount = document.getElementById('basket-count-header');
             const total = document.getElementById('total');
 
             if (basket.length === 0) {
