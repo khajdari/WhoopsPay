@@ -212,6 +212,8 @@ interface Translations {
   enterCurrentPassword: TranslationKey;
   enterNewPassword: TranslationKey;
   confirmNewPassword: TranslationKey;
+  userId: TranslationKey;
+  accountCreated: TranslationKey;
   
   // Landing page
   signIn: TranslationKey;
@@ -794,6 +796,14 @@ const translations: Translations = {
   confirmNewPassword: {
     'en-GB': 'Confirm new password',
     'el-GR': 'Επιβεβαιώστε τον νέο κωδικό'
+  },
+  userId: {
+    'en-GB': 'User ID',
+    'el-GR': 'ID Χρήστη'
+  },
+  accountCreated: {
+    'en-GB': 'Account Created',
+    'el-GR': 'Λογαριασμός Δημιουργήθηκε'
   },
 
   // Messages
