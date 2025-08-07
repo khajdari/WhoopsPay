@@ -67,6 +67,17 @@ interface Translations {
   requestMoney: TranslationKey;
   amount: TranslationKey;
   recipient: TranslationKey;
+  verifyingPayment: TranslationKey;
+  waitingForCallback: TranslationKey;
+  listeningForPaymentConfirmation: TranslationKey;
+  paymentVerified: TranslationKey;
+  verificationFailed: TranslationKey;
+  amountMismatch: TranslationKey;
+  verificationPending: TranslationKey;
+  transactionComplete: TranslationKey;
+  transactionFailed: TranslationKey;
+  transactionProcessedSuccessfully: TranslationKey;
+  transactionCouldNotBeCompleted: TranslationKey;
   description: TranslationKey;
   paymentMethod: TranslationKey;
   balance: TranslationKey;
@@ -158,9 +169,12 @@ interface Translations {
   serverStatus: TranslationKey;
   databaseHealth: TranslationKey;
   apiDocumentation: TranslationKey;
+  adminApiDocumentation: TranslationKey;
   systemLogs: TranslationKey;
   expressLogs: TranslationKey;
+  adminExpressLogs: TranslationKey;
   databaseLogs: TranslationKey;
+  adminDatabaseLogs: TranslationKey;
   userManagement: TranslationKey;
   issueManagement: TranslationKey;
   systemOverview: TranslationKey;
@@ -172,9 +186,11 @@ interface Translations {
   totalTransactions: TranslationKey;
   pendingIssues: TranslationKey;
   dashboardOnline: TranslationKey;
+  statusOnline: TranslationKey;
   offline: TranslationKey;
   healthy: TranslationKey;
   warning: TranslationKey;
+  statusCritical: TranslationKey;
   
   // Greetings and common UI
   hi: TranslationKey;
@@ -1461,47 +1477,47 @@ const translations: Translations = {
   },
 
   // Payment component translations
-  'verifyingPayment': {
+  verifyingPayment: {
     'en-GB': 'Verifying payment...',
     'el-GR': 'Επαλήθευση πληρωμής...'
   },
-  'waitingForCallback': {
+  waitingForCallback: {
     'en-GB': 'Waiting for payment callback...',
     'el-GR': 'Αναμονή για callback πληρωμής...'
   },
-  'listeningForPaymentConfirmation': {
+  listeningForPaymentConfirmation: {
     'en-GB': 'Listening for payment confirmation from external service',
     'el-GR': 'Αναμονή επιβεβαίωσης πληρωμής από εξωτερική υπηρεσία'
   },
-  'paymentVerified': {
+  paymentVerified: {
     'en-GB': 'Payment verified successfully',
     'el-GR': 'Η πληρωμή επαληθεύτηκε με επιτυχία'
   },
-  'verificationFailed': {
+  verificationFailed: {
     'en-GB': 'Payment verification failed',
     'el-GR': 'Η επαλήθευση πληρωμής απέτυχε'
   },
-  'amountMismatch': {
+  amountMismatch: {
     'en-GB': 'Payment amount mismatch detected',
     'el-GR': 'Ανιχνεύθηκε αναντιστοιχία ποσού πληρωμής'
   },
-  'verificationPending': {
+  verificationPending: {
     'en-GB': 'Payment verification pending',
     'el-GR': 'Επαλήθευση πληρωμής σε εκκρεμότητα'
   },
-  'transactionComplete': {
+  transactionComplete: {
     'en-GB': 'Transaction completed successfully',
     'el-GR': 'Η συναλλαγή ολοκληρώθηκε με επιτυχία'
   },
-  'transactionFailed': {
+  transactionFailed: {
     'en-GB': 'Transaction failed',
     'el-GR': 'Η συναλλαγή απέτυχε'
   },
-  'transactionProcessedSuccessfully': {
+  transactionProcessedSuccessfully: {
     'en-GB': 'Your transaction has been processed successfully',
     'el-GR': 'Η συναλλαγή σας έχει επεξεργαστεί με επιτυχία'
   },
-  'transactionCouldNotBeCompleted': {
+  transactionCouldNotBeCompleted: {
     'en-GB': 'Your transaction could not be completed',
     'el-GR': 'Η συναλλαγή σας δεν μπόρεσε να ολοκληρωθεί'
   },
