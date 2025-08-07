@@ -429,6 +429,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin log endpoints
   app.get('/api/admin/logs/express', isAuthenticated, AdminController.getExpressLogs);
   app.get('/api/admin/logs/database', isAuthenticated, AdminController.getDatabaseLogs);
+  app.get('/api/admin/system-failures', isAuthenticated, AdminController.getSystemFailures);
 
   // Admin database management endpoints
   app.get('/api/admin/database/tables', isAuthenticated, AdminController.getDatabaseTables);

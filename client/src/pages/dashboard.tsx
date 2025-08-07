@@ -53,6 +53,13 @@ export default function Dashboard() {
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 
+  // System failures data for admin dashboard
+  const { data: systemFailures } = useQuery({
+    queryKey: ["/api/admin/system-failures"],
+    enabled: !!user && (user as any)?.isAdmin === 1,
+    refetchInterval: 60000, // Refetch every minute
+  });
+
   // Handle external payment request assignment when arriving from Juice Shop
   useEffect(() => {
     if (!user) return;
@@ -129,6 +136,55 @@ export default function Dashboard() {
               {t('monitorApplicationHealth')}
             </p>
           </div>
+
+          {/* System Failures Table - Only show if there are real failures */}
+          {systemFailures?.failures && systemFailures.failures.length > 0 && (
+            <div className="mb-8">
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4 text-red-600">{t('systemFailuresTable')}</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left py-2 px-3">{t('errorTime')}</th>
+                          <th className="text-left py-2 px-3">{t('errorType')}</th>
+                          <th className="text-left py-2 px-3">{t('errorMessage')}</th>
+                          <th className="text-left py-2 px-3">{t('errorSeverity')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {systemFailures.failures.map((failure: any, index: number) => (
+                          <tr key={index} className="border-b">
+                            <td className="py-2 px-3 text-xs text-gray-600">
+                              {new Date(failure.time).toLocaleTimeString()}
+                            </td>
+                            <td className="py-2 px-3">
+                              <span className="px-2 py-1 rounded text-xs bg-gray-100 text-gray-800">
+                                {failure.type}
+                              </span>
+                            </td>
+                            <td className="py-2 px-3 text-xs">
+                              {failure.message}
+                            </td>
+                            <td className="py-2 px-3">
+                              <span className={`px-2 py-1 rounded text-xs ${
+                                failure.severity === 'critical' ? 'bg-red-100 text-red-800' :
+                                failure.severity === 'high' ? 'bg-orange-100 text-orange-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {failure.severity}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           {/* Health Check Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
