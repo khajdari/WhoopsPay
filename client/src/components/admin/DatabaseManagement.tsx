@@ -566,9 +566,9 @@ export function DatabaseManagement() {
 
       {/* Edit Row Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto border-2 border-orange-200">
-          <DialogHeader className="pb-6 border-b border-orange-100">
-            <DialogTitle className="text-2xl font-bold text-center text-[hsl(var(--whoopspay-orange))]">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto border-2 border-blue-200">
+          <DialogHeader className="pb-6 border-b border-blue-100">
+            <DialogTitle className="text-2xl font-bold text-center text-[hsl(var(--whoopspay-blue))]">
               🔧 Edit Database Record
             </DialogTitle>
             <p className="text-center text-gray-600 mt-2">
@@ -576,12 +576,12 @@ export function DatabaseManagement() {
             </p>
           </DialogHeader>
           
-          <div className="bg-gradient-to-br from-orange-50/70 to-amber-50/70 rounded-xl p-6 border border-orange-200">
+          <div className="bg-gradient-to-br from-blue-50/70 to-sky-50/70 rounded-xl p-6 border border-blue-200">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {tables?.find((t: TableInfo) => t.name === selectedTable)?.columns.map((col: any, idx: number) => (
                 <div key={idx} className="space-y-3">
                   <Label className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-[hsl(var(--whoopspay-orange))]"></div>
+                    <div className="w-3 h-3 rounded-full bg-[hsl(var(--whoopspay-blue))]"></div>
                     {col.name}
                     <span className="text-xs text-white bg-[hsl(var(--whoopspay-gold))] px-3 py-1 rounded-full font-semibold">
                       {col.type}
@@ -605,7 +605,7 @@ export function DatabaseManagement() {
                     className={`border-2 transition-all duration-200 ${
                       formErrors[idx] 
                         ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100' 
-                        : 'border-orange-200 focus:border-[hsl(var(--whoopspay-orange))] focus:ring-2 focus:ring-orange-100'
+                        : 'border-blue-200 focus:border-[hsl(var(--whoopspay-blue))] focus:ring-2 focus:ring-blue-100'
                     }`}
                   />
                   {formErrors[idx] && (
@@ -622,7 +622,7 @@ export function DatabaseManagement() {
               <Button 
                 onClick={handleSaveEditedRow}
                 disabled={isSubmitting}
-                className="bg-[hsl(var(--whoopspay-orange))] hover:bg-[hsl(var(--whoopspay-darkblue))] text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-bold text-base"
+                className="bg-[hsl(var(--whoopspay-blue))] hover:bg-[hsl(var(--whoopspay-darkblue))] text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-bold text-base"
               >
                 {isSubmitting ? (
                   <>
@@ -643,7 +643,7 @@ export function DatabaseManagement() {
                   setFormErrors({});
                 }}
                 disabled={isSubmitting}
-                className="border-2 border-[hsl(var(--whoopspay-orange))] text-[hsl(var(--whoopspay-orange))] hover:bg-[hsl(var(--whoopspay-orange))] hover:text-white px-8 py-3 rounded-xl transition-all duration-200 font-bold"
+                className="border-2 border-[hsl(var(--whoopspay-blue))] text-[hsl(var(--whoopspay-blue))] hover:bg-[hsl(var(--whoopspay-blue))] hover:text-white px-8 py-3 rounded-xl transition-all duration-200 font-bold"
               >
                 Cancel
               </Button>
