@@ -658,6 +658,8 @@ export class DatabaseStorage implements IStorage {
 
   async getPendingMoneyRequests(userId: string): Promise<any[]> {
     try {
+      console.log(`Fetching pending requests for user: ${userId}`);
+      
       const result = await db
         .select({
           id: moneyRequests.id,
@@ -688,6 +690,8 @@ export class DatabaseStorage implements IStorage {
           eq(moneyRequests.status, "pending")
         ))
         .orderBy(desc(moneyRequests.createdAt));
+      
+      console.log(`Found ${result.length} pending requests for user ${userId}:`, result.map(r => ({ id: r.id, fromUserId: r.fromUserId, toUserId: r.toUserId, amount: r.amount })));
       return result;
     } catch (error) {
       console.error("Error fetching pending money requests:", error);
