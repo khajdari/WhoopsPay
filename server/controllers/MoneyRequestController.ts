@@ -139,7 +139,7 @@ export class MoneyRequestController {
         await storage.updateUserBalance(request.toUserId, newToBalance.toFixed(2));
         console.log("Balance updates completed successfully");
 
-        // Create a transaction record
+        // Create a transaction record for the payment transfer
         try {
           await storage.createTransaction({
             fromUserId: request.fromUserId,
@@ -153,6 +153,22 @@ export class MoneyRequestController {
           });
         } catch (transactionError) {
           console.error("Error creating transaction record:", transactionError);
+        }
+
+        // Create a transaction record for the request approval
+        try {
+          await storage.createTransaction({
+            fromUserId: request.fromUserId,
+            toUserId: request.toUserId,
+            amount: request.amount,
+            description: `Money request approved: ${request.description || "Money request"}`,
+            status: "approved",
+            type: "money_request",
+            transactionCategory: request.type === "external" ? "OFFUS" : "ONUS",
+            isInternal: request.type === "internal" ? 1 : 0
+          });
+        } catch (transactionError) {
+          console.error("Error creating approval transaction record:", transactionError);
         }
 
         // Create notifications for both users
@@ -234,6 +250,23 @@ export class MoneyRequestController {
       // Update request status to rejected
       const updatedRequest = await storage.updateMoneyRequestStatus(parseInt(requestId), "rejected");
 
+      // Create a transaction record for the rejection
+      try {
+        const rejectorUser = await storage.getUser(userId);
+        await storage.createTransaction({
+          fromUserId: request.fromUserId,
+          toUserId: request.toUserId,
+          amount: request.amount,
+          description: `Money request rejected: ${request.description || "Money request"}`,
+          status: "rejected",
+          type: "money_request",
+          transactionCategory: request.type === "external" ? "OFFUS" : "ONUS",
+          isInternal: request.type === "internal" ? 1 : 0
+        });
+      } catch (transactionError) {
+        console.error("Error creating rejection transaction record:", transactionError);
+      }
+
       // Create rejection notification for the person who made the request
       try {
         const rejectorUser = await storage.getUser(userId);
@@ -309,6 +342,22 @@ export class MoneyRequestController {
         status: "pending",
         type: "internal"
       });
+
+      // Create a transaction record for the money request creation
+      try {
+        await storage.createTransaction({
+          fromUserId: fromUserId,
+          toUserId: userId,
+          amount: parseFloat(amount),
+          description: `Money request created: ${description || "Money request"}`,
+          status: "pending",
+          type: "money_request",
+          transactionCategory: "ONUS",
+          isInternal: 1
+        });
+      } catch (transactionError) {
+        console.error("Error creating money request transaction record:", transactionError);
+      }
 
       // Create notification for the person being asked to pay
       try {
