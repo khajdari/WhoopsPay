@@ -41,8 +41,8 @@ RUN npm ci --only=production && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/data ./data
 
-# Copy client assets for production serving
-COPY --from=builder /app/dist/client ./dist/client
+# Copy client assets for production serving (Vite builds to dist/public)
+COPY --from=builder /app/dist/public ./dist/client
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs && \

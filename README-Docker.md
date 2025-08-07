@@ -154,9 +154,12 @@ docker logs whoopspay-juice-shop-official  # Only if using --profile optional
 ### Common Issues
 
 **Container keeps restarting with "Cannot find package 'vite'" error:**
-- This was a known issue with development dependencies in production
-- Fixed in the latest Docker configuration
-- Solution: Rebuild with `./docker-run.sh build`
+- Fixed by creating production-only server build without vite dependencies
+- Solution: `docker-compose build --no-cache whoopspay`
+
+**Build fails with "dist/client not found" error:**
+- Fixed by correcting Vite output path mapping in Docker
+- Vite builds client to `/dist/public`, Docker now maps this correctly
 
 **Port already in use:**
 - Stop existing containers: `./docker-run.sh stop`
