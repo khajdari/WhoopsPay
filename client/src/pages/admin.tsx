@@ -43,7 +43,7 @@ export default function Admin() {
   const [showSensitive, setShowSensitive] = useState(false);
   const { t } = useI18n();
 
-  const { data: users, isLoading } = useQuery({
+  const { data: users, isLoading } = useQuery<Array<any>>({
     queryKey: ['/api/users'], // VULNERABLE: No access control
   });
 
@@ -153,7 +153,60 @@ export default function Admin() {
         </div>
       </div>
       
-      <Footer />
+      {/* Administration-specific Footer */}
+      <footer className="bg-gray-900 border-t border-gray-700 text-white py-8 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Security Training Info */}
+            <div>
+              <h4 className="text-lg font-semibold text-red-400 mb-3">Security Training</h4>
+              <p className="text-sm text-gray-300 mb-2">
+                This administrative panel demonstrates security vulnerabilities for educational purposes.
+              </p>
+              <p className="text-xs text-red-300">
+                ⚠️ Contains intentional security flaws for learning
+              </p>
+            </div>
+
+            {/* System Information */}
+            <div>
+              <h4 className="text-lg font-semibold text-blue-400 mb-3">System Information</h4>
+              <div className="text-sm text-gray-300 space-y-1">
+                <p>Version: WhoopsPay v2.0</p>
+                <p>Environment: Development</p>
+                <p>Last Update: {new Date().toLocaleDateString()}</p>
+                <p>Total Users: {users?.length || 0}</p>
+              </div>
+            </div>
+
+            {/* Legal & Documentation */}
+            <div>
+              <h4 className="text-lg font-semibold text-green-400 mb-3">Documentation</h4>
+              <div className="text-sm text-gray-300 space-y-2">
+                <p>
+                  <a href="/api-docs" className="text-blue-400 hover:text-blue-300 underline">
+                    {t('apiDocumentation')}
+                  </a>
+                </p>
+                <p>
+                  <a href="/issue-reports" className="text-yellow-400 hover:text-yellow-300 underline">
+                    Issue Reports
+                  </a>
+                </p>
+                <p className="text-xs text-gray-400 pt-2">
+                  For educational and training purposes only
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-700 mt-6 pt-6 text-center">
+            <p className="text-sm text-gray-400">
+              © 2024 WhoopsPay Educational Platform - Cybersecurity Training System
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
