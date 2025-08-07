@@ -18,6 +18,7 @@ export interface AppConfig {
   development: DomainConfig;
   production: DomainConfig;
   replit: DomainConfig;
+  docker: DomainConfig;
 }
 
 const config: AppConfig = {
@@ -50,6 +51,16 @@ const config: AppConfig = {
       domain: "https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/juice-shop",
       name: "Juice Shop Replit"
     }
+  },
+  docker: {
+    whoopspay: {
+      domain: process.env.WHOOPSPAY_URL || "http://localhost:3000",
+      name: "WhoopsPay Docker"
+    },
+    juiceShop: {
+      domain: process.env.JUICE_SHOP_URL || "http://localhost:3001",
+      name: "Juice Shop Docker"
+    }
   }
 };
 
@@ -59,9 +70,12 @@ const config: AppConfig = {
 export function getCurrentConfig(): DomainConfig {
   const env = process.env.NODE_ENV || 'development';
   const isReplit = process.env.REPLIT_DOMAINS || process.env.REPL_ID;
+  const isDocker = process.env.WHOOPSPAY_URL || process.env.JUICE_SHOP_URL;
   
   // Determine environment
-  if (isReplit) {
+  if (isDocker && !isReplit) {
+    return config.docker;
+  } else if (isReplit) {
     return config.replit;
   } else if (env === 'production') {
     return config.production;

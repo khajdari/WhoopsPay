@@ -8,6 +8,10 @@ The application serves as a training tool for security professionals, developers
 
 ## Recent Changes (December 2024)
 
+- **Docker Support**: Complete Docker configuration with multi-stage builds and health checks
+- **Docker Compose**: Full orchestration of WhoopsPay + OWASP Juice Shop containers
+- **Environment Detection**: Enhanced URL adapter supports Docker, localhost, and Replit environments  
+- **Production Ready**: Optimized Docker images with security best practices
 - **MVC Architecture Implementation**: Refactored monolithic routes.ts into proper MVC structure with dedicated controllers
 - **Modular Organization**: Moved Juice Shop integration into separate modules/juice-shop directory  
 - **Controller Layer**: Created dedicated controllers for Auth, User, Transaction, MoneyRequest, Notification, and Admin operations
@@ -63,13 +67,17 @@ Preferred communication style: Simple, everyday language.
 ### External Integrations
 - **Juice Shop integration** for cross-platform payment processing demonstration
 - **PayPal SDK integration** for external payment gateway simulation
-- **Replit environment detection** with dynamic configuration management
+- **Docker containerization** with multi-service orchestration
+- **Environment detection** supporting Docker, Replit, and localhost configurations
+- **Health check endpoints** for container monitoring and load balancing
 
 ### Development Tools
 - **TypeScript** throughout for enhanced developer experience and type safety
 - **ESBuild** for fast server-side bundling and production builds
 - **Hot module replacement** with Vite for rapid development iteration
 - **Component architecture** with reusable UI components and custom hooks
+- **Docker support** with multi-stage builds, health checks, and development overrides
+- **Container orchestration** using Docker Compose for local development
 
 ## External Dependencies
 
