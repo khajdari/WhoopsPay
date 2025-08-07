@@ -147,8 +147,6 @@ interface Translations {
   // Transaction status and types
   onus: TranslationKey;
   offus: TranslationKey;
-  completed: TranslationKey;
-  pending: TranslationKey;
   
   // Administration
   accountInformation: TranslationKey;
@@ -262,7 +260,7 @@ interface Translations {
   // Category options
   technical: TranslationKey;
   payment: TranslationKey;
-  security: TranslationKey;
+  categorySecurityOption: TranslationKey;
   account: TranslationKey;
   other: TranslationKey;
   
@@ -311,9 +309,6 @@ interface Translations {
   // Signup page
   signUpTitle: TranslationKey;
   createAccount: TranslationKey;
-  firstName: TranslationKey;
-  lastName: TranslationKey;
-  email: TranslationKey;
   enterFirstName: TranslationKey;
   enterLastName: TranslationKey;
   enterEmail: TranslationKey;
@@ -687,10 +682,6 @@ const translations: Translations = {
     'el-GR': 'Υποβολή και παρακολούθηση αναφορών για σφάλματα, ζητήματα ασφαλείας και άλλα προβλήματα πλατφόρμας'
   },
   // Status labels
-  open: {
-    'en-GB': 'Open',
-    'el-GR': 'Ανοιχτό'
-  },
   inProgressStatus: {
     'en-GB': 'In Progress',
     'el-GR': 'Σε Εξέλιξη'
@@ -1020,6 +1011,10 @@ const translations: Translations = {
   account: {
     'en-GB': 'Account',
     'el-GR': 'Λογαριασμός'
+  },
+  categorySecurityOption: {
+    'en-GB': 'Security',
+    'el-GR': 'Ασφάλεια'
   },
   other: {
     'en-GB': 'Other',

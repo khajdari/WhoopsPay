@@ -102,8 +102,8 @@ export default function Dashboard() {
       refetchInterval: 30000, // Refetch every 30 seconds
     });
 
-    const errorCount = expressLogs?.logs ? 
-      expressLogs.logs.filter((log: string) => 
+    const errorCount = (expressLogs as any)?.logs ? 
+      (expressLogs as any).logs.filter((log: string) => 
         log.includes(' 4') || log.includes(' 5') || log.toLowerCase().includes('error')
       ).length : 0;
 
@@ -152,7 +152,7 @@ export default function Dashboard() {
                     {serverStatus ? (
                       <div className="flex flex-col">
                         <p className="text-sm font-medium text-green-600">
-                          Started: {new Date(serverStatus.startTime).toLocaleString()}
+                          Started: {new Date((serverStatus as any).startTime).toLocaleString()}
                         </p>
                         <span className="text-xs text-gray-500">(4 services running)</span>
                       </div>
@@ -361,10 +361,10 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-medium text-gray-900 flex items-center gap-2">
                     <Clock className="h-5 w-5 text-orange-500" />
-                    {t('dashboard.pendingRequests')}
-                    {pendingRequests && pendingRequests.length > 0 && (
+                    {t('pendingRequests')}
+                    {pendingRequests && (pendingRequests as any).length > 0 && (
                       <span className="ml-2 bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                        {pendingRequests.length}
+                        {(pendingRequests as any).length}
                       </span>
                     )}
                   </h3>
@@ -388,7 +388,7 @@ export default function Dashboard() {
                       </div>
                     ))}
                   </div>
-                ) : Array.isArray(pendingRequests) && pendingRequests.length > 0 ? (
+                ) : Array.isArray(pendingRequests) && (pendingRequests as any).length > 0 ? (
                   <div className="mt-4 space-y-3">
                     {pendingRequests.map((request: any) => (
                       <div 
@@ -479,7 +479,7 @@ export default function Dashboard() {
                   <div className="flex-1">
                     <p className="text-sm font-medium text-gray-600">All Transactions</p>
                     <p className="text-2xl font-bold text-gray-900">
-                      {allTransactionsLoading ? <Skeleton className="h-8 w-16" /> : allTransactions ? allTransactions.length : '0'}
+                      {allTransactionsLoading ? <Skeleton className="h-8 w-16" /> : allTransactions ? (allTransactions as any).length : '0'}
                     </p>
                   </div>
                   <Activity className="h-8 w-8 text-green-600" />
@@ -506,7 +506,7 @@ export default function Dashboard() {
                       {serverStatus ? (
                         <>
                           <p className="text-sm font-medium text-green-600">
-                            Started: {new Date(serverStatus.startTime).toLocaleString()}
+                            Started: {new Date((serverStatus as any).startTime).toLocaleString()}
                           </p>
                           <span className="text-xs text-gray-500">({allUsers ? '4' : '0'} services running)</span>
                         </>
@@ -540,9 +540,9 @@ export default function Dashboard() {
                         </div>
                       ))}
                     </div>
-                  ) : allUsers && allUsers.length > 0 ? (
+                  ) : allUsers && (allUsers as any).length > 0 ? (
                     <div className="space-y-4">
-                      {allUsers.slice(0, 5).map((user: any) => (
+                      {(allUsers as any).slice(0, 5).map((user: any) => (
                         <div key={user.id} className="flex items-center justify-between">
                           <div className="flex items-center space-x-3">
                             <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
@@ -590,8 +590,8 @@ export default function Dashboard() {
                         </div>
                       ))}
                     </div>
-                  ) : allTransactions && allTransactions.length > 0 ? (
-                    allTransactions.slice(0, 5).map((transaction: any) => (
+                  ) : allTransactions && (allTransactions as any).length > 0 ? (
+                    (allTransactions as any).slice(0, 5).map((transaction: any) => (
                       <TransactionItem key={transaction.id} transaction={transaction} />
                     ))
                   ) : (
