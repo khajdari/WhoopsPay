@@ -24,6 +24,7 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useI18n } from '@/lib/i18n';
 
 /**
  * NotificationsModalProps Interface - Component properties
@@ -55,6 +56,7 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
   const { notifications, unreadCount, markAllAsRead, clearAll } = useNotifications();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { t } = useI18n();
 
   const approveRequestMutation = useMutation({
     mutationFn: async (transactionId: number) => {
@@ -113,10 +115,10 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Bell className="w-5 h-5" />
-            Notifications
+            {t('notifications')}
             {unreadCount > 0 && (
               <Badge variant="destructive" className="ml-auto">
-                {unreadCount} new
+                {unreadCount} {t('new')}
               </Badge>
             )}
           </DialogTitle>
@@ -126,7 +128,7 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
           {notifications.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               <Bell className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-              <p>No notifications</p>
+              <p>{t('noNotifications')}</p>
             </div>
           ) : (
             notifications.map((notification) => {
@@ -162,7 +164,7 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                         <div className="flex items-center gap-2 mt-2">
                           <Badge className="bg-orange-100 text-orange-800 text-xs flex items-center gap-1">
                             <ExternalLink className="w-3 h-3" />
-                            Off-Us
+                            {t('offus')}
                           </Badge>
                         </div>
                       )}
@@ -172,7 +174,7 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                         <div className="flex items-center gap-2 mt-2">
                           <Badge className="bg-blue-100 text-blue-800 text-xs flex items-center gap-1">
                             <CreditCard className="w-3 h-3" />
-                            On-Us
+                            {t('onus')}
                           </Badge>
                         </div>
                       )}
@@ -191,7 +193,7 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                             className="bg-green-600 hover:bg-green-700 text-white"
                           >
                             <Check className="w-3 h-3 mr-1" />
-                            Approve
+                            {t('approve')}
                           </Button>
                           <Button
                             size="sm"
@@ -201,7 +203,7 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                             className="border-red-300 text-red-600 hover:bg-red-50"
                           >
                             <X className="w-3 h-3 mr-1" />
-                            Reject
+                            {t('reject')}
                           </Button>
                         </div>
                       )}
@@ -218,20 +220,11 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
             <Button 
               variant="outline" 
               size="sm" 
-              className="flex-1"
-              onClick={handleMarkAllRead}
-            >
-              <Check className="w-4 h-4 mr-2" />
-              Mark all as read
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="flex-1"
+              className="w-full"
               onClick={handleClearAll}
             >
               <X className="w-4 h-4 mr-2" />
-              Clear all
+              {t('clearAll')}
             </Button>
           </div>
         )}
