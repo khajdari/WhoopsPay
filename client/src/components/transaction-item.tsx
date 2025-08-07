@@ -53,8 +53,13 @@ interface TransactionItemProps {
 export function TransactionItem({ transaction }: TransactionItemProps) {
   const { user } = useAuth();
   
+  // Early return if transaction is null or undefined
+  if (!transaction) {
+    return <div>Loading transaction...</div>;
+  }
+  
   const isOutgoing = transaction.fromUserId === user?.id;
-  const amount = parseFloat(transaction.amount);
+  const amount = parseFloat(transaction.amount || '0');
   const formattedAmount = `${isOutgoing ? '- ¤' : '+ ¤'}${Math.abs(amount).toFixed(2)}`;
   
   const getTransactionIcon = () => {
@@ -73,7 +78,8 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
     // VULNERABLE: This could expose user information through client-side logic
     if (transaction.description?.includes('Amazon')) return 'Amazon.com';
     if (transaction.description?.includes('Bank')) return 'Bank Transfer';
-    return isOutgoing ? transaction.toUserId : transaction.fromUserId;
+    const contactName = isOutgoing ? transaction.toUserId : transaction.fromUserId;
+    return contactName || 'Unknown Contact';
   };
 
   return (
@@ -112,7 +118,7 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
             ) : (
               <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                 <span className="text-blue-600 font-semibold text-sm">
-                  {getContactName().substring(0, 2).toUpperCase()}
+                  {(getContactName() || 'UN').substring(0, 2).toUpperCase()}
                 </span>
               </div>
             )}
