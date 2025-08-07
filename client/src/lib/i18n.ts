@@ -187,6 +187,7 @@ interface Translations {
   pendingIssues: TranslationKey;
   dashboardOnline: TranslationKey;
   statusOnline: TranslationKey;
+  adminOnline: TranslationKey;
   offline: TranslationKey;
   healthy: TranslationKey;
   warning: TranslationKey;
@@ -197,6 +198,7 @@ interface Translations {
   issueReports: TranslationKey;
   noPendingRequests: TranslationKey;
   noPendingRequestsDesc: TranslationKey;
+  pendingRequests: TranslationKey;
   
   // Profile and Settings
   profileSettings: TranslationKey;
@@ -234,7 +236,6 @@ interface Translations {
   systemHealthDashboardTitle: TranslationKey;
   monitorApplicationHealth: TranslationKey;
   database: TranslationKey;
-  adminOnline: TranslationKey;
   apiServer: TranslationKey;
   running: TranslationKey;
   adminTotalUsers: TranslationKey;
@@ -719,6 +720,10 @@ const translations: Translations = {
   noPendingRequestsDesc: {
     'en-GB': 'When someone requests money from you, it will appear here',
     'el-GR': 'Όταν κάποιος σας ζητήσει χρήματα, θα εμφανιστεί εδώ'
+  },
+  pendingRequests: {
+    'en-GB': 'Pending Requests',
+    'el-GR': 'Εκκρεμή Αιτήματα'
   },
   
   // Profile and Settings
@@ -1388,6 +1393,10 @@ const translations: Translations = {
   statusOnline: {
     'en-GB': 'Online',
     'el-GR': 'Σε Σύνδεση'
+  },
+  adminOnline: {
+    'en-GB': 'Online',
+    'el-GR': 'Σε Λειτουργία'
   },
   offline: {
     'en-GB': 'Offline', 
