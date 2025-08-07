@@ -16,7 +16,7 @@ services:
       - DATABASE_URL=file:./data/database.db
       - SESSION_SECRET=your-secure-session-secret-change-in-production
       - WHOOPSPAY_URL=http://localhost:3000
-      - JUICE_SHOP_URL=http://localhost:3001
+      - JUICE_SHOP_URL=http://localhost:3000/juice-shop
     volumes:
       - ./data:/app/data  # Persist SQLite database
       - ./logs:/app/logs  # Persist application logs
@@ -29,15 +29,14 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    depends_on:
-      - juice-shop
+    # Remove dependency on juice-shop since we use integrated version
 
-  # OWASP Juice Shop (External Payment Service)
+  # OWASP Juice Shop (External Payment Service) - Optional official version
   juice-shop:
     image: bkimminich/juice-shop:latest
-    container_name: whoopspay-juice-shop
+    container_name: whoopspay-juice-shop-official
     ports:
-      - "3001:3000"  # Map host port 3001 to container port 3000
+      - "3002:3000"  # Map to port 3002 to avoid conflicts
     environment:
       - NODE_ENV=production
       - CTF_KEY=zLp@.-6fMW6L-7R3b!9uR_K!4GPL-o5Q_
@@ -50,6 +49,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    profiles:
+      - optional  # Only start with --profile optional
 
 networks:
   whoopspay-network:
