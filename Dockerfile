@@ -23,11 +23,11 @@ COPY server/ ./server/
 COPY shared/ ./shared/
 COPY data/ ./data/
 
-# Build the application (but exclude vite.ts from server build)
-RUN npm run build
+# Build client first
+RUN npm run vite build
 
-# Remove development-only files from dist
-RUN rm -f dist/vite.js || true
+# Build server with production config (excludes vite)
+RUN node build-server.js
 
 # Production stage
 FROM node:18-alpine AS production
