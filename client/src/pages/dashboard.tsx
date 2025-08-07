@@ -54,7 +54,7 @@ export default function Dashboard() {
   });
 
   // System failures data for admin dashboard
-  const { data: systemFailures } = useQuery({
+  const { data: systemFailures } = useQuery<{failures: Array<{time: string, type: string, message: string, severity: string, source: string}>}>({
     queryKey: ["/api/admin/system-failures"],
     enabled: !!user && (user as any)?.isAdmin === 1,
     refetchInterval: 60000, // Refetch every minute
