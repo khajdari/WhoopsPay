@@ -68,5 +68,5 @@ Dockerfile*
 docker-compose*.yml
 .dockerignore
 
-# Attached assets (not needed in production)
+# Attached assets (not needed in production - required ones copied to client/src/assets)
 attached_assets/
