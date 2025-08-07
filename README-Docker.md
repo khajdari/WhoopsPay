@@ -33,6 +33,46 @@ docker-compose down
 
 ## Available Commands
 
+### Using the Management Script (Recommended)
+
+```bash
+# Build and start WhoopsPay (clean build)
+./docker-run.sh build
+
+# Start WhoopsPay only
+./docker-run.sh start
+
+# Start with optional official Juice Shop
+./docker-run.sh juice
+
+# Show live logs
+./docker-run.sh logs
+
+# Stop all services
+./docker-run.sh stop
+
+# Clean up Docker resources
+./docker-run.sh clean
+```
+
+### Using Docker Compose Directly
+
+```bash
+# Build and start services
+docker-compose up --build
+
+# Start only WhoopsPay
+docker-compose up whoopspay
+
+# Start with optional official Juice Shop
+docker-compose --profile optional up
+
+# View real-time logs
+docker-compose logs -f whoopspay
+```
+
+### Using NPM Scripts
+
 ```bash
 # Build the WhoopsPay Docker image
 npm run docker:build
@@ -45,18 +85,6 @@ npm run docker:stop
 
 # View real-time logs
 npm run docker:logs
-
-# Build and start services
-docker-compose up --build
-
-# Start only WhoopsPay
-docker-compose up whoopspay
-
-# Start with optional official Juice Shop
-docker-compose --profile optional up
-
-# Start only official Juice Shop (optional)
-docker-compose --profile optional up juice-shop
 ```
 
 ## Configuration
@@ -129,12 +157,29 @@ docker logs whoopspay-app
 docker logs whoopspay-juice-shop-official  # Only if using --profile optional
 ```
 
+## Troubleshooting
+
+### Common Issues
+
+**Container keeps restarting with "Cannot find package 'vite'" error:**
+- This was a known issue with development dependencies in production
+- Fixed in the latest Docker configuration
+- Solution: Rebuild with `./docker-run.sh build`
+
+**Port already in use:**
+- Stop existing containers: `./docker-run.sh stop`
+- Or use different ports in docker-compose.yml
+
+**Database issues:**
+- Clean up and restart: `./docker-run.sh clean` then `./docker-run.sh build`
+
 ## Security Considerations
 
 - Change the `SESSION_SECRET` in production
 - The setup includes health checks for both services
 - Containers run with non-root users where possible
 - Network isolation between containers
+- Development dependencies excluded from production image
 
 ## Integration Testing
 

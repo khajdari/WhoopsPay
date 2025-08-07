@@ -33,15 +33,25 @@ function serveStatic(app: express.Express) {
 async function setupDevelopmentVite(app: express.Express, server: any) {
   if (isDevelopment) {
     try {
-      const viteModule = await import("./vite.js");
-      await viteModule.setupVite(app, server);
+      // Only try to load Vite if we're in true development (with source files)
+      const viteModule = await import("./vite.js").catch(() => null);
+      
+      if (viteModule && viteModule.setupVite) {
+        await viteModule.setupVite(app, server);
+        log("Development mode: Vite middleware enabled");
+      } else {
+        // Vite not available, serve static files
+        serveStatic(app);
+        log("Development mode: Vite not available, serving static files");
+      }
     } catch (error) {
-      console.error("Failed to setup Vite in development:", error);
-      // Fallback to static serving even in development
+      log(`Vite setup failed: ${error.message}`);
+      // Fallback to static serving
       serveStatic(app);
     }
   } else {
     serveStatic(app);
+    log("Production mode: Serving static files");
   }
 }
 

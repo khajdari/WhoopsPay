@@ -23,8 +23,11 @@ COPY server/ ./server/
 COPY shared/ ./shared/
 COPY data/ ./data/
 
-# Build the application
+# Build the application (but exclude vite.ts from server build)
 RUN npm run build
+
+# Remove development-only files from dist
+RUN rm -f dist/vite.js || true
 
 # Production stage
 FROM node:18-alpine AS production
@@ -38,6 +41,9 @@ RUN npm ci --only=production && npm cache clean --force
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/data ./data
+
+# Copy client assets for production serving
+COPY --from=builder /app/dist/client ./dist/client
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs && \
