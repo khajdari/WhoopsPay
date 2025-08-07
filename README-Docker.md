@@ -36,23 +36,13 @@ docker-compose down
 ### Using the Management Script (Recommended)
 
 ```bash
-# Build and start WhoopsPay (clean build)
+# IMPORTANT: Clear cached images first, then build
+docker-compose down
+docker-compose build --no-cache whoopspay
+docker-compose up -d whoopspay
+
+# Or use the management script:
 ./docker-run.sh build
-
-# Start WhoopsPay only
-./docker-run.sh start
-
-# Start with optional official Juice Shop
-./docker-run.sh juice
-
-# Show live logs
-./docker-run.sh logs
-
-# Stop all services
-./docker-run.sh stop
-
-# Clean up Docker resources
-./docker-run.sh clean
 ```
 
 ### Using Docker Compose Directly
