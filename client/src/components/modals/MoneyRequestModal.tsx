@@ -38,7 +38,13 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
       return await apiRequest(`/api/requests/${requestId}/approve`, 'POST');
     },
     onSuccess: (data: any) => {
+      // Invalidate all relevant queries to refresh UI
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
+      // Invalidate user profiles to refresh balances
+      queryClient.invalidateQueries({ queryKey: [`/api/users`] });
       
       if (data.redirect && data.redirectUrl && onExternalRedirect) {
         // Close this modal and trigger redirect from parent
@@ -76,7 +82,13 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
       return await apiRequest(`/api/requests/${requestId}/reject`, 'POST');
     },
     onSuccess: (data: any) => {
+      // Invalidate all relevant queries to refresh UI
       queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
+      // Invalidate user profiles to refresh balances
+      queryClient.invalidateQueries({ queryKey: [`/api/users`] });
       
       if (data.redirect && data.redirectUrl && onExternalRedirect) {
         // Close this modal and trigger redirect from parent
