@@ -682,18 +682,7 @@ const translations: Translations = {
     'el-GR': 'Υποβολή και παρακολούθηση αναφορών για σφάλματα, ζητήματα ασφαλείας και άλλα προβλήματα πλατφόρμας'
   },
   // Status labels
-  inProgressStatus: {
-    'en-GB': 'In Progress',
-    'el-GR': 'Σε Εξέλιξη'
-  },
-  resolvedStatus: {
-    'en-GB': 'Resolved',
-    'el-GR': 'Επιλύθηκε'
-  },
-  closed: {
-    'en-GB': 'Closed',
-    'el-GR': 'Κλειστό'
-  },
+
   // Priority labels
   high: {
     'en-GB': 'High',
