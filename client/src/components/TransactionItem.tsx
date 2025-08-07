@@ -9,6 +9,12 @@ interface TransactionItemProps {
 
 export default function TransactionItem({ transaction }: TransactionItemProps) {
   const { t } = useI18n();
+  
+  // Early return if transaction is null or undefined
+  if (!transaction) {
+    return <div>Loading transaction...</div>;
+  }
+  
   const isReceived = transaction.toUserId && typeof transaction.toUserId === 'string' && transaction.toUserId.startsWith('@');
   const isONUS = transaction.transactionCategory === 'ONUS';
   const isOFFUS = transaction.transactionCategory === 'OFFUS';
