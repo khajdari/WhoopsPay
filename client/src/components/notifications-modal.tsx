@@ -19,7 +19,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Check, X, CreditCard, DollarSign, Shield } from "lucide-react";
+import { Bell, Check, X, CreditCard, DollarSign, Shield, ExternalLink } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -156,6 +156,33 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                       <p className="text-sm text-gray-600 mt-1">
                         {notification.message}
                       </p>
+                      
+                      {/* Transaction Category Badge for External Payment Requests */}
+                      {notification.type === "external_payment" && (
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge className="bg-orange-100 text-orange-800 text-xs flex items-center gap-1">
+                            <ExternalLink className="w-3 h-3" />
+                            Off-Us
+                          </Badge>
+                          <Badge className="bg-blue-100 text-blue-800 text-xs">
+                            External Payment
+                          </Badge>
+                        </div>
+                      )}
+                      
+                      {/* Transaction Category Badge for Money Request */}
+                      {notification.type === "money_request" && (
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge className="bg-blue-100 text-blue-800 text-xs flex items-center gap-1">
+                            <CreditCard className="w-3 h-3" />
+                            On-Us
+                          </Badge>
+                          <Badge className="bg-green-100 text-green-800 text-xs">
+                            Money Request
+                          </Badge>
+                        </div>
+                      )}
+                      
                       <p className="text-xs text-gray-400 mt-2">
                         {notification.time}
                       </p>

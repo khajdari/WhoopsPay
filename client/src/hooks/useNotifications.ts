@@ -18,7 +18,7 @@
  */
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { DollarSign, CreditCard, Shield } from "lucide-react";
+import { DollarSign, CreditCard, Shield, ExternalLink } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -67,17 +67,46 @@ export function useNotifications() {
       const data = await response.json();
       
       // Transform database notifications to match our interface
-      return data.map((notif: any) => ({
-        id: notif.id,
-        type: notif.type,
-        title: notif.title,
-        message: notif.message,
-        time: new Date(notif.createdAt).toLocaleString(),
-        read: notif.read,
-        icon: DollarSign,
-        color: notif.type === "payment" ? "text-green-600 bg-green-100" : "text-blue-600 bg-blue-100",
-        transactionId: notif.transactionId
-      }));
+      return data.map((notif: any) => {
+        const getIconAndColor = (type: string) => {
+          switch(type) {
+            case "external_payment":
+              return {
+                icon: ExternalLink,
+                color: "bg-orange-100 text-orange-600"
+              };
+            case "money_request":
+              return {
+                icon: CreditCard,
+                color: "bg-green-100 text-green-600"
+              };
+            case "payment":
+              return {
+                icon: DollarSign,
+                color: "bg-blue-100 text-blue-600"
+              };
+            default:
+              return {
+                icon: DollarSign,
+                color: "bg-gray-100 text-gray-600"
+              };
+          }
+        };
+        
+        const { icon, color } = getIconAndColor(notif.type);
+        
+        return {
+          id: notif.id,
+          type: notif.type,
+          title: notif.title,
+          message: notif.message,
+          time: new Date(notif.createdAt).toLocaleString(),
+          read: notif.read,
+          icon: icon,
+          color: color,
+          transactionId: notif.transactionId
+        };
+      });
     },
     enabled: !!user?.id,
     refetchInterval: 5000, // Refresh every 5 seconds to get new notifications
