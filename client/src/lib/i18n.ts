@@ -240,6 +240,12 @@ interface Translations {
   running: TranslationKey;
   adminTotalUsers: TranslationKey;
   systemFailures: TranslationKey;
+  systemFailuresTable: TranslationKey;
+  errorTime: TranslationKey;
+  errorType: TranslationKey;
+  errorMessage: TranslationKey;
+  errorSeverity: TranslationKey;
+  noSystemFailures: TranslationKey;
   accessAdminPanel: TranslationKey;
   monitorIssues: TranslationKey;
   adminNavigation: TranslationKey;
@@ -877,6 +883,30 @@ const translations: Translations = {
   systemFailures: {
     'en-GB': 'System Failures',
     'el-GR': 'Σφάλματα Συστήματος'
+  },
+  systemFailuresTable: {
+    'en-GB': 'Recent System Failures',
+    'el-GR': 'Πρόσφατα Σφάλματα Συστήματος'
+  },
+  errorTime: {
+    'en-GB': 'Time',
+    'el-GR': 'Ώρα'
+  },
+  errorType: {
+    'en-GB': 'Type',
+    'el-GR': 'Τύπος'
+  },
+  errorMessage: {
+    'en-GB': 'Message',
+    'el-GR': 'Μήνυμα'
+  },
+  errorSeverity: {
+    'en-GB': 'Severity',
+    'el-GR': 'Σοβαρότητα'
+  },
+  noSystemFailures: {
+    'en-GB': 'No system failures detected',
+    'el-GR': 'Δεν εντοπίστηκαν σφάλματα συστήματος'
   },
   accessAdminPanel: {
     'en-GB': 'Access Admin Panel',

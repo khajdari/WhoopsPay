@@ -399,4 +399,93 @@ export class AdminController {
       });
     }
   }
+
+  /**
+   * Get system failures from logs
+   * @route GET /api/admin/system-failures
+   */
+  static async getSystemFailures(req: Request, res: Response) {
+    try {
+      // Get user from request (set by isAuthenticated middleware)
+      const user = (req as any).user;
+      
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access denied - Admin only" });
+      }
+
+      // Get recent errors from both express and database logs
+      const expressLogs = logStore.getExpressLogs().slice(-100); // Last 100 entries
+      const databaseLogs = logStore.getDbLogs().slice(-100); // Last 100 entries
+      
+      const failures: any[] = [];
+      
+      // Parse express logs for errors
+      expressLogs.forEach(log => {
+        if (log.includes('ERROR') || log.includes('error') || log.includes('500 in') || log.includes('ECONNREFUSED') || log.includes('ETIMEDOUT') || log.includes('Failed')) {
+          const timeMatch = log.match(/\[([\d-T:.Z]+)\]/);
+          const time = timeMatch ? new Date(timeMatch[1]) : new Date();
+          
+          // Extract error info
+          let type = 'API Error';
+          let message = log.split('] ')[1] || log;
+          let severity = 'medium';
+          
+          if (log.includes('500 in')) {
+            type = 'Server Error';
+            severity = 'high';
+          } else if (log.includes('ECONNREFUSED')) {
+            type = 'Connection Error';
+            severity = 'critical';
+          } else if (log.includes('ERROR') || log.includes('Failed')) {
+            type = 'Application Error';
+            severity = 'high';
+          }
+          
+          failures.push({
+            time: time.toISOString(),
+            type,
+            message: message.substring(0, 80) + (message.length > 80 ? '...' : ''),
+            severity,
+            source: 'express'
+          });
+        }
+      });
+      
+      // Parse database logs for errors
+      databaseLogs.forEach(log => {
+        if (log.includes('ERROR') || log.includes('SQLITE_') || log.includes('database error') || log.includes('Failed')) {
+          const timeMatch = log.match(/\[([\d-T:.Z]+)\]/);
+          const time = timeMatch ? new Date(timeMatch[1]) : new Date();
+          
+          let type = 'Database Error';
+          let message = log.split('] ')[1] || log;
+          let severity = 'high';
+          
+          if (log.includes('SQLITE_CORRUPT')) {
+            severity = 'critical';
+          } else if (log.includes('SQLITE_BUSY')) {
+            severity = 'medium';
+          }
+          
+          failures.push({
+            time: time.toISOString(),
+            type,
+            message: message.substring(0, 80) + (message.length > 80 ? '...' : ''),
+            severity,
+            source: 'database'
+          });
+        }
+      });
+      
+      // Sort by time (newest first) and limit to recent failures
+      const recentFailures = failures
+        .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
+        .slice(0, 10);
+      
+      res.json({ failures: recentFailures });
+    } catch (error) {
+      console.error('Failed to get system failures:', error);
+      res.status(500).json({ message: 'Failed to get system failures' });
+    }
+  }
 }
