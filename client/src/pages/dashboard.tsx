@@ -102,24 +102,7 @@ export default function Dashboard() {
     }
   }, [user, toast]);
 
-  // System Failures Count Component
-  const SystemFailuresCount = () => {
-    const { data: expressLogs } = useQuery({
-      queryKey: ["/api/admin/logs/express"],
-      refetchInterval: 30000, // Refetch every 30 seconds
-    });
 
-    const errorCount = (expressLogs as any)?.logs ? 
-      (expressLogs as any).logs.filter((log: string) => 
-        log.includes(' 4') || log.includes(' 5') || log.toLowerCase().includes('error')
-      ).length : 0;
-
-    return (
-      <p className={`text-2xl font-bold ${errorCount > 0 ? 'text-red-600' : 'text-green-600'}`}>
-        {errorCount}
-      </p>
-    );
-  };
 
   // If admin, show only health check information
   if (user?.isAdmin) {
@@ -238,7 +221,9 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">{t('systemFailures')}</p>
-                    <SystemFailuresCount />
+                    <p className="text-2xl font-bold text-red-600">
+                      {systemFailures?.failures?.length || 0}
+                    </p>
                   </div>
                   <AlertTriangle className="h-8 w-8 text-red-600" />
                 </div>
