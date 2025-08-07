@@ -1,0 +1,66 @@
+$ docker-compose build --no-cache whoopspay
+[+] Building 28.6s (22/27)
+ => [internal] load local bake definitions                                                                                                                                                                                                               0.0s
+ => => reading from stdin 445B                                                                                                                                                                                                                           0.0s
+ => [internal] load build definition from Dockerfile                                                                                                                                                                                                     0.0s
+ => => transferring dockerfile: 1.63kB                                                                                                                                                                                                                   0.0s
+ => [internal] load metadata for docker.io/library/node:18-alpine                                                                                                                                                                                        0.9s
+ => [auth] library/node:pull token for registry-1.docker.io                                                                                                                                                                                              0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                                        0.0s
+ => => transferring context: 1.04kB                                                                                                                                                                                                                      0.0s
+ => [internal] load build context                                                                                                                                                                                                                        0.0s
+ => => transferring context: 19.58kB                                                                                                                                                                                                                     0.0s
+ => [builder  1/15] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e                                                                                                                        0.0s
+ => CACHED [builder  2/15] WORKDIR /app                                                                                                                                                                                                                  0.0s
+ => [builder  3/15] COPY package*.json ./                                                                                                                                                                                                                0.1s
+ => [builder  4/15] COPY tsconfig.json ./                                                                                                                                                                                                                0.1s
+ => [production 4/9] RUN npm ci --only=production && npm cache clean --force                                                                                                                                                                            18.4s
+ => [builder  5/15] COPY vite.config.ts ./                                                                                                                                                                                                               0.1s
+ => [builder  6/15] COPY tailwind.config.ts ./                                                                                                                                                                                                           0.1s
+ => [builder  7/15] COPY postcss.config.js ./                                                                                                                                                                                                            0.1s
+ => [builder  8/15] COPY components.json ./                                                                                                                                                                                                              0.1s
+ => [builder  9/15] RUN npm ci                                                                                                                                                                                                                          19.0s
+ => [builder 10/15] COPY client/ ./client/                                                                                                                                                                                                               0.1s
+ => [builder 11/15] COPY server/ ./server/                                                                                                                                                                                                               0.1s
+ => [builder 12/15] COPY shared/ ./shared/                                                                                                                                                                                                               0.1s
+ => [builder 13/15] COPY data/ ./data/                                                                                                                                                                                                                   0.1s
+ => [builder 14/15] RUN npx vite build                                                                                                                                                                                                                   6.8s
+ => ERROR [builder 15/15] RUN node build-server.js                                                                                                                                                                                                       0.4s
+------
+ > [builder 15/15] RUN node build-server.js:
+0.368 node:internal/modules/cjs/loader:1143
+0.368   throw err;
+0.368   ^
+0.368
+0.368 Error: Cannot find module '/app/build-server.js'
+0.368     at Module._resolveFilename (node:internal/modules/cjs/loader:1140:15)
+0.368     at Module._load (node:internal/modules/cjs/loader:981:27)
+0.368     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:128:12)
+0.368     at node:internal/main/run_main_module:28:49 {
+0.368   code: 'MODULE_NOT_FOUND',
+0.368   requireStack: []
+0.368 }
+0.368
+0.368 Node.js v18.20.8
+------
+Dockerfile:30
+
+--------------------
+
+  28 |
+
+  29 |     # Build server with production entry point (no vite imports)
+
+  30 | >>> RUN node build-server.js
+
+  31 |
+
+  32 |     # Production stage
+
+--------------------
+
+failed to solve: process "/bin/sh -c node build-server.js" did not complete successfully: exit code: 1
+
+
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/xte81wk5z3ymfnj8xncnktghd

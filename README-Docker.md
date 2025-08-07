@@ -36,13 +36,15 @@ docker-compose down
 ### Using the Management Script (Recommended)
 
 ```bash
-# IMPORTANT: Clear cached images first, then build
+# SIMPLE COMMANDS FOR LOCAL DEVELOPMENT:
+
+# Stop and rebuild (fixes vite error)
 docker-compose down
-docker-compose build --no-cache whoopspay
+docker-compose build --no-cache whoopspay  
 docker-compose up -d whoopspay
 
-# Or use the management script:
-./docker-run.sh build
+# View logs if needed
+docker-compose logs -f whoopspay
 ```
 
 ### Using Docker Compose Directly

@@ -13,6 +13,7 @@ COPY vite.config.ts ./
 COPY tailwind.config.ts ./
 COPY postcss.config.js ./
 COPY components.json ./
+COPY build-server.js ./
 
 # Install all dependencies (including devDependencies for build)
 RUN npm ci
@@ -23,11 +24,9 @@ COPY server/ ./server/
 COPY shared/ ./shared/
 COPY data/ ./data/
 
-# Build client first
+# Build the application  
 RUN npx vite build
-
-# Build server with production entry point (no vite imports)
-RUN node build-server.js
+RUN npx esbuild server/index.prod.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/index.js --external:vite --external:@vitejs/plugin-react --external:@replit/vite-plugin-runtime-error-modal --external:@replit/vite-plugin-cartographer
 
 # Production stage
 FROM node:18-alpine AS production
