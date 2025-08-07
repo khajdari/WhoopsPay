@@ -1,0 +1,45 @@
+$ docker-compose build --no-cache whoopspay
+[+] Building 1.4s (15/27)
+ => [internal] load local bake definitions                                                                                                                                                                                                               0.0s
+ => => reading from stdin 445B                                                                                                                                                                                                                           0.0s
+ => [internal] load build definition from Dockerfile                                                                                                                                                                                                     0.0s
+ => => transferring dockerfile: 1.60kB                                                                                                                                                                                                                   0.0s
+ => [internal] load metadata for docker.io/library/node:18-alpine                                                                                                                                                                                        1.0s
+ => [auth] library/node:pull token for registry-1.docker.io                                                                                                                                                                                              0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                                        0.0s
+ => => transferring context: 1.04kB                                                                                                                                                                                                                      0.0s
+ => [internal] load build context                                                                                                                                                                                                                        0.0s
+ => => transferring context: 382.68kB                                                                                                                                                                                                                    0.0s
+ => [builder  1/15] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e                                                                                                                        0.0s
+ => CACHED [builder  2/15] WORKDIR /app                                                                                                                                                                                                                  0.0s
+ => CANCELED [builder  3/15] COPY package*.json ./                                                                                                                                                                                                       0.1s
+ => CACHED [builder  4/15] COPY tsconfig.json ./                                                                                                                                                                                                         0.0s
+ => CACHED [builder  5/15] COPY vite.config.ts ./                                                                                                                                                                                                        0.0s
+ => CACHED [builder  6/15] COPY tailwind.config.ts ./                                                                                                                                                                                                    0.0s
+ => CACHED [builder  7/15] COPY postcss.config.js ./                                                                                                                                                                                                     0.0s
+ => CACHED [builder  8/15] COPY components.json ./                                                                                                                                                                                                       0.0s
+ => ERROR [builder  9/15] COPY build-server.js ./                                                                                                                                                                                                        0.0s
+------
+ > [builder  9/15] COPY build-server.js ./:
+------
+Dockerfile:16
+
+--------------------
+
+  14 |     COPY postcss.config.js ./
+
+  15 |     COPY components.json ./
+
+  16 | >>> COPY build-server.js ./
+
+  17 |
+
+  18 |     # Install all dependencies (including devDependencies for build)
+
+--------------------
+
+failed to solve: failed to compute cache key: failed to calculate checksum of ref 2ce581cf-9817-49b0-b2a4-6108f2bd7022::vw674afeepz1a8hd3eqi8fuca: "/build-server.js": not found
+
+
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/bg1g4bql81n3utj9g6ljskfib
