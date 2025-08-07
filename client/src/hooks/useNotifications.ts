@@ -18,7 +18,7 @@
  */
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { DollarSign, CreditCard, Shield, ExternalLink } from "lucide-react";
+import { DollarSign, CreditCard, Shield, ExternalLink, Check, X } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -79,6 +79,16 @@ export function useNotifications() {
               return {
                 icon: CreditCard,
                 color: "bg-green-100 text-green-600"
+              };
+            case "money_request_approved":
+              return {
+                icon: Check,
+                color: "bg-green-100 text-green-600"
+              };
+            case "money_request_rejected":
+              return {
+                icon: X,
+                color: "bg-red-100 text-red-600"
               };
             case "payment":
               return {
