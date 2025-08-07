@@ -459,9 +459,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // JUICE SHOP MODULE ROUTES
   // ============================================================================
   
-  // Serve Juice Shop static HTML interface
-  app.get('/juice-shop', (req, res) => {
-    res.sendFile(path.join(__dirname, '../modules/juice-shop/public/index.html'));
+  // Serve Juice Shop static files
+  app.use('/juice-shop', (req, res, next) => {
+    if (req.path === '/' || req.path === '') {
+      const juiceShopPath = path.join(process.cwd(), 'server/modules/juice-shop/public/index.html');
+      res.sendFile(juiceShopPath);
+    } else {
+      // Serve other static assets (like logos, CSS, JS)
+      const assetPath = path.join(process.cwd(), 'server/modules/juice-shop/public', req.path);
+      res.sendFile(assetPath, (err) => {
+        if (err) {
+          next(); // Let other routes handle it
+        }
+      });
+    }
   });
   
   // Juice Shop API routes for the frontend interface
