@@ -38,12 +38,12 @@ docker-compose down
 ```bash
 # SIMPLE COMMANDS FOR LOCAL DEVELOPMENT:
 
-# Stop and rebuild (fixes vite error)
+# Clean build (fixes any errors)
 docker-compose down
-docker-compose build --no-cache whoopspay  
+docker-compose build --no-cache whoopspay
 docker-compose up -d whoopspay
 
-# View logs if needed
+# View logs
 docker-compose logs -f whoopspay
 ```
 
