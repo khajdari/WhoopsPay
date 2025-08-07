@@ -151,6 +151,7 @@ interface Translations {
   // Administration
   accountInformation: TranslationKey;
   administration: TranslationKey;
+  adminMenuAdministration: TranslationKey;
   adminPanel: TranslationKey;
   systemHealth: TranslationKey;
   systemHealthDashboard: TranslationKey;
@@ -260,6 +261,7 @@ interface Translations {
   // Category options
   technical: TranslationKey;
   payment: TranslationKey;
+  categorySecurity: TranslationKey;
   categorySecurityOption: TranslationKey;
   account: TranslationKey;
   other: TranslationKey;
@@ -978,7 +980,10 @@ const translations: Translations = {
     'en-GB': 'Payment',
     'el-GR': 'Πληρωμή'
   },
-
+  categorySecurity: {
+    'en-GB': 'Security',
+    'el-GR': 'Ασφάλεια'
+  },
   account: {
     'en-GB': 'Account',
     'el-GR': 'Λογαριασμός'
