@@ -22,7 +22,7 @@ export function RedirectModal({
   isApproval,
   orderInfo 
 }: RedirectModalProps) {
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(5);
   const [autoRedirect, setAutoRedirect] = useState(true);
 
   useEffect(() => {
