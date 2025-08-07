@@ -24,9 +24,8 @@ COPY server/ ./server/
 COPY shared/ ./shared/
 COPY data/ ./data/
 
-# Build the application  
-RUN npx vite build
-RUN npx esbuild server/index.prod.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/index.js --external:vite --external:@vitejs/plugin-react --external:@replit/vite-plugin-runtime-error-modal --external:@replit/vite-plugin-cartographer
+# Build the application normally
+RUN npm run build
 
 # Production stage
 FROM node:18-alpine AS production
