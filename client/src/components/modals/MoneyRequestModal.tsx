@@ -155,13 +155,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md bg-white border-2 border-blue-600 text-gray-900">
-        <DialogHeader className="relative">
-          <button 
-            onClick={onClose}
-            className="absolute -top-2 -right-2 w-6 h-6 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800"
-          >
-            ×
-          </button>
+        <DialogHeader>
           <DialogTitle className={`flex items-center gap-2 ${
             (request.isExternal || request.type === 'external') 
               ? 'text-orange-800' 
