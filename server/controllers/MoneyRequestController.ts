@@ -61,17 +61,24 @@ export class MoneyRequestController {
    * - A04: Insecure Design (Missing financial approval controls)
    * - API7: Server Side Request Forgery (Unvalidated external redirects)
    */
-  static async approveRequest(req: Request, res: Response) {
+  static async approveRequest(req: any, res: Response) {
     try {
       const { requestId } = req.params;
+      const userId = req.user?.id;
       
-      // OWASP A01: Broken Access Control - Insecure Direct Object Reference
-      // CRITICAL VULNERABILITY: No authorization check - anyone can approve any payment request
-      // This allows attackers to approve financial transactions they don't own
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
       const request = await storage.getMoneyRequest(parseInt(requestId));
       
       if (!request) {
         return res.status(404).json({ message: "Request not found" });
+      }
+
+      // Check if user is authorized to approve this request (for internal requests)
+      if (request.type === "internal" && request.fromUserId !== userId) {
+        return res.status(403).json({ message: "You can only approve requests sent to you" });
       }
 
       if (request.status !== "pending") {
@@ -103,32 +110,76 @@ export class MoneyRequestController {
         });
       }
 
-      // For internal requests, update user balances
-      if (request.toUserId && request.fromUserId !== "juice-shop") {
+      // For internal requests, process the money transfer
+      if (request.toUserId && request.fromUserId !== "juice-shop" && request.type === "internal") {
+        // Get both users
+        const fromUser = await storage.getUser(request.fromUserId);
         const toUser = await storage.getUser(request.toUserId);
-        if (toUser) {
-          const newBalance = parseFloat(toUser.balance || '0') + parseFloat(request.amount.toString());
-          await storage.updateUserBalance(request.toUserId, newBalance.toFixed(2));
-
-          // Create notification for the user
-          try {
-            await storage.createNotification({
-              userId: request.toUserId,
-              type: "payment",
-              title: "Payment Received",
-              message: `You received $${request.amount} from ${request.description}`,
-              isRead: 0
-            });
-          } catch (notificationError) {
-            console.error("Error creating notification:", notificationError);
-          }
-
-          return res.json({
-            message: "Payment request approved successfully",
-            request: updatedRequest,
-            newBalance: newBalance
-          });
+        
+        if (!fromUser || !toUser) {
+          return res.status(404).json({ message: "User not found" });
         }
+
+        const transferAmount = parseFloat(request.amount.toString());
+        const fromBalance = parseFloat(fromUser.balance || '0');
+        const toBalance = parseFloat(toUser.balance || '0');
+
+        // Check if sender has sufficient funds
+        if (fromBalance < transferAmount) {
+          return res.status(400).json({ message: "Insufficient funds to complete the request" });
+        }
+
+        // Calculate new balances
+        const newFromBalance = fromBalance - transferAmount;
+        const newToBalance = toBalance + transferAmount;
+
+        // Update both user balances
+        await storage.updateUserBalance(request.fromUserId, newFromBalance.toFixed(2));
+        await storage.updateUserBalance(request.toUserId, newToBalance.toFixed(2));
+
+        // Create a transaction record
+        try {
+          await storage.createTransaction({
+            fromUserId: request.fromUserId,
+            toUserId: request.toUserId,
+            amount: transferAmount,
+            description: request.description || "Money Request Payment",
+            status: "completed",
+            type: "transfer",
+            transactionCategory: "ONUS",
+            isInternal: 1
+          });
+        } catch (transactionError) {
+          console.error("Error creating transaction record:", transactionError);
+        }
+
+        // Create notifications for both users
+        try {
+          await storage.createNotification({
+            userId: request.toUserId,
+            type: "payment",
+            title: "Payment Received",
+            message: `You received ¤${request.amount} from ${fromUser.firstName || fromUser.email}`,
+            isRead: 0
+          });
+
+          await storage.createNotification({
+            userId: request.fromUserId,
+            type: "payment",
+            title: "Payment Sent",
+            message: `You sent ¤${request.amount} to ${toUser.firstName || toUser.email}`,
+            isRead: 0
+          });
+        } catch (notificationError) {
+          console.error("Error creating notifications:", notificationError);
+        }
+
+        return res.json({
+          message: "Payment request approved successfully",
+          request: updatedRequest,
+          fromBalance: newFromBalance,
+          toBalance: newToBalance
+        });
       }
 
       res.json({
@@ -145,15 +196,24 @@ export class MoneyRequestController {
    * Reject an external payment request
    * VULNERABILITY: No authorization check
    */
-  static async rejectRequest(req: Request, res: Response) {
+  static async rejectRequest(req: any, res: Response) {
     try {
       const { requestId } = req.params;
+      const userId = req.user?.id;
       
-      // VULNERABLE: No authorization check
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
       const request = await storage.getMoneyRequest(parseInt(requestId));
       
       if (!request) {
         return res.status(404).json({ message: "Request not found" });
+      }
+
+      // Check if user is authorized to reject this request (for internal requests)
+      if (request.type === "internal" && request.fromUserId !== userId) {
+        return res.status(403).json({ message: "You can only reject requests sent to you" });
       }
 
       if (request.status !== "pending") {
@@ -181,6 +241,69 @@ export class MoneyRequestController {
     } catch (error) {
       console.error("Error rejecting request:", error);
       res.status(500).json({ message: "Failed to reject request" });
+    }
+  }
+
+  /**
+   * Create a new internal money request
+   * VULNERABILITY: Minimal validation and authorization
+   */
+  static async createInternalRequest(req: any, res: Response) {
+    try {
+      const userId = req.user?.id;
+      
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const { fromUserId, amount, description } = req.body;
+
+      // Basic validation
+      if (!fromUserId || !amount) {
+        return res.status(400).json({ message: "From user and amount are required" });
+      }
+
+      if (fromUserId === userId) {
+        return res.status(400).json({ message: "Cannot request money from yourself" });
+      }
+
+      // Verify the target user exists
+      const fromUser = await storage.getUser(fromUserId);
+      if (!fromUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Create the money request
+      const request = await storage.createMoneyRequest({
+        fromUserId: fromUserId, // Who will pay
+        toUserId: userId, // Who is requesting (current user)
+        amount: parseFloat(amount),
+        description: description || "Money request",
+        status: "pending",
+        type: "internal"
+      });
+
+      // Create notification for the person being asked to pay
+      try {
+        const currentUser = await storage.getUser(userId);
+        await storage.createNotification({
+          userId: fromUserId,
+          type: "money_request",
+          title: "Money Request",
+          message: `${currentUser?.firstName || currentUser?.email} is requesting ¤${amount}${description ? ` for: ${description}` : ''}`,
+          isRead: 0
+        });
+      } catch (notificationError) {
+        console.error("Error creating notification:", notificationError);
+      }
+
+      res.json({
+        message: "Money request created successfully",
+        request: request
+      });
+    } catch (error) {
+      console.error("Error creating internal money request:", error);
+      res.status(500).json({ message: "Failed to create money request" });
     }
   }
 
