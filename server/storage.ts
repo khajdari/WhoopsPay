@@ -45,7 +45,7 @@ import {
   type InsertMoneyRequest,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, or } from "drizzle-orm";
+import { eq, desc, and, or, like, isNotNull, isNull } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { logStore } from "./middleware/adminMiddleware";
 
@@ -278,7 +278,8 @@ export class DatabaseStorage implements IStorage {
             eq(transactions.fromUserId, userId),
             eq(transactions.toUserId, userId)
           )
-        );
+        )
+        .orderBy(desc(transactions.createdAt));
       logStore.addDbLog(`Found ${result.length} transactions for user ${userId}`);
       return result;
     } catch (error) {
@@ -300,7 +301,10 @@ export class DatabaseStorage implements IStorage {
 
   async getAllTransactions(): Promise<Transaction[]> {
     try {
-      const result = await db.select().from(transactions);
+      const result = await db
+        .select()
+        .from(transactions)
+        .orderBy(desc(transactions.createdAt));
       return result;
     } catch (error) {
       console.error("Error fetching all transactions:", error);
