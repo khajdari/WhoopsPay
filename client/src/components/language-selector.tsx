@@ -25,6 +25,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useI18n, type Language } from "@/lib/i18n";
+import ukFlag from "@assets/uk.png";
+import grFlag from "@assets/gr.jpg";
 
 /**
  * LanguageSelector Component - Locale selection interface
@@ -51,8 +53,20 @@ export function LanguageSelector() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-1 flex items-center justify-center">
-          <div className="w-6 h-6 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center text-sm">
-            {currentLanguage.flag}
+          <div className="w-6 h-6 rounded-full overflow-hidden border border-gray-200">
+            {currentLanguage.code === 'en-GB' ? (
+              <img 
+                src={ukFlag} 
+                alt="UK Flag" 
+                className="w-full h-full object-contain scale-150"
+              />
+            ) : (
+              <img 
+                src={grFlag} 
+                alt="Greek Flag" 
+                className="w-full h-full object-cover scale-110"
+              />
+            )}
           </div>
           <span className="sr-only">{t('changeLanguage')}</span>
         </Button>
