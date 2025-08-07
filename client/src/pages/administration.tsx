@@ -1,20 +1,35 @@
 /**
- * Administration Page - Enhanced administrative controls and system monitoring
+ * WhoopsPay Administration Page - OWASP Vulnerability Training
  * 
- * Advanced administrative interface providing comprehensive system oversight:
- * - Real-time server and database log monitoring
- * - Administrative authentication and access control
- * - System health monitoring and refresh capabilities
- * - Tabbed interface for organized administration tasks
- * - Auto-refresh functionality for live system monitoring
+ * WARNING: This component contains intentional security vulnerabilities for educational purposes.
  * 
- * Educational Security Features:
- * - Demonstrates proper administrative access control
- * - Shows secure logging and monitoring practices
- * - Includes administrative privilege verification
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (Client-side admin privilege checking)
+ * - A03: Injection (XSS through unvalidated log data)
+ * - A04: Insecure Design (Admin functions exposed to frontend)
+ * - A05: Security Misconfiguration (Excessive admin permissions)
+ * - A09: Security Logging and Monitoring Failures (Logs exposed to client)
  * 
- * VULNERABILITY NOTE: May contain intentional access control weaknesses
- * for educational security training purposes.
+ * API Security Top 10 Vulnerabilities:
+ * - API5: Broken Function Level Authorization (Admin functions without proper validation)
+ * - API8: Security Misconfiguration (Administrative endpoints exposed)
+ * - API9: Improper Inventory Management (Admin APIs accessible)
+ * 
+ * Administrative Security Vulnerabilities:
+ * - Admin status verified client-side only (easily bypassed)
+ * - System logs and monitoring data exposed to frontend
+ * - Administrative functions accessible through client manipulation
+ * - Real-time system information leaked to unauthorized users
+ * - Database logs containing sensitive information exposed
+ * 
+ * Educational Vulnerabilities Include:
+ * - Client-side admin privilege escalation
+ * - Sensitive system logs exposed to browser
+ * - Administrative API endpoints accessible without proper server-side validation
+ * - System monitoring data leaked to client-side
+ * - Database management functions exposed through client interface
+ * 
+ * NEVER use this code in production environments!
  */
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";

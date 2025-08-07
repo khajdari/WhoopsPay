@@ -1,3 +1,30 @@
+/**
+ * WhoopsPay Money Request Controller - OWASP Vulnerability Training
+ * 
+ * WARNING: This controller contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (IDOR, insufficient authorization checks)
+ * - A04: Insecure Design (Missing business logic validation for financial operations)
+ * - A05: Security Misconfiguration (Unrestricted external redirects)
+ * - A07: Identification and Authentication Failures (Weak ownership validation)
+ * - A09: Security Logging and Monitoring Failures (Insufficient financial transaction logging)
+ * 
+ * API Security Top 10 Vulnerabilities:
+ * - API1: Broken Object Level Authorization (No request ownership validation)
+ * - API6: Unrestricted Access to Sensitive Business Flows (Financial approvals)
+ * - API7: Server Side Request Forgery (Unvalidated redirects)
+ * - API10: Unsafe Consumption of APIs (External URL handling)
+ * 
+ * Financial Security Vulnerabilities:
+ * - Anyone can approve payment requests without ownership validation
+ * - Unvalidated external redirects to potentially malicious sites
+ * - Missing financial transaction approval workflows
+ * - No fraud detection for suspicious payment patterns
+ * 
+ * NEVER use this code in production environments!
+ */
+
 import { Request, Response } from 'express';
 import { storage } from '../storage';
 import { URLAdapter } from '../utils/urlAdapter';
@@ -5,6 +32,8 @@ import { URLAdapter } from '../utils/urlAdapter';
 export class MoneyRequestController {
   /**
    * Get pending payment requests for the current user
+   * 
+   * NOTE: This method has proper authentication - included for contrast
    */
   static async getPendingRequests(req: any, res: Response) {
     try {
@@ -25,13 +54,20 @@ export class MoneyRequestController {
 
   /**
    * Approve an external payment request
-   * VULNERABILITY: No authorization check - anyone can approve any request
+   * 
+   * OWASP VULNERABILITIES DEMONSTRATED:
+   * - A01: Broken Access Control (IDOR - no ownership validation)
+   * - API1: Broken Object Level Authorization (Anyone can approve any request)
+   * - A04: Insecure Design (Missing financial approval controls)
+   * - API7: Server Side Request Forgery (Unvalidated external redirects)
    */
   static async approveRequest(req: Request, res: Response) {
     try {
       const { requestId } = req.params;
       
-      // VULNERABLE: No authorization check - anyone can approve any request
+      // OWASP A01: Broken Access Control - Insecure Direct Object Reference
+      // CRITICAL VULNERABILITY: No authorization check - anyone can approve any payment request
+      // This allows attackers to approve financial transactions they don't own
       const request = await storage.getMoneyRequest(parseInt(requestId));
       
       if (!request) {
@@ -55,11 +91,13 @@ export class MoneyRequestController {
           external: true
         });
 
+        // OWASP A05: Security Misconfiguration & API7: Server Side Request Forgery
+        // VULNERABLE: Unvalidated external redirects - potential open redirect vulnerability
         // For external requests, return redirect information
         return res.json({
           message: 'External payment approved successfully',
           redirect: true,
-          redirectUrl: request.returnUrl, // This should already be adapted by URLAdapter
+          redirectUrl: request.returnUrl, // VULNERABLE: No URL validation
           request: updatedRequest,
           external: true
         });

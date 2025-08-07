@@ -1,3 +1,32 @@
+/**
+ * WhoopsPay Admin Controller - OWASP Vulnerability Training
+ * 
+ * WARNING: This controller contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (Weak admin verification, privilege escalation)
+ * - A03: Injection (SQL injection in admin queries)
+ * - A04: Insecure Design (Inadequate admin authorization framework)
+ * - A05: Security Misconfiguration (Administrative functions exposed)
+ * - A07: Identification and Authentication Failures (Session-based admin validation)
+ * - A09: Security Logging and Monitoring Failures (Insufficient admin action logging)
+ * 
+ * API Security Top 10 Vulnerabilities:
+ * - API5: Broken Function Level Authorization (Weak role-based access control)
+ * - API6: Unrestricted Access to Sensitive Business Flows (Admin functions)
+ * - API8: Security Misconfiguration (Exposed administrative endpoints)
+ * - API9: Improper Inventory Management (Exposed admin APIs)
+ * 
+ * Administrative Security Vulnerabilities:
+ * - Session-based admin authentication (can be manipulated)
+ * - No multi-factor authentication for admin functions
+ * - Direct database access without proper validation
+ * - Administrative privilege escalation opportunities
+ * - Insufficient audit logging for admin actions
+ * 
+ * NEVER use this code in production environments!
+ */
+
 import { Request, Response } from 'express';
 import { storage } from '../storage';
 import { logStore } from '../middleware/adminMiddleware';
@@ -8,13 +37,21 @@ import Database from 'better-sqlite3';
 export class AdminController {
   /**
    * Get all users (admin only)
-   * VULNERABILITY: No proper admin authentication
+   * 
+   * OWASP VULNERABILITIES DEMONSTRATED:
+   * - A01: Broken Access Control (Weak admin verification)
+   * - A07: Authentication Failures (Session-based admin check)
+   * - API5: Broken Function Level Authorization
    */
   static async getAllUsers(req: Request, res: Response) {
     try {
       const sessionUser = (req as any).session?.user;
       
-      // VULNERABLE: Basic admin check that can be bypassed
+      // OWASP A01: Broken Access Control & A07: Authentication Failures
+      // CRITICAL VULNERABILITY: Weak admin verification that can be bypassed by:
+      // - Session manipulation
+      // - Privilege escalation through other vulnerabilities
+      // - No server-side role validation
       if (!sessionUser?.isAdmin) {
         return res.status(403).json({ message: "Access denied - Admin only" });
       }
@@ -61,7 +98,9 @@ export class AdminController {
         return res.status(403).json({ message: "Access denied - Admin only" });
       }
 
+      // OWASP A03: Injection & A04: Insecure Design
       // VULNERABLE: No input validation for balance amount
+      // Admin can set negative balances, extremely high amounts, or invalid values
       if (!userId || newBalance === undefined) {
         return res.status(400).json({ message: "User ID and new balance are required" });
       }

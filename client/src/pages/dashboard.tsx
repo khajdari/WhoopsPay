@@ -1,9 +1,29 @@
 /**
- * Dashboard Page - Main user interface for WhoopsPay
+ * WhoopsPay Dashboard Page - OWASP Vulnerability Training
  * 
- * Central hub displaying user financial overview, recent transactions,
- * payment methods, and quick action buttons. Provides comprehensive
- * financial management interface with real-time data updates.
+ * WARNING: This component contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (Client-side privilege checking)
+ * - A03: Injection (DOM-based XSS through unvalidated data)
+ * - A04: Insecure Design (Client-side financial data management)
+ * - A05: Security Misconfiguration (Exposed admin functions)
+ * - A09: Security Logging and Monitoring Failures (Client-side monitoring)
+ * 
+ * Client-Side Security Vulnerabilities:
+ * - Admin status checked client-side only (can be manipulated)
+ * - Financial data displayed without server-side validation
+ * - Real-time system monitoring exposed to frontend
+ * - External redirect handling without proper validation
+ * - Payment approval logic partially handled client-side
+ * 
+ * Educational Vulnerabilities Include:
+ * - Client-side privilege escalation opportunities
+ * - Sensitive system information exposed to frontend
+ * - Financial transaction data accessible without proper authorization
+ * - Admin dashboard features exposed based on client-side flags
+ * 
+ * NEVER use this code in production environments!
  */
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";

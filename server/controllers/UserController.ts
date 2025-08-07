@@ -1,34 +1,70 @@
+/**
+ * WhoopsPay User Controller - OWASP Vulnerability Training
+ * 
+ * WARNING: This controller contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (IDOR, missing authorization checks)
+ * - A03: Injection (Potential for parameter pollution)
+ * - A04: Insecure Design (No proper authorization framework)
+ * - A05: Security Misconfiguration (Excessive data exposure)
+ * - A09: Security Logging and Monitoring Failures (No access logging)
+ * 
+ * API Security Top 10 Vulnerabilities:
+ * - API1: Broken Object Level Authorization (Direct object references)
+ * - API3: Broken Object Property Level Authorization (Excessive data exposure)
+ * - API5: Broken Function Level Authorization (Missing role checks)
+ * - API6: Unrestricted Access to Sensitive Business Flows (No business logic validation)
+ * 
+ * Educational Vulnerabilities Include:
+ * - Insecure Direct Object References (IDOR)
+ * - Missing authentication and authorization checks
+ * - Excessive data exposure in API responses
+ * - No input validation or sanitization
+ * - Lack of business logic validation
+ * 
+ * NEVER use this code in production environments!
+ */
+
 import { Request, Response } from 'express';
 import { storage } from '../storage';
 
 export class UserController {
   /**
    * Get user profile
-   * VULNERABILITY: Direct object reference without authorization check
+   * 
+   * OWASP VULNERABILITIES DEMONSTRATED:
+   * - A01: Broken Access Control (IDOR vulnerability)
+   * - API1: Broken Object Level Authorization (No ownership validation)
+   * - API3: Excessive Data Exposure (Returning sensitive information)
    */
   static async getUserProfile(req: Request, res: Response) {
     try {
       const { userId } = req.params;
       
-      // VULNERABLE: Direct object reference - no authorization check
-      // Any user can access any other user's profile
+      // OWASP A01: Broken Access Control - Insecure Direct Object Reference (IDOR)
+      // CRITICAL VULNERABILITY: No authorization check - any user can access any profile
+      // This violates the principle of object-level authorization
       const user = await storage.getUser(userId);
       
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // VULNERABLE: Returning sensitive information without proper access control
+      // OWASP API3: Broken Object Property Level Authorization
+      // CRITICAL VULNERABILITY: Exposing sensitive information without access control
       res.json({
         id: user.id,
-        email: user.email,
+        email: user.email,                    // VULNERABLE: PII exposure
         firstName: user.firstName,
         lastName: user.lastName,
-        balance: user.balance, // VULNERABLE: Exposing balance to anyone
-        isAdmin: user.isAdmin, // VULNERABLE: Exposing admin status
+        balance: user.balance,                // CRITICAL: Financial data exposure
+        isAdmin: user.isAdmin,                // CRITICAL: Privilege escalation risk
         profileImageUrl: user.profileImageUrl,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
+        // Note: More sensitive fields like SSN, address are not exposed here
+        // but the core vulnerability remains - no authorization check
       });
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -38,23 +74,34 @@ export class UserController {
 
   /**
    * Update user profile
-   * VULNERABILITY: No authentication or authorization
+   * 
+   * OWASP VULNERABILITIES DEMONSTRATED:
+   * - A01: Broken Access Control (No authentication/authorization)
+   * - A03: Injection (No input validation)
+   * - A04: Insecure Design (Mass assignment vulnerability)
+   * - API1: Broken Object Level Authorization
+   * - API6: Mass Assignment (No property filtering)
    */
   static async updateUserProfile(req: Request, res: Response) {
     try {
       const { userId } = req.params;
       const updateData = req.body;
       
-      // VULNERABLE: No authentication or authorization check
-      // Anyone can update any user's profile
+      // OWASP A01: Broken Access Control
+      // CRITICAL VULNERABILITY: No authentication or authorization check
+      // Anyone can update any user's profile without being logged in
       
       const existingUser = await storage.getUser(userId);
       if (!existingUser) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // VULNERABLE: No input validation - users can set any fields
-      // VULNERABLE: Direct update without validation
+      // OWASP A03: Injection & A04: Insecure Design
+      // CRITICAL VULNERABILITY: Mass Assignment Attack
+      // No input validation - users can set any fields including:
+      // - balance (privilege escalation)
+      // - isAdmin (privilege escalation)
+      // - any other sensitive fields
       const updatedUser = { ...existingUser, ...updateData };
       // Note: updateUser method would need to be implemented in storage
       
@@ -70,7 +117,11 @@ export class UserController {
 
   /**
    * Get all users (admin function)
-   * VULNERABILITY: No admin check
+   * 
+   * OWASP VULNERABILITIES DEMONSTRATED:
+   * - A01: Broken Access Control (No admin authorization)
+   * - API5: Broken Function Level Authorization (Missing role validation)
+   * - API3: Excessive Data Exposure (All user data exposed)
    */
   static async getAllUsers(req: Request, res: Response) {
     try {
