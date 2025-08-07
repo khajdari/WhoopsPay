@@ -28,7 +28,8 @@ docker-compose down
 ### 2. Access the Applications
 
 - **WhoopsPay**: http://localhost:3000
-- **OWASP Juice Shop**: http://localhost:3001
+- **WhoopsPay's Custom Juice Shop**: http://localhost:3000/juice-shop
+- **Official OWASP Juice Shop**: http://localhost:3002 (optional, requires --profile optional)
 
 ## Available Commands
 
@@ -51,8 +52,11 @@ docker-compose up --build
 # Start only WhoopsPay
 docker-compose up whoopspay
 
-# Start only Juice Shop
-docker-compose up juice-shop
+# Start with optional official Juice Shop
+docker-compose --profile optional up
+
+# Start only official Juice Shop (optional)
+docker-compose --profile optional up juice-shop
 ```
 
 ## Configuration
@@ -62,13 +66,13 @@ docker-compose up juice-shop
 The Docker setup uses these environment variables:
 
 - `WHOOPSPAY_URL=http://localhost:3000`
-- `JUICE_SHOP_URL=http://localhost:3001`
+- `JUICE_SHOP_URL=http://localhost:3000/juice-shop` (integrated custom version)
 - `SESSION_SECRET=your-secure-session-secret-change-in-production`
 
 ### Port Mapping
 
-- Host port 3000 → WhoopsPay container port 5000
-- Host port 3001 → Juice Shop container port 3000
+- Host port 3000 → WhoopsPay container port 5000 (includes integrated Juice Shop at /juice-shop)
+- Host port 3002 → Official Juice Shop container port 3000 (optional)
 
 ### Persistent Data
 
@@ -122,7 +126,7 @@ docker-compose logs -f juice-shop
 
 # Container logs
 docker logs whoopspay-app
-docker logs whoopspay-juice-shop
+docker logs whoopspay-juice-shop-official  # Only if using --profile optional
 ```
 
 ## Security Considerations
@@ -134,11 +138,19 @@ docker logs whoopspay-juice-shop
 
 ## Integration Testing
 
-Both services are configured to communicate with each other:
+### Custom Juice Shop Integration (Default)
 
-1. WhoopsPay connects to Juice Shop for external payment processing
-2. Payment flows between the applications work seamlessly
-3. Both applications maintain their intentional vulnerabilities for educational purposes
+- WhoopsPay includes integrated custom Juice Shop at `/juice-shop`
+- Features WhoopsPay-themed products and financial services
+- Custom payment flow integration for educational security training
+- Maintains intentional vulnerabilities for OWASP learning
+
+### Optional Official Juice Shop
+
+- Available at port 3002 when using `--profile optional`
+- Standard OWASP Juice Shop with original products
+- Useful for comparing with official vulnerability examples
+- Both versions maintain educational security vulnerabilities
 
 ## Production Deployment
 
@@ -153,14 +165,30 @@ For production use:
 ## Architecture
 
 ```
-┌─────────────────┐    ┌─────────────────┐
-│   WhoopsPay     │    │   Juice Shop    │
-│   localhost:3000│◄──►│   localhost:3001│
-│                 │    │                 │
-│   SQLite DB     │    │   File Storage  │
-│   (volume)      │    │   (ephemeral)   │
-└─────────────────┘    └─────────────────┘
-         │                       │
-         └───────────────────────┘
-              Docker Network
+┌─────────────────────────────────────────────────────────┐
+│                    localhost:3000                       │
+│  ┌─────────────────┐    ┌─────────────────────────────┐│
+│  │   WhoopsPay     │    │   Custom Juice Shop         ││
+│  │     Main App    │◄──►│   (/juice-shop)             ││
+│  │                 │    │                             ││
+│  │   SQLite DB     │    │   Integrated Service        ││
+│  │   (volume)      │    │   (same container)          ││
+│  └─────────────────┘    └─────────────────────────────┘│
+└─────────────────────────────────────────────────────────┘
+                               │
+                               │ (optional)
+                               ▼
+┌─────────────────────────────────────────────────────────┐
+│                    localhost:3002                       │
+│  ┌─────────────────────────────────────────────────────┐│
+│  │            Official OWASP Juice Shop                ││
+│  │              (--profile optional)                   ││
+│  │                                                     ││
+│  │            File Storage (ephemeral)                 ││
+│  └─────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────┘
+                               │
+                ┌──────────────┴──────────────┐
+                │        Docker Network       │
+                └─────────────────────────────┘
 ```
