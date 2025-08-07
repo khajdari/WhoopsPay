@@ -51,13 +51,13 @@ export default function IssueReporting() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "open":
-        return <Badge variant="destructive" className="flex items-center gap-1"><AlertTriangle className="h-3 w-3" />{t('open')}</Badge>;
+        return <Badge variant="destructive" className="flex items-center gap-1"><AlertTriangle className="h-3 w-3" />{t('statusOpen')}</Badge>;
       case "in_progress":
-        return <Badge variant="default" className="flex items-center gap-1"><Clock className="h-3 w-3" />{t('inProgressStatus')}</Badge>;
+        return <Badge variant="default" className="flex items-center gap-1"><Clock className="h-3 w-3" />{t('statusInProgress')}</Badge>;
       case "resolved":
-        return <Badge variant="outline" className="flex items-center gap-1 text-green-600"><CheckCircle className="h-3 w-3" />{t('resolvedStatus')}</Badge>;
+        return <Badge variant="outline" className="flex items-center gap-1 text-green-600"><CheckCircle className="h-3 w-3" />{t('statusResolved')}</Badge>;
       case "closed":
-        return <Badge variant="secondary" className="flex items-center gap-1"><XCircle className="h-3 w-3" />{t('closed')}</Badge>;
+        return <Badge variant="secondary" className="flex items-center gap-1"><XCircle className="h-3 w-3" />{t('statusClosed')}</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -66,13 +66,13 @@ export default function IssueReporting() {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case "critical":
-        return <Badge className="bg-red-600 text-white">{t('critical')}</Badge>;
+        return <Badge className="bg-red-600 text-white">{t('priorityCritical')}</Badge>;
       case "high":
-        return <Badge className="bg-orange-600 text-white">{t('high')}</Badge>;
+        return <Badge className="bg-orange-600 text-white">{t('priorityHigh')}</Badge>;
       case "medium":
-        return <Badge className="bg-yellow-600 text-white">{t('medium')}</Badge>;
+        return <Badge className="bg-yellow-600 text-white">{t('priorityMedium')}</Badge>;
       case "low":
-        return <Badge className="bg-green-600 text-white">{t('low')}</Badge>;
+        return <Badge className="bg-green-600 text-white">{t('priorityLow')}</Badge>;
       default:
         return <Badge variant="outline">{priority}</Badge>;
     }
@@ -184,11 +184,11 @@ export default function IssueReporting() {
                     <Badge variant="destructive">{groupedIssues.open.length}</Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">{t('inProgress')}</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('statusInProgress')}</span>
                     <Badge variant="default">{groupedIssues.in_progress.length}</Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">{t('resolved')}</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('statusResolved')}</span>
                     <Badge variant="outline" className="text-green-600">{groupedIssues.resolved.length}</Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
