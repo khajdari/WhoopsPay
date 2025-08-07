@@ -92,17 +92,19 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up
 
 2. **Asset loading errors**: If you see errors about missing assets (uk.png, gr.jpg), ensure the required files are in `client/src/assets/`
 
-3. **Port conflicts**: If ports 3000 or 3001 are in use, modify the port mappings in `docker-compose.yml`
+3. **"tsx: not found" error**: This occurs when the development override tries to run `tsx` in a production container. The current setup uses the production build for consistency
 
-4. **Database issues**: Clear the database volume:
+4. **Port conflicts**: If ports 3000 or 3001 are in use, modify the port mappings in `docker-compose.yml`
+
+5. **Database issues**: Clear the database volume:
    ```bash
    docker-compose down -v
    docker-compose up
    ```
 
-5. **Permission issues**: Ensure Docker has access to the project directory
+6. **Permission issues**: Ensure Docker has access to the project directory
 
-6. **Build failures**: Clear Docker cache:
+7. **Build failures**: Clear Docker cache:
    ```bash
    docker system prune -a
    docker-compose build --no-cache

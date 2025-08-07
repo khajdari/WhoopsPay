@@ -4,15 +4,14 @@
 services:
   whoopspay:
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production  # Use production build but with development config
       - DEBUG=1
+      - WHOOPSPAY_URL=http://localhost:3000
+      - JUICE_SHOP_URL=http://localhost:3001
     volumes:
-      # Mount source code for development (hot reload)
-      - .:/app:ro
-      - /app/node_modules
       - ./data:/app/data
       - ./logs:/app/logs
-    command: npm run dev
+    command: npm run start  # Use the production start command
     
   juice-shop:
     environment:
