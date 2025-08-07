@@ -91,6 +91,8 @@ interface Translations {
   requestRejected: TranslationKey;
   markAllRead: TranslationKey;
   clearAll: TranslationKey;
+  new: TranslationKey;
+  noNotifications: TranslationKey;
   
   // Transaction types
   transfer: TranslationKey;
@@ -619,6 +621,14 @@ const translations: Translations = {
   clearAll: {
     'en-GB': 'Clear All',
     'el-GR': 'Εκκαθάριση Όλων'
+  },
+  new: {
+    'en-GB': 'new',
+    'el-GR': 'νέα'
+  },
+  noNotifications: {
+    'en-GB': 'No notifications',
+    'el-GR': 'Δεν υπάρχουν ειδοποιήσεις'
   },
   
   // Transaction types
