@@ -679,9 +679,9 @@ export class DatabaseStorage implements IStorage {
           }
         })
         .from(moneyRequests)
-        .leftJoin(users, eq(moneyRequests.toUserId, users.id)) // Join with the person who made the request
+        .leftJoin(users, eq(moneyRequests.toUserId, users.id)) // Join with the person who made the request (toUserId)
         .where(and(
-          eq(moneyRequests.fromUserId, userId), // Show requests where others want money FROM this user
+          eq(moneyRequests.fromUserId, userId), // Show requests where others want money FROM this user (fromUserId = current user)
           eq(moneyRequests.status, "pending")
         ))
         .orderBy(desc(moneyRequests.createdAt));
