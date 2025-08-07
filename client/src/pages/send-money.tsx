@@ -1,20 +1,30 @@
 /**
- * Send Money Page - Comprehensive financial transaction interface
+ * WhoopsPay Send Money Page - OWASP Vulnerability Training
  * 
- * Multi-functional money management page providing:
- * - Send money to other users with payment method selection
- * - Request money from other users with notification system
- * - Add money to account using various funding sources
- * - Real-time transaction processing and status updates
- * - Payment method integration and management
+ * WARNING: This component contains intentional security vulnerabilities for educational purposes.
  * 
- * Educational Security Features:
- * - Demonstrates financial transaction processing
- * - Shows payment method validation patterns
- * - Includes transaction notification systems
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (No proper transaction authorization)
+ * - A03: Injection (Client-side data validation only)
+ * - A04: Insecure Design (Client-side financial transaction logic)
+ * - A05: Security Misconfiguration (Exposed payment processing)
+ * - A07: Identification and Authentication Failures (Weak transaction validation)
  * 
- * VULNERABILITY NOTE: May contain intentional transaction security
- * weaknesses for educational security training purposes.
+ * Financial Security Vulnerabilities:
+ * - Transaction amounts validated only client-side
+ * - No proper business logic validation for financial operations
+ * - Payment method selection without server-side verification
+ * - Money request approval logic exposed to frontend
+ * - Insufficient validation of recipient information
+ * 
+ * Educational Vulnerabilities Include:
+ * - Client-side only transaction validation (can be bypassed)
+ * - Financial limits and controls handled client-side
+ * - Payment method validation insufficient
+ * - No proper fraud detection mechanisms
+ * - Transaction notification system exploitable
+ * 
+ * NEVER use this code in production environments!
  */
 import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

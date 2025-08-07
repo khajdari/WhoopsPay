@@ -6,8 +6,17 @@ WhoopsPay is a comprehensive educational cybersecurity training platform built a
 
 The application serves as a training tool for security professionals, developers, students, and penetration testers to understand web application vulnerabilities and secure coding practices. It includes intentional security flaws such as broken access control, cryptographic failures, injection vulnerabilities, and insecure design patterns.
 
-## Recent Changes (December 2024)
+## Recent Changes (August 2025)
 
+### Latest Updates
+- **Comprehensive OWASP Vulnerability Documentation**: Systematic enhancement of security vulnerability comments across entire codebase
+- **Educational Security Comments**: All controllers, middleware, and critical client components now contain detailed OWASP Top 10 and API Security Top 10 vulnerability explanations
+- **Training Platform Enhancement**: Enhanced educational value with specific vulnerability examples and security weakness explanations
+- **Backend Security Documentation**: Complete vulnerability documentation in AuthController, UserController, TransactionController, AdminController, MoneyRequestController, and NotificationController
+- **Client-Side Vulnerability Comments**: Enhanced frontend components (Login, Dashboard, Administration, Transactions, Send Money) with client-side security vulnerability explanations
+- **Infrastructure Security Documentation**: Updated storage layer, authentication middleware, and routing with comprehensive security vulnerability documentation
+
+### Previous Updates (December 2024)
 - **Docker Support**: Complete Docker configuration with multi-stage builds and health checks
 - **Docker Compose**: Full orchestration of WhoopsPay + OWASP Juice Shop containers
 - **Environment Detection**: Enhanced URL adapter supports Docker, localhost, and Replit environments  
@@ -59,10 +68,16 @@ Preferred communication style: Simple, everyday language.
 - **Session middleware** for request authentication and user context management
 
 ### Security Training Features
-- **Intentional OWASP Top 10 vulnerabilities** including broken access control, injection flaws, and cryptographic failures
-- **API Security vulnerabilities** demonstrating broken authorization and excessive data exposure
-- **Verbose error handling** and insufficient logging for educational security analysis
-- **Direct object references** without proper authorization checks
+- **Comprehensive OWASP Top 10 vulnerabilities** with detailed educational comments explaining each vulnerability type
+- **API Security Top 10 vulnerabilities** demonstrating broken authorization, excessive data exposure, and improper inventory management
+- **Educational vulnerability documentation** with specific examples and security weakness explanations throughout codebase
+- **Client-side security vulnerabilities** including DOM-based XSS, client-side privilege escalation, and insecure data handling
+- **Server-side vulnerabilities** including SQL injection, broken access control, cryptographic failures, and insecure design patterns
+- **Financial security vulnerabilities** specific to payment processing, transaction validation, and monetary controls
+- **Administrative security vulnerabilities** including privilege escalation, weak admin verification, and exposed system information
+- **Authentication and session management vulnerabilities** with detailed explanations of security weaknesses
+- **Direct object references** without proper authorization checks and comprehensive IDOR examples
+- **Verbose error handling** and insufficient logging with educational security analysis
 
 ### External Integrations
 - **Juice Shop integration** for cross-platform payment processing demonstration

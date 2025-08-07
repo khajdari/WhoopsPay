@@ -1,24 +1,49 @@
+/**
+ * WhoopsPay Admin Middleware - OWASP Vulnerability Training
+ * 
+ * WARNING: This middleware contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (Session-based privilege validation)
+ * - A07: Identification and Authentication Failures (Weak admin verification)
+ * - A05: Security Misconfiguration (Basic role checking)
+ * 
+ * Educational Vulnerabilities Include:
+ * - Session-based admin validation can be manipulated
+ * - No multi-factor authentication for admin access
+ * - Basic boolean flag for admin privileges
+ * - Insufficient audit logging for admin actions
+ * 
+ * NEVER use this code in production environments!
+ */
+
 import { Request, Response, NextFunction } from "express";
 import { storage } from "../storage";
 
-// Admin middleware to check if user has admin privileges
+// OWASP A01: Broken Access Control - Weak Admin Privilege Validation
+// VULNERABLE: Session-based admin checking without proper security controls
 export const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Check if user is authenticated via session
+    // OWASP A07: Identification and Authentication Failures
+    // VULNERABLE: Basic session-based authentication without additional security
     const userId = (req as any).session?.userId;
     
     if (!userId) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    // Get user from storage
+    // VULNERABLE: Direct database lookup without additional validation
     const user = await storage.getUser(userId);
     
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
 
-    // Check if user is admin
+    // OWASP A01: Broken Access Control - Weak Privilege Validation
+    // VULNERABLE: Simple boolean flag for admin privileges
+    // - No role hierarchy or granular permissions
+    // - Can be manipulated through other vulnerabilities
+    // - No time-based or context-based access controls
     if (!user.isAdmin) {
       return res.status(403).json({ 
         error: "Access denied. Administrator privileges required.",

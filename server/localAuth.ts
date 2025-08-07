@@ -1,9 +1,29 @@
 /**
- * Local Authentication System - Session-based user authentication
+ * WhoopsPay Local Authentication System - OWASP Vulnerability Training
  * 
- * Provides secure session management, password hashing, and authentication
- * middleware for the WhoopsPay application. Designed for educational purposes
- * with intentional security vulnerabilities for training.
+ * WARNING: This system contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A02: Cryptographic Failures (Weak session secrets, mixed password storage)
+ * - A04: Insecure Design (Weak authentication flow)
+ * - A05: Security Misconfiguration (Development secrets in production)
+ * - A07: Identification and Authentication Failures (Weak session management)
+ * - A09: Security Logging and Monitoring Failures (Insufficient audit logging)
+ * 
+ * Authentication Security Vulnerabilities:
+ * - Default session secret exposed in code
+ * - Session cookies not secured for HTTPS in production
+ * - Mixed plain text and encrypted password validation
+ * - No rate limiting on authentication attempts
+ * - Basic session validation without additional security layers
+ * 
+ * Educational Vulnerabilities Include:
+ * - Predictable session secrets enabling session hijacking
+ * - Weak password storage validation
+ * - Authentication bypass opportunities through session manipulation
+ * - No multi-factor authentication requirements
+ * 
+ * NEVER use this code in production environments!
  */
 import session from "express-session";
 import type { Express, RequestHandler } from "express";
@@ -11,50 +31,60 @@ import { storage } from "./storage";
 import bcrypt from "bcrypt";
 
 /**
- * Session Configuration - Sets up Express session middleware
+ * Session Configuration - OWASP Educational Vulnerabilities
  * 
- * Configures session storage with security settings appropriate for
- * local development. Uses secure cookies and proper TTL management.
+ * OWASP A02: Cryptographic Failures & A05: Security Misconfiguration
+ * VULNERABLE: Weak session configuration with multiple security issues
  */
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week session duration
   
   return session({
+    // OWASP A02: Cryptographic Failures - Weak Session Secret
+    // CRITICAL VULNERABILITY: Default secret exposed in code, predictable
     secret: process.env.SESSION_SECRET || 'whoopspay-local-dev-secret-key-change-in-production',
     resave: false, // Don't save session if unmodified
     saveUninitialized: false, // Don't create session until something stored
     cookie: {
-      httpOnly: true, // Prevent XSS attacks via JavaScript access
-      secure: false, // Set to false for local development (use true for HTTPS)
-      maxAge: sessionTtl, // Session expiration time
+      httpOnly: true, // Good: Prevent XSS attacks via JavaScript access
+      // OWASP A05: Security Misconfiguration - Insecure Cookie Settings
+      // VULNERABLE: secure: false allows session theft over HTTP
+      secure: false, // VULNERABLE: Should be true for HTTPS in production
+      maxAge: sessionTtl, // VULNERABLE: Long session duration increases attack window
     },
   });
 }
 
 /**
- * Authentication Middleware - Validates user sessions
+ * Authentication Middleware - OWASP Educational Vulnerabilities
  * 
- * Checks for valid user session and attaches user object to request.
- * Returns 401 Unauthorized for invalid or missing sessions.
- * Essential for protecting authenticated routes throughout the application.
+ * OWASP A07: Identification and Authentication Failures
+ * VULNERABLE: Basic session validation without proper security controls
  */
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
   try {
-    // Check if session exists and contains user ID
+    // OWASP A07: Identification and Authentication Failures
+    // VULNERABLE: Basic session checking without additional validation
+    // - No session timeout validation
+    // - No concurrent session limits
+    // - No session integrity verification
     if (req.session && req.session.userId) {
-      // Fetch full user data from storage
+      // VULNERABLE: Direct database lookup without additional security checks
       const user = await storage.getUser(req.session.userId);
       if (!user) {
         return res.status(401).json({ message: "User not found" });
       }
       
-      // Attach user to request object
+      // OWASP A09: Security Logging and Monitoring Failures
+      // VULNERABLE: No authentication logging or monitoring
       (req as any).user = user;
       return next();
     }
     
     return res.status(401).json({ message: "Unauthorized - Please log in" });
   } catch (error) {
+    // OWASP A09: Security Logging and Monitoring Failures
+    // VULNERABLE: Generic error handling without security event logging
     console.error("Authentication middleware error:", error);
     return res.status(500).json({ message: "Authentication error" });
   }

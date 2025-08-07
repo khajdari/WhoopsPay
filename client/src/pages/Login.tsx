@@ -1,20 +1,31 @@
 /**
- * Login Page - User authentication interface with external payment integration
+ * WhoopsPay Login Page - OWASP Vulnerability Training
  * 
- * Comprehensive authentication page providing:
- * - Username/password login form with validation
- * - External payment request handling from integrated applications
- * - Automatic redirection after successful authentication
- * - Payment modal integration for cross-platform transactions
- * - Session management and authentication state tracking
+ * WARNING: This component contains intentional security vulnerabilities for educational purposes.
  * 
- * Educational Security Features:
- * - Demonstrates authentication form patterns
- * - Shows external payment integration vulnerabilities
- * - Includes session handling and redirect logic
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A02: Cryptographic Failures (Client-side password handling)
+ * - A03: Injection (Potential XSS through unvalidated URL parameters)
+ * - A04: Insecure Design (Weak client-side validation only)
+ * - A05: Security Misconfiguration (Exposed test accounts)
+ * - A07: Identification and Authentication Failures (Client-side auth logic)
  * 
- * VULNERABILITY NOTE: Authentication may lack proper rate limiting
- * and password complexity requirements for educational purposes.
+ * Client-Side Security Vulnerabilities:
+ * - Unvalidated URL parameters processed directly from external sources
+ * - Test accounts exposed in production-like environment  
+ * - Client-side password validation without server verification
+ * - External payment parameters accepted without validation
+ * - No protection against automated credential stuffing attacks
+ * - Authentication state managed purely client-side
+ * 
+ * Educational Vulnerabilities Include:
+ * - URL parameter injection through external payment flows
+ * - Client-side security controls that can be bypassed
+ * - Information disclosure through exposed test accounts
+ * - Weak password complexity requirements
+ * - Missing brute force protection
+ * 
+ * NEVER use this code in production environments!
  */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,17 +48,20 @@ import { LanguageSelector } from "@/components/language-selector";
 import { ArrowLeft } from "lucide-react";
 
 /**
- * Login Form Validation Schema - Input validation rules
+ * Login Form Validation Schema - OWASP Educational Vulnerabilities
  * 
- * Defines validation requirements for user authentication:
- * - Username: Required field with minimum length
- * - Password: Required field with basic validation
+ * OWASP A04: Insecure Design & A07: Authentication Failures
+ * VULNERABLE: Weak password requirements demonstrate poor security design
  * 
- * VULNERABILITY NOTE: Lacks proper password complexity requirements.
+ * Security Weaknesses:
+ * - No password complexity requirements (length, special chars, numbers)
+ * - No protection against common passwords
+ * - Client-side only validation (can be bypassed)
+ * - No rate limiting for login attempts
  */
 const loginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(1, "Password is required"),
+  username: z.string().min(1, "Username is required"), // VULNERABLE: No format validation
+  password: z.string().min(1, "Password is required"), // VULNERABLE: No complexity requirements
 });
 
 /**

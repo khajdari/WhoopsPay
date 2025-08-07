@@ -1,20 +1,33 @@
 /**
- * Transaction History Page - Financial transaction management and analysis
+ * WhoopsPay Transaction History Page - OWASP Vulnerability Training
  * 
- * Comprehensive transaction viewing interface providing:
- * - Complete transaction history with search and filtering
- * - Real-time pagination and data management
- * - Advanced filtering by transaction type and status
- * - Mobile-responsive transaction display
- * - Detailed transaction information with security context
+ * WARNING: This component contains intentional security vulnerabilities for educational purposes.
  * 
- * Educational Security Features:
- * - Demonstrates client-side data filtering vulnerabilities
- * - Shows improper access control through visible data exposure
- * - Includes pagination without proper authorization checks
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (Client-side data filtering only)
+ * - A03: Injection (XSS through unvalidated search inputs)
+ * - A04: Insecure Design (All transaction data exposed to client)
+ * - A05: Security Misconfiguration (Excessive data exposure)
+ * - A09: Security Logging and Monitoring Failures (Client-side transaction logs)
  * 
- * VULNERABILITY NOTE: Client-side filtering exposes all transaction
- * data for educational security training purposes.
+ * API Security Top 10 Vulnerabilities:
+ * - API3: Broken Object Property Level Authorization (All transaction details exposed)
+ * - API1: Broken Object Level Authorization (Access to all transactions)
+ * 
+ * Data Exposure Vulnerabilities:
+ * - All user transaction data loaded client-side regardless of ownership
+ * - Client-side filtering exposes other users' transaction details
+ * - Search functionality can reveal sensitive financial patterns
+ * - Pagination loads all data before filtering client-side
+ * - Transaction metadata exposed including internal IDs
+ * 
+ * Educational Vulnerabilities Include:
+ * - Client-side data filtering allows access to unauthorized transactions
+ * - Search inputs not properly sanitized (XSS potential)
+ * - Financial transaction history exposed without proper authorization
+ * - Transaction details accessible beyond user's own transactions
+ * 
+ * NEVER use this code in production environments!
  */
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";

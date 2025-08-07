@@ -1,8 +1,27 @@
 /**
- * WhoopsPay API Routes - MVC Architecture
+ * WhoopsPay API Routes - OWASP Vulnerability Training
  * 
- * This file organizes all routes using the MVC pattern with dedicated controllers.
- * Routes are grouped by functionality and use proper controller methods.
+ * WARNING: This routing configuration contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (Missing authorization on sensitive endpoints)
+ * - A04: Insecure Design (No rate limiting, unrestricted API access)
+ * - A05: Security Misconfiguration (Exposed API documentation, verbose errors)
+ * - A09: Security Logging and Monitoring Failures (Insufficient endpoint monitoring)
+ * 
+ * API Security Top 10 Vulnerabilities:
+ * - API4: Unrestricted Resource Consumption (No rate limiting)
+ * - API8: Security Misconfiguration (Open API documentation)
+ * - API9: Improper Inventory Management (All endpoints exposed)
+ * 
+ * Educational Vulnerabilities Include:
+ * - Administrative endpoints accessible without proper validation
+ * - Financial transaction endpoints lack proper authorization
+ * - API documentation exposed revealing system architecture
+ * - No rate limiting or DDoS protection
+ * - Missing CORS configuration
+ * 
+ * NEVER use this code in production environments!
  */
 
 import type { Express } from "express";

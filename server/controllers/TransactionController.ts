@@ -1,3 +1,33 @@
+/**
+ * WhoopsPay Transaction Controller - OWASP Vulnerability Training
+ * 
+ * WARNING: This controller contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (No authentication, IDOR, insufficient authorization)
+ * - A03: Injection (SQL injection through unvalidated parameters)
+ * - A04: Insecure Design (Missing business logic validation, race conditions)
+ * - A05: Security Misconfiguration (No transaction limits, verbose errors)
+ * - A07: Identification and Authentication Failures (No user verification)
+ * - A09: Security Logging and Monitoring Failures (Insufficient financial transaction logging)
+ * 
+ * API Security Top 10 Vulnerabilities:
+ * - API1: Broken Object Level Authorization (No transaction ownership validation)
+ * - API2: Broken User Authentication (No authentication required)
+ * - API4: Unrestricted Resource Consumption (No rate limiting on financial operations)
+ * - API6: Unrestricted Access to Sensitive Business Flows (No transaction validation)
+ * - API7: Server Side Request Forgery (Potential through external references)
+ * 
+ * Financial Security Vulnerabilities:
+ * - Unlimited transaction amounts without balance validation
+ * - Race conditions in balance updates
+ * - Missing transaction approval workflows
+ * - No fraud detection or monitoring
+ * - Inadequate financial audit trails
+ * 
+ * NEVER use this code in production environments!
+ */
+
 import { Request, Response } from 'express';
 import { storage } from '../storage';
 import { insertTransactionSchema } from '@shared/schema';
@@ -5,18 +35,30 @@ import { insertTransactionSchema } from '@shared/schema';
 export class TransactionController {
   /**
    * Create a new transaction
-   * VULNERABILITY: No authentication check - anyone can create transactions
+   * 
+   * OWASP VULNERABILITIES DEMONSTRATED:
+   * - A01: Broken Access Control (No authentication required)
+   * - A04: Insecure Design (No business logic validation)
+   * - API2: Broken User Authentication (Anonymous transactions allowed)
+   * - API6: Unrestricted Access to Sensitive Business Flows
    */
   static async createTransaction(req: Request, res: Response) {
     try {
-      // VULNERABLE: No authentication check - anyone can create transactions
+      // OWASP A01: Broken Access Control
+      // CRITICAL VULNERABILITY: No authentication check - anyone can create transactions
+      // This allows anonymous users to initiate financial transactions
       const transactionData = req.body;
       const { fromUserId, type } = transactionData;
       
-      // VULNERABLE: Insufficient input validation
+      // OWASP A03: Injection & A04: Insecure Design
+      // VULNERABLE: Insufficient input validation and business logic validation
       
-      // WARNING: No validation of transaction limits or user permissions
-      // Users can send any amount, even if they don't have sufficient balance
+      // OWASP A04: Insecure Design - Missing Financial Controls
+      // CRITICAL VULNERABILITY: No validation of:
+      // - Transaction limits or user permissions
+      // - Sufficient balance before transaction
+      // - Daily/monthly transaction limits
+      // - Fraud detection patterns
       
       // Ensure both users exist before creating transaction
       const fromUser = await storage.getUser(transactionData.fromUserId);
@@ -63,7 +105,9 @@ export class TransactionController {
           const fromBalance = parseFloat(fromUser.balance || '0') - parseFloat(transactionData.amount);
           const toBalance = parseFloat(toUser.balance || '0') + parseFloat(transactionData.amount);
           
-          // VULNERABLE: No checks for negative balances
+          // OWASP A04: Insecure Design - Financial Logic Vulnerabilities
+          // CRITICAL VULNERABILITY: No checks for negative balances
+          // This allows users to spend money they don't have
           await storage.updateUserBalance(transactionData.fromUserId, fromBalance.toString());
           await storage.updateUserBalance(transactionData.toUserId, toBalance.toString());
 
