@@ -151,6 +151,8 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                         <h4 className="text-sm font-medium text-gray-900">
                           {notification.title === "Payment Received" ? t('paymentReceived') : 
                            notification.title === "Money Request" ? t('moneyRequest') :
+                           notification.title === "Money Request Approved" ? t('requestApproved') :
+                           notification.title === "Money Request Rejected" ? t('requestRejected') :
                            notification.title === "Request Approved" ? t('requestApproved') :
                            notification.title === "Request Rejected" ? t('requestRejected') :
                            notification.title}

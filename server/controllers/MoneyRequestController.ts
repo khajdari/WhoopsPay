@@ -161,7 +161,7 @@ export class MoneyRequestController {
             userId: request.toUserId,
             type: "payment",
             title: "Payment Received",
-            message: `You received ¤${request.amount} from ${fromUser.firstName || fromUser.email}`,
+            message: `You received ¤${request.amount} from ${fromUser.firstName || fromUser.email}${request.description ? ` for: ${request.description}` : ''}`,
             isRead: 0
           });
 
@@ -169,7 +169,16 @@ export class MoneyRequestController {
             userId: request.fromUserId,
             type: "payment",
             title: "Payment Sent",
-            message: `You sent ¤${request.amount} to ${toUser.firstName || toUser.email}`,
+            message: `You sent ¤${request.amount} to ${toUser.firstName || toUser.email}${request.description ? ` for: ${request.description}` : ''}`,
+            isRead: 0
+          });
+
+          // Additional approval notification for the requester
+          await storage.createNotification({
+            userId: request.toUserId,
+            type: "money_request_approved",
+            title: "Money Request Approved",
+            message: `${fromUser.firstName || fromUser.email} approved your request for ¤${request.amount}${request.description ? ` for: ${request.description}` : ''}`,
             isRead: 0
           });
         } catch (notificationError) {
@@ -224,6 +233,22 @@ export class MoneyRequestController {
 
       // Update request status to rejected
       const updatedRequest = await storage.updateMoneyRequestStatus(parseInt(requestId), "rejected");
+
+      // Create rejection notification for the person who made the request
+      try {
+        const rejectorUser = await storage.getUser(userId);
+        const requesterUser = await storage.getUser(request.toUserId);
+        
+        await storage.createNotification({
+          userId: request.toUserId, // Send notification to the person who made the request
+          type: "money_request_rejected",
+          title: "Money Request Rejected",
+          message: `${rejectorUser?.firstName || rejectorUser?.email} rejected your request for ¤${request.amount}${request.description ? ` for: ${request.description}` : ''}`,
+          isRead: 0
+        });
+      } catch (notificationError) {
+        console.error("Error creating rejection notification:", notificationError);
+      }
 
       // For external requests, return redirect information to cancel URL
       if (request.type === "external" && request.externalSource) {
