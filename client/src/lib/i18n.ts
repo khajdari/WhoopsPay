@@ -133,16 +133,16 @@ interface Translations {
   submitTrackIssues: TranslationKey;
   
   // Status labels
-  open: TranslationKey;
-  inProgressStatus: TranslationKey;
-  resolvedStatus: TranslationKey;
-  closed: TranslationKey;
+  statusOpen: TranslationKey;
+  statusInProgress: TranslationKey;
+  statusResolved: TranslationKey;
+  statusClosed: TranslationKey;
   
   // Priority labels
-  critical: TranslationKey;
-  high: TranslationKey;
-  medium: TranslationKey;
-  low: TranslationKey;
+  priorityCritical: TranslationKey;
+  priorityHigh: TranslationKey;
+  priorityMedium: TranslationKey;
+  priorityLow: TranslationKey;
   
   // Transaction status and types
   onus: TranslationKey;
@@ -169,10 +169,10 @@ interface Translations {
   memoryUsage: TranslationKey;
   cpuUsage: TranslationKey;
   activeConnections: TranslationKey;
-  totalUsers: TranslationKey;
+  dashboardTotalUsers: TranslationKey;
   totalTransactions: TranslationKey;
   pendingIssues: TranslationKey;
-  online: TranslationKey;
+  dashboardOnline: TranslationKey;
   offline: TranslationKey;
   healthy: TranslationKey;
   warning: TranslationKey;
@@ -219,23 +219,23 @@ interface Translations {
   systemHealthDashboardTitle: TranslationKey;
   monitorApplicationHealth: TranslationKey;
   database: TranslationKey;
-  online: TranslationKey;
+  adminOnline: TranslationKey;
   apiServer: TranslationKey;
   running: TranslationKey;
-  totalUsers: TranslationKey;
+  adminTotalUsers: TranslationKey;
   systemFailures: TranslationKey;
   accessAdminPanel: TranslationKey;
   monitorIssues: TranslationKey;
-  administration: TranslationKey;
-  issueReports: TranslationKey;
+  adminNavigation: TranslationKey;
+  adminIssueReports: TranslationKey;
   
   // Administration panel specific
   administrationPanel: TranslationKey;
   systemMonitoringApi: TranslationKey;
   sensitiveInfoWarning: TranslationKey;
-  apiDocumentation: TranslationKey;
-  expressLogs: TranslationKey;
-  databaseLogs: TranslationKey;
+  interfaceApiDocumentation: TranslationKey;
+  interfaceExpressLogs: TranslationKey;
+  interfaceDatabaseLogs: TranslationKey;
   dbManagement: TranslationKey;
   apiDocumentationSwagger: TranslationKey;
   
@@ -247,17 +247,17 @@ interface Translations {
   allCategories: TranslationKey;
   noIssueReportsFound: TranslationKey;
 
-  // Status options
-  open: TranslationKey;
-  inProgress: TranslationKey;
-  resolved: TranslationKey;
-  closed: TranslationKey;
+  // Status options (renamed to avoid duplicates)
+  issueStatusOpen: TranslationKey;
+  issueStatusInProgress: TranslationKey;
+  issueStatusResolved: TranslationKey;
+  issueStatusClosed: TranslationKey;
 
-  // Priority options
-  critical: TranslationKey;
-  high: TranslationKey;
-  medium: TranslationKey;
-  low: TranslationKey;
+  // Priority options (renamed to avoid duplicates)
+  issuePriorityCritical: TranslationKey;
+  issuePriorityHigh: TranslationKey;
+  issuePriorityMedium: TranslationKey;
+  issuePriorityLow: TranslationKey;
 
   // Category options
   technical: TranslationKey;
@@ -882,7 +882,7 @@ const translations: Translations = {
     'en-GB': 'Running',
     'el-GR': 'Εκτελείται'
   },
-  totalUsers: {
+  adminTotalUsers: {
     'en-GB': 'Total Users',
     'el-GR': 'Σύνολο Χρηστών'
   },
@@ -898,11 +898,11 @@ const translations: Translations = {
     'en-GB': 'Monitor Issues',
     'el-GR': 'Παρακολούθηση Ζητημάτων'
   },
-  administration: {
+  adminNavigation: {
     'en-GB': 'Administration',
     'el-GR': 'Διαχείριση'
   },
-  issueReports: {
+  adminIssueReports: {
     'en-GB': 'Issue Reports',
     'el-GR': 'Αναφορές Προβλημάτων'
   },
@@ -968,37 +968,38 @@ const translations: Translations = {
   },
 
   // Status options
-  open: {
+  statusOpen: {
     'en-GB': 'Open',
     'el-GR': 'Ανοιχτό'
   },
-  inProgress: {
+  statusInProgress: {
     'en-GB': 'In Progress',
     'el-GR': 'Σε Εξέλιξη'
   },
-  resolved: {
+  // Status options
+  statusResolved: {
     'en-GB': 'Resolved',
     'el-GR': 'Επιλυμένο'
   },
-  closed: {
+  statusClosed: {
     'en-GB': 'Closed',
     'el-GR': 'Κλειστό'
   },
 
   // Priority options
-  critical: {
+  priorityCritical: {
     'en-GB': 'Critical',
     'el-GR': 'Κρίσιμη'
   },
-  high: {
+  priorityHigh: {
     'en-GB': 'High',
     'el-GR': 'Υψηλή'
   },
-  medium: {
+  priorityMedium: {
     'en-GB': 'Medium',
     'el-GR': 'Μεσαία'
   },
-  low: {
+  priorityLow: {
     'en-GB': 'Low',
     'el-GR': 'Χαμηλή'
   },
@@ -1012,7 +1013,7 @@ const translations: Translations = {
     'en-GB': 'Payment',
     'el-GR': 'Πληρωμή'
   },
-  security: {
+  categorySecurity: {
     'en-GB': 'Security',
     'el-GR': 'Ασφάλεια'
   },
@@ -1317,7 +1318,7 @@ const translations: Translations = {
   },
   
   // Administration menu and content
-  administration: {
+  adminMenuAdministration: {
     'en-GB': 'Administration',
     'el-GR': 'Διαχείριση'
   },
@@ -1341,7 +1342,7 @@ const translations: Translations = {
     'en-GB': 'Database Health',
     'el-GR': 'Υγεία Βάσης Δεδομένων'
   },
-  apiDocumentation: {
+  adminApiDocumentation: {
     'en-GB': 'API Documentation',
     'el-GR': 'Τεκμηρίωση API'
   },
@@ -1349,11 +1350,11 @@ const translations: Translations = {
     'en-GB': 'System Logs',
     'el-GR': 'Αρχεία Καταγραφής Συστήματος'
   },
-  expressLogs: {
+  adminExpressLogs: {
     'en-GB': 'Express Logs',
     'el-GR': 'Αρχεία Καταγραφής Express'
   },
-  databaseLogs: {
+  adminDatabaseLogs: {
     'en-GB': 'Database Logs',
     'el-GR': 'Αρχεία Καταγραφής Βάσης Δεδομένων'
   },
@@ -1385,7 +1386,7 @@ const translations: Translations = {
     'en-GB': 'Active Connections',
     'el-GR': 'Ενεργές Συνδέσεις'
   },
-  totalUsers: {
+  dashboardTotalUsers: {
     'en-GB': 'Total Users',
     'el-GR': 'Σύνολο Χρηστών'
   },
@@ -1397,7 +1398,7 @@ const translations: Translations = {
     'en-GB': 'Pending Issues',
     'el-GR': 'Εκκρεμή Ζητήματα'
   },
-  online: {
+  statusOnline: {
     'en-GB': 'Online',
     'el-GR': 'Σε Σύνδεση'
   },
@@ -1413,7 +1414,7 @@ const translations: Translations = {
     'en-GB': 'Warning',
     'el-GR': 'Προειδοποίηση'
   },
-  critical: {
+  statusCritical: {
     'en-GB': 'Critical',
     'el-GR': 'Κρίσιμο'
   },
