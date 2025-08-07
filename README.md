@@ -162,11 +162,11 @@ After using WhoopsPay, users will understand:
 ## 📖 Documentation Structure
 
 - `README.md` - This overview and setup guide
-- `ARCHITECTURE.md` - Detailed system architecture
-- `SECURITY_DOCUMENTATION.md` - Vulnerability details and explanations
-- `JUICE_SHOP_INTEGRATION.md` - External integration setup
-- `LOCAL_SETUP.md` - Detailed local development setup
-- `DEPLOYMENT.md` - Production deployment considerations
+- `PROJECT_STRUCTURE.md` - Detailed MVC architecture and project organization
+- `SECURITY_TRAINING.md` - Comprehensive vulnerability documentation and learning guide
+- `README-Docker.md` - Docker setup and containerization guide  
+- `replit.md` - Project architecture and development guidelines
+- Inline code comments - Detailed OWASP vulnerability explanations throughout codebase
 
 ## 🤝 Contributing
 

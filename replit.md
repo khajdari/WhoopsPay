@@ -1,5 +1,7 @@
 # WhoopsPay - Educational Security Training Platform
 
+**⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes. NEVER use this code in production environments!**
+
 ## Overview
 
 WhoopsPay is a comprehensive educational cybersecurity training platform built as a realistic financial application with proper MVC architecture. It demonstrates common security vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10 in a controlled environment. The platform combines interactive security learning with intelligent transaction processing, featuring a full-stack architecture with React frontend, Express backend using MVC design patterns, and SQLite database.
