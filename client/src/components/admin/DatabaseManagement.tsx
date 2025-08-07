@@ -244,13 +244,14 @@ export function DatabaseManagement() {
       const primaryKeyIndex = columns.findIndex((col: any) => col === primaryKeyCol.name);
       const primaryKeyValue = originalRow[primaryKeyIndex];
 
-      const setClauses = editRowData.map((value, idx) => 
-        `${columns[idx]} = ?`
-      ).join(', ');
+      const setClauses = editRowData.map((value, idx) => {
+        const escapedValue = typeof value === 'string' ? `'${value.replace(/'/g, "''")}'` : value;
+        return `${columns[idx]} = ${escapedValue}`;
+      }).join(', ');
 
-      const updateQuery = `UPDATE ${selectedTable} SET ${setClauses} WHERE ${primaryKeyCol.name} = ?`;
+      const updateQuery = `UPDATE ${selectedTable} SET ${setClauses} WHERE ${primaryKeyCol.name} = ${typeof primaryKeyValue === 'string' ? `'${primaryKeyValue.replace(/'/g, "''")}'` : primaryKeyValue}`;
       
-      await executeQueryMutation.mutateAsync(updateQuery + ` -- Values: [${editRowData.map(v => `'${v}'`).join(', ')}, '${primaryKeyValue}']`);
+      await executeQueryMutation.mutateAsync(updateQuery);
       
       await refetchTableData();
       setShowEditDialog(false);
@@ -325,16 +326,6 @@ export function DatabaseManagement() {
   const exportQueryResults = () => {
     // This function is not used in the current implementation
     return null;
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'query_results.csv');
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
