@@ -149,14 +149,25 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
                         <h4 className="text-sm font-medium text-gray-900">
-                          {notification.title}
+                          {notification.title === "Payment Received" ? t('paymentReceived') : 
+                           notification.title === "Money Request" ? t('moneyRequest') :
+                           notification.title === "Request Approved" ? t('requestApproved') :
+                           notification.title === "Request Rejected" ? t('requestRejected') :
+                           notification.title}
                         </h4>
                         {!notification.read && (
                           <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1.5" />
                         )}
                       </div>
                       <p className="text-sm text-gray-600 mt-1">
-                        {notification.message}
+                        {/* Translate notification messages */}
+                        {notification.message.includes("You received") ? (
+                          <>
+                            {t('youReceived')} {notification.message.match(/\$\d+/)?.[0] || notification.message.match(/¤\d+/)?.[0]} {t('from')} {notification.message.split(' from ')[1]}
+                          </>
+                        ) : (
+                          notification.message
+                        )}
                       </p>
                       
                       {/* Transaction Category Badge for External Payment Requests */}
@@ -169,8 +180,8 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                         </div>
                       )}
                       
-                      {/* Transaction Category Badge for Money Request */}
-                      {notification.type === "money_request" && (
+                      {/* Transaction Category Badge for Money Request and Payment */}
+                      {(notification.type === "money_request" || notification.type === "payment") && (
                         <div className="flex items-center gap-2 mt-2">
                           <Badge className="bg-blue-100 text-blue-800 text-xs flex items-center gap-1">
                             <CreditCard className="w-3 h-3" />

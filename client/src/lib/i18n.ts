@@ -109,6 +109,12 @@ interface Translations {
   insufficientFunds: TranslationKey;
   userNotFound: TranslationKey;
   
+  // Notification content
+  paymentReceived: TranslationKey;
+  youReceived: TranslationKey;
+  from: TranslationKey;
+  projectBonusPayment: TranslationKey;
+  
   // Form validation
   required: TranslationKey;
   invalidAmount: TranslationKey;
@@ -629,6 +635,24 @@ const translations: Translations = {
   noNotifications: {
     'en-GB': 'No notifications',
     'el-GR': 'Δεν υπάρχουν ειδοποιήσεις'
+  },
+  
+  // Notification content translations
+  paymentReceived: {
+    'en-GB': 'Payment Received',
+    'el-GR': 'Πληρωμή Ελήφθη'
+  },
+  youReceived: {
+    'en-GB': 'You received',
+    'el-GR': 'Λάβατε'
+  },
+  from: {
+    'en-GB': 'from',
+    'el-GR': 'από'
+  },
+  projectBonusPayment: {
+    'en-GB': 'Project bonus payment',
+    'el-GR': 'Πληρωμή μπόνους έργου'
   },
   
   // Transaction types
