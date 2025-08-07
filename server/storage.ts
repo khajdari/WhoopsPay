@@ -653,13 +653,35 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getPendingMoneyRequests(userId: string): Promise<MoneyRequest[]> {
+  async getPendingMoneyRequests(userId: string): Promise<any[]> {
     try {
       const result = await db
-        .select()
+        .select({
+          id: moneyRequests.id,
+          fromUserId: moneyRequests.fromUserId,
+          toUserId: moneyRequests.toUserId,
+          amount: moneyRequests.amount,
+          description: moneyRequests.description,
+          status: moneyRequests.status,
+          type: moneyRequests.type,
+          createdAt: moneyRequests.createdAt,
+          respondedAt: moneyRequests.respondedAt,
+          externalOrderId: moneyRequests.externalOrderId,
+          externalSource: moneyRequests.externalSource,
+          returnUrl: moneyRequests.returnUrl,
+          cancelUrl: moneyRequests.cancelUrl,
+          // Join user information of the person requesting money
+          fromUser: {
+            id: users.id,
+            firstName: users.firstName,
+            lastName: users.lastName,
+            email: users.email
+          }
+        })
         .from(moneyRequests)
+        .leftJoin(users, eq(moneyRequests.toUserId, users.id)) // Join with the person who made the request
         .where(and(
-          eq(moneyRequests.toUserId, userId),
+          eq(moneyRequests.fromUserId, userId), // Show requests where others want money FROM this user
           eq(moneyRequests.status, "pending")
         ))
         .orderBy(desc(moneyRequests.createdAt));
