@@ -134,8 +134,10 @@ export class MoneyRequestController {
         const newToBalance = toBalance + transferAmount;
 
         // Update both user balances
+        console.log(`Updating balances: From ${request.fromUserId} (${fromBalance} -> ${newFromBalance}), To ${request.toUserId} (${toBalance} -> ${newToBalance})`);
         await storage.updateUserBalance(request.fromUserId, newFromBalance.toFixed(2));
         await storage.updateUserBalance(request.toUserId, newToBalance.toFixed(2));
+        console.log("Balance updates completed successfully");
 
         // Create a transaction record
         try {

@@ -207,10 +207,13 @@ export class DatabaseStorage implements IStorage {
 
   async updateUserBalance(userId: string, amount: string): Promise<void> {
     try {
+      const numericAmount = parseFloat(amount);
+      console.log(`Updating balance for user ${userId} to ${numericAmount} (from string: ${amount})`);
       await db
         .update(users)
-        .set({ balance: parseFloat(amount), updatedAt: Date.now() })
+        .set({ balance: numericAmount, updatedAt: Date.now() })
         .where(eq(users.id, userId));
+      console.log(`Balance update completed for user ${userId}`);
     } catch (error) {
       console.error("Error updating user balance:", error);
       throw error;
