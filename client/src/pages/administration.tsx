@@ -20,6 +20,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useI18n } from "@/lib/i18n";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -305,14 +306,7 @@ export default function Administration() {
         </Tabs>
       </main>
       
-      {/* Simple Footer */}
-      <footer className="bg-gray-800 text-gray-400 py-4 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-sm">
-            {t('footerText')}
-          </p>
-        </div>
-      </footer>
+      <Footer />
       
       <MobileNav />
     </div>
