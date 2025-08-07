@@ -305,66 +305,12 @@ export default function Administration() {
         </Tabs>
       </main>
       
-      {/* Administration-specific Footer */}
-      <footer className="bg-gray-900 border-t border-gray-700 text-white py-8 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Security Training Info */}
-            <div>
-              <h4 className="text-lg font-semibold text-red-400 mb-3">Security Training Platform</h4>
-              <p className="text-sm text-gray-300 mb-2">
-                This administrative interface demonstrates secure system monitoring and API documentation practices.
-              </p>
-              <p className="text-xs text-red-300">
-                ⚠️ Contains intentional vulnerabilities for educational purposes
-              </p>
-            </div>
-
-            {/* System Information */}
-            <div>
-              <h4 className="text-lg font-semibold text-blue-400 mb-3">System Information</h4>
-              <div className="text-sm text-gray-300 space-y-1">
-                <p>Version: WhoopsPay v2.0</p>
-                <p>Environment: Development</p>
-                <p>Last Update: {new Date().toLocaleDateString()}</p>
-                <p>Auto Refresh: {autoRefresh ? 'Enabled' : 'Disabled'}</p>
-              </div>
-            </div>
-
-            {/* Administration Links */}
-            <div>
-              <h4 className="text-lg font-semibold text-green-400 mb-3">Administration</h4>
-              <div className="text-sm text-gray-300 space-y-2">
-                <p>
-                  <a href="/api-docs" className="text-blue-400 hover:text-blue-300 underline">
-                    Swagger API Documentation
-                  </a>
-                </p>
-                <p>
-                  <a href="/admin" className="text-yellow-400 hover:text-yellow-300 underline">
-                    User Management Panel
-                  </a>
-                </p>
-                <p>
-                  <a href="/issue-reports" className="text-purple-400 hover:text-purple-300 underline">
-                    Issue Reports Monitor
-                  </a>
-                </p>
-                <p className="text-xs text-gray-400 pt-2">
-                  Administrative access logged and monitored
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-700 mt-6 pt-6 text-center">
-            <p className="text-sm text-gray-400">
-              © 2024 WhoopsPay Educational Platform - Administrative Interface
-            </p>
-            <p className="text-xs text-gray-500 mt-1">
-              For educational and cybersecurity training purposes only
-            </p>
-          </div>
+      {/* Simple Footer */}
+      <footer className="bg-gray-800 text-gray-400 py-6 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-sm">
+            {t('footerText')}
+          </p>
         </div>
       </footer>
       
