@@ -286,6 +286,8 @@ export default function Dashboard() {
   const { data: transactions, isLoading: transactionsLoading } = useQuery({
     queryKey: ["/api/transactions"],
     enabled: !!user,
+    refetchInterval: 5000, // Auto-refresh transactions every 5 seconds
+    refetchIntervalInBackground: true,
   });
 
   const { data: paymentMethods, isLoading: paymentMethodsLoading } = useQuery({
@@ -301,6 +303,8 @@ export default function Dashboard() {
   const { data: userProfile, isLoading: profileLoading } = useQuery({
     queryKey: [`/api/users/${user?.id}/profile`],
     enabled: !!user,
+    refetchInterval: 5000, // Auto-refresh user profile (includes balance) every 5 seconds
+    refetchIntervalInBackground: true,
   });
 
   // Admin-specific data
@@ -314,10 +318,12 @@ export default function Dashboard() {
     enabled: !!user && (user as any)?.isAdmin === 1,
   });
 
-  // Pending requests data for regular users
+  // Pending requests data for regular users with auto-refresh
   const { data: pendingRequests, isLoading: pendingRequestsLoading } = useQuery({
     queryKey: ["/api/pending-requests"],
     enabled: !!user && (user as any)?.isAdmin !== 1,
+    refetchInterval: 3000, // Auto-refresh every 3 seconds
+    refetchIntervalInBackground: true,
   });
 
   const { data: systemLogs, isLoading: logsLoading } = useQuery({
