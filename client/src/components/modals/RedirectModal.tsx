@@ -53,15 +53,9 @@ export function RedirectModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white border-2 border-blue-600 text-gray-900 max-w-lg z-[9999] fixed rounded-lg">
-        <DialogHeader className="relative">
-          <button 
-            onClick={onClose}
-            className="absolute -top-2 -right-2 w-6 h-6 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800"
-          >
-            ×
-          </button>
-          <DialogTitle className="flex items-center gap-2 text-blue-600 text-lg">
+      <DialogContent className="bg-white border-2 border-orange-600 text-gray-900 max-w-lg z-[9999] fixed rounded-lg">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-orange-800 text-lg">
             {isApproval ? (
               <>
                 <CheckCircle className="h-5 w-5" />
@@ -79,13 +73,13 @@ export function RedirectModal({
         <div className="space-y-6">
           {/* Status Badge */}
           <div className="flex justify-center">
-            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-              External Payment Request
+            <span className="bg-orange-800 text-white px-3 py-1 rounded-full text-sm font-medium">
+              Off-Us Payment Request
             </span>
           </div>
 
           {/* Amount Display */}
-          <div className="bg-blue-600 text-white p-4 rounded-lg text-center">
+          <div className="bg-orange-800 text-white p-4 rounded-lg text-center">
             <div className="text-2xl font-bold">
               ¤ {orderInfo.amount.toFixed(2)}
             </div>
@@ -93,7 +87,7 @@ export function RedirectModal({
 
           {/* From Section */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-blue-600">
+            <div className="flex items-center gap-2 text-orange-800">
               <ExternalLink className="h-4 w-4" />
               <span className="font-medium">From:</span>
             </div>
@@ -105,7 +99,7 @@ export function RedirectModal({
 
           {/* Description Section */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-blue-600">
+            <div className="flex items-center gap-2 text-orange-800">
               <span className="font-medium">Description:</span>
             </div>
             <div className="ml-6 text-gray-900">
@@ -115,7 +109,7 @@ export function RedirectModal({
 
           {/* External Details */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-blue-600">
+            <div className="flex items-center gap-2 text-orange-800">
               <span className="font-medium">External Details:</span>
             </div>
             <div className="ml-6 space-y-2 text-sm">
@@ -147,13 +141,13 @@ export function RedirectModal({
             
             {autoRedirect && countdown > 0 ? (
               <div className="space-y-3">
-                <p className="text-blue-600 font-medium">
+                <p className="text-orange-800 font-medium">
                   Redirecting to Juice Shop in {countdown} seconds...
                 </p>
                 <div className="flex justify-center gap-3">
                   <Button 
                     onClick={handleManualRedirect}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2"
+                    className="bg-orange-800 hover:bg-orange-900 text-white font-medium px-6 py-2"
                   >
                     Continue to Juice Shop
                   </Button>
@@ -170,7 +164,7 @@ export function RedirectModal({
               <div className="flex justify-center gap-3">
                 <Button 
                   onClick={handleManualRedirect}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2"
+                  className="bg-orange-800 hover:bg-orange-900 text-white font-medium px-6 py-2"
                 >
                   Continue to Juice Shop
                 </Button>
