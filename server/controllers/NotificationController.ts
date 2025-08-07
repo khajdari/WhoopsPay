@@ -141,4 +141,54 @@ export class NotificationController {
       res.status(500).json({ message: "Failed to create notification" });
     }
   }
+
+  /**
+   * Mark all notifications as read for current user
+   * 
+   * OWASP VULNERABILITIES DEMONSTRATED:
+   * - A01: Broken Access Control (No proper user validation)
+   * - API1: Broken Object Level Authorization (Mass operations without checks)
+   */
+  static async markAllNotificationsRead(req: Request, res: Response) {
+    try {
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ message: "Unauthorized - Please log in" });
+      }
+
+      // OWASP A01: Broken Access Control - Mass operation without proper validation
+      // This allows marking all notifications for a user without detailed permission checks
+      await storage.markAllNotificationsAsRead(user.id);
+      
+      res.json({ message: "All notifications marked as read" });
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+      res.status(500).json({ message: "Failed to mark all notifications as read" });
+    }
+  }
+
+  /**
+   * Clear all notifications for current user
+   * 
+   * OWASP VULNERABILITIES DEMONSTRATED:
+   * - A01: Broken Access Control (Mass deletion without validation)
+   * - A04: Insecure Design (No confirmation for destructive operations)
+   */
+  static async clearAllNotifications(req: Request, res: Response) {
+    try {
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ message: "Unauthorized - Please log in" });
+      }
+
+      // OWASP A01: Broken Access Control & A04: Insecure Design
+      // Mass deletion without confirmation or detailed permission validation
+      await storage.deleteAllNotifications(user.id);
+      
+      res.json({ message: "All notifications cleared" });
+    } catch (error) {
+      console.error("Error clearing all notifications:", error);
+      res.status(500).json({ message: "Failed to clear all notifications" });
+    }
+  }
 }

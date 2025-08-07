@@ -433,6 +433,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.patch('/api/notifications/:notificationId/read', isAuthenticated, NotificationController.markNotificationRead);
   app.delete('/api/notifications/:notificationId', isAuthenticated, NotificationController.deleteNotification);
   app.post('/api/notifications', isAuthenticated, NotificationController.createNotification);
+  app.put('/api/notifications/mark-all-read', isAuthenticated, NotificationController.markAllNotificationsRead);
+  app.delete('/api/notifications', isAuthenticated, NotificationController.clearAllNotifications);
 
   // ============================================================================
   // ADMIN ROUTES
