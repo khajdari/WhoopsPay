@@ -25,13 +25,11 @@ export function Footer() {
   const { t } = useI18n();
 
   return (
-    <footer className="bg-gray-800 text-white py-4 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="text-center">
-          <p className="text-gray-400">
-            {t('footerText')}
-          </p>
-        </div>
+    <footer className="bg-gray-800 text-gray-400 py-3">
+      <div className="max-w-7xl mx-auto px-4 text-center">
+        <p className="text-sm">
+          {t('footerText')}
+        </p>
       </div>
     </footer>
   );
