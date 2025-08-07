@@ -1,0 +1,33 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+api/auth/user:1 
+ Failed to load resource: the server responded with a status of 401 (Unauthorized)
+2
+transaction-item.tsx:115 Uncaught TypeError: Cannot read properties of null (reading 'substring')
+    at TransactionItem (transaction-item.tsx:115:35)
+chunk-RPCDYKBN.js?v=539d573c:14032 The above error occurred in the <TransactionItem> component:
+
+    at TransactionItem (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/src/components/transaction-item.tsx:22:35)
+    at div
+    at div
+    at _c (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/src/components/ui/card.tsx:20:11)
+    at div
+    at div
+    at main
+    at div
+    at main
+    at div
+    at Layout (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/src/components/layout.tsx:21:3)
+    at Dashboard (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/src/pages/dashboard.tsx:37:20)
+    at Route (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.d…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=539d573c:206:16)
+    at Switch (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.d…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=539d573c:262:17)
+    at Router (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/src/App.tsx?v=CHf6KeO3eBfgAQMHQ7j3Y:45:42)
+    at Provider (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.d…unner/workspace/node_modules/.vite/deps/chunk-5AJU3CG7.js?v=539d573c:38:15)
+    at TooltipProvider (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.d…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=539d573c:62:5)
+    at I18nProvider (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/src/lib/i18n.ts:1459:32)
+    at QueryClientProvider (https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.d…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=539d573c:2932:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+chunk-RPCDYKBN.js?v=539d573c:9129 Uncaught TypeError: Cannot read properties of null (reading 'substring')
+    at TransactionItem (transaction-item.tsx:115:35)

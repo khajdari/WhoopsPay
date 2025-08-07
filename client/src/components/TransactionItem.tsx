@@ -9,7 +9,7 @@ interface TransactionItemProps {
 
 export default function TransactionItem({ transaction }: TransactionItemProps) {
   const { t } = useI18n();
-  const isReceived = transaction.toUserId && transaction.toUserId.startsWith('@');
+  const isReceived = transaction.toUserId && typeof transaction.toUserId === 'string' && transaction.toUserId.startsWith('@');
   const isONUS = transaction.transactionCategory === 'ONUS';
   const isOFFUS = transaction.transactionCategory === 'OFFUS';
   
@@ -97,7 +97,8 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
       }
       return transaction.externalMerchantId || 'External Merchant';
     }
-    return isReceived ? transaction.fromUserId : transaction.toUserId;
+    const displayUserId = isReceived ? transaction.fromUserId : transaction.toUserId;
+    return displayUserId || 'Unknown User';
   };
 
   const getNetworkInfo = () => {
@@ -128,7 +129,7 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
               {getStatusBadge()}
             </div>
             <p className="text-sm text-gray-500 truncate">
-              {transaction.description}
+              {transaction.description || 'No description'}
             </p>
             {isOFFUS && transaction.externalOrderId && (
               <p className="text-xs text-gray-400 mt-1">
@@ -137,13 +138,13 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
             )}
             {getNetworkInfo()}
             <p className="text-xs text-gray-400 mt-1">
-              {formatDistanceToNow(new Date(transaction.createdAt), { addSuffix: true })}
+              {transaction.createdAt ? formatDistanceToNow(new Date(transaction.createdAt), { addSuffix: true }) : 'Unknown time'}
             </p>
           </div>
         </div>
         <div className="flex-shrink-0">
           <p className={`text-sm font-semibold ${getTransactionColor()}`}>
-            {isReceived ? '+ ¤' : '- ¤'}{transaction.amount.toFixed(2)}
+            {isReceived ? '+ ¤' : '- ¤'}{parseFloat(transaction.amount || '0').toFixed(2)}
           </p>
         </div>
       </div>
