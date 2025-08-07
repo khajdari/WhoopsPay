@@ -683,19 +683,7 @@ const translations: Translations = {
   },
   // Status labels
 
-  // Priority labels
-  high: {
-    'en-GB': 'High',
-    'el-GR': 'Υψηλό'
-  },
-  medium: {
-    'en-GB': 'Medium',
-    'el-GR': 'Μέτριο'
-  },
-  low: {
-    'en-GB': 'Low',
-    'el-GR': 'Χαμηλό'
-  },
+  // Priority labels removed - using priorityHigh, priorityMedium, priorityLow instead
   
   // Greetings and common UI
   hi: {
@@ -850,10 +838,7 @@ const translations: Translations = {
     'en-GB': 'Database',
     'el-GR': 'Βάση Δεδομένων'
   },
-  online: {
-    'en-GB': 'Online',
-    'el-GR': 'Σε Λειτουργία'
-  },
+
   apiServer: {
     'en-GB': 'API Server',
     'el-GR': 'Διακομιστής API'
