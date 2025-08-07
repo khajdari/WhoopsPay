@@ -1,8 +1,49 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes/index";
-import { setupVite, serveStatic, log } from "./vite";
 import { clearAndReinitializeDatabase } from "./initDatabase";
 import { seedMockData } from "./mockData";
+import path from "path";
+
+// Development vs production setup
+const isDevelopment = process.env.NODE_ENV === "development";
+
+// Production logging function
+function log(message: string, source = "express") {
+  const formattedTime = new Date().toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit", 
+    second: "2-digit",
+    hour12: true,
+  });
+  console.log(`${formattedTime} [${source}] ${message}`);
+}
+
+// Production static serving function
+function serveStatic(app: express.Express) {
+  // Serve built client files in production
+  app.use(express.static(path.join(process.cwd(), "dist/client")));
+  
+  // Catch-all handler for client-side routing
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(process.cwd(), "dist/client/index.html"));
+  });
+}
+
+// Dynamic import for development vite setup
+async function setupDevelopmentVite(app: express.Express, server: any) {
+  if (isDevelopment) {
+    try {
+      const viteModule = await import("./vite.js");
+      await viteModule.setupVite(app, server);
+    } catch (error) {
+      console.error("Failed to setup Vite in development:", error);
+      // Fallback to static serving even in development
+      serveStatic(app);
+    }
+  } else {
+    serveStatic(app);
+  }
+}
 
 // Track server start time
 export const serverStartTime = new Date();
@@ -59,14 +100,10 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
-  }
+  // Setup development or production serving
+  // This is done after setting up all API routes so the catch-all route
+  // doesn't interfere with API endpoints
+  await setupDevelopmentVite(app, server);
 
   // ALWAYS serve the app on port 5000
   // this serves both the API and the client.
@@ -74,7 +111,7 @@ app.use((req, res, next) => {
   const port = 5000;
   server.listen({
     port,
-    host: "127.0.0.1",
+    host: "0.0.0.0",  // Bind to all interfaces for Docker
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
