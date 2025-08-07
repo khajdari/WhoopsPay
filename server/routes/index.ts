@@ -72,16 +72,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           description: 'Development server',
         },
       ],
-      components: {
-        securitySchemes: {
-          sessionAuth: {
-            type: 'apiKey',
-            in: 'cookie',
-            name: 'connect.sid',
-            description: 'Session-based authentication'
-          }
-        }
-      }
+      components: {}
     },
     apis: ['./server/routes/*.ts', './server/controllers/*.ts'], // paths to files containing OpenAPI definitions
   };
@@ -139,8 +130,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
    *     summary: Get current user
    *     description: Get information about the currently authenticated user
    *     tags: [Authentication]
-   *     security:
-   *       - sessionAuth: []
    *     responses:
    *       200:
    *         description: User information
@@ -273,8 +262,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
    *     summary: Get user payment methods
    *     description: Get payment methods for the authenticated user
    *     tags: [Payments]
-   *     security:
-   *       - sessionAuth: []
    *     responses:
    *       200:
    *         description: List of payment methods
