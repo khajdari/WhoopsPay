@@ -164,6 +164,10 @@ docker logs whoopspay-juice-shop-official  # Only if using --profile optional
 - Fixed by correcting Vite output path mapping in Docker
 - Vite builds client to `/dist/public`, Docker now maps this correctly
 
+**Juice Shop shows "ENOENT: no such file" error:**
+- Fixed by copying server/modules directory to production container
+- Juice Shop static files now available at runtime
+
 **Port already in use:**
 - Stop existing containers: `./docker-run.sh stop`
 - Or use different ports in docker-compose.yml

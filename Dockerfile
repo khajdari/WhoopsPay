@@ -38,6 +38,7 @@ RUN npm ci && npm cache clean --force
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/data ./data
+COPY --from=builder /app/server/modules ./server/modules
 
 # Copy client assets for production serving (Vite builds to dist/public)
 COPY --from=builder /app/dist/public ./dist/client
