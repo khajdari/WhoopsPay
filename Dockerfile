@@ -24,9 +24,9 @@ COPY shared/ ./shared/
 COPY data/ ./data/
 
 # Build client first
-RUN npm run vite build
+RUN npx vite build
 
-# Build server with production config (excludes vite)
+# Build server with production entry point (no vite imports)
 RUN node build-server.js
 
 # Production stage
