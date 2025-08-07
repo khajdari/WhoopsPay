@@ -1,0 +1,21 @@
+# Docker Compose override for development environment
+# This file extends docker-compose.yml for local development
+
+version: '3.8'
+
+services:
+  whoopspay:
+    environment:
+      - NODE_ENV=development
+      - DEBUG=1
+    volumes:
+      # Mount source code for development (hot reload)
+      - .:/app:ro
+      - /app/node_modules
+      - ./data:/app/data
+      - ./logs:/app/logs
+    command: npm run dev
+    
+  juice-shop:
+    environment:
+      - NODE_ENV=development
