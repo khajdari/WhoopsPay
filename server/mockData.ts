@@ -264,57 +264,7 @@ export async function seedMockData() {
       isDefault: 0,
     });
 
-    // Create external money requests from Juice Shop that users can approve
-    await storage.createMoneyRequest({
-      fromUserId: "juice-shop",
-      toUserId: "@james_chen",
-      amount: 24.99,
-      description: "Juice Shop - Apple Juice Order #JS-2024-001",
-      status: "pending",
-      type: "external",
-      externalOrderId: "JS-2024-001",
-      externalSource: "juice-shop",
-      returnUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=success&orderId=JS-2024-001"),
-      cancelUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=cancelled&orderId=JS-2024-001"),
-      externalMetadata: JSON.stringify({
-        items: [{ name: "Apple Juice", quantity: 2, price: 12.495 }],
-        merchant: "OWASP Juice Shop"
-      })
-    });
-
-    await storage.createMoneyRequest({
-      fromUserId: "juice-shop", 
-      toUserId: "@sarah_wilson",
-      amount: 15.50,
-      description: "Juice Shop - Green Smoothie Order #JS-2024-002",
-      status: "pending",
-      type: "external",
-      externalOrderId: "JS-2024-002",
-      externalSource: "juice-shop",
-      returnUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=success&orderId=JS-2024-002"),
-      cancelUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=cancelled&orderId=JS-2024-002"),
-      externalMetadata: JSON.stringify({
-        items: [{ name: "Green Smoothie", quantity: 1, price: 15.50 }],
-        merchant: "OWASP Juice Shop"
-      })
-    });
-
-    await storage.createMoneyRequest({
-      fromUserId: "juice-shop",
-      toUserId: "@elena_kowalski", 
-      amount: 8.25,
-      description: "Juice Shop - Orange Juice Order #JS-2024-003",
-      status: "pending",
-      type: "external",
-      externalOrderId: "JS-2024-003",
-      externalSource: "juice-shop",
-      returnUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=success&orderId=JS-2024-003"),
-      cancelUrl: URLAdapter.buildJuiceShopUrl("#/basket?payment=cancelled&orderId=JS-2024-003"),
-      externalMetadata: JSON.stringify({
-        items: [{ name: "Orange Juice", quantity: 1, price: 8.25 }],
-        merchant: "OWASP Juice Shop"
-      })
-    });
+    // External money requests removed - no Off-Us pending requests in test data
 
     // Create internal money requests between users
     await storage.createMoneyRequest({
