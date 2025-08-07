@@ -978,10 +978,7 @@ const translations: Translations = {
     'en-GB': 'Payment',
     'el-GR': 'Πληρωμή'
   },
-  categorySecurity: {
-    'en-GB': 'Security',
-    'el-GR': 'Ασφάλεια'
-  },
+
   account: {
     'en-GB': 'Account',
     'el-GR': 'Λογαριασμός'
