@@ -155,7 +155,7 @@ export function AdminIssueMonitor() {
     });
   };
 
-  const filteredIssues = issues.filter((issue: IssueReport) => {
+  const filteredIssues = (issues as IssueReport[] || []).filter((issue: IssueReport) => {
     if (selectedStatus !== "all" && issue.status !== selectedStatus) return false;
     if (selectedPriority !== "all" && issue.priority !== selectedPriority) return false;
     if (selectedCategory !== "all" && issue.category !== selectedCategory) return false;
@@ -209,10 +209,10 @@ export function AdminIssueMonitor() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t('allStatus')}</SelectItem>
-              <SelectItem value="open">{t('open')}</SelectItem>
-              <SelectItem value="in_progress">{t('inProgress')}</SelectItem>
-              <SelectItem value="resolved">{t('resolved')}</SelectItem>
-              <SelectItem value="closed">{t('closed')}</SelectItem>
+              <SelectItem value="open">{t('statusOpen')}</SelectItem>
+              <SelectItem value="in_progress">{t('statusInProgress')}</SelectItem>
+              <SelectItem value="resolved">{t('statusResolved')}</SelectItem>
+              <SelectItem value="closed">{t('statusClosed')}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -222,10 +222,10 @@ export function AdminIssueMonitor() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t('allPriority')}</SelectItem>
-              <SelectItem value="critical">{t('critical')}</SelectItem>
-              <SelectItem value="high">{t('high')}</SelectItem>
-              <SelectItem value="medium">{t('medium')}</SelectItem>
-              <SelectItem value="low">{t('low')}</SelectItem>
+              <SelectItem value="critical">{t('priorityCritical')}</SelectItem>
+              <SelectItem value="high">{t('priorityHigh')}</SelectItem>
+              <SelectItem value="medium">{t('priorityMedium')}</SelectItem>
+              <SelectItem value="low">{t('priorityLow')}</SelectItem>
             </SelectContent>
           </Select>
 

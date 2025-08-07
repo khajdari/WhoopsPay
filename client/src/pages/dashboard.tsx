@@ -137,7 +137,7 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">{t('database')}</p>
-                    <p className="text-2xl font-bold text-green-600">{t('online')}</p>
+                    <p className="text-2xl font-bold text-green-600">{t('adminOnline')}</p>
                   </div>
                   <Activity className="h-8 w-8 text-green-600" />
                 </div>
@@ -169,7 +169,7 @@ export default function Dashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">{t('totalUsers')}</p>
+                    <p className="text-sm font-medium text-gray-600">{t('adminTotalUsers')}</p>
                     <p className="text-2xl font-bold text-blue-600">4</p>
                   </div>
                   <Users className="h-8 w-8 text-blue-600" />
@@ -194,7 +194,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">{t('administration')}</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('adminNavigation')}</h3>
                 <Link href="/administration">
                   <Button className="w-full">
                     <Shield className="h-4 w-4 mr-2" />
@@ -206,7 +206,7 @@ export default function Dashboard() {
 
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">{t('issueReports')}</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('adminIssueReports')}</h3>
                 <Link href="/issues">
                   <Button className="w-full" variant="outline">
                     <AlertTriangle className="h-4 w-4 mr-2" />
