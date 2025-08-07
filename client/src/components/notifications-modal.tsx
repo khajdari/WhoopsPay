@@ -164,9 +164,6 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                             <ExternalLink className="w-3 h-3" />
                             Off-Us
                           </Badge>
-                          <Badge className="bg-blue-100 text-blue-800 text-xs">
-                            External Payment
-                          </Badge>
                         </div>
                       )}
                       
@@ -176,9 +173,6 @@ export function NotificationsModal({ open, onOpenChange, onMarkAllRead, onClearA
                           <Badge className="bg-blue-100 text-blue-800 text-xs flex items-center gap-1">
                             <CreditCard className="w-3 h-3" />
                             On-Us
-                          </Badge>
-                          <Badge className="bg-green-100 text-green-800 text-xs">
-                            Money Request
                           </Badge>
                         </div>
                       )}
