@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpRight, ArrowDownLeft, ExternalLink, Users } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft, ExternalLink, Users, Clock, Check, X } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useI18n } from '@/lib/i18n';
 
@@ -16,6 +16,16 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
   const getTransactionIcon = () => {
     if (isOFFUS) {
       return <ExternalLink className="w-5 h-5 text-orange-600" />;
+    }
+    if (transaction.type === 'money_request') {
+      // Different icons for money requests based on status
+      if (transaction.status === 'pending') {
+        return <Clock className="w-5 h-5 text-yellow-600" />;
+      } else if (transaction.status === 'approved') {
+        return <Check className="w-5 h-5 text-green-600" />;
+      } else if (transaction.status === 'rejected') {
+        return <X className="w-5 h-5 text-red-600" />;
+      }
     }
     if (isReceived) {
       return <ArrowDownLeft className="w-5 h-5 text-green-600" />;
@@ -34,6 +44,7 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
       completed: "bg-green-100 text-green-800",
       pending: "bg-yellow-100 text-yellow-800",
       rejected: "bg-red-100 text-red-800",
+      approved: "bg-green-100 text-green-800",
       external_pending: "bg-blue-100 text-blue-800"
     };
     
@@ -45,6 +56,8 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
           return t('pending');
         case 'rejected':
           return t('rejected');
+        case 'approved':
+          return t('requestApproved');
         default:
           return transaction.status?.toUpperCase() || '';
       }
