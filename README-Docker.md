@@ -1,5 +1,7 @@
 # Docker Setup for WhoopsPay
 
+**⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes. NEVER use this code in production environments!**
+
 This guide explains how to run WhoopsPay and OWASP Juice Shop using Docker on localhost.
 
 ## Prerequisites

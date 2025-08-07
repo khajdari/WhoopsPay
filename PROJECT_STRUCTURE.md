@@ -1,5 +1,7 @@
 # WhoopsPay - MVC Architecture Structure
 
+**⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes. NEVER use this code in production environments!**
+
 ## Project Organization
 
 ### Backend Structure (MVC Pattern)
