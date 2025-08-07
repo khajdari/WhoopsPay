@@ -134,17 +134,18 @@ export default function SendMoney() {
 
   const requestMoneyMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("/api/transactions", "POST", data);
+      return await apiRequest("/api/money-request", "POST", data);
     },
     onSuccess: () => {
       toast({
-        title: "Request sent successfully!",
-        description: `¤${requestAmount} has been requested from ${requestFrom}`,
+        title: "Money request sent!",
+        description: `Request for ¤${requestAmount} sent successfully`,
       });
       // Add live notification for request
       addTransactionNotification('sent', requestAmount, `request from ${requestFrom}`);
       queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
       queryClient.invalidateQueries({ queryKey: [`/api/users/${user?.id}/profile`] });
+      queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
       setRequestFrom("");
       setRequestAmount("");
       setRequestNote("");
@@ -237,13 +238,11 @@ export default function SendMoney() {
       return;
     }
 
-    // Create a money request transaction
+    // Create a money request
     requestMoneyMutation.mutate({
       fromUserId: requestFrom,
-      toUserId: user?.id,
       amount: parseFloat(requestAmount),
-      description: `Money request: ${requestNote}`,
-      status: "pending",
+      description: requestNote || "Money request",
     });
   };
 
