@@ -25,8 +25,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useI18n, type Language } from "@/lib/i18n";
-import ukFlag from "@assets/uk.png";
-import grFlag from "@assets/gr.jpg";
+import ukFlag from "@/assets/uk.png";
+import grFlag from "@/assets/gr.jpg";
 
 /**
  * LanguageSelector Component - Locale selection interface

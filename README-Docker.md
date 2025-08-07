@@ -88,17 +88,21 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up
 
 ### Common Issues
 
-1. **Port conflicts**: If ports 3000 or 3001 are in use, modify the port mappings in `docker-compose.yml`
+1. **Version warnings**: The `version` attribute in docker-compose files is now obsolete and has been removed
 
-2. **Database issues**: Clear the database volume:
+2. **Asset loading errors**: If you see errors about missing assets (uk.png, gr.jpg), ensure the required files are in `client/src/assets/`
+
+3. **Port conflicts**: If ports 3000 or 3001 are in use, modify the port mappings in `docker-compose.yml`
+
+4. **Database issues**: Clear the database volume:
    ```bash
    docker-compose down -v
    docker-compose up
    ```
 
-3. **Permission issues**: Ensure Docker has access to the project directory
+5. **Permission issues**: Ensure Docker has access to the project directory
 
-4. **Build failures**: Clear Docker cache:
+6. **Build failures**: Clear Docker cache:
    ```bash
    docker system prune -a
    docker-compose build --no-cache

@@ -1,8 +1,6 @@
 # Docker Compose configuration for WhoopsPay + OWASP Juice Shop
 # Educational cybersecurity training platform with external payment integration
 
-version: '3.8'
-
 services:
   # WhoopsPay Application
   whoopspay:
