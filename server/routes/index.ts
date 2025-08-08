@@ -45,6 +45,7 @@ import { TransactionController } from '../controllers/TransactionController';
 import { MoneyRequestController } from '../controllers/MoneyRequestController';
 import { NotificationController } from '../controllers/NotificationController';
 import { AdminController } from '../controllers/AdminController';
+import { IssueReportController } from '../controllers/IssueReportController';
 import { juiceShopRoutes, JuiceShopController } from '../modules/juice-shop/index';
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -425,6 +426,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/notifications', isAuthenticated, NotificationController.clearAllNotifications);
 
   // ============================================================================
+  // ISSUE REPORT ROUTES
+  // ============================================================================
+  
+  /**
+   * @swagger
+   * /api/issues:
+   *   post:
+   *     summary: Create new issue report
+   *     description: Submit a new issue report
+   *     tags: [Issue Reports]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               title:
+   *                 type: string
+   *               description:
+   *                 type: string
+   *               category:
+   *                 type: string
+   *               priority:
+   *                 type: string
+   *     responses:
+   *       201:
+   *         description: Issue report created successfully
+   *       400:
+   *         description: Missing required fields
+   *       401:
+   *         description: User not authenticated
+   */
+  app.post('/api/issues', isAuthenticated, IssueReportController.createIssueReport);
+  
+  /**
+   * @swagger
+   * /api/issues/user:
+   *   get:
+   *     summary: Get user's issue reports
+   *     description: Retrieve all issue reports for current user
+   *     tags: [Issue Reports]
+   *     responses:
+   *       200:
+   *         description: User issue reports retrieved successfully
+   *       401:
+   *         description: User not authenticated
+   */
+  app.get('/api/issues/user', isAuthenticated, IssueReportController.getUserIssueReports);
+  
+  /**
+   * @swagger
+   * /api/issues/{id}:
+   *   get:
+   *     summary: Get specific issue report
+   *     description: Retrieve a specific issue report by ID
+   *     tags: [Issue Reports]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *         description: Issue report ID
+   *     responses:
+   *       200:
+   *         description: Issue report retrieved successfully
+   *       404:
+   *         description: Issue report not found
+   */
+  app.get('/api/issues/:id', isAuthenticated, IssueReportController.getIssueReport);
+
+  // ============================================================================
   // ADMIN ROUTES
   // ============================================================================
   
@@ -444,6 +518,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/admin/database/tables', isAuthenticated, AdminController.getDatabaseTables);
   app.get('/api/admin/database/table/:tableName', isAuthenticated, AdminController.getTableData);
   app.post('/api/admin/database/execute', isAuthenticated, AdminController.executeSqlQuery);
+  
+  // Admin issue report management
+  app.get('/api/admin/issues', IssueReportController.getAllIssueReports); // Get all issue reports for admin
+  app.put('/api/admin/issues/:id/status', IssueReportController.updateIssueReportStatus);
 
   // ============================================================================
   // JUICE SHOP MODULE ROUTES
