@@ -181,7 +181,7 @@ const server = http.createServer(async (req, res) => {
                     message: 'Payment request sent to WhoopsPay',
                     orderId: orderId,
                     total: total.toFixed(2),
-                    paymentUrl: `http://localhost:5000/dashboard?highlight=${result.transactionId}`
+                    paymentUrl: `https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/dashboard?orderId=${orderId}&returnTo=juice-shop`
                   });
                 } else {
                   sendJSON(res, { error: result.message || 'Payment failed' }, 400);
