@@ -538,6 +538,21 @@ interface Translations {
   'sendMoney.destination': TranslationKey;
   'sendMoney.sourcePlaceholder': TranslationKey;
   'sendMoney.destinationPlaceholder': TranslationKey;
+
+  // External payment request translations
+  externalPaymentRequest: TranslationKey;
+  externalPaymentRequestDescription: TranslationKey;
+  externalPaymentApproved: TranslationKey;
+  externalMerchantLabel: TranslationKey;
+  externalDetails: TranslationKey;
+  orderIdLabel: TranslationKey;
+  sourceLabel: TranslationKey;
+  returnUrlLabel: TranslationKey;
+  paymentProcessedSuccessfully: TranslationKey;
+  redirectingToService: TranslationKey;
+  continueToService: TranslationKey;
+  cancelAutoRedirect: TranslationKey;
+  paymentApprovedSuccessfully: TranslationKey;
 }
 
 const translations: Translations = {
@@ -2246,6 +2261,60 @@ const translations: Translations = {
   'sendMoney.destinationPlaceholder': {
     'en-GB': 'Bank account or card',
     'el-GR': 'Τραπεζικός λογαριασμός ή κάρτα'
+  },
+
+  // External payment request translations
+  externalPaymentRequest: {
+    'en-GB': 'External Payment Request',
+    'el-GR': 'Αίτημα Εξωτερικής Πληρωμής'
+  },
+  externalPaymentRequestDescription: {
+    'en-GB': 'A payment request from Juice Shop has been added to your pending requests.',
+    'el-GR': 'Ένα αίτημα πληρωμής από το Juice Shop προστέθηκε στα εκκρεμή αιτήματά σας.'
+  },
+  externalPaymentApproved: {
+    'en-GB': 'External Payment Approved',
+    'el-GR': 'Εξωτερική Πληρωμή Εγκρίθηκε'
+  },
+  externalMerchantLabel: {
+    'en-GB': 'External Merchant',
+    'el-GR': 'Εξωτερικός Έμπορος'
+  },
+  externalDetails: {
+    'en-GB': 'External Details:',
+    'el-GR': 'Εξωτερικές Λεπτομέρειες:'
+  },
+  orderIdLabel: {
+    'en-GB': 'Order ID:',
+    'el-GR': 'Αριθμός Παραγγελίας:'
+  },
+  sourceLabel: {
+    'en-GB': 'Source:',
+    'el-GR': 'Πηγή:'
+  },
+  returnUrlLabel: {
+    'en-GB': 'Return URL:',
+    'el-GR': 'URL Επιστροφής:'
+  },
+  paymentProcessedSuccessfully: {
+    'en-GB': 'Payment has been processed successfully. You will be redirected to complete your order.',
+    'el-GR': 'Η πληρωμή επεξεργάστηκε επιτυχώς. Θα ανακατευθυνθείτε για να ολοκληρώσετε την παραγγελία σας.'
+  },
+  redirectingToService: {
+    'en-GB': 'Redirecting to Juice Shop in',
+    'el-GR': 'Ανακατεύθυνση στο Juice Shop σε'
+  },
+  continueToService: {
+    'en-GB': 'Continue to Juice Shop',
+    'el-GR': 'Συνέχεια στο Juice Shop'
+  },
+  cancelAutoRedirect: {
+    'en-GB': 'Cancel Auto-redirect',
+    'el-GR': 'Ακύρωση Αυτόματης Ανακατεύθυνσης'
+  },
+  paymentApprovedSuccessfully: {
+    'en-GB': 'Payment approved successfully',
+    'el-GR': 'Η πληρωμή εγκρίθηκε επιτυχώς'
   }
 };
 
