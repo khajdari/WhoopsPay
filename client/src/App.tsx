@@ -88,6 +88,7 @@ function Router() {
           <Route path="/profile" component={Profile} />
           <Route path="/account" component={Settings} />
           <Route path="/issues" component={IssueReporting} />
+          <Route path="/issue-reports" component={IssueReporting} />
         </>
       )}
 

@@ -39,7 +39,7 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
       setPriority("");
       
       // Invalidate queries
-      queryClient.invalidateQueries({ queryKey: ["/api/issues"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/issues/user"] });
       
       if (onSubmitSuccess) {
         onSubmitSuccess();
