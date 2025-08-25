@@ -465,14 +465,13 @@ export class MoneyRequestController {
       }
 
       // Find the pending external request for this order
-      const pendingRequests = await storage.getPendingMoneyRequests("pending-user-selection");
-      const matchingRequest = pendingRequests.find((request: any) => 
-        request.externalOrderId === orderId && request.toUserId === "pending-user-selection"
-      );
-
-      if (!matchingRequest) {
+      const unassignedRequests = await storage.findUnassignedExternalRequest(orderId);
+      
+      if (unassignedRequests.length === 0) {
         return res.status(404).json({ message: "External payment request not found" });
       }
+      
+      const matchingRequest = unassignedRequests[0];
 
       // Delete the old unassigned request
       await storage.deleteMoneyRequest(matchingRequest.id);
