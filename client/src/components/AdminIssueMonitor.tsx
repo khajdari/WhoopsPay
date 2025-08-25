@@ -57,9 +57,11 @@ export function AdminIssueMonitor() {
   const { t } = useI18n();
   const queryClient = useQueryClient();
 
-  const { data: issues = [], isLoading } = useQuery({
+  const { data: issuesResponse = { data: [] }, isLoading } = useQuery<{ data: IssueReport[]; success: boolean; count: number }>({
     queryKey: ["/api/admin/issues"],
   });
+
+  const issues = issuesResponse.data || [];
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status, notes }: { id: number; status: string; notes?: string }) => {

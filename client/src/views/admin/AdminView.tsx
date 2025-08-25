@@ -66,7 +66,7 @@ export function AdminView({
       }
 
       if (alertsResult.success) {
-        setSystemAlerts(alertsResult.data);
+        setSystemAlerts(alertsResult.data || []);
       }
     } catch (err) {
       setError('Failed to load admin data');
