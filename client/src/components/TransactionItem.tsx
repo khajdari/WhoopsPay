@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpRight, ArrowDownLeft, ExternalLink, Users, Clock, Check, X } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { el } from "date-fns/locale";
 import { useI18n } from '@/lib/i18n';
 
 interface TransactionItemProps {
@@ -8,7 +9,7 @@ interface TransactionItemProps {
 }
 
 export default function TransactionItem({ transaction }: TransactionItemProps) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   
   // Early return if transaction is null or undefined
   if (!transaction) {
@@ -144,7 +145,10 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
             )}
             {getNetworkInfo()}
             <p className="text-xs text-gray-400 mt-1">
-              {transaction.createdAt ? formatDistanceToNow(new Date(transaction.createdAt), { addSuffix: true }) : 'Unknown time'}
+              {transaction.createdAt ? formatDistanceToNow(new Date(transaction.createdAt), { 
+                addSuffix: true,
+                locale: language === 'el-GR' ? el : undefined 
+              }) : t('unknownTime')}
             </p>
           </div>
         </div>
