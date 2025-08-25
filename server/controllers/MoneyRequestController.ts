@@ -263,7 +263,7 @@ export class MoneyRequestController {
       }
 
       // Check if user is authorized to reject this request (for internal requests)
-      if (request.type === "internal" && request.fromUserId !== userId) {
+      if (request.type === "internal" && request.toUserId !== userId) {
         return res.status(403).json({ message: "You can only reject requests sent to you" });
       }
 
