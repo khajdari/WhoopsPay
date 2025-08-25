@@ -91,15 +91,21 @@ export class MoneyRequestController {
 
       // Check if this is an external request (from juice-shop or other external sources)
       if (request.type === "external" && request.externalSource) {
-        // FIXED: Process balance transfer for external requests too!
+        // FIXED CORRECTLY: For external requests, user PAYS the external merchant, so balance goes DOWN
         const toUser = await storage.getUser(request.toUserId);
         
         if (toUser) {
           const transferAmount = parseFloat(request.amount.toString());
           const currentBalance = parseFloat(toUser.balance || '0');
-          const newBalance = currentBalance + transferAmount; // External requests ADD money to user balance
           
-          console.log(`💰 External payment approved: Adding $${transferAmount} to ${request.toUserId} (${currentBalance} -> ${newBalance})`);
+          // Check if user has sufficient funds to pay external merchant
+          if (currentBalance < transferAmount) {
+            return res.status(400).json({ message: "Insufficient funds to complete external payment" });
+          }
+          
+          const newBalance = currentBalance - transferAmount; // FIXED: External payments SUBTRACT from user balance
+          
+          console.log(`💸 External payment approved: User paying $${transferAmount} to ${request.externalSource} (${currentBalance} -> ${newBalance})`);
           await storage.updateUserBalance(request.toUserId, newBalance.toFixed(2));
 
           // Create transaction record for external payment
