@@ -191,13 +191,17 @@ export class MoneyRequestController {
           console.error("❌ Error creating transaction record:", transactionError);
         }
 
+        // Get user data for notifications
+        const fromUser = await storage.getUser(request.fromUserId); // Requester
+        const toUser = await storage.getUser(request.toUserId); // Approver
+
         // Create notifications for both users
         try {
           await storage.createNotification({
             userId: request.toUserId,
             type: "payment",
             title: "Payment Received",
-            message: `You received ¤${request.amount} from ${fromUser.firstName || fromUser.email}${request.description ? ` for: ${request.description}` : ''}`,
+            message: `You received ¤${request.amount} from ${fromUser?.firstName || fromUser?.email || request.fromUserId}${request.description ? ` for: ${request.description}` : ''}`,
             isRead: 0
           });
 
@@ -205,7 +209,7 @@ export class MoneyRequestController {
             userId: request.fromUserId,
             type: "payment",
             title: "Payment Sent",
-            message: `You sent ¤${request.amount} to ${toUser.firstName || toUser.email}${request.description ? ` for: ${request.description}` : ''}`,
+            message: `You sent ¤${request.amount} to ${toUser?.firstName || toUser?.email || request.toUserId}${request.description ? ` for: ${request.description}` : ''}`,
             isRead: 0
           });
 
@@ -214,7 +218,7 @@ export class MoneyRequestController {
             userId: request.toUserId,
             type: "money_request_approved",
             title: "Money Request Approved",
-            message: `${fromUser.firstName || fromUser.email} approved your request for ¤${request.amount}${request.description ? ` for: ${request.description}` : ''}`,
+            message: `${fromUser?.firstName || fromUser?.email || request.fromUserId} approved your request for ¤${request.amount}${request.description ? ` for: ${request.description}` : ''}`,
             isRead: 0
           });
         } catch (notificationError) {
@@ -224,8 +228,8 @@ export class MoneyRequestController {
         return res.json({
           message: "Payment request approved successfully",
           request: updatedRequest,
-          fromBalance: newFromBalance,
-          toBalance: newToBalance
+          approverBalance: newApproverBalance,
+          requesterBalance: newRequesterBalance
         });
       }
 
