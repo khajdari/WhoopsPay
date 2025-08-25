@@ -155,6 +155,16 @@ export function useNotifications() {
             const template = t('youSentMessage');
             message = template.replace('{{amount}}', amount).replace('{{recipient}}', recipient).replace('{{description}}', description);
           }
+
+          // Translate rejection messages like "Elena rejected your request for ¤15.75 for: Book lending reimbursement"
+          const rejectionPattern = /^(.+) rejected your request for ¤([0-9.]+)(.*)$/;
+          const rejectionMatch = message.match(rejectionPattern);
+          if (rejectionMatch) {
+            const [, rejector, amount, description] = rejectionMatch;
+            const template = t('requestRejectedNotification');
+            const descriptionText = description ? t('requestRejectedFor').replace('{description}', description.replace(' for: ', '')) : '';
+            message = template.replace('{name}', rejector).replace('{amount}', amount).replace('{description}', descriptionText);
+          }
           
           return { title, message };
         };
