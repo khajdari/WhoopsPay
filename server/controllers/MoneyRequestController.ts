@@ -452,8 +452,71 @@ export class MoneyRequestController {
   }
 
   /**
-   * Assign an external payment request to the current logged-in user
-   * This is called when a user logs in after an external checkout
+   * Assign ALL pending external payment requests to the current logged-in user
+   * This is called when a user logs in or visits dashboard
+   */
+  static async assignAllPendingExternalRequests(req: any, res: Response) {
+    try {
+      const userId = req.user.id;
+
+      // Find ALL pending external requests
+      const unassignedRequests = await storage.getAllUnassignedExternalRequests();
+      
+      if (unassignedRequests.length === 0) {
+        return res.json({ message: "No pending external requests to assign", count: 0 });
+      }
+      
+      let assignedCount = 0;
+      
+      // Assign each unassigned external request to this user
+      for (const request of unassignedRequests) {
+        try {
+          // Delete the old unassigned request
+          await storage.deleteMoneyRequest(request.id);
+
+          // Create a new request assigned to this user
+          const newRequest = await storage.createMoneyRequest({
+            fromUserId: request.fromUserId,
+            toUserId: userId,
+            amount: request.amount,
+            description: request.description,
+            status: "pending",
+            type: request.type,
+            externalOrderId: request.externalOrderId,
+            externalSource: request.externalSource,
+            returnUrl: request.returnUrl,
+            cancelUrl: request.cancelUrl,
+            externalMetadata: request.externalMetadata
+          });
+
+          // Create notification for the user
+          await storage.createNotification({
+            userId: userId,
+            type: "external_payment",
+            title: "External Payment Request",
+            message: `Payment request from ${request.externalSource} for ¤${request.amount.toFixed(2)}`,
+            isRead: 0
+          });
+          
+          assignedCount++;
+        } catch (error) {
+          console.error(`Error assigning external request ${request.id}:`, error);
+        }
+      }
+
+      res.json({
+        message: `Successfully assigned ${assignedCount} external payment requests`,
+        count: assignedCount
+      });
+    } catch (error) {
+      console.error("Error assigning external requests:", error);
+      res.status(500).json({ message: "Failed to assign external requests" });
+    }
+  }
+
+  /**
+   * Assign a specific external payment request to the current logged-in user
+   * This is called when a user logs in after an external checkout with orderId
    */
   static async assignExternalRequestToUser(req: any, res: Response) {
     try {

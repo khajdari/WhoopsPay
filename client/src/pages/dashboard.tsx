@@ -97,7 +97,7 @@ export default function Dashboard() {
     }
     
     if (orderId) {
-      // Assign the external payment request to this user
+      // Assign the specific external payment request to this user
       fetch('/api/assign-external-request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -118,6 +118,28 @@ export default function Dashboard() {
         }
       }).catch(error => {
         console.error('Error assigning external request:', error);
+      });
+    } else {
+      // No orderId, so assign ALL pending external requests to this user
+      fetch('/api/assign-all-external-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      }).then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      }).then(data => {
+        if (data && data.count > 0) {
+          toast({
+            title: "External Payment Requests",
+            description: `${data.count} payment request(s) from external sources have been added to your pending requests.`,
+            variant: "default",
+          });
+          // Refresh pending requests to show the new ones
+          queryClient.invalidateQueries({ queryKey: ['/api/pending-requests'] });
+        }
+      }).catch(error => {
+        console.error('Error assigning external requests:', error);
       });
     }
   }, [user, toast]);
