@@ -63,8 +63,8 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
         }, 100);
       } else {
         toast({
-          title: "Payment Approved!",
-          description: `Payment of ¤${request.amount} has been processed successfully.`,
+          title: t('paymentApprovedTitle'),
+          description: t('paymentProcessedSuccessfully').replace('{{amount}}', request.amount.toString()),
           className: "bg-blue-50 border-blue-600 text-blue-800",
         });
         onClose();
