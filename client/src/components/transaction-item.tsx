@@ -19,8 +19,10 @@
  */
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
+import { el } from "date-fns/locale";
 import { ArrowUpRight, ArrowDownLeft, ShoppingCart, University, Play, Music, Car, Coffee, Smartphone } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useI18n } from "@/lib/i18n";
 
 /**
  * TransactionItemProps Interface - Component properties
@@ -52,6 +54,7 @@ interface TransactionItemProps {
  */
 export function TransactionItem({ transaction }: TransactionItemProps) {
   const { user } = useAuth();
+  const { t, language } = useI18n();
   
   // Early return if transaction is null or undefined
   if (!transaction) {
@@ -132,7 +135,10 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
               {transaction.description || 'No description'}
             </p>
             <p className="text-xs text-gray-400">
-              {formatDistanceToNow(new Date(transaction.createdAt), { addSuffix: true })}
+              {formatDistanceToNow(new Date(transaction.createdAt), { 
+                addSuffix: true,
+                locale: language === 'el-GR' ? el : undefined 
+              })}
             </p>
           </div>
         </div>
@@ -146,7 +152,20 @@ export function TransactionItem({ transaction }: TransactionItemProps) {
             variant={transaction.status === 'completed' ? 'default' : 'secondary'}
             className="text-xs"
           >
-            {transaction.status}
+            {(() => {
+              switch(transaction.status) {
+                case 'completed':
+                  return t('completed');
+                case 'pending':
+                  return t('pending');
+                case 'rejected':
+                  return t('rejected');
+                case 'approved':
+                  return t('requestApproved');
+                default:
+                  return transaction.status?.toUpperCase() || '';
+              }
+            })()}
           </Badge>
         </div>
       </div>
