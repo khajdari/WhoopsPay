@@ -381,6 +381,8 @@ interface Translations {
   rejecting: TranslationKey;
   externalMerchant: TranslationKey;
   clickToReview: TranslationKey;
+  loginSuccessful: TranslationKey;
+  welcomeBackToWhoopsPay: TranslationKey;
   
   secureProtection: TranslationKey;
   secureProtectionDesc: TranslationKey;
@@ -1636,6 +1638,14 @@ const translations: Translations = {
   clickToReview: {
     'en-GB': 'Click to review',
     'el-GR': 'Κάντε κλικ για επανεξέταση'
+  },
+  loginSuccessful: {
+    'en-GB': 'Login successful',
+    'el-GR': 'Επιτυχής σύνδεση'
+  },
+  welcomeBackToWhoopsPay: {
+    'en-GB': 'Welcome back to WhoopsPay!',
+    'el-GR': 'Καλώς ήρθατε πίσω στο WhoopsPay!'
   },
 
   // Account Information
