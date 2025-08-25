@@ -756,6 +756,26 @@ export class DatabaseStorage implements IStorage {
       return [];
     }
   }
+
+  /**
+   * Get ALL unassigned external payment requests
+   */
+  async getAllUnassignedExternalRequests(): Promise<any[]> {
+    try {
+      const result = await db
+        .select()
+        .from(moneyRequests)
+        .where(and(
+          eq(moneyRequests.toUserId, "pending-user-selection"),
+          eq(moneyRequests.status, "pending")
+        ));
+      
+      return result;
+    } catch (error) {
+      console.error("Error finding all unassigned external requests:", error);
+      return [];
+    }
+  }
 }
 
 export const storage = new DatabaseStorage();

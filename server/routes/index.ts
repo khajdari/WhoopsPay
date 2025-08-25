@@ -413,6 +413,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/requests/:requestId/reject', isAuthenticated, MoneyRequestController.rejectRequest);
   app.post('/api/external-payment-request', MoneyRequestController.createExternalRequest);
   app.post('/api/assign-external-request', isAuthenticated, MoneyRequestController.assignExternalRequestToUser);
+  app.post('/api/assign-all-external-requests', isAuthenticated, MoneyRequestController.assignAllPendingExternalRequests);
 
   // ============================================================================
   // NOTIFICATION ROUTES
