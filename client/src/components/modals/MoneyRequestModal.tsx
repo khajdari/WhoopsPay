@@ -1,3 +1,36 @@
+/**
+ * WhoopsPay Money Request Modal - OWASP Vulnerability Training
+ * 
+ * WARNING: This component contains intentional security vulnerabilities for educational purposes.
+ * 
+ * OWASP Top 10 Vulnerabilities Demonstrated:
+ * - A01: Broken Access Control (Client-side approval/rejection logic)
+ * - A03: Injection (Unvalidated external URL redirects)
+ * - A04: Insecure Design (Financial approval logic exposed to client)
+ * - A05: Security Misconfiguration (External redirect handling)
+ * - A07: Identification and Authentication Failures (Weak transaction validation)
+ * 
+ * API Security Top 10 Vulnerabilities:
+ * - API1: Broken Object Level Authorization (No server-side ownership validation)
+ * - API7: Server Side Request Forgery (Unvalidated external redirects)
+ * - API10: Unsafe Consumption of APIs (External payment system integration)
+ * 
+ * Financial Security Vulnerabilities:
+ * - Payment approval/rejection handled primarily client-side
+ * - External payment system redirects without proper validation
+ * - Financial transaction state management exposed to frontend
+ * - No multi-factor authentication for high-value transactions
+ * - Insufficient validation of payment request authenticity
+ * 
+ * Educational Vulnerabilities Include:
+ * - Client-side financial transaction approval logic
+ * - Unvalidated external redirects to payment systems
+ * - Payment request data manipulation possibilities
+ * - Insufficient server-side validation of transaction states
+ * - External payment integration security weaknesses
+ * 
+ * NEVER use this code in production environments!
+ */
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -22,11 +55,21 @@ import {
   Building
 } from "lucide-react";
 
+/**
+ * Money Request Modal Props Interface
+ * 
+ * OWASP A04: Insecure Design - Type Safety Vulnerabilities
+ * VULNERABLE: request type is 'any' allowing any data structure
+ * This bypasses TypeScript's type safety and can lead to:
+ * - Runtime errors from unexpected data structures
+ * - Security vulnerabilities from malformed data
+ * - Difficulty in validating payment request authenticity
+ */
 interface MoneyRequestModalProps {
-  request: any;
+  request: any; // VULNERABLE: Should have proper type definition
   isOpen: boolean;
   onClose: () => void;
-  onExternalRedirect?: (redirectUrl: string, isApproval: boolean, orderInfo: any) => void;
+  onExternalRedirect?: (redirectUrl: string, isApproval: boolean, orderInfo: any) => void; // VULNERABLE: Unvalidated redirect function
 }
 
 export default function MoneyRequestModal({ request, isOpen, onClose, onExternalRedirect }: MoneyRequestModalProps) {
