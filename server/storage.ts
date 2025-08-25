@@ -719,6 +719,22 @@ export class DatabaseStorage implements IStorage {
       throw error;
     }
   }
+
+  /**
+   * Delete money request by ID
+   */
+  async deleteMoneyRequest(id: number): Promise<boolean> {
+    try {
+      const result = await db
+        .delete(moneyRequests)
+        .where(eq(moneyRequests.id, id));
+      
+      return result.changes > 0;
+    } catch (error) {
+      console.error("Error deleting money request:", error);
+      throw error;
+    }
+  }
 }
 
 export const storage = new DatabaseStorage();

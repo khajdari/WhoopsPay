@@ -474,8 +474,10 @@ export class MoneyRequestController {
         return res.status(404).json({ message: "External payment request not found" });
       }
 
-      // Update the request to be assigned to this user - using a simple approach since updateMoneyRequest doesn't exist
-      // Delete the old request and create a new one with the correct user
+      // Delete the old unassigned request
+      await storage.deleteMoneyRequest(matchingRequest.id);
+
+      // Create a new request assigned to this user
       const newRequest = await storage.createMoneyRequest({
         fromUserId: matchingRequest.fromUserId,
         toUserId: userId,
