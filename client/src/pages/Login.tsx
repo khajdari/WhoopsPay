@@ -146,13 +146,13 @@ export default function Login() {
       // Check if this was a Juice Shop payment login
       if (response.paymentRequest) {
         toast({
-          title: "Login successful",
+          title: t('loginSuccessful'),
           description: `Payment request created for $${response.paymentRequest.amount}. Check your pending requests.`,
         });
       } else {
         toast({
-          title: "Login successful",
-          description: "Welcome back to WhoopsPay!",
+          title: t('loginSuccessful'),
+          description: t('welcomeBackToWhoopsPay'),
         });
       }
       
