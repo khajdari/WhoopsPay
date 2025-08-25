@@ -553,6 +553,19 @@ interface Translations {
   continueToService: TranslationKey;
   cancelAutoRedirect: TranslationKey;
   paymentApprovedSuccessfully: TranslationKey;
+  
+  // Redirect Modal specific translations  
+  externalPaymentRejected: TranslationKey;
+  fromLabel: TranslationKey;
+  juiceShopMerchant: TranslationKey;
+  descriptionLabel: TranslationKey;
+  externalDetailsLabel: TranslationKey;
+  orderIdColon: TranslationKey;
+  sourceColon: TranslationKey;
+  returnUrlColon: TranslationKey;
+  paymentRejectedMessage: TranslationKey;
+  redirectingCountdown: TranslationKey;
+  secondsText: TranslationKey;
 }
 
 const translations: Translations = {
@@ -2315,6 +2328,52 @@ const translations: Translations = {
   paymentApprovedSuccessfully: {
     'en-GB': 'Payment approved successfully',
     'el-GR': 'Η πληρωμή εγκρίθηκε επιτυχώς'
+  },
+
+  // Redirect Modal specific translations (no duplicates)
+  externalPaymentRejected: {
+    'en-GB': 'External Payment Rejected',
+    'el-GR': 'Εξωτερική Πληρωμή Απορρίφθηκε'
+  },
+  fromLabel: {
+    'en-GB': 'From:',
+    'el-GR': 'Από:'
+  },
+  juiceShopMerchant: {
+    'en-GB': 'Juice Shop',
+    'el-GR': 'Juice Shop'
+  },
+  descriptionLabel: {
+    'en-GB': 'Description:',
+    'el-GR': 'Περιγραφή:'
+  },
+  externalDetailsLabel: {
+    'en-GB': 'External Details:',
+    'el-GR': 'Εξωτερικές Λεπτομέρειες:'
+  },
+  orderIdColon: {
+    'en-GB': 'Order ID:',
+    'el-GR': 'Αριθμός Παραγγελίας:'
+  },
+  sourceColon: {
+    'en-GB': 'Source:',
+    'el-GR': 'Πηγή:'
+  },
+  returnUrlColon: {
+    'en-GB': 'Return URL:',
+    'el-GR': 'URL Επιστροφής:'
+  },
+  paymentRejectedMessage: {
+    'en-GB': 'Payment was rejected. You will be redirected back to the merchant.',
+    'el-GR': 'Η πληρωμή απορρίφθηκε. Θα ανακατευθυνθείτε πίσω στον έμπορο.'
+  },
+  redirectingCountdown: {
+    'en-GB': 'Redirecting to Juice Shop in',
+    'el-GR': 'Ανακατεύθυνση στο Juice Shop σε'
+  },
+  secondsText: {
+    'en-GB': 'seconds...',
+    'el-GR': 'δευτερόλεπτα...'
   }
 };
 

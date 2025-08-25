@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { ExternalLink, CheckCircle, XCircle } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/lib/i18n";
 
 interface RedirectModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export function RedirectModal({
   isApproval,
   orderInfo 
 }: RedirectModalProps) {
+  const { t } = useLanguage();
   const [countdown, setCountdown] = useState(5);
   const [autoRedirect, setAutoRedirect] = useState(true);
 
@@ -59,12 +61,12 @@ export function RedirectModal({
             {isApproval ? (
               <>
                 <CheckCircle className="h-5 w-5" />
-                External Payment Approved
+                {t('externalPaymentApproved')}
               </>
             ) : (
               <>
                 <XCircle className="h-5 w-5" />
-                External Payment Rejected
+                {t('externalPaymentRejected')}
               </>
             )}
           </DialogTitle>
@@ -74,7 +76,7 @@ export function RedirectModal({
           {/* Status Badge */}
           <div className="flex justify-center">
             <span className="bg-orange-800 text-white px-3 py-1 rounded-full text-sm font-medium">
-              Off-Us Payment Request
+              {t('offUsPaymentRequest')}
             </span>
           </div>
 
@@ -89,18 +91,18 @@ export function RedirectModal({
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-orange-800">
               <ExternalLink className="h-4 w-4" />
-              <span className="font-medium">From:</span>
+              <span className="font-medium">{t('fromLabel')}</span>
             </div>
             <div className="ml-6">
-              <div className="text-gray-900 font-medium">Juice Shop</div>
-              <div className="text-gray-600 text-sm">External Merchant</div>
+              <div className="text-gray-900 font-medium">{t('juiceShopMerchant')}</div>
+              <div className="text-gray-600 text-sm">{t('externalMerchant')}</div>
             </div>
           </div>
 
           {/* Description Section */}
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-orange-800">
-              <span className="font-medium">Description:</span>
+              <span className="font-medium">{t('descriptionLabel')}</span>
             </div>
             <div className="ml-6 text-gray-900">
               {orderInfo.description}
@@ -110,19 +112,19 @@ export function RedirectModal({
           {/* External Details */}
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-orange-800">
-              <span className="font-medium">External Details:</span>
+              <span className="font-medium">{t('externalDetailsLabel')}</span>
             </div>
             <div className="ml-6 space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Order ID:</span>
+                <span className="text-gray-600">{t('orderIdColon')}</span>
                 <span className="text-gray-900">{orderInfo.orderId}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Source:</span>
+                <span className="text-gray-600">{t('sourceColon')}</span>
                 <span className="text-gray-900">Juice-Shop</span>
               </div>
               <div className="flex justify-between items-start">
-                <span className="text-gray-600">Return URL:</span>
+                <span className="text-gray-600">{t('returnUrlColon')}</span>
                 <span className="text-gray-900 text-xs font-mono break-all max-w-xs">
                   {redirectUrl}
                 </span>
@@ -134,29 +136,29 @@ export function RedirectModal({
           <div className="text-center">
             <p className="text-gray-700 mb-4">
               {isApproval 
-                ? "Payment has been processed successfully. You will be redirected to complete your order." 
-                : "Payment was rejected. You will be redirected back to the merchant."
+                ? t('paymentProcessedSuccessfully') 
+                : t('paymentRejectedMessage')
               }
             </p>
             
             {autoRedirect && countdown > 0 ? (
               <div className="space-y-3">
                 <p className="text-orange-800 font-medium">
-                  Redirecting to Juice Shop in {countdown} seconds...
+                  {t('redirectingCountdown')} {countdown} {t('secondsText')}
                 </p>
                 <div className="flex justify-center gap-3">
                   <Button 
                     onClick={handleManualRedirect}
                     className="bg-orange-800 hover:bg-orange-900 text-white font-medium px-6 py-2"
                   >
-                    Continue to Juice Shop
+                    {t('continueToService')}
                   </Button>
                   <Button 
                     onClick={handleCancelAutoRedirect}
                     variant="outline"
                     className="border-red-600 text-red-600 hover:bg-red-50 px-6 py-2"
                   >
-                    Cancel Auto-redirect
+                    {t('cancelAutoRedirect')}
                   </Button>
                 </div>
               </div>
@@ -166,14 +168,14 @@ export function RedirectModal({
                   onClick={handleManualRedirect}
                   className="bg-orange-800 hover:bg-orange-900 text-white font-medium px-6 py-2"
                 >
-                  Continue to Juice Shop
+                  {t('continueToService')}
                 </Button>
                 <Button 
                   onClick={onClose}
                   variant="outline"
                   className="border-gray-400 text-gray-700 hover:bg-gray-50 px-6 py-2"
                 >
-                  Stay Here
+                  {t('stayHere')}
                 </Button>
               </div>
             )}
