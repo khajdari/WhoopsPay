@@ -150,10 +150,13 @@ const server = http.createServer(async (req, res) => {
         try {
           // Create payment request to WhoopsPay
           const paymentData = {
-            userId: '@james_chen', // Default user for demo
+            toUserId: 'pending-user-selection',
             amount: total,
-            orderId: orderId,
-            description: `Juice Shop Order ${orderId} - ${basketItems.length} items`
+            externalOrderId: orderId,
+            externalSource: 'juice-shop',
+            description: `Juice Shop Order ${orderId} - ${basketItems.length} items`,
+            returnUrl: 'https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/dashboard',
+            cancelUrl: 'https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/dashboard'
           };
           
           const https = require('https');
