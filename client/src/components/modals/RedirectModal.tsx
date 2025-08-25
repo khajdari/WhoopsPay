@@ -104,7 +104,7 @@ export function RedirectModal({
             <div className="flex items-center gap-2 text-orange-800">
               <span className="font-medium">{t('descriptionLabel')}</span>
             </div>
-            <div className="ml-6 text-gray-900">
+            <div className="ml-6 text-gray-900 break-words">
               {orderInfo.description}
             </div>
           </div>
@@ -115,17 +115,17 @@ export function RedirectModal({
               <span className="font-medium">{t('externalDetailsLabel')}</span>
             </div>
             <div className="ml-6 space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">{t('orderIdColon')}</span>
-                <span className="text-gray-900">{orderInfo.orderId}</span>
+              <div className="flex justify-between items-start gap-2">
+                <span className="text-gray-600 flex-shrink-0">{t('orderIdColon')}</span>
+                <span className="text-gray-900 text-right break-words">{orderInfo.orderId}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">{t('sourceColon')}</span>
-                <span className="text-gray-900">Juice-Shop</span>
+              <div className="flex justify-between items-start gap-2">
+                <span className="text-gray-600 flex-shrink-0">{t('sourceColon')}</span>
+                <span className="text-gray-900 text-right">Juice-Shop</span>
               </div>
-              <div className="flex justify-between items-start">
-                <span className="text-gray-600">{t('returnUrlColon')}</span>
-                <span className="text-gray-900 text-xs font-mono break-all max-w-xs">
+              <div className="flex justify-between items-start gap-2">
+                <span className="text-gray-600 flex-shrink-0">{t('returnUrlColon')}</span>
+                <span className="text-gray-900 text-xs font-mono break-all text-right max-w-[180px]">
                   {redirectUrl}
                 </span>
               </div>
@@ -134,7 +134,7 @@ export function RedirectModal({
 
           {/* Status Message */}
           <div className="text-center">
-            <p className="text-gray-700 mb-4">
+            <p className="text-gray-700 mb-4 px-2 leading-relaxed">
               {isApproval 
                 ? t('paymentProcessedSuccessfully') 
                 : t('paymentRejectedMessage')
@@ -143,37 +143,37 @@ export function RedirectModal({
             
             {autoRedirect && countdown > 0 ? (
               <div className="space-y-3">
-                <p className="text-orange-800 font-medium">
+                <p className="text-orange-800 font-medium px-2">
                   {t('redirectingCountdown')} {countdown} {t('secondsText')}
                 </p>
-                <div className="flex justify-center gap-3">
+                <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3">
                   <Button 
                     onClick={handleManualRedirect}
-                    className="bg-orange-800 hover:bg-orange-900 text-white font-medium px-6 py-2"
+                    className="bg-orange-800 hover:bg-orange-900 text-white font-medium px-4 py-2 text-sm"
                   >
                     {t('continueToService')}
                   </Button>
                   <Button 
                     onClick={handleCancelAutoRedirect}
                     variant="outline"
-                    className="border-red-600 text-red-600 hover:bg-red-50 px-6 py-2"
+                    className="border-red-600 text-red-600 hover:bg-red-50 px-4 py-2 text-sm"
                   >
                     {t('cancelAutoRedirect')}
                   </Button>
                 </div>
               </div>
             ) : (
-              <div className="flex justify-center gap-3">
+              <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-3">
                 <Button 
                   onClick={handleManualRedirect}
-                  className="bg-orange-800 hover:bg-orange-900 text-white font-medium px-6 py-2"
+                  className="bg-orange-800 hover:bg-orange-900 text-white font-medium px-4 py-2 text-sm"
                 >
                   {t('continueToService')}
                 </Button>
                 <Button 
                   onClick={onClose}
                   variant="outline"
-                  className="border-gray-400 text-gray-700 hover:bg-gray-50 px-6 py-2"
+                  className="border-gray-400 text-gray-700 hover:bg-gray-50 px-4 py-2 text-sm"
                 >
                   {t('stayHere')}
                 </Button>
