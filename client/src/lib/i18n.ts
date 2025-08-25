@@ -380,6 +380,7 @@ interface Translations {
   approving: TranslationKey;
   rejecting: TranslationKey;
   externalMerchant: TranslationKey;
+  clickToReview: TranslationKey;
   
   secureProtection: TranslationKey;
   secureProtectionDesc: TranslationKey;
@@ -735,7 +736,7 @@ const translations: Translations = {
   },
   pending: {
     'en-GB': 'Pending',
-    'el-GR': 'Εκκρεμεί'
+    'el-GR': 'σε αναμονή'
   },
   
   // Issue Reporting
@@ -1631,6 +1632,10 @@ const translations: Translations = {
   externalMerchant: {
     'en-GB': 'External Merchant',
     'el-GR': 'Εξωτερικός Έμπορος'
+  },
+  clickToReview: {
+    'en-GB': 'Click to review',
+    'el-GR': 'Κάντε κλικ για επανεξέταση'
   },
 
   // Account Information

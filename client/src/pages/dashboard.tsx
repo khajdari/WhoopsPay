@@ -488,12 +488,12 @@ export default function Dashboard() {
                               </p>
                               {(request.type === 'external' || request.isExternal) && (
                                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                                  Off-Us
+                                  {t('offus')}
                                 </span>
                               )}
                               {(request.type === 'internal' || (!request.type && !request.isExternal)) && (
                                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                  On-Us
+                                  {t('onus')}
                                 </span>
                               )}
                             </div>
@@ -507,7 +507,7 @@ export default function Dashboard() {
                           </div>
                         </div>
                         <div className="text-gray-400">
-                          <span className="text-sm">Click to review</span>
+                          <span className="text-sm">{t('clickToReview')}</span>
                         </div>
                       </div>
                     ))}
