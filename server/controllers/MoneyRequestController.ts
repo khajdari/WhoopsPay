@@ -140,38 +140,39 @@ export class MoneyRequestController {
 
       // For internal requests, process the money transfer
       if (request.toUserId && request.fromUserId !== "juice-shop" && request.type === "internal") {
-        // Get both users
-        const fromUser = await storage.getUser(request.fromUserId);
-        const toUser = await storage.getUser(request.toUserId);
+        // FIXED CORRECTLY: When approving internal request, the APPROVER (toUserId) sends money to the REQUESTER (fromUserId)
+        // Get both users - approver sends money to requester
+        const approver = await storage.getUser(request.toUserId); // Person approving (current user - Sarah)
+        const requester = await storage.getUser(request.fromUserId); // Person who requested money (Maria)
         
-        if (!fromUser || !toUser) {
+        if (!approver || !requester) {
           return res.status(404).json({ message: "User not found" });
         }
 
         const transferAmount = parseFloat(request.amount.toString());
-        const fromBalance = parseFloat(fromUser.balance || '0');
-        const toBalance = parseFloat(toUser.balance || '0');
+        const approverBalance = parseFloat(approver.balance || '0');
+        const requesterBalance = parseFloat(requester.balance || '0');
 
-        // Check if sender has sufficient funds
-        if (fromBalance < transferAmount) {
+        // Check if approver has sufficient funds to send
+        if (approverBalance < transferAmount) {
           return res.status(400).json({ message: "Insufficient funds to complete the request" });
         }
 
-        // Calculate new balances
-        const newFromBalance = fromBalance - transferAmount;
-        const newToBalance = toBalance + transferAmount;
+        // Calculate new balances: Approver LOSES money, Requester GAINS money
+        const newApproverBalance = approverBalance - transferAmount; // MINUS from approver (Sarah)
+        const newRequesterBalance = requesterBalance + transferAmount; // PLUS to requester (Maria)
 
-        // Update both user balances
-        console.log(`Updating balances: From ${request.fromUserId} (${fromBalance} -> ${newFromBalance}), To ${request.toUserId} (${toBalance} -> ${newToBalance})`);
-        await storage.updateUserBalance(request.fromUserId, newFromBalance.toFixed(2));
-        await storage.updateUserBalance(request.toUserId, newToBalance.toFixed(2));
+        // Update both user balances CORRECTLY
+        console.log(`💸 FIXED: Approver ${request.toUserId} (${approverBalance} -> ${newApproverBalance}), Requester ${request.fromUserId} (${requesterBalance} -> ${newRequesterBalance})`);
+        await storage.updateUserBalance(request.toUserId, newApproverBalance.toFixed(2)); // Approver loses money
+        await storage.updateUserBalance(request.fromUserId, newRequesterBalance.toFixed(2)); // Requester gains money
         console.log("Balance updates completed successfully");
 
         // Create a transaction record for the payment transfer
         try {
           await storage.createTransaction({
-            fromUserId: request.fromUserId,
-            toUserId: request.toUserId,
+            fromUserId: request.toUserId, // FIXED: Approver is the sender
+            toUserId: request.fromUserId, // FIXED: Requester is the receiver
             amount: transferAmount,
             description: request.description || "Money Request Payment",
             status: "completed",
@@ -179,24 +180,9 @@ export class MoneyRequestController {
             transactionCategory: "ONUS",
             isInternal: 1
           });
+          console.log(`✅ Internal transaction record created correctly`);
         } catch (transactionError) {
-          console.error("Error creating transaction record:", transactionError);
-        }
-
-        // Create a transaction record for the request approval
-        try {
-          await storage.createTransaction({
-            fromUserId: request.fromUserId,
-            toUserId: request.toUserId,
-            amount: request.amount,
-            description: `Money request approved: ${request.description || "Money request"}`,
-            status: "approved",
-            type: "money_request",
-            transactionCategory: request.type === "external" ? "OFFUS" : "ONUS",
-            isInternal: request.type === "internal" ? 1 : 0
-          });
-        } catch (transactionError) {
-          console.error("Error creating approval transaction record:", transactionError);
+          console.error("❌ Error creating transaction record:", transactionError);
         }
 
         // Create notifications for both users
