@@ -322,6 +322,18 @@ interface Translations {
   featuresSubtitle: TranslationKey;
   instantTransfers: TranslationKey;
   instantTransfersDesc: TranslationKey;
+  
+  // Additional issue reporting translations
+  all: TranslationKey;
+  noIssuesFoundCategory: TranslationKey;
+  assignedTo: TranslationKey;
+  adminNotes: TranslationKey;
+  viewDetails: TranslationKey;
+  issueReportDetailsStatus: TranslationKey;
+  status: TranslationKey;
+  priority: TranslationKey;
+  category: TranslationKey;
+  created: TranslationKey;
   secureProtection: TranslationKey;
   secureProtectionDesc: TranslationKey;
   mobileApp: TranslationKey;
@@ -1366,7 +1378,48 @@ const translations: Translations = {
     'el-GR': 'Εξωτερική'
   },
 
-  
+  // Additional issue reporting translations
+  all: {
+    'en-GB': 'All',
+    'el-GR': 'Όλα'
+  },
+  noIssuesFoundCategory: {
+    'en-GB': 'No issues found in this category.',
+    'el-GR': 'Δεν βρέθηκαν προβλήματα σε αυτή την κατηγορία.'
+  },
+  assignedTo: {
+    'en-GB': 'Assigned to',
+    'el-GR': 'Ανατέθηκε στον'
+  },
+  adminNotes: {
+    'en-GB': 'Admin Notes',
+    'el-GR': 'Σημειώσεις Διαχειριστή'
+  },
+  viewDetails: {
+    'en-GB': 'View Details',
+    'el-GR': 'Προβολή Λεπτομερειών'
+  },
+  issueReportDetailsStatus: {
+    'en-GB': 'Issue report details and current status',
+    'el-GR': 'Λεπτομέρειες αναφοράς προβλήματος και τρέχουσα κατάσταση'
+  },
+  status: {
+    'en-GB': 'Status',
+    'el-GR': 'Κατάσταση'
+  },
+  priority: {
+    'en-GB': 'Priority',
+    'el-GR': 'Προτεραιότητα'
+  },
+  category: {
+    'en-GB': 'Category',
+    'el-GR': 'Κατηγορία'
+  },
+  created: {
+    'en-GB': 'Created',
+    'el-GR': 'Δημιουργήθηκε'
+  },
+
   // Account Information
   accountInformation: {
     'en-GB': 'Account Information',

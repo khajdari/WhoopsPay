@@ -228,27 +228,27 @@ export default function IssueReporting() {
                 ) : (
                   <Tabs defaultValue="all" className="w-full">
                     <TabsList className="grid w-full grid-cols-5">
-                      <TabsTrigger value="all">All ({userIssues?.length || 0})</TabsTrigger>
-                      <TabsTrigger value="open">Open ({groupedIssues.open.length})</TabsTrigger>
-                      <TabsTrigger value="in_progress">In Progress ({groupedIssues.in_progress.length})</TabsTrigger>
-                      <TabsTrigger value="resolved">Resolved ({groupedIssues.resolved.length})</TabsTrigger>
-                      <TabsTrigger value="closed">Closed ({groupedIssues.closed.length})</TabsTrigger>
+                      <TabsTrigger value="all">{t('all')} ({userIssues?.length || 0})</TabsTrigger>
+                      <TabsTrigger value="open">{t('statusOpen')} ({groupedIssues.open.length})</TabsTrigger>
+                      <TabsTrigger value="in_progress">{t('statusInProgress')} ({groupedIssues.in_progress.length})</TabsTrigger>
+                      <TabsTrigger value="resolved">{t('statusResolved')} ({groupedIssues.resolved.length})</TabsTrigger>
+                      <TabsTrigger value="closed">{t('statusClosed')} ({groupedIssues.closed.length})</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="all">
-                      <IssueList issues={userIssues || []} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} />
+                      <IssueList issues={userIssues || []} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} t={t} />
                     </TabsContent>
                     <TabsContent value="open">
-                      <IssueList issues={groupedIssues.open} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} />
+                      <IssueList issues={groupedIssues.open} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} t={t} />
                     </TabsContent>
                     <TabsContent value="in_progress">
-                      <IssueList issues={groupedIssues.in_progress} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} />
+                      <IssueList issues={groupedIssues.in_progress} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} t={t} />
                     </TabsContent>
                     <TabsContent value="resolved">
-                      <IssueList issues={groupedIssues.resolved} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} />
+                      <IssueList issues={groupedIssues.resolved} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} t={t} />
                     </TabsContent>
                     <TabsContent value="closed">
-                      <IssueList issues={groupedIssues.closed} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} />
+                      <IssueList issues={groupedIssues.closed} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getCategoryIcon={getCategoryIcon} formatDate={formatDate} t={t} />
                     </TabsContent>
                   </Tabs>
                 )}
@@ -269,13 +269,14 @@ interface IssueListProps {
   getPriorityBadge: (priority: string) => JSX.Element;
   getCategoryIcon: (category: string) => string;
   formatDate: (timestamp: number) => string;
+  t: (key: any) => string;
 }
 
-function IssueList({ issues, getStatusBadge, getPriorityBadge, getCategoryIcon, formatDate }: IssueListProps) {
+function IssueList({ issues, getStatusBadge, getPriorityBadge, getCategoryIcon, formatDate, t }: IssueListProps) {
   if (issues.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
-        <p>No issues found in this category.</p>
+        <p>{t('noIssuesFoundCategory')}</p>
       </div>
     );
   }
@@ -313,14 +314,14 @@ function IssueList({ issues, getStatusBadge, getPriorityBadge, getCategoryIcon, 
                 </div>
                 {issue.assignedTo && (
                   <div className="flex items-center gap-1">
-                    <span>Assigned to: {issue.assignedTo}</span>
+                    <span>{t('assignedTo')}: {issue.assignedTo}</span>
                   </div>
                 )}
               </div>
 
               {issue.adminNotes && (
                 <div className="bg-muted p-2 rounded text-sm mb-3">
-                  <strong>Admin Notes:</strong> {issue.adminNotes}
+                  <strong>{t('adminNotes')}:</strong> {issue.adminNotes}
                 </div>
               )}
 
@@ -328,7 +329,7 @@ function IssueList({ issues, getStatusBadge, getPriorityBadge, getCategoryIcon, 
                 <DialogTrigger asChild>
                   <Button variant="outline" size="sm" className="flex items-center gap-1">
                     <Eye className="h-3 w-3" />
-                    View Details
+                    {t('viewDetails')}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl">
@@ -339,50 +340,50 @@ function IssueList({ issues, getStatusBadge, getPriorityBadge, getCategoryIcon, 
                       <Badge variant="outline">#{issue.id}</Badge>
                     </DialogTitle>
                     <DialogDescription>
-                      Issue report details and current status
+                      {t('issueReportDetailsStatus')}
                     </DialogDescription>
                   </DialogHeader>
                   <ScrollArea className="max-h-[400px]">
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-semibold mb-2">Description</h4>
+                        <h4 className="font-semibold mb-2">{t('description')}</h4>
                         <p className="text-sm p-3 bg-muted rounded">{issue.description}</p>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <h4 className="font-semibold mb-1">Status</h4>
+                          <h4 className="font-semibold mb-1">{t('status')}</h4>
                           {getStatusBadge(issue.status)}
                         </div>
                         <div>
-                          <h4 className="font-semibold mb-1">Priority</h4>
+                          <h4 className="font-semibold mb-1">{t('priority')}</h4>
                           {getPriorityBadge(issue.priority)}
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <h4 className="font-semibold mb-1">Category</h4>
+                          <h4 className="font-semibold mb-1">{t('category')}</h4>
                           <p className="text-sm">{issue.category}</p>
                         </div>
                         <div>
-                          <h4 className="font-semibold mb-1">Created</h4>
+                          <h4 className="font-semibold mb-1">{t('created')}</h4>
                           <p className="text-sm">{formatDate(issue.createdAt)}</p>
                         </div>
                       </div>
                       {issue.assignedTo && (
                         <div>
-                          <h4 className="font-semibold mb-1">Assigned to</h4>
+                          <h4 className="font-semibold mb-1">{t('assignedTo')}</h4>
                           <p className="text-sm">{issue.assignedTo}</p>
                         </div>
                       )}
                       {issue.adminNotes && (
                         <div>
-                          <h4 className="font-semibold mb-1">Admin Notes</h4>
+                          <h4 className="font-semibold mb-1">{t('adminNotes')}</h4>
                           <p className="text-sm p-3 bg-muted rounded">{issue.adminNotes}</p>
                         </div>
                       )}
                       {issue.resolvedAt && (
                         <div>
-                          <h4 className="font-semibold mb-1">Resolved</h4>
+                          <h4 className="font-semibold mb-1">{t('resolved')}</h4>
                           <p className="text-sm">{formatDate(issue.resolvedAt)}</p>
                         </div>
                       )}
