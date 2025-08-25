@@ -575,6 +575,7 @@ interface Translations {
   approvedYourRequestMessage: TranslationKey;
   youReceivedMessage: TranslationKey;
   youSentMessage: TranslationKey;
+  paymentApprovedTitle: TranslationKey;
 }
 
 const translations: Translations = {
@@ -2319,8 +2320,8 @@ const translations: Translations = {
     'el-GR': 'URL Επιστροφής:'
   },
   paymentProcessedSuccessfully: {
-    'en-GB': 'Payment has been processed successfully. You will be redirected to complete your order.',
-    'el-GR': 'Η πληρωμή επεξεργάστηκε επιτυχώς. Θα ανακατευθυνθείτε για να ολοκληρώσετε την παραγγελία σας.'
+    'en-GB': 'Payment of ¤{{amount}} has been processed successfully.',
+    'el-GR': 'Η πληρωμή των ¤{{amount}} έχει επεξεργαστεί επιτυχώς.'
   },
   redirectingToService: {
     'en-GB': 'Redirecting to Juice Shop in',
@@ -2413,6 +2414,10 @@ const translations: Translations = {
   youSentMessage: {
     'en-GB': 'You sent ¤{{amount}} to {{recipient}}{{description}}',
     'el-GR': 'Στείλατε ¤{{amount}} σε {{recipient}}{{description}}'
+  },
+  paymentApprovedTitle: {
+    'en-GB': 'Payment Approved!',
+    'el-GR': 'Πληρωμή Εγκρίθηκε!'
   }
 };
 
