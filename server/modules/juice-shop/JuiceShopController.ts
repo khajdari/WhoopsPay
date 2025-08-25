@@ -179,7 +179,7 @@ export class JuiceShopController {
 
         const request = await storage.createMoneyRequest({
           fromUserId: "juice-shop",
-          toUserId: userId,
+          toUserId: "pending-user-selection", // This will be updated when user logs in
           amount: order.total,
           description: `Juice Shop Order #${orderId}`,
           status: "pending",
@@ -199,7 +199,7 @@ export class JuiceShopController {
           message: 'Payment request created',
           data: {
             requestId: request.id,
-            redirectUrl: `/payment-approval?requestId=${request.id}`,
+            redirectUrl: URLAdapter.adaptExternalUrl(`/?orderId=${orderId}`),
             order: order
           }
         });
