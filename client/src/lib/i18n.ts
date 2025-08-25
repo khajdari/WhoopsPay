@@ -360,6 +360,14 @@ interface Translations {
   submissionFailedDesc: TranslationKey;
   missingInformation: TranslationKey;
   missingInformationDesc: TranslationKey;
+  
+  // Time and date formatting
+  minutesAgo: TranslationKey;
+  hoursAgo: TranslationKey;
+  daysAgo: TranslationKey;
+  justNow: TranslationKey;
+  unknownTime: TranslationKey;
+  
   secureProtection: TranslationKey;
   secureProtectionDesc: TranslationKey;
   mobileApp: TranslationKey;
@@ -1542,6 +1550,28 @@ const translations: Translations = {
   missingInformationDesc: {
     'en-GB': 'Please fill in all required fields.',
     'el-GR': 'Παρακαλώ συμπληρώστε όλα τα υποχρεωτικά πεδία.'
+  },
+  
+  // Time and date formatting
+  minutesAgo: {
+    'en-GB': 'minutes ago',
+    'el-GR': 'λεπτά πριν'
+  },
+  hoursAgo: {
+    'en-GB': 'hours ago', 
+    'el-GR': 'ώρες πριν'
+  },
+  daysAgo: {
+    'en-GB': 'days ago',
+    'el-GR': 'μέρες πριν'
+  },
+  justNow: {
+    'en-GB': 'just now',
+    'el-GR': 'μόλις τώρα'
+  },
+  unknownTime: {
+    'en-GB': 'Unknown time',
+    'el-GR': 'Άγνωστη ώρα'
   },
 
   // Account Information
