@@ -334,6 +334,32 @@ interface Translations {
   priority: TranslationKey;
   category: TranslationKey;
   created: TranslationKey;
+  
+  // Issue reporting form specific
+  reportIssuesDesc: TranslationKey;
+  issueTitle: TranslationKey;
+  issueTitlePlaceholder: TranslationKey;
+  selectCategory: TranslationKey;
+  selectPriority: TranslationKey;
+  technicalIssues: TranslationKey;
+  paymentProblems: TranslationKey;
+  securityConcerns: TranslationKey;
+  accountIssues: TranslationKey;
+  critical: TranslationKey;
+  high: TranslationKey;
+  medium: TranslationKey;
+  low: TranslationKey;
+  detailedDescription: TranslationKey;
+  detailedDescriptionPlaceholder: TranslationKey;
+  requiredFields: TranslationKey;
+  submitReport: TranslationKey;
+  submitting: TranslationKey;
+  issueReportSubmitted: TranslationKey;
+  issueReportSubmittedDesc: TranslationKey;
+  submissionFailed: TranslationKey;
+  submissionFailedDesc: TranslationKey;
+  missingInformation: TranslationKey;
+  missingInformationDesc: TranslationKey;
   secureProtection: TranslationKey;
   secureProtectionDesc: TranslationKey;
   mobileApp: TranslationKey;
@@ -1418,6 +1444,104 @@ const translations: Translations = {
   created: {
     'en-GB': 'Created',
     'el-GR': 'Δημιουργήθηκε'
+  },
+  
+  // Issue reporting form specific
+  reportIssuesDesc: {
+    'en-GB': 'Report any issues, bugs, or concerns you encounter while using WhoopsPay',
+    'el-GR': 'Αναφέρετε τυχόν προβλήματα, σφάλματα ή ανησυχίες που αντιμετωπίζετε κατά τη χρήση του WhoopsPay'
+  },
+  issueTitle: {
+    'en-GB': 'Issue Title',
+    'el-GR': 'Τίτλος Προβλήματος'
+  },
+  issueTitlePlaceholder: {
+    'en-GB': 'Brief description of the issue',
+    'el-GR': 'Σύντομη περιγραφή του προβλήματος'
+  },
+  selectCategory: {
+    'en-GB': 'Select category',
+    'el-GR': 'Επιλέξτε κατηγορία'
+  },
+  selectPriority: {
+    'en-GB': 'Select priority',
+    'el-GR': 'Επιλέξτε προτεραιότητα'
+  },
+  technicalIssues: {
+    'en-GB': 'Technical Issues',
+    'el-GR': 'Τεχνικά Προβλήματα'
+  },
+  paymentProblems: {
+    'en-GB': 'Payment Problems',
+    'el-GR': 'Προβλήματα Πληρωμής'
+  },
+  securityConcerns: {
+    'en-GB': 'Security Concerns',
+    'el-GR': 'Ανησυχίες Ασφάλειας'
+  },
+  accountIssues: {
+    'en-GB': 'Account Issues',
+    'el-GR': 'Προβλήματα Λογαριασμού'
+  },
+  critical: {
+    'en-GB': 'Critical',
+    'el-GR': 'Κρίσιμο'
+  },
+  high: {
+    'en-GB': 'High',
+    'el-GR': 'Υψηλό'
+  },
+  medium: {
+    'en-GB': 'Medium',
+    'el-GR': 'Μέτριο'
+  },
+  low: {
+    'en-GB': 'Low',
+    'el-GR': 'Χαμηλό'
+  },
+  detailedDescription: {
+    'en-GB': 'Detailed Description',
+    'el-GR': 'Λεπτομερής Περιγραφή'
+  },
+  detailedDescriptionPlaceholder: {
+    'en-GB': 'Please provide a detailed description of the issue, including steps to reproduce if applicable...',
+    'el-GR': 'Παρακαλώ δώστε μια λεπτομερή περιγραφή του προβλήματος, συμπεριλαμβανομένων των βημάτων αναπαραγωγής εάν είναι εφαρμόσιμο...'
+  },
+  requiredFields: {
+    'en-GB': '* Required fields',
+    'el-GR': '* Υποχρεωτικά πεδία'
+  },
+  submitReport: {
+    'en-GB': 'Submit Report',
+    'el-GR': 'Υποβολή Αναφοράς'
+  },
+  submitting: {
+    'en-GB': 'Submitting...',
+    'el-GR': 'Υποβολή...'
+  },
+  issueReportSubmitted: {
+    'en-GB': 'Issue Report Submitted',
+    'el-GR': 'Η Αναφορά Προβλήματος Υποβλήθηκε'
+  },
+  issueReportSubmittedDesc: {
+    'en-GB': 'Your issue report has been submitted successfully. Our team will review it.',
+    'el-GR': 'Η αναφορά προβλήματος υποβλήθηκε επιτυχώς. Η ομάδα μας θα την εξετάσει.'
+  },
+  submissionFailed: {
+    'en-GB': 'Submission Failed',
+    'el-GR': 'Η Υποβολή Απέτυχε'
+  },
+  submissionFailedDesc: {
+    'en-GB': 'Failed to submit issue report. Please try again.',
+    'el-GR': 'Αποτυχία υποβολής αναφοράς προβλήματος. Παρακαλώ δοκιμάστε ξανά.'
+  },
+  missingInformation: {
+    'en-GB': 'Missing Information',
+    'el-GR': 'Λείπουν Πληροφορίες'
+  },
+  missingInformationDesc: {
+    'en-GB': 'Please fill in all required fields.',
+    'el-GR': 'Παρακαλώ συμπληρώστε όλα τα υποχρεωτικά πεδία.'
   },
 
   // Account Information
