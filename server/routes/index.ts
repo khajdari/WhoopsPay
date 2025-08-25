@@ -410,6 +410,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/pending-requests', isAuthenticated, MoneyRequestController.getPendingRequests);
   app.post('/api/money-request', isAuthenticated, MoneyRequestController.createInternalRequest);
   app.post('/api/requests/:requestId/approve', isAuthenticated, MoneyRequestController.approveRequest);
+  // Test route to verify controller binding
+  app.post('/api/test-reject', (req, res) => {
+    console.log('🔴 TEST REJECT ROUTE HIT');
+    res.json({ message: 'Test route works' });
+  });
+  
   app.post('/api/requests/:requestId/reject', isAuthenticated, MoneyRequestController.rejectRequest);
   app.post('/api/external-payment-request', MoneyRequestController.createExternalRequest);
   app.post('/api/assign-external-request', isAuthenticated, MoneyRequestController.assignExternalRequestToUser);
