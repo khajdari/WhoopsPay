@@ -44,9 +44,11 @@ export default function IssueReporting() {
   const { t } = useI18n();
   const [showForm, setShowForm] = useState(false);
 
-  const { data: userIssues = [], isLoading } = useQuery<IssueReport[]>({
+  const { data: userIssuesResponse = { data: [] }, isLoading } = useQuery<{ success: boolean; data: IssueReport[] }>({
     queryKey: ["/api/issues/user"],
   });
+
+  const userIssues = userIssuesResponse.data || [];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
