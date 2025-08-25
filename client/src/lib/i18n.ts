@@ -368,6 +368,19 @@ interface Translations {
   justNow: TranslationKey;
   unknownTime: TranslationKey;
   
+  // Money request modal translations
+  moneyRequestDetails: TranslationKey;
+  onUsMoneyRequest: TranslationKey;
+  offUsPaymentRequest: TranslationKey;
+  fromColon: TranslationKey;
+  descriptionColon: TranslationKey;
+  requested: TranslationKey;
+  rejectButton: TranslationKey;
+  approvePayment: TranslationKey;
+  approving: TranslationKey;
+  rejecting: TranslationKey;
+  externalMerchant: TranslationKey;
+  
   secureProtection: TranslationKey;
   secureProtectionDesc: TranslationKey;
   mobileApp: TranslationKey;
@@ -1572,6 +1585,52 @@ const translations: Translations = {
   unknownTime: {
     'en-GB': 'Unknown time',
     'el-GR': 'Άγνωστη ώρα'
+  },
+  
+  // Money request modal translations
+  moneyRequestDetails: {
+    'en-GB': 'Money Request Details',
+    'el-GR': 'Λεπτομέρειες Αιτήματος Χρημάτων'
+  },
+  onUsMoneyRequest: {
+    'en-GB': 'On-Us Money Request',
+    'el-GR': 'Εσωτερικό Αίτημα Χρημάτων'
+  },
+  offUsPaymentRequest: {
+    'en-GB': 'Off-Us Payment Request',
+    'el-GR': 'Εξωτερικό Αίτημα Πληρωμής'
+  },
+  fromColon: {
+    'en-GB': 'From:',
+    'el-GR': 'Από:'
+  },
+  descriptionColon: {
+    'en-GB': 'Description:',
+    'el-GR': 'Περιγραφή:'
+  },
+  requested: {
+    'en-GB': 'Requested:',
+    'el-GR': 'Αιτήθηκε:'
+  },
+  rejectButton: {
+    'en-GB': 'Reject',
+    'el-GR': 'Απόρριψη'
+  },
+  approvePayment: {
+    'en-GB': 'Approve Payment',
+    'el-GR': 'Έγκριση Πληρωμής'
+  },
+  approving: {
+    'en-GB': 'Approving...',
+    'el-GR': 'Έγκριση...'
+  },
+  rejecting: {
+    'en-GB': 'Rejecting...',
+    'el-GR': 'Απόρριψη...'
+  },
+  externalMerchant: {
+    'en-GB': 'External Merchant',
+    'el-GR': 'Εξωτερικός Έμπορος'
   },
 
   // Account Information

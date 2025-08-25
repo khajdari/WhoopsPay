@@ -7,6 +7,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { formatDistanceToNow } from "date-fns";
+import { el } from "date-fns/locale";
+import { useI18n } from "@/lib/i18n";
 import { 
   Check, 
   X, 
@@ -32,6 +34,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
   const [isRejecting, setIsRejecting] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { t, language } = useI18n();
 
   const approveMutation = useMutation({
     mutationFn: async (requestId: number) => {
@@ -147,7 +150,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
     if (request.isExternal || request.type === 'external') {
       return {
         icon: <ExternalLink className="w-5 h-5 text-orange-800" />,
-        label: "Off-Us Payment Request",
+        label: t('offUsPaymentRequest'),
         bgColor: "bg-orange-50",
         borderColor: "border-orange-200",
         badgeColor: "bg-orange-100 text-orange-800"
@@ -155,7 +158,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
     }
     return {
       icon: <User className="w-5 h-5 text-blue-600" />,
-      label: "On-Us Money Request",
+      label: t('onUsMoneyRequest'),
       bgColor: "bg-blue-50", 
       borderColor: "border-blue-200",
       badgeColor: "bg-blue-100 text-blue-800"
@@ -174,7 +177,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
               : 'text-blue-600'
           }`}>
             {typeInfo.icon}
-            Money Request Details
+            {t('moneyRequestDetails')}
           </DialogTitle>
         </DialogHeader>
 
@@ -207,14 +210,14 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
                 : 'text-blue-600'
             }`}>
               <User className="w-4 h-4" />
-              <span className="font-medium">From:</span>
+              <span className="font-medium">{t('fromColon')}</span>
             </div>
             {request.isExternal ? (
               <div className="pl-6">
                 <p className="font-medium text-gray-900">
                   {request.fromUser?.firstName} {request.fromUser?.lastName}
                 </p>
-                <p className="text-sm text-gray-600">External Merchant</p>
+                <p className="text-sm text-gray-600">{t('externalMerchant')}</p>
               </div>
             ) : (
               <div className="pl-6">
@@ -237,7 +240,7 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
                 : 'text-blue-600'
             }`}>
               <FileText className="w-4 h-4" />
-              <span className="font-medium">Description:</span>
+              <span className="font-medium">{t('descriptionColon')}</span>
             </div>
             <p className="pl-6 text-gray-900">{request.description}</p>
           </div>
@@ -285,10 +288,13 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
                 : 'text-blue-600'
             }`}>
               <Clock className="w-4 h-4" />
-              <span className="font-medium">Requested:</span>
+              <span className="font-medium">{t('requested')}</span>
             </div>
             <p className="pl-6 text-sm text-gray-900">
-              {formatDistanceToNow(new Date(request.createdAt), { addSuffix: true })}
+              {formatDistanceToNow(new Date(request.createdAt), { 
+                addSuffix: true,
+                locale: language === 'el-GR' ? el : undefined 
+              })}
             </p>
             <p className="pl-6 text-xs text-gray-500">
               {new Date(request.createdAt).toLocaleString()}
@@ -306,12 +312,12 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
               {isRejecting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Rejecting...
+                  {t('rejecting')}
                 </>
               ) : (
                 <>
                   <X className="h-4 w-4 mr-2" />
-                  Reject
+                  {t('rejectButton')}
                 </>
               )}
             </Button>
@@ -328,12 +334,12 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
               {isApproving ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Approving...
+                  {t('approving')}
                 </>
               ) : (
                 <>
                   <Check className="h-4 w-4 mr-2" />
-                  Approve Payment
+                  {t('approvePayment')}
                 </>
               )}
             </Button>
