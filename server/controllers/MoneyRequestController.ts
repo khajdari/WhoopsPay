@@ -262,6 +262,16 @@ export class MoneyRequestController {
         return res.status(404).json({ message: "Request not found" });
       }
 
+      // Debug logging
+      console.log(`DEBUG - Reject request attempt:`);
+      console.log(`  requestId: ${requestId}`);
+      console.log(`  userId: ${userId}`);
+      console.log(`  request.type: ${request.type}`);
+      console.log(`  request.fromUserId: ${request.fromUserId}`);
+      console.log(`  request.toUserId: ${request.toUserId}`);
+      console.log(`  Authorization check: request.type === "internal" && request.toUserId !== userId`);
+      console.log(`  Check result: ${request.type === "internal"} && ${request.toUserId !== userId} = ${request.type === "internal" && request.toUserId !== userId}`);
+
       // Check if user is authorized to reject this request (for internal requests)
       if (request.type === "internal" && request.toUserId !== userId) {
         return res.status(403).json({ message: "You can only reject requests sent to you" });
