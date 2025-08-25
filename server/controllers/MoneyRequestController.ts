@@ -299,7 +299,7 @@ export class MoneyRequestController {
         await storage.createNotification({
           userId: request.toUserId, // Send notification to the person who made the request
           type: "money_request_rejected",
-          title: "Money Request Rejected",
+          title: "Αίτημα Απορρίφθηκε",
           message: `${rejectorUser?.firstName || rejectorUser?.email} rejected your request for ¤${request.amount}${request.description ? ` for: ${request.description}` : ''}`,
           isRead: 0
         });

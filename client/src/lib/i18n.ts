@@ -1199,6 +1199,14 @@ const translations: Translations = {
     'en-GB': 'The money request has been rejected.',
     'el-GR': 'Το αίτημα χρημάτων απορρίφθηκε.'
   },
+  requestRejectedNotification: {
+    'en-GB': '{name} rejected your request for ¤{amount}{description}',
+    'el-GR': 'Ο/Η {name} απέρριψε το αίτημά σας για ¤{amount}{description}'
+  },
+  requestRejectedFor: {
+    'en-GB': ' for: {description}',
+    'el-GR': ' για: {description}'
+  },
   insufficientFunds: {
     'en-GB': 'Insufficient funds',
     'el-GR': 'Ανεπαρκή κεφάλαια'
