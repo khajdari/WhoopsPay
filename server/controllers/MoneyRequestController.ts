@@ -400,6 +400,8 @@ export class MoneyRequestController {
         cancelUrl,
         externalMetadata 
       } = req.body;
+      
+      console.log("🔍 Creating external request with data:", { amount, toUserId, externalOrderId, externalSource, description });
 
       // VULNERABLE: Minimal validation
       if (!amount || !toUserId) {
@@ -423,21 +425,28 @@ export class MoneyRequestController {
         cancelUrl: adaptedCancelUrl,
         externalMetadata: externalMetadata
       });
+      
+      console.log("✅ External request created:", request);
 
-      // Create notification for the target user
-      try {
-        const user = await storage.getUser(toUserId);
-        if (user) {
-          await storage.createNotification({
-            userId: toUserId,
-            type: "external_payment",
-            title: "External Payment Request",
-            message: `External payment request for $${amount} from ${externalSource || 'External Source'}`,
-            isRead: 0
-          });
+      // Create notification for the target user ONLY if not pending-user-selection
+      if (toUserId && toUserId !== "pending-user-selection") {
+        try {
+          const user = await storage.getUser(toUserId);
+          if (user) {
+            await storage.createNotification({
+              userId: toUserId,
+              type: "external_payment",
+              title: "External Payment Request",
+              message: `External payment request for $${amount} from ${externalSource || 'External Source'}`,
+              isRead: 0
+            });
+            console.log("✅ Notification created for:", toUserId);
+          }
+        } catch (notificationError) {
+          console.error("❌ Error creating notification:", notificationError);
         }
-      } catch (notificationError) {
-        console.error("Error creating notification:", notificationError);
+      } else {
+        console.log("⏳ Request created with pending-user-selection, no immediate notification");
       }
 
       res.json({
@@ -446,7 +455,7 @@ export class MoneyRequestController {
         status: "pending"
       });
     } catch (error) {
-      console.error("Error creating external request:", error);
+      console.error("❌ Error creating external request:", error);
       res.status(500).json({ message: "Failed to create external request" });
     }
   }
@@ -458,11 +467,14 @@ export class MoneyRequestController {
   static async assignAllPendingExternalRequests(req: any, res: Response) {
     try {
       const userId = req.user.id;
+      console.log("🔍 Looking for unassigned external requests for user:", userId);
 
       // Find ALL pending external requests
       const unassignedRequests = await storage.getAllUnassignedExternalRequests();
+      console.log("🔍 Found unassigned external requests:", unassignedRequests.length, unassignedRequests);
       
       if (unassignedRequests.length === 0) {
+        console.log("❌ No pending external requests to assign");
         return res.json({ message: "No pending external requests to assign", count: 0 });
       }
       
@@ -471,6 +483,8 @@ export class MoneyRequestController {
       // Assign each unassigned external request to this user
       for (const request of unassignedRequests) {
         try {
+          console.log("🔄 Assigning external request:", request.id, "to user:", userId);
+          
           // Delete the old unassigned request
           await storage.deleteMoneyRequest(request.id);
 
@@ -488,6 +502,7 @@ export class MoneyRequestController {
             cancelUrl: request.cancelUrl,
             externalMetadata: request.externalMetadata
           });
+          console.log("✅ New assigned request created:", newRequest.id);
 
           // Create notification for the user
           await storage.createNotification({
@@ -497,19 +512,21 @@ export class MoneyRequestController {
             message: `Payment request from ${request.externalSource} for ¤${request.amount.toFixed(2)}`,
             isRead: 0
           });
+          console.log("✅ Notification created for assignment");
           
           assignedCount++;
         } catch (error) {
-          console.error(`Error assigning external request ${request.id}:`, error);
+          console.error(`❌ Error assigning external request ${request.id}:`, error);
         }
       }
 
+      console.log("✅ Assignment complete. Total assigned:", assignedCount);
       res.json({
         message: `Successfully assigned ${assignedCount} external payment requests`,
         count: assignedCount
       });
     } catch (error) {
-      console.error("Error assigning external requests:", error);
+      console.error("❌ Error assigning external requests:", error);
       res.status(500).json({ message: "Failed to assign external requests" });
     }
   }
