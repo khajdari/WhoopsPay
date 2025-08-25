@@ -164,8 +164,8 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
         }, 100);
       } else {
         toast({
-          title: "Payment Rejected",
-          description: "The money request has been rejected.",
+          title: t('paymentRejected'),
+          description: t('requestRejectedMessage'),
           className: "bg-red-50 border-red-600 text-red-800",
         });
         onClose();

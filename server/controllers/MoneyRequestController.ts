@@ -248,15 +248,9 @@ export class MoneyRequestController {
    * VULNERABILITY: No authorization check
    */
   static async rejectRequest(req: any, res: Response) {
-    console.log('🔴 REJECT REQUEST METHOD CALLED');
-    console.log('Request params:', req.params);
-    console.log('User from req:', req.user);
-    
     try {
       const { requestId } = req.params;
       const userId = req.user?.id;
-      
-      console.log('🔴 Processing reject request:', { requestId, userId });
       
       if (!userId) {
         return res.status(401).json({ message: "Unauthorized" });
@@ -267,16 +261,6 @@ export class MoneyRequestController {
       if (!request) {
         return res.status(404).json({ message: "Request not found" });
       }
-
-      // Debug logging
-      console.log(`DEBUG - Reject request attempt:`);
-      console.log(`  requestId: ${requestId}`);
-      console.log(`  userId: ${userId}`);
-      console.log(`  request.type: ${request.type}`);
-      console.log(`  request.fromUserId: ${request.fromUserId}`);
-      console.log(`  request.toUserId: ${request.toUserId}`);
-      console.log(`  Authorization check: request.type === "internal" && request.toUserId !== userId`);
-      console.log(`  Check result: ${request.type === "internal"} && ${request.toUserId !== userId} = ${request.type === "internal" && request.toUserId !== userId}`);
 
       // Check if user is authorized to reject this request (for internal requests)
       if (request.type === "internal" && request.toUserId !== userId) {
