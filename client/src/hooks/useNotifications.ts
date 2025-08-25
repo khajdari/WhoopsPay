@@ -109,9 +109,15 @@ export function useNotifications() {
         
         // Translate notification titles and messages
         const translateNotificationText = (title: string, message: string) => {
-          // Translate "External Payment Request" title
+          // Translate notification titles
           if (title === "External Payment Request") {
             title = t('notificationExternalPaymentRequest');
+          } else if (title === "Money Request Approved") {
+            title = t('moneyRequestApproved');
+          } else if (title === "Payment Received") {
+            title = t('paymentReceived');
+          } else if (title === "Payment Sent") {
+            title = t('paymentSent');
           }
           
           // Translate payment request messages 
@@ -121,6 +127,33 @@ export function useNotifications() {
             const [, source, amount] = match;
             const template = t('paymentRequestFromSource');
             message = template.replace('{{source}}', source).replace('{{amount}}', amount);
+          }
+
+          // Translate approval messages like "Maria approved your request for ¤100 for: Project bonus payment"
+          const approvalPattern = /^(.+) approved your request for ¤([0-9.]+)(.*)$/;
+          const approvalMatch = message.match(approvalPattern);
+          if (approvalMatch) {
+            const [, approver, amount, description] = approvalMatch;
+            const template = t('approvedYourRequestMessage');
+            message = template.replace('{{approver}}', approver).replace('{{amount}}', amount).replace('{{description}}', description);
+          }
+
+          // Translate payment received messages like "You received ¤100 from Maria for: Project bonus payment"
+          const receivedPattern = /^You received ¤([0-9.]+) from (.+)(.*)$/;
+          const receivedMatch = message.match(receivedPattern);
+          if (receivedMatch) {
+            const [, amount, sender, description] = receivedMatch;
+            const template = t('youReceivedMessage');
+            message = template.replace('{{amount}}', amount).replace('{{sender}}', sender).replace('{{description}}', description);
+          }
+
+          // Translate payment sent messages like "You sent ¤100 to Maria for: Project bonus payment"  
+          const sentPattern = /^You sent ¤([0-9.]+) to (.+)(.*)$/;
+          const sentMatch = message.match(sentPattern);
+          if (sentMatch) {
+            const [, amount, recipient, description] = sentMatch;
+            const template = t('youSentMessage');
+            message = template.replace('{{amount}}', amount).replace('{{recipient}}', recipient).replace('{{description}}', description);
           }
           
           return { title, message };

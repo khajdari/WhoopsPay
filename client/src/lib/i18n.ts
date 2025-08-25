@@ -570,6 +570,11 @@ interface Translations {
   // Notification translations  
   notificationExternalPaymentRequest: TranslationKey;
   paymentRequestFromSource: TranslationKey;
+  moneyRequestApproved: TranslationKey;
+  paymentSent: TranslationKey;
+  approvedYourRequestMessage: TranslationKey;
+  youReceivedMessage: TranslationKey;
+  youSentMessage: TranslationKey;
 }
 
 const translations: Translations = {
@@ -2388,6 +2393,26 @@ const translations: Translations = {
   paymentRequestFromSource: {
     'en-GB': 'Payment request from {{source}} for ¤{{amount}}',
     'el-GR': 'Αίτημα πληρωμής από {{source}} για ¤{{amount}}'
+  },
+  moneyRequestApproved: {
+    'en-GB': 'Money Request Approved',
+    'el-GR': 'Αίτημα Εγκρίθηκε'
+  },
+  paymentSent: {
+    'en-GB': 'Payment Sent',
+    'el-GR': 'Πληρωμή Στάλθηκε'
+  },
+  approvedYourRequestMessage: {
+    'en-GB': '{{approver}} approved your request for ¤{{amount}}{{description}}',
+    'el-GR': '{{approver}} ενέκρινε το αίτημά σας για ¤{{amount}}{{description}}'
+  },
+  youReceivedMessage: {
+    'en-GB': 'You received ¤{{amount}} from {{sender}}{{description}}',
+    'el-GR': 'Λάβατε ¤{{amount}} από {{sender}}{{description}}'
+  },
+  youSentMessage: {
+    'en-GB': 'You sent ¤{{amount}} to {{recipient}}{{description}}',
+    'el-GR': 'Στείλατε ¤{{amount}} σε {{recipient}}{{description}}'
   }
 };
 
