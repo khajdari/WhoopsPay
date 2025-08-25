@@ -71,8 +71,22 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
       }
     },
     onError: (error: any) => {
+      // If request is not pending anymore, close modal and refresh data
+      if (error.message?.includes("Request is not pending") || error.message?.includes("not pending")) {
+        toast({
+          title: "Request Already Processed",
+          description: "This request has already been processed or is no longer available.",
+          variant: "destructive",
+          className: "bg-orange-50 border-orange-600 text-orange-800",
+        });
+        // Close modal and refresh data
+        onClose();
+        queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
+        return;
+      }
+      
       toast({
-        title: "Approval Failed",
+        title: "Approval Failed", 
         description: error.message || "Failed to approve request",
         variant: "destructive",
         className: "bg-red-50 border-red-600 text-red-800",
@@ -115,6 +129,20 @@ export default function MoneyRequestModal({ request, isOpen, onClose, onExternal
       }
     },
     onError: (error: any) => {
+      // If request is not pending anymore, close modal and refresh data
+      if (error.message?.includes("Request is not pending") || error.message?.includes("not pending")) {
+        toast({
+          title: "Request Already Processed",
+          description: "This request has already been processed or is no longer available.",
+          variant: "destructive", 
+          className: "bg-orange-50 border-orange-600 text-orange-800",
+        });
+        // Close modal and refresh data
+        onClose();
+        queryClient.invalidateQueries({ queryKey: ["/api/pending-requests"] });
+        return;
+      }
+      
       toast({
         title: "Rejection Failed",
         description: error.message || "Failed to reject request",
