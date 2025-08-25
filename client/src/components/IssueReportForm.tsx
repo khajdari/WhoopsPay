@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { AlertTriangle, FileText, Send } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 interface IssueReportFormProps {
   onSubmitSuccess?: () => void;
@@ -21,6 +22,7 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
   const [priority, setPriority] = useState("");
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { t } = useI18n();
 
   const submitIssueMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -28,8 +30,8 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
     },
     onSuccess: () => {
       toast({
-        title: "Issue Report Submitted",
-        description: "Your issue report has been submitted successfully. Our team will review it.",
+        title: t('issueReportSubmitted'),
+        description: t('issueReportSubmittedDesc'),
       });
       
       // Reset form
@@ -47,8 +49,8 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
     },
     onError: (error) => {
       toast({
-        title: "Submission Failed",
-        description: "Failed to submit issue report. Please try again.",
+        title: t('submissionFailed'),
+        description: t('submissionFailedDesc'),
         variant: "destructive",
       });
     },
@@ -59,8 +61,8 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
     
     if (!title || !description || !category || !priority) {
       toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields.",
+        title: t('missingInformation'),
+        description: t('missingInformationDesc'),
         variant: "destructive",
       });
       return;
@@ -99,56 +101,56 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <FileText className="h-5 w-5" />
-          Submit Issue Report
+          {t('submitIssueReport')}
         </CardTitle>
         <CardDescription>
-          Report any issues, bugs, or concerns you encounter while using WhoopsPay
+          {t('reportIssuesDesc')}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Issue Title *</Label>
+            <Label htmlFor="title">{t('issueTitle')} *</Label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Brief description of the issue"
+              placeholder={t('issueTitlePlaceholder')}
               required
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="category">Category *</Label>
+              <Label htmlFor="category">{t('category')} *</Label>
               <Select value={category} onValueChange={setCategory} required>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder={t('selectCategory')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="technical">
                     <span className="flex items-center gap-2">
-                      🔧 Technical Issues
+                      🔧 {t('technicalIssues')}
                     </span>
                   </SelectItem>
                   <SelectItem value="payment">
                     <span className="flex items-center gap-2">
-                      💳 Payment Problems
+                      💳 {t('paymentProblems')}
                     </span>
                   </SelectItem>
                   <SelectItem value="security">
                     <span className="flex items-center gap-2">
-                      🔒 Security Concerns
+                      🔒 {t('securityConcerns')}
                     </span>
                   </SelectItem>
                   <SelectItem value="account">
                     <span className="flex items-center gap-2">
-                      👤 Account Issues
+                      👤 {t('accountIssues')}
                     </span>
                   </SelectItem>
                   <SelectItem value="other">
                     <span className="flex items-center gap-2">
-                      📝 Other
+                      📝 {t('other')}
                     </span>
                   </SelectItem>
                 </SelectContent>
@@ -156,31 +158,31 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="priority">Priority *</Label>
+              <Label htmlFor="priority">{t('priority')} *</Label>
               <Select value={priority} onValueChange={setPriority} required>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select priority" />
+                  <SelectValue placeholder={t('selectPriority')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="critical">
                     <span className="flex items-center gap-2 text-red-600 dark:text-red-400">
                       <AlertTriangle className="h-4 w-4" />
-                      Critical
+                      {t('critical')}
                     </span>
                   </SelectItem>
                   <SelectItem value="high">
                     <span className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
-                      High
+                      {t('high')}
                     </span>
                   </SelectItem>
                   <SelectItem value="medium">
                     <span className="flex items-center gap-2 text-yellow-600 dark:text-yellow-400">
-                      Medium
+                      {t('medium')}
                     </span>
                   </SelectItem>
                   <SelectItem value="low">
                     <span className="flex items-center gap-2 text-green-600 dark:text-green-400">
-                      Low
+                      {t('low')}
                     </span>
                   </SelectItem>
                 </SelectContent>
@@ -189,12 +191,12 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Detailed Description *</Label>
+            <Label htmlFor="description">{t('detailedDescription')} *</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Please provide a detailed description of the issue, including steps to reproduce if applicable..."
+              placeholder={t('detailedDescriptionPlaceholder')}
               rows={6}
               required
             />
@@ -202,7 +204,7 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
 
           <div className="flex items-center justify-between pt-4">
             <div className="text-sm text-muted-foreground">
-              * Required fields
+              {t('requiredFields')}
             </div>
             <Button 
               type="submit" 
@@ -212,12 +214,12 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
               {submitIssueMutation.isPending ? (
                 <>
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                  Submitting...
+                  {t('submitting')}
                 </>
               ) : (
                 <>
                   <Send className="h-4 w-4" />
-                  Submit Report
+                  {t('submitReport')}
                 </>
               )}
             </Button>
