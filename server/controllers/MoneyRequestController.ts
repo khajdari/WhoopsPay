@@ -76,8 +76,9 @@ export class MoneyRequestController {
         return res.status(404).json({ message: "Request not found" });
       }
 
-      // Check if user is authorized to approve this request (for internal requests)
-      if (request.type === "internal" && request.fromUserId !== userId) {
+      // Check if user is authorized to approve this request
+      // FIXED: User should be able to approve requests TO them (toUserId), not FROM them (fromUserId)
+      if (request.toUserId !== userId) {
         return res.status(403).json({ message: "You can only approve requests sent to you" });
       }
 
@@ -90,6 +91,33 @@ export class MoneyRequestController {
 
       // Check if this is an external request (from juice-shop or other external sources)
       if (request.type === "external" && request.externalSource) {
+        // FIXED: Process balance transfer for external requests too!
+        const toUser = await storage.getUser(request.toUserId);
+        
+        if (toUser) {
+          const transferAmount = parseFloat(request.amount.toString());
+          const currentBalance = parseFloat(toUser.balance || '0');
+          const newBalance = currentBalance + transferAmount; // External requests ADD money to user balance
+          
+          console.log(`💰 External payment approved: Adding $${transferAmount} to ${request.toUserId} (${currentBalance} -> ${newBalance})`);
+          await storage.updateUserBalance(request.toUserId, newBalance.toFixed(2));
+
+          // Create transaction record for external payment
+          await storage.createTransaction({
+            fromUserId: request.externalSource || "external",
+            toUserId: request.toUserId,
+            amount: transferAmount,
+            type: "external",
+            status: "completed",
+            description: request.description,
+            metadata: JSON.stringify({
+              externalOrderId: request.externalOrderId,
+              externalSource: request.externalSource
+            })
+          });
+          console.log(`✅ Transaction record created for external payment`);
+        }
+
         console.log("Sending external redirect response:", {
           message: 'External payment approved successfully',
           redirect: true,
