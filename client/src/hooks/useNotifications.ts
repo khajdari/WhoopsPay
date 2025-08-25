@@ -21,6 +21,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DollarSign, CreditCard, Shield, ExternalLink, Check, X } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/lib/i18n";
 
 /**
  * Notification Interface - Notification data structure
@@ -54,6 +55,7 @@ interface Notification {
  */
 export function useNotifications() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const queryClient = useQueryClient();
   const [localNotifications, setLocalNotifications] = useState<Notification[]>([]);
 
@@ -105,11 +107,32 @@ export function useNotifications() {
         
         const { icon, color } = getIconAndColor(notif.type);
         
+        // Translate notification titles and messages
+        const translateNotificationText = (title: string, message: string) => {
+          // Translate "External Payment Request" title
+          if (title === "External Payment Request") {
+            title = t('notificationExternalPaymentRequest');
+          }
+          
+          // Translate payment request messages 
+          const paymentRequestPattern = /^Payment request from (.+) for ¤(.+)$/;
+          const match = message.match(paymentRequestPattern);
+          if (match) {
+            const [, source, amount] = match;
+            const template = t('paymentRequestFromSource');
+            message = template.replace('{{source}}', source).replace('{{amount}}', amount);
+          }
+          
+          return { title, message };
+        };
+        
+        const { title: translatedTitle, message: translatedMessage } = translateNotificationText(notif.title, notif.message);
+        
         return {
           id: notif.id,
           type: notif.type,
-          title: notif.title,
-          message: notif.message,
+          title: translatedTitle,
+          message: translatedMessage,
           time: new Date(notif.createdAt).toLocaleString(),
           read: notif.read,
           icon: icon,

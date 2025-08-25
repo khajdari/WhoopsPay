@@ -566,6 +566,10 @@ interface Translations {
   paymentRejectedMessage: TranslationKey;
   redirectingCountdown: TranslationKey;
   secondsText: TranslationKey;
+  
+  // Notification translations  
+  notificationExternalPaymentRequest: TranslationKey;
+  paymentRequestFromSource: TranslationKey;
 }
 
 const translations: Translations = {
@@ -2374,6 +2378,16 @@ const translations: Translations = {
   secondsText: {
     'en-GB': 'seconds...',
     'el-GR': 'δευτερόλεπτα...'
+  },
+  
+  // Notification translations
+  notificationExternalPaymentRequest: {
+    'en-GB': 'External Payment Request',
+    'el-GR': 'Αίτημα Εξωτερικής Πληρωμής'
+  },
+  paymentRequestFromSource: {
+    'en-GB': 'Payment request from {{source}} for ¤{{amount}}',
+    'el-GR': 'Αίτημα πληρωμής από {{source}} για ¤{{amount}}'
   }
 };
 
