@@ -484,7 +484,7 @@ export default function Dashboard() {
                           <div>
                             <div className="flex items-center gap-2">
                               <p className="font-medium text-gray-900">
-                                ¤{request.amount} from {request.fromUser?.firstName} {request.fromUser?.lastName}
+                                ¤{request.amount} {t('from')} {request.fromUser?.firstName} {request.fromUser?.lastName}
                               </p>
                               {(request.type === 'external' || request.isExternal) && (
                                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
