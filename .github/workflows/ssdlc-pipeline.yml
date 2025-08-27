@@ -209,8 +209,8 @@ jobs:
         run: |
           echo "Deploying to secure test environment..."
           
-          # Start application in test mode
-          npm start &
+          # Start application in development mode for testing
+          npm run dev &
           APP_PID=$!
           echo "Application PID: $APP_PID"
           
@@ -221,7 +221,7 @@ jobs:
           echo "status=deployed" >> $GITHUB_OUTPUT
           echo "✅ Application deployed at http://localhost:5000"
         env:
-          NODE_ENV: test
+          NODE_ENV: development
           DATABASE_URL: sqlite:./test.db
 
       - name: Verify deployment health
@@ -249,17 +249,17 @@ jobs:
           
           # Configure ZAP for educational platform
           cat > .zap/rules.tsv << 'EOF'
-          10011	IGNORE	(Cookie Slack Detector)
-          10015	IGNORE	(Incomplete Cache Control)
-          10027	INFO	(Information Disclosure)
-          10054	INFO	(Cookie Security)
-          10096	IGNORE	(Timestamp Disclosure)
-          10109	IGNORE	(Modern Web Application)
-          40012	INFO	(Cross Domain Script Inclusion)
-          40014	INFO	(Cross-Domain Misconfiguration)
-          40016	INFO	(Web Browser XSS Protection)
-          40017	INFO	(Cross-Domain JavaScript Source)
-          90001	IGNORE	(Insecure JSF ViewState)
+          10011 IGNORE  (Cookie Slack Detector)
+          10015 IGNORE  (Incomplete Cache Control)
+          10027 INFO    (Information Disclosure)
+          10054 INFO    (Cookie Security)
+          10096 IGNORE  (Timestamp Disclosure)
+          10109 IGNORE  (Modern Web Application)
+          40012 INFO    (Cross Domain Script Inclusion)
+          40014 INFO    (Cross-Domain Misconfiguration)
+          40016 INFO    (Web Browser XSS Protection)
+          40017 INFO    (Cross-Domain JavaScript Source)
+          90001 IGNORE  (Insecure JSF ViewState)
           EOF
           
           echo "OWASP ZAP configuration created"
