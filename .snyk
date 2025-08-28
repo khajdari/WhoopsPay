@@ -1,21 +1,8 @@
-# Snyk policy file for WhoopsPay educational security platform
+# Snyk policy file for WhoopsPay - FULL SECURITY SCANNING
 version: v1.0.0
 
-# Ignore educational vulnerabilities - these are intentional for training
-ignore:
-  SNYK-JS-*:
-    - '**/*educational*/**':
-        reason: 'Educational vulnerability for security training purposes'
-        expires: '2025-12-31T23:59:59.999Z'
-    - '**/*vulnerable*/**':
-        reason: 'Intentional security demonstration code'
-        expires: '2025-12-31T23:59:59.999Z'
-    - '**/*demo*/**':
-        reason: 'Demo vulnerability for training platform'
-        expires: '2025-12-31T23:59:59.999Z'
-    - '**/controllers/**':
-        reason: 'Contains intentional educational vulnerabilities'
-        expires: '2025-12-31T23:59:59.999Z'
+# NO IGNORES - Detect ALL vulnerabilities including educational ones
+ignore: {}
 
 # No patches applied
 patch: {}
@@ -25,14 +12,12 @@ language-settings:
   javascript: true
   typescript: true
 
-# Failure threshold - only fail on high severity real vulnerabilities
-failureThreshold: high
+# Failure threshold - detect all severities
+failureThreshold: low
 
-# Exclude test files and documentation
+# Minimal exclusions - only build artifacts
 exclude:
   global:
-    - '**/*.test.*'
-    - '**/test/**'
-    - '**/tests/**'
-    - '**/docs/**'
-    - '**/*.md'
+    - '**/node_modules/**'
+    - '**/dist/**'
+    - '**/build/**'
