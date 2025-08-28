@@ -80,6 +80,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.verbose=true
+            -Dsonar.pullrequest.github.summary_comment=true
+            -Dsonar.analysis.mode=publish
         continue-on-error: true
 
       - name: Set SonarCloud status
@@ -131,7 +136,15 @@ jobs:
             echo "✅ NPM audit completed as security fallback"
           else
             echo "✅ Snyk token configured - proceeding with scan"
+            echo "🔍 Token length: ${#SNYK_TOKEN}"
+            echo "🔍 Token prefix: ${SNYK_TOKEN:0:10}..."
+            # Test authentication with environment variable (no interactive auth needed)
+            echo "Testing Snyk authentication..."
+            npx snyk test --dry-run --json || echo "⚠️ Dry run test failed - will proceed anyway"
+            echo "✅ Snyk authentication check completed"
           fi
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Snyk dependency vulnerability scan
         uses: snyk/actions/node@master
