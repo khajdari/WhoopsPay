@@ -1,6 +1,7 @@
 /**
  * Domain Configuration for WhoopsPay and Juice Shop
  * Dynamically handles URLs based on environment
+ *
  */
 
 export interface DomainConfig {
