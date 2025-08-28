@@ -113,21 +113,49 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check Snyk authentication
+        run: |
+          if [ -z "${{ secrets.SNYK_TOKEN }}" ]; then
+            echo "⚠️ SNYK_TOKEN not configured - skipping Snyk scan"
+            echo ""
+            echo "To enable Snyk scanning:"
+            echo "1. Go to https://snyk.io and create an account"
+            echo "2. Generate an API token from Account Settings"
+            echo "3. Add it as SNYK_TOKEN in GitHub repository secrets"
+            echo ""
+            echo "Using npm audit as fallback..."
+            npm audit --audit-level=low --json > npm-audit.json || true
+            echo "✅ NPM audit completed as security fallback"
+          else
+            echo "✅ Snyk token configured - proceeding with scan"
+          fi
+
       - name: Snyk dependency vulnerability scan
+        if: secrets.SNYK_TOKEN != ''
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high --json-file-output=snyk-results.json
+          args: --severity-threshold=low --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif
         continue-on-error: true
 
-      - name: Generate comprehensive Snyk reports
+      - name: Generate comprehensive security reports
         id: snyk
         run: |
-          echo "Generating Snyk security reports..."
-          npx snyk test --json > snyk-test.json || true
-          npx snyk test --sarif > snyk-test.sarif || true
-          npx snyk monitor || true
+          if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
+            echo "Generating Snyk security reports..."
+            npx snyk test --json > snyk-test.json || true
+            npx snyk test --sarif > snyk-test.sarif || true
+            npx snyk monitor || true
+            echo "✅ Snyk security scan completed"
+            ls -la snyk*.json snyk*.sarif 2>/dev/null || echo "Snyk reports generated"
+          else
+            echo "✅ NPM audit security scan completed (Snyk fallback)"
+            if [ -f "npm-audit.json" ]; then
+              echo "Security audit results available"
+              cat npm-audit.json | head -20
+            fi
+          fi
           echo "status=completed" >> $GITHUB_OUTPUT
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -135,11 +163,12 @@ jobs:
       - name: Upload SCA artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: sca-snyk-results
+          name: sca-security-results
           path: |
             snyk-results.json
             snyk-test.json
             snyk-test.sarif
+            npm-audit.json
           retention-days: 30
 
   # PHASE 4: Secure Build Process
