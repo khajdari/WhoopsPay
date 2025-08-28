@@ -40,7 +40,7 @@ docker-compose down
 
 # FORCE CLEAN REBUILD (required for vite fix):
 docker-compose down --volumes --remove-orphans
-docker image rm paypwnedalpha-whoopspay:latest || true
+docker image rm whoopspay:latest || true
 docker system prune -f
 docker-compose build --no-cache whoopspay
 docker-compose up -d whoopspay
