@@ -254,23 +254,37 @@ jobs:
         run: |
           mkdir -p .zap
           
-          # Configure ZAP for educational platform
+          # Configure ZAP rules file - proper format without comments
           cat > .zap/rules.tsv << 'EOF'
-          # AGGRESSIVE SCANNING - DETECT ALL VULNERABILITIES
-          10011 WARN    (Cookie Slack Detector)
-          10015 WARN    (Incomplete Cache Control)
-          10027 WARN    (Information Disclosure)
-          10054 WARN    (Cookie Security)
-          10096 WARN    (Timestamp Disclosure)
-          10109 WARN    (Modern Web Application)
-          40012 WARN    (Cross Domain Script Inclusion)
-          40014 WARN    (Cross-Domain Misconfiguration)
-          40016 WARN    (Web Browser XSS Protection)
-          40017 WARN    (Cross-Domain JavaScript Source)
-          90001 WARN    (Insecure JSF ViewState)
-          EOF
+10011   WARN    (Cookie Slack Detector)
+10015   WARN    (Incomplete Cache Control)
+10027   WARN    (Information Disclosure)
+10054   WARN    (Cookie Security)
+10096   WARN    (Timestamp Disclosure)
+10109   WARN    (Modern Web Application)
+40012   WARN    (Cross Domain Script Inclusion)
+40014   WARN    (Cross-Domain Misconfiguration)
+40016   WARN    (Web Browser XSS Protection)
+40017   WARN    (Cross-Domain JavaScript Source)
+90001   WARN    (Insecure JSF ViewState)
+EOF
           
           echo "OWASP ZAP configuration created"
+          echo "Rules file content:"
+          cat .zap/rules.tsv
+
+      - name: Wait for application to be ready
+        run: |
+          echo "Waiting for application at ${{ needs.secure-deployment.outputs.app-url }}"
+          sleep 10
+          for i in {1..30}; do
+            if curl -s ${{ needs.secure-deployment.outputs.app-url }} | grep -q "WhoopsPay"; then
+              echo "Application is ready"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 5
+          done
 
       - name: OWASP ZAP baseline security scan
         id: zap
@@ -278,13 +292,39 @@ jobs:
         with:
           target: '${{ needs.secure-deployment.outputs.app-url }}'
           rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-a -j -T 30 -l High'
+          cmd_options: '-a -j -T 30 -l WARN'
         continue-on-error: true
 
       - name: Process ZAP results
         run: |
           echo "Processing OWASP ZAP scan results..."
-          ls -la *.html *.json *.md 2>/dev/null || echo "ZAP reports generated"
+          ls -la *.html *.json *.md 2>/dev/null || echo "No ZAP reports found"
+          
+          # Check if report files exist and show content
+          if [ -f "report_html.html" ]; then
+            echo "HTML report size: $(wc -c < report_html.html) bytes"
+            if [ -s "report_html.html" ]; then
+              echo "✅ HTML report generated successfully"
+            else
+              echo "⚠️ HTML report is empty"
+            fi
+          else
+            echo "❌ HTML report not found"
+          fi
+          
+          if [ -f "report_json.json" ]; then
+            echo "JSON report size: $(wc -c < report_json.json) bytes"
+            if [ -s "report_json.json" ]; then
+              echo "✅ JSON report generated successfully"
+              echo "First 500 characters of JSON report:"
+              head -c 500 report_json.json
+            else
+              echo "⚠️ JSON report is empty"
+            fi
+          else
+            echo "❌ JSON report not found"
+          fi
+          
           echo "status=completed" >> $GITHUB_OUTPUT
 
       - name: Upload DAST artifacts
