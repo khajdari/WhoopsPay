@@ -305,8 +305,11 @@ jobs:
     needs: [secure-build, dast-owasp-zap]
     if: success()
     outputs:
-      image-tags: ${{ steps.build.outputs.tags }}
+      image-tags: ${{ steps.meta.outputs.tags }}
       image-digest: ${{ steps.build.outputs.digest }}
+      semantic_version: ${{ steps.version.outputs.semantic_version }}
+      build_number: ${{ steps.version.outputs.build_number }}
+      timestamp: ${{ steps.version.outputs.timestamp }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -323,24 +326,53 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
+      - name: Generate version number
+        id: version
+        run: |
+          # Generate semantic version based on timestamp and PR
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          PR_NUMBER=${{ github.event.number }}
+          BRANCH_NAME=$(echo "${{ github.head_ref }}" | sed 's/[^a-zA-Z0-9._-]/-/g')
+          
+          # Create version tags
+          VERSION_MAJOR="1"
+          VERSION_MINOR=$(date +%m)
+          VERSION_PATCH="${TIMESTAMP}"
+          SEMANTIC_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
+          
+          # Set outputs
+          echo "semantic_version=${SEMANTIC_VERSION}" >> $GITHUB_OUTPUT
+          echo "timestamp=${TIMESTAMP}" >> $GITHUB_OUTPUT
+          echo "branch_safe=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+          echo "build_number=${PR_NUMBER}-${TIMESTAMP}" >> $GITHUB_OUTPUT
+          
+          echo "Generated version: ${SEMANTIC_VERSION}"
+          echo "Build number: ${PR_NUMBER}-${TIMESTAMP}"
+
       - name: Extract container metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=pr,prefix=vuln-fix-
-            type=raw,value=security-validated-{{date 'YYYYMMDD-HHmmss'}}
+            type=raw,value=${{ steps.version.outputs.semantic_version }}
+            type=raw,value=v${{ steps.version.outputs.semantic_version }}
+            type=raw,value=build-${{ steps.version.outputs.build_number }}
+            type=ref,event=pr,prefix=pr-,suffix=-${{ steps.version.outputs.timestamp }}
+            type=raw,value=${{ steps.version.outputs.branch_safe }}-${{ steps.version.outputs.timestamp }}
             type=raw,value=latest-secure
           labels: |
-            org.opencontainers.image.title=WhoopsPay Security Fixed
+            org.opencontainers.image.title=WhoopsPay Security Validated
             org.opencontainers.image.description=WhoopsPay with security validation from ${{ github.head_ref }}
+            org.opencontainers.image.version=${{ steps.version.outputs.semantic_version }}
             security.validated=true
             security.scanned.sast=true
             security.scanned.sca=true
             security.scanned.dast=true
             security.fix.branch=${{ github.head_ref }}
             security.fix.pr=${{ github.event.number }}
+            build.number=${{ steps.version.outputs.build_number }}
+            build.timestamp=${{ steps.version.outputs.timestamp }}
 
       - name: Build and push to Docker Hub
         id: build
@@ -357,8 +389,11 @@ jobs:
       - name: Container security verification
         run: |
           echo "✅ Container built and pushed to Docker Hub"
-          echo "Image tags: ${{ steps.meta.outputs.tags }}"
-          echo "Security labels applied and verified"
+          echo "🏷️  Version: ${{ steps.version.outputs.semantic_version }}"
+          echo "🔨 Build: ${{ steps.version.outputs.build_number }}"
+          echo "📦 Image tags:"
+          echo "${{ steps.meta.outputs.tags }}" | sed 's/,/\n/g' | sed 's/^/  - /'
+          echo "🔐 Security labels applied and verified"
 
   # PHASE 8: Security Compliance Report
   security-compliance:
@@ -404,9 +439,16 @@ jobs:
           
           echo "## 🐳 Validated Container Images" >> compliance-report.md
           echo "Security-validated images available on Docker Hub:" >> compliance-report.md
+          echo "" >> compliance-report.md
+          echo "### 📦 Image Tags:" >> compliance-report.md
           echo "\`\`\`" >> compliance-report.md
-          echo "${{ needs.docker-security.outputs.image-tags }}" >> compliance-report.md
+          echo "${{ needs.docker-security.outputs.image-tags }}" | sed 's/,/\n/g' >> compliance-report.md
           echo "\`\`\`" >> compliance-report.md
+          echo "" >> compliance-report.md
+          echo "### 🔢 Version Information:" >> compliance-report.md
+          echo "- **Semantic Version**: \`${{ needs.docker-security.outputs.semantic_version }}\`" >> compliance-report.md
+          echo "- **Build Number**: \`${{ needs.docker-security.outputs.build_number }}\`" >> compliance-report.md
+          echo "- **Timestamp**: \`${{ needs.docker-security.outputs.timestamp }}\`" >> compliance-report.md
           echo "" >> compliance-report.md
           
           echo "## 📋 Educational Security Notes" >> compliance-report.md
