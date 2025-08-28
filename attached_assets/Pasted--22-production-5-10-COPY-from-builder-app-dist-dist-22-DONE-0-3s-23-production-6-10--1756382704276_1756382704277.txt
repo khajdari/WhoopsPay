@@ -1,0 +1,45 @@
+#22 [production  5/10] COPY --from=builder /app/dist ./dist
+#22 DONE 0.3s
+
+#23 [production  6/10] COPY --from=builder /app/data ./data
+#23 DONE 0.0s
+
+#24 [production  7/10] COPY --from=builder /app/server/modules ./server/modules
+#24 DONE 0.0s
+
+#25 [production  8/10] COPY --from=builder /app/dist/public ./dist/client
+#25 DONE 0.0s
+
+#26 [production  9/10] RUN addgroup -g 1001 -S nodejs &&     adduser -S whoopspay -u 1001
+#26 DONE 0.1s
+
+#27 [production 10/10] RUN chown -R whoopspay:nodejs /app
+#27 DONE 26.9s
+
+#28 exporting to image
+#28 exporting layers
+#28 exporting layers 19.7s done
+#28 ...
+
+#29 [auth] ***/whoopspay:pull,push token for registry-1.docker.io
+#29 DONE 0.0s
+
+#28 exporting to image
+#28 exporting manifest sha256:86286ca00c66b1c8911580a6e8a9b0b33f950205cf6c6d9ae62572a052a21884 done
+#28 exporting config sha256:ed52f0a8a15a5a4038fc6456eabf909919787c20c36e574eca91fb5bb5cbafa7 done
+#28 exporting attestation manifest sha256:908fdb2f464c72da1f2c08018c82b92305770def9fb695c06c754dadd0272a01 done
+#28 exporting manifest list sha256:b3446d87ff5674d996f22af18a4ec9bb897c5880c6e72f8d12683e2d437bbac7 done
+#28 pushing layers
+#28 ...
+
+#30 [auth] ***/whoopspay:pull,push token for registry-1.docker.io
+#30 DONE 0.0s
+
+#28 exporting to image
+#28 pushing layers 0.2s done
+#28 ERROR: failed to push docker.io/***/whoopspay:vuln-fix-1: failed to authorize: failed to fetch oauth token: unexpected status from GET request to https://auth.docker.io/token?scope=repository%3A***%2Fwhoopspay%3Apull%2Cpush&service=registry.docker.io: 401 Unauthorized: access token has insufficient scopes
+------
+ > exporting to image:
+------
+ERROR: failed to build: failed to solve: failed to fetch oauth token: unexpected status from GET request to https://auth.docker.io/token?scope=repository%3A***%2Fwhoopspay%3Apull%2Cpush&service=registry.docker.io: 401 Unauthorized: access token has insufficient scopes
+Error: buildx failed with: ERROR: failed to build: failed to solve: failed to fetch oauth token: unexpected status from GET request to https://auth.docker.io/token?scope=repository%3A***%2Fwhoopspay%3Apull%2Cpush&service=registry.docker.io: 401 Unauthorized: access token has insufficient scopes
