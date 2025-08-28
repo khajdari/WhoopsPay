@@ -53,9 +53,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     definition: {
       openapi: '3.0.0',
       info: {
-        title: 'PayPwned API - Vulnerability Testing',
+        title: 'WhoopsPay API - Vulnerability Testing',
         version: '1.0.0',
-        description: 'API documentation for PayPwned - Contains intentional security vulnerabilities for educational purposes',
+        description: 'API documentation for WhoopsPay - Contains intentional security vulnerabilities for educational purposes',
       },
       servers: [
         {
