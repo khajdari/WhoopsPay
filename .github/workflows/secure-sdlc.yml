@@ -1,0 +1,18 @@
+# This file is deprecated
+# Use ssdlc-pipeline.yml instead
+
+name: Deprecated Secure SDLC
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deprecated:
+    name: "⚠️ Deprecated - Use ssdlc-pipeline.yml"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deprecated notice
+        run: |
+          echo "⚠️  This workflow is deprecated"
+          echo "✅ Use ssdlc-pipeline.yml instead"
+          echo "🔗 This pipeline triggers on pull requests to develop-vulnerable"
