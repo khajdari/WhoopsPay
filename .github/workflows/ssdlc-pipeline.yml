@@ -136,7 +136,14 @@ jobs:
             echo "✅ NPM audit completed as security fallback"
           else
             echo "✅ Snyk token configured - proceeding with scan"
+            echo "🔍 Token length: ${#SNYK_TOKEN}"
+            echo "🔍 Token prefix: ${SNYK_TOKEN:0:10}..."
+            # Test authentication
+            npx snyk auth ${{ secrets.SNYK_TOKEN }} || echo "⚠️ Authentication test failed"
+            npx snyk test --dry-run || echo "⚠️ Dry run test failed"
           fi
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Snyk dependency vulnerability scan
         uses: snyk/actions/node@master
