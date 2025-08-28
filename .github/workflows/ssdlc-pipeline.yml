@@ -422,15 +422,22 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const fs = require('fs');
-            const report = fs.readFileSync('compliance-report.md', 'utf8');
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: report
-            });
+            try {
+              const fs = require('fs');
+              const report = fs.readFileSync('compliance-report.md', 'utf8');
+              
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: report
+              });
+              console.log('✅ Security compliance report posted to PR');
+            } catch (error) {
+              console.log('⚠️ Could not post PR comment (permissions issue)');
+              console.log('📊 Security compliance report available in artifacts');
+            }
+        continue-on-error: true
 
       - name: SSDLC pipeline completion
         run: |
