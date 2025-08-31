@@ -453,8 +453,7 @@ jobs:
           target: 'http://localhost:5000'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a -j -T 30 -l WARN'
-          issue_title: false
-          create_issue: false
+          allow_issue_writing: false
         continue-on-error: true
 
       - name: Process ZAP results
