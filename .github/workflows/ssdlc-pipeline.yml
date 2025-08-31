@@ -394,7 +394,8 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `🔒 Pre-Validation Security Report - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
+            const title = `🔒 Pre-Validation Security Report - ${branchName}`;
             const body = `
             # 🔒 Pre-Validation Security Report
             
@@ -418,14 +419,15 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'pre-validation', 'automated-report']
+              labels: ['security', 'pre-validation', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
             });
 
       - name: Create SonarCloud Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `🔍 SonarCloud Static Analysis Report - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
+            const title = `🔍 SonarCloud Static Analysis Report - ${branchName}`;
             const body = `
             # 🔍 SonarCloud Static Analysis Report
             
@@ -450,14 +452,15 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sast', 'sonarcloud', 'automated-report']
+              labels: ['security', 'sast', 'sonarcloud', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
             });
 
       - name: Create Snyk Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `📦 Snyk Dependency Security Report - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
+            const title = `📦 Snyk Dependency Security Report - ${branchName}`;
             const body = `
             # 📦 Snyk Dependency Security Report
             
@@ -482,14 +485,15 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report']
+              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
             });
 
       - name: Create OWASP ZAP Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `🎯 OWASP ZAP Dynamic Security Report - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
+            const title = `🎯 OWASP ZAP Dynamic Security Report - ${branchName}`;
             const body = `
             # 🎯 OWASP ZAP Dynamic Security Report
             
@@ -514,14 +518,15 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report']
+              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
             });
 
       - name: Create Summary Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `📊 Security Pipeline Summary - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
+            const title = `📊 Security Pipeline Summary - ${branchName}`;
             const body = `
             # 📊 Complete Security Pipeline Summary
             
@@ -552,5 +557,5 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'pipeline-summary', 'automated-report']
+              labels: ['security', 'pipeline-summary', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
             });
