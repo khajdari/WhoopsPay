@@ -52,7 +52,7 @@ function generateHTML(sonarData, projectInfo) {
   
   // Generate issue rows
   function generateIssueRows(issues) {
-    return issues.slice(0, 50).map(issue => `
+    return issues.map(issue => `
       <tr class="issue-row ${issue.severity.toLowerCase()}">
         <td class="severity-cell">
           <span class="severity-tag ${issue.severity.toLowerCase()}">${issue.severity}</span>
@@ -180,7 +180,7 @@ function generateHTML(sonarData, projectInfo) {
         .card-bugs { background: linear-gradient(135deg, #e74c3c, #c0392b); }
         .card-vulnerabilities { background: linear-gradient(135deg, #e67e22, #d35400); }
         .card-code-smells { background: linear-gradient(135deg, #f39c12, #e67e22); }
-        .card-hotspots { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .card-hotspots { background: linear-gradient(135deg, #3498db, #2980b9); }
         
         .summary-card h3 {
             font-size: 2.5em;
@@ -264,7 +264,7 @@ function generateHTML(sonarData, projectInfo) {
         .type-tag.bug { background-color: #e74c3c; }
         .type-tag.vulnerability { background-color: #e67e22; }
         .type-tag.code_smell { background-color: #f39c12; }
-        .type-tag.security_hotspot { background-color: #9b59b6; }
+        .type-tag.security_hotspot { background-color: #3498db; }
         
         .footer {
             text-align: center;
@@ -347,7 +347,7 @@ function generateHTML(sonarData, projectInfo) {
         </div>
         
         <div class="issues-section">
-            <h2>🔍 Detailed Issues ${issues.length > 50 ? `(Showing first 50 of ${issues.length})` : ''}</h2>
+            <h2>🔍 Detailed Issues ${issues.length > 0 ? `(${issues.length} total)` : ''}</h2>
             ${issues.length > 0 ? `
             <table class="issues-table">
                 <thead>

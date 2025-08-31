@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SonarCloud Security Report - WhoopsPay v1.0.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .metadata {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .metadata h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .meta-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .summary {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .summary h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .summary-card {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .card-bugs { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .card-vulnerabilities { background: linear-gradient(135deg, #e67e22, #d35400); }
+        .card-code-smells { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .card-hotspots { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        
+        .summary-card h3 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .severity-overview {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .severity-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .severity-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .issues-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .issues-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .issues-table th {
+            background: #f8f9fa;
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .issues-table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: top;
+        }
+        
+        .issue-row:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .severity-tag, .type-tag {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .severity-tag.blocker { background-color: #d73027; }
+        .severity-tag.critical { background-color: #fc8d59; }
+        .severity-tag.major { background-color: #fee08b; color: #333; }
+        .severity-tag.minor { background-color: #91bfdb; }
+        .severity-tag.info { background-color: #4575b4; }
+        
+        .type-tag.bug { background-color: #e74c3c; }
+        .type-tag.vulnerability { background-color: #e67e22; }
+        .type-tag.code_smell { background-color: #f39c12; }
+        .type-tag.security_hotspot { background-color: #9b59b6; }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .header h1 { font-size: 2em; }
+            .summary-grid { grid-template-columns: 1fr; }
+            .issues-table { font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ SonarCloud Security Report</h1>
+            <div class="subtitle">WhoopsPay - Version 1.0.0</div>
+        </div>
+        
+        <div class="metadata">
+            <h2>📊 Analysis Metadata</h2>
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <strong>Project:</strong> WhoopsPay
+                </div>
+                <div class="meta-item">
+                    <strong>Version:</strong> 1.0.0
+                </div>
+                <div class="meta-item">
+                    <strong>Generated:</strong> 8/31/2025, 8:03:17 PM
+                </div>
+                <div class="meta-item">
+                    <strong>Total Issues:</strong> 500
+                </div>
+                <div class="meta-item">
+                    <strong>Security Hotspots:</strong> 52
+                </div>
+                <div class="meta-item">
+                    <strong>Analysis Source:</strong> SonarCloud
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary">
+            <h2>🎯 Issue Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-card card-bugs">
+                    <h3>7</h3>
+                    <p>Bugs</p>
+                </div>
+                <div class="summary-card card-vulnerabilities">
+                    <h3>5</h3>
+                    <p>Vulnerabilities</p>
+                </div>
+                <div class="summary-card card-code-smells">
+                    <h3>488</h3>
+                    <p>Code Smells</p>
+                </div>
+                <div class="summary-card card-hotspots">
+                    <h3>52</h3>
+                    <p>Security Hotspots</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="severity-overview">
+            <h2>⚠️ Severity Distribution</h2>
+            <div class="severity-badges">
+                <span class="severity-badge blocker" style="background-color: #d73027;">BLOCKER: 5</span>
+                <span class="severity-badge critical" style="background-color: #fc8d59;">CRITICAL: 358</span>
+                <span class="severity-badge major" style="background-color: #fee08b;">MAJOR: 63</span>
+                <span class="severity-badge minor" style="background-color: #91bfdb;">MINOR: 73</span>
+                <span class="severity-badge info" style="background-color: #4575b4;">INFO: 1</span>
+            </div>
+        </div>
+        
+        <div class="issues-section">
+            <h2>🔍 Detailed Issues (Showing first 50 of 500)</h2>
+            
+            <table class="issues-table">
+                <thead>
+                    <tr>
+                        <th>Severity</th>
+                        <th>Type</th>
+                        <th>Message</th>
+                        <th>File</th>
+                        <th>Line</th>
+                        <th>Rule</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">20</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">34</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">52</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">64</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">83</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">100</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">141</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">158</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">171</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">202</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">229</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">252</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Remove the declaration of the unused &#39;response&#39; variable.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">260</td>
+        <td class="rule-cell">javascript:S1481</td>
+      </tr>
+    
+      <tr class="issue-row major">
+        <td class="severity-cell">
+          <span class="severity-tag major">MAJOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Remove this useless assignment to variable &quot;response&quot;.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">260</td>
+        <td class="rule-cell">javascript:S1854</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">291</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">303</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">321</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-api-top10-tests.js</td>
+        <td class="line-cell">339</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">18</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">31</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Remove the declaration of the unused &#39;response&#39; variable.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">41</td>
+        <td class="rule-cell">javascript:S1481</td>
+      </tr>
+    
+      <tr class="issue-row major">
+        <td class="severity-cell">
+          <span class="severity-tag major">MAJOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Remove this useless assignment to variable &quot;response&quot;.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">41</td>
+        <td class="rule-cell">javascript:S1854</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">50</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">65</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Remove the declaration of the unused &#39;response&#39; variable.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">76</td>
+        <td class="rule-cell">javascript:S1481</td>
+      </tr>
+    
+      <tr class="issue-row major">
+        <td class="severity-cell">
+          <span class="severity-tag major">MAJOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Remove this useless assignment to variable &quot;response&quot;.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">76</td>
+        <td class="rule-cell">javascript:S1854</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">81</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">94</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">133</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">150</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">175</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">201</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">227</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">241</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">261</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Handle this exception or don&#39;t catch it at all.</td>
+        <td class="file-cell">khajdari_WhoopsPay:security-tests/owasp-top10-tests.js</td>
+        <td class="line-cell">278</td>
+        <td class="rule-cell">javascript:S2486</td>
+      </tr>
+    
+      <tr class="issue-row blocker">
+        <td class="severity-cell">
+          <span class="severity-tag blocker">BLOCKER</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag vulnerability">VULNERABILITY</span>
+        </td>
+        <td class="message-cell">Change this workflow to not use user-controlled data directly in a run block.</td>
+        <td class="file-cell">khajdari_WhoopsPay:.github/workflows/ssdlc-pipeline.yml</td>
+        <td class="line-cell">-</td>
+        <td class="rule-cell">githubactions:S7630</td>
+      </tr>
+    
+      <tr class="issue-row blocker">
+        <td class="severity-cell">
+          <span class="severity-tag blocker">BLOCKER</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag vulnerability">VULNERABILITY</span>
+        </td>
+        <td class="message-cell">Change this workflow to not use user-controlled data directly in a run block.</td>
+        <td class="file-cell">khajdari_WhoopsPay:.github/workflows/ssdlc-pipeline.yml</td>
+        <td class="line-cell">-</td>
+        <td class="rule-cell">githubactions:S7630</td>
+      </tr>
+    
+      <tr class="issue-row blocker">
+        <td class="severity-cell">
+          <span class="severity-tag blocker">BLOCKER</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag vulnerability">VULNERABILITY</span>
+        </td>
+        <td class="message-cell">Change this workflow to not use user-controlled data directly in a run block.</td>
+        <td class="file-cell">khajdari_WhoopsPay:.github/workflows/ssdlc-pipeline.yml</td>
+        <td class="line-cell">-</td>
+        <td class="rule-cell">githubactions:S7630</td>
+      </tr>
+    
+      <tr class="issue-row blocker">
+        <td class="severity-cell">
+          <span class="severity-tag blocker">BLOCKER</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag vulnerability">VULNERABILITY</span>
+        </td>
+        <td class="message-cell">Change this workflow to not use user-controlled data directly in a run block.</td>
+        <td class="file-cell">khajdari_WhoopsPay:.github/workflows/secure-sdlc.yml</td>
+        <td class="line-cell">-</td>
+        <td class="rule-cell">githubactions:S7630</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Use the &quot;RegExp.exec()&quot; method instead.</td>
+        <td class="file-cell">khajdari_WhoopsPay:client/src/hooks/useNotifications.ts</td>
+        <td class="line-cell">161</td>
+        <td class="rule-cell">typescript:S6594</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Use the &quot;RegExp.exec()&quot; method instead.</td>
+        <td class="file-cell">khajdari_WhoopsPay:client/src/hooks/useNotifications.ts</td>
+        <td class="line-cell">134</td>
+        <td class="rule-cell">typescript:S6594</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Use the &quot;RegExp.exec()&quot; method instead.</td>
+        <td class="file-cell">khajdari_WhoopsPay:client/src/hooks/useNotifications.ts</td>
+        <td class="line-cell">143</td>
+        <td class="rule-cell">typescript:S6594</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Use the &quot;RegExp.exec()&quot; method instead.</td>
+        <td class="file-cell">khajdari_WhoopsPay:client/src/hooks/useNotifications.ts</td>
+        <td class="line-cell">152</td>
+        <td class="rule-cell">typescript:S6594</td>
+      </tr>
+    
+      <tr class="issue-row critical">
+        <td class="severity-cell">
+          <span class="severity-tag critical">CRITICAL</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Refactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed.</td>
+        <td class="file-cell">khajdari_WhoopsPay:server/controllers/MoneyRequestController.ts</td>
+        <td class="line-cell">64</td>
+        <td class="rule-cell">typescript:S3776</td>
+      </tr>
+    
+      <tr class="issue-row major">
+        <td class="severity-cell">
+          <span class="severity-tag major">MAJOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Refactor this code to not use nested template literals.</td>
+        <td class="file-cell">khajdari_WhoopsPay:server/controllers/MoneyRequestController.ts</td>
+        <td class="line-cell">204</td>
+        <td class="rule-cell">typescript:S4624</td>
+      </tr>
+    
+      <tr class="issue-row major">
+        <td class="severity-cell">
+          <span class="severity-tag major">MAJOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Refactor this code to not use nested template literals.</td>
+        <td class="file-cell">khajdari_WhoopsPay:server/controllers/MoneyRequestController.ts</td>
+        <td class="line-cell">212</td>
+        <td class="rule-cell">typescript:S4624</td>
+      </tr>
+    
+      <tr class="issue-row major">
+        <td class="severity-cell">
+          <span class="severity-tag major">MAJOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Refactor this code to not use nested template literals.</td>
+        <td class="file-cell">khajdari_WhoopsPay:server/controllers/MoneyRequestController.ts</td>
+        <td class="line-cell">221</td>
+        <td class="rule-cell">typescript:S4624</td>
+      </tr>
+    
+      <tr class="issue-row minor">
+        <td class="severity-cell">
+          <span class="severity-tag minor">MINOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Use the &quot;RegExp.exec()&quot; method instead.</td>
+        <td class="file-cell">khajdari_WhoopsPay:client/src/hooks/useNotifications.ts</td>
+        <td class="line-cell">125</td>
+        <td class="rule-cell">typescript:S6594</td>
+      </tr>
+    
+      <tr class="issue-row major">
+        <td class="severity-cell">
+          <span class="severity-tag major">MAJOR</span>
+        </td>
+        <td class="type-cell">
+          <span class="type-tag code_smell">CODE_SMELL</span>
+        </td>
+        <td class="message-cell">Extract this nested ternary operation into an independent statement.</td>
+        <td class="file-cell">khajdari_WhoopsPay:client/src/pages/dashboard.tsx</td>
+        <td class="line-cell">480</td>
+        <td class="rule-cell">typescript:S3358</td>
+      </tr>
+    
+                </tbody>
+            </table>
+            
+        </div>
+        
+        <div class="footer">
+            <p>Report generated by WhoopsPay Security Pipeline • 2025-08-31T20:03:17.782Z</p>
+            <p>Data source: SonarCloud Analysis • Visit <a href="https://sonarcloud.io" target="_blank">sonarcloud.io</a> for detailed analysis</p>
+        </div>
+    </div>
+</body>
+</html>
