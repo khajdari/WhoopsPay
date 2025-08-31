@@ -167,7 +167,14 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          npm run test -- --coverage --watchAll=false || echo "Tests completed"
+          # Check if test script exists in package.json
+          if npm run | grep -q "test"; then
+            echo "✅ Test script found - running tests with coverage"
+            npm run test -- --coverage --watchAll=false || echo "Tests completed"
+          else
+            echo "⚠️ No test script found in package.json - skipping tests"
+            echo "To add tests: Add 'test' script to package.json"
+          fi
           ls -la coverage/ || echo "No coverage found"
 
       - name: Run OWASP Top 10 Security Tests
@@ -206,6 +213,7 @@ jobs:
             -Dsonar.pullrequest.github.summary_comment=true
             -Dsonar.analysis.mode=publish
             -Dsonar.log.level=DEBUG
+            -Dsonar.scanner.disableAutoAnalysis=true
         continue-on-error: true
 
       - name: Check SonarCloud results and organize
@@ -439,6 +447,7 @@ jobs:
           target: 'http://localhost:5000'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a -j -T 30 -l WARN'
+          artifact_name: 'owasp-zap-security-scan-v${{ env.VERSION }}'
         continue-on-error: true
 
       - name: Process ZAP results
@@ -505,17 +514,33 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
       
-      - name: Build Docker image with semantic version
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push Docker image with semantic version
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+            ${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify Docker Hub push
         run: |
-          echo "🐳 Building Docker image with semantic version..."
-          echo "Version: v$VERSION"
-          echo "Docker tag: $DOCKER_TAG"
-          
-          # Build image with semantic version tag
-          docker build -t "${{ env.IMAGE_NAME }}:$VERSION" -t "${{ env.IMAGE_NAME }}:latest" .
-          
-          echo "✅ Docker image built successfully with version v$VERSION"
-          docker images | grep whoopspay || echo "Image not found in local registry"
+          echo "✅ Docker image pushed successfully with semantic version"
+          echo "🐳 Image tags pushed:"
+          echo "   - ${{ env.IMAGE_NAME }}:$VERSION"
+          echo "   - ${{ env.IMAGE_NAME }}:latest"
+          echo "🔗 View on Docker Hub: https://hub.docker.com/r/${{ secrets.DOCKER_HUB_USERNAME }}/whoopspay"
 
   create-security-issues:
     name: "📋 Create Security Report Issues"
