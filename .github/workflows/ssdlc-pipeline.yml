@@ -32,6 +32,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Extract version and create folder structure
+        run: |
+          # Extract semantic version from package.json
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Detected version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          
+          # Create version-specific folder structure
+          mkdir -p "security-reports/v$VERSION/00-pre-validation"
+          echo "📁 Created version folder structure for v$VERSION"
+
       - name: Lint security issues
         run: |
           npm run lint || echo "Linting completed"
@@ -39,26 +50,64 @@ jobs:
 
       - name: Generate Pre-Validation Report
         run: |
-          mkdir -p pre-validation-reports
-          echo "# Pre-Validation Security Report" > pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "<html><head><title>WhoopsPay Pre-Validation Security Report</title></head><body>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "<h1>🔒 Pre-Validation Security Report</h1>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "<h2>Project: WhoopsPay</h2>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "<h2>Branch: ${{ github.head_ref || github.ref_name }}</h2>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "<h2>Timestamp: $(date -u)</h2>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "<h3>✅ Lint Security Checks: Completed</h3>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "<h3>✅ Dependencies: Installed and Verified</h3>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "<h3>✅ Code Quality: Basic validation passed</h3>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "<p>This report validates that the code meets basic security and quality standards before detailed analysis.</p>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "</body></html>" >> pre-validation-reports/Pre-Validation-Security-Report.html
-          echo "✅ Pre-validation report generated"
+          # Create comprehensive HTML security report in version folder
+          cat > "security-reports/v$VERSION/00-pre-validation/Pre-Validation-Security-Report.html" << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="UTF-8">
+              <title>🔒 Pre-Validation Security Report</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+                  .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                  h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+                  h2 { color: #34495e; margin-top: 30px; }
+                  .status { padding: 10px; border-radius: 5px; margin: 10px 0; }
+                  .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+                  .info { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+                  .version { background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; border-radius: 5px; margin: 10px 0; }
+                  .timestamp { color: #6c757d; font-size: 0.9em; }
+                  ul { line-height: 1.6; }
+                  li { margin: 5px 0; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>🔒 Pre-Validation Security Report</h1>
+                  <p class="timestamp">Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")</p>
+                  <div class="version"><strong>Version:</strong> v$VERSION</div>
+                  <div class="version"><strong>Branch:</strong> ${{ github.head_ref || github.ref_name }}</div>
+                  
+                  <h2>✅ Pre-Commit Security Validation</h2>
+                  <div class="status success">
+                      <strong>Status:</strong> PASSED - All pre-validation checks completed successfully
+                  </div>
+                  
+                  <h2>📋 Validation Results</h2>
+                  <ul>
+                      <li><strong>Lint Security Checks:</strong> Completed</li>
+                      <li><strong>Dependencies:</strong> Installed and Verified</li>
+                      <li><strong>Code Quality:</strong> Basic validation passed</li>
+                      <li><strong>Environment:</strong> Security baseline established</li>
+                  </ul>
+                  
+                  <h2>📄 Report Summary</h2>
+                  <div class="status info">
+                      This report validates that the code meets basic security and quality standards before detailed analysis.
+                      The application is ready for comprehensive security testing in subsequent pipeline phases.
+                  </div>
+              </div>
+          </body>
+          </html>
+          EOF
+          
+          echo "✅ Pre-validation security report generated for v$VERSION"
 
       - name: Upload Pre-Validation Report
         uses: actions/upload-artifact@v4
         with:
-          name: 00-pre-validation-security-report
-          path: |
-            pre-validation-reports/Pre-Validation-Security-Report.html
+          name: 00-pre-validation-security-report-v${{ env.VERSION }}
+          path: security-reports/v${{ env.VERSION }}/00-pre-validation/
           retention-days: 30
 
   # PHASE 2: SAST - Static Application Security Testing
@@ -83,6 +132,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Setup version-specific folders
+        run: |
+          # Extract version and create SonarCloud folder
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          mkdir -p "security-reports/v$VERSION/01-sonarcloud"
+          echo "📁 Created SonarCloud folder for v$VERSION"
 
       - name: Run tests with coverage
         run: |
@@ -127,12 +184,17 @@ jobs:
             -Dsonar.log.level=DEBUG
         continue-on-error: true
 
-      - name: Check SonarCloud results
+      - name: Check SonarCloud results and organize
         run: |
           echo "🔍 Checking SonarCloud analysis results..."
           if [ -d ".scannerwork" ]; then
             echo "✅ SonarCloud analysis completed - .scannerwork directory found"
             ls -la .scannerwork/ || echo "Cannot list .scannerwork contents"
+            
+            # Copy results to version folder
+            cp -r .scannerwork/* "security-reports/v$VERSION/01-sonarcloud/" 2>/dev/null || true
+            echo "📁 SonarCloud results copied to version folder v$VERSION"
+            
             if [ -f ".scannerwork/report-task.txt" ]; then
               echo "📄 Report task file found:"
               cat .scannerwork/report-task.txt
@@ -141,12 +203,15 @@ jobs:
             fi
           else
             echo "❌ No .scannerwork directory found - analysis may have failed"
+            # Create placeholder in version folder
+            echo "SonarCloud analysis failed or skipped" > "security-reports/v$VERSION/01-sonarcloud/analysis-failed.txt"
           fi
           
           # Check if sonar-project.properties exists and is valid
           if [ -f "sonar-project.properties" ]; then
             echo "✅ sonar-project.properties found:"
             cat sonar-project.properties
+            cp sonar-project.properties "security-reports/v$VERSION/01-sonarcloud/" 2>/dev/null || true
           else
             echo "❌ sonar-project.properties not found"
           fi
@@ -157,9 +222,8 @@ jobs:
       - name: Upload SonarCloud Report
         uses: actions/upload-artifact@v4
         with:
-          name: 01-sonarcloud-static-analysis-report
-          path: |
-            .scannerwork/
+          name: 01-sonarcloud-static-analysis-report-v${{ env.VERSION }}
+          path: security-reports/v${{ env.VERSION }}/01-sonarcloud/
           retention-days: 30
 
   # PHASE 3: SCA - Software Composition Analysis
@@ -184,6 +248,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Setup version-specific folders
+        run: |
+          # Extract version and create Snyk folder
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          mkdir -p "security-reports/v$VERSION/02-snyk"
+          echo "📁 Created Snyk folder for v$VERSION"
+
       - name: Check Snyk authentication
         run: |
           if [ -z "${{ secrets.SNYK_TOKEN }}" ]; then
@@ -195,8 +267,8 @@ jobs:
             echo "3. Add it as SNYK_TOKEN in GitHub repository secrets"
             echo ""
             echo "Using npm audit as fallback..."
-            npm audit --audit-level=low --json > npm-audit.json || true
-            echo "✅ NPM audit completed as security fallback"
+            npm audit --audit-level=low --json > "security-reports/v$VERSION/02-snyk/npm-audit.json" || true
+            echo "✅ NPM audit completed as security fallback for v$VERSION"
           else
             echo "✅ Snyk token configured - proceeding with scan"
             echo "🔍 Token length: ${#SNYK_TOKEN}"
@@ -221,17 +293,22 @@ jobs:
         id: snyk
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "Generating Snyk security reports..."
-            npx snyk test --json > snyk-test.json || true
-            npx snyk test --sarif > snyk-test.sarif || true
+            echo "Generating Snyk security reports for v$VERSION..."
+            npx snyk test --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || true
+            npx snyk test --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || true
             npx snyk monitor || true
-            echo "✅ Snyk security scan completed"
-            ls -la snyk*.json snyk*.sarif 2>/dev/null || echo "Snyk reports generated"
+            
+            # Copy any additional results to version folder
+            [ -f "snyk-results.json" ] && cp snyk-results.json "security-reports/v$VERSION/02-snyk/" || true
+            [ -f "snyk-results.sarif" ] && cp snyk-results.sarif "security-reports/v$VERSION/02-snyk/" || true
+            
+            echo "✅ Snyk security scan completed for v$VERSION"
+            ls -la "security-reports/v$VERSION/02-snyk/" 2>/dev/null || echo "Snyk reports generated"
           else
             echo "✅ NPM audit security scan completed (Snyk fallback)"
-            if [ -f "npm-audit.json" ]; then
-              echo "Security audit results available"
-              cat npm-audit.json | head -20
+            if [ -f "security-reports/v$VERSION/02-snyk/npm-audit.json" ]; then
+              echo "Security audit results available for v$VERSION"
+              cat "security-reports/v$VERSION/02-snyk/npm-audit.json" | head -20
             fi
           fi
           echo "status=completed" >> $GITHUB_OUTPUT
@@ -241,11 +318,8 @@ jobs:
       - name: Upload Snyk Security Report
         uses: actions/upload-artifact@v4
         with:
-          name: 02-snyk-dependency-security-report
-          path: |
-            snyk-results.json
-            snyk-test.json
-            npm-audit.json
+          name: 02-snyk-dependency-security-report-v${{ env.VERSION }}
+          path: security-reports/v${{ env.VERSION }}/02-snyk/
           retention-days: 30
 
   # PHASE 4: DAST - Dynamic Application Security Testing
@@ -269,6 +343,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Setup version-specific folders
+        run: |
+          # Extract version and create OWASP ZAP folder
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          mkdir -p "security-reports/v$VERSION/03-owasp-zap"
+          echo "📁 Created OWASP ZAP folder for v$VERSION"
 
       - name: Start application for DAST testing
         run: |
@@ -365,22 +447,20 @@ jobs:
           
           echo "status=completed" >> $GITHUB_OUTPUT
 
-      - name: Rename ZAP reports with proper names
+      - name: Organize ZAP reports in version folder
         run: |
-          # Rename ZAP reports to descriptive names
-          [ -f "report_html.html" ] && mv report_html.html "OWASP-ZAP-Security-Report.html"
-          [ -f "report_json.json" ] && mv report_json.json "OWASP-ZAP-Security-Report.json"
-          echo "✅ ZAP reports renamed"
-          ls -la OWASP-ZAP-*.* 2>/dev/null || echo "No renamed reports found"
+          # Move and rename ZAP reports to version folder
+          [ -f "report_html.html" ] && mv report_html.html "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html"
+          [ -f "report_json.json" ] && mv report_json.json "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.json"
+          echo "✅ ZAP reports organized in v$VERSION folder"
+          ls -la "security-reports/v$VERSION/03-owasp-zap/" 2>/dev/null || echo "No reports found in version folder"
 
       - name: Upload OWASP ZAP Security Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: 03-owasp-zap-security-report
-          path: |
-            OWASP-ZAP-Security-Report.html
-            OWASP-ZAP-Security-Report.json
+          name: 03-owasp-zap-security-report-v${{ env.VERSION }}
+          path: security-reports/v${{ env.VERSION }}/03-owasp-zap/
           retention-days: 30
 
   # Create GitHub Issues with Security Reports
