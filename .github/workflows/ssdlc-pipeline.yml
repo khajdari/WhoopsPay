@@ -607,35 +607,6 @@ jobs:
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
     steps:
-      - name: Create Pre-Validation Security Issue
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const title = '🔒 Pre-Validation Security Report';
-            const body = `
-            # 🔒 Pre-Validation Security Report
-            
-            **Status:** Pre-validation security checks completed
-            **Timestamp:** ${new Date().toISOString()}
-            
-            ## ✅ Validation Results
-            - **Lint Security Checks:** Completed
-            - **Dependencies:** Installed and Verified  
-            - **Code Quality:** Basic validation passed
-            
-            ## 📁 Report Artifacts
-            - Download: Pre-Validation Report from GitHub Actions artifacts
-            
-            This report validates that the code meets basic security and quality standards before detailed analysis.
-            `;
-            
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: title,
-              body: body,
-              labels: ['security', 'pre-validation', 'automated-report']
-            });
 
       - name: Create Snyk Code SAST Security Issue
         uses: actions/github-script@v7
@@ -743,7 +714,6 @@ jobs:
             
             | Phase | Tool | Status | Report |
             |-------|------|--------|--------|
-            | Pre-Validation | Lint & Basic Checks | ${{ needs.pre-commit-security.result }} | ✅ |
             | SAST | Snyk Code | ${{ needs.sast-snyk-code.result }} | ✅ |
             | SCA | Snyk | ${{ needs.sca-snyk.result }} | ✅ |
             | DAST | OWASP ZAP | ${{ needs.dast-owasp-zap.result }} | ✅ |
