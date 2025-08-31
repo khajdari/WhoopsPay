@@ -2,10 +2,8 @@ name: Secure SDLC Pipeline
 
 on:
   pull_request:
-    branches: [ develop-vulnerable, main ]
+    branches: [ develop-vulnerable ]
     types: [opened, synchronize, reopened]
-  push:
-    branches: [ main, develop-vulnerable ]
   workflow_dispatch:
 
 env:
