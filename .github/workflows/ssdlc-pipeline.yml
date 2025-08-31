@@ -2,10 +2,8 @@ name: Secure SDLC Pipeline
 
 on:
   pull_request:
-    branches: [ develop-vulnerable, main ]
+    branches: [ develop-vulnerable ]
     types: [opened, synchronize, reopened]
-  push:
-    branches: [ main, develop-vulnerable ]
   workflow_dispatch:
 
 env:
@@ -74,6 +72,23 @@ jobs:
           node security-tests/owasp-api-top10-tests.js || echo "OWASP API tests completed"
         continue-on-error: true
 
+      - name: Check SonarCloud configuration
+        run: |
+          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "⚠️ SONAR_TOKEN not configured - SonarCloud analysis will be skipped"
+            echo "To enable SonarCloud:"
+            echo "1. Go to https://sonarcloud.io and sign up"
+            echo "2. Create a project and get your token"
+            echo "3. Add it as SONAR_TOKEN in GitHub repository secrets"
+          else
+            echo "✅ SonarCloud token configured"
+            echo "🔍 Token length: ${#SONAR_TOKEN}"
+            echo "🔍 Project key: khajdari_WhoopsPay"
+            echo "🔍 Organization: khajdari"
+          fi
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: SonarCloud static analysis
         id: sonar
         uses: SonarSource/sonarcloud-github-action@master
@@ -85,7 +100,32 @@ jobs:
             -Dsonar.verbose=true
             -Dsonar.pullrequest.github.summary_comment=true
             -Dsonar.analysis.mode=publish
+            -Dsonar.log.level=DEBUG
         continue-on-error: true
+
+      - name: Check SonarCloud results
+        run: |
+          echo "🔍 Checking SonarCloud analysis results..."
+          if [ -d ".scannerwork" ]; then
+            echo "✅ SonarCloud analysis completed - .scannerwork directory found"
+            ls -la .scannerwork/ || echo "Cannot list .scannerwork contents"
+            if [ -f ".scannerwork/report-task.txt" ]; then
+              echo "📄 Report task file found:"
+              cat .scannerwork/report-task.txt
+            else
+              echo "❌ No report-task.txt found"
+            fi
+          else
+            echo "❌ No .scannerwork directory found - analysis may have failed"
+          fi
+          
+          # Check if sonar-project.properties exists and is valid
+          if [ -f "sonar-project.properties" ]; then
+            echo "✅ sonar-project.properties found:"
+            cat sonar-project.properties
+          else
+            echo "❌ sonar-project.properties not found"
+          fi
 
       - name: Set SonarCloud status
         run: echo "status=completed" >> $GITHUB_OUTPUT
@@ -294,6 +334,46 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start application for DAST testing
+        run: |
+          echo "Starting application for DAST security testing..."
+          
+          # Start application in background for DAST testing
+          npm run dev &
+          APP_PID=$!
+          echo "Application PID: $APP_PID"
+          echo "APP_PID=$APP_PID" >> $GITHUB_ENV
+          
+          # Wait for application to be ready
+          echo "Waiting for application to start..."
+          for i in {1..60}; do
+            if curl -s http://localhost:5000/health >/dev/null 2>&1; then
+              echo "✅ Application is ready for DAST testing"
+              break
+            fi
+            if [ $i -eq 60 ]; then
+              echo "❌ Application failed to start within timeout"
+              exit 1
+            fi
+            echo "Waiting for app... ($i/60)"
+            sleep 3
+          done
+          
+          # Verify application is responding
+          curl -s http://localhost:5000/ | grep -q "WhoopsPay" && echo "✅ Application verified"
+        env:
+          NODE_ENV: development
+          DATABASE_URL: sqlite:./test.db
+
       - name: Create OWASP ZAP configuration
         run: |
           mkdir -p .zap
@@ -317,24 +397,11 @@ jobs:
           echo "Rules file content:"
           cat .zap/rules.tsv
 
-      - name: Wait for application to be ready
-        run: |
-          echo "Waiting for application at ${{ needs.secure-deployment.outputs.app-url }}"
-          sleep 10
-          for i in {1..30}; do
-            if curl -s ${{ needs.secure-deployment.outputs.app-url }} | grep -q "WhoopsPay"; then
-              echo "Application is ready"
-              break
-            fi
-            echo "Waiting... ($i/30)"
-            sleep 5
-          done
-
       - name: OWASP ZAP baseline security scan
         id: zap
         uses: zaproxy/action-baseline@v0.12.0
         with:
-          target: '${{ needs.secure-deployment.outputs.app-url }}'
+          target: 'http://localhost:5000'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a -j -T 30 -l WARN'
         continue-on-error: true
