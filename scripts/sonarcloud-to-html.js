@@ -108,55 +108,24 @@ function generateHTML(sonarData, projectInfo) {
         
         .header {
             background: linear-gradient(135deg, #2d3142 0%, #1e1f2a 100%);
-            color: #4c9aff;
+            color: white;
             padding: 30px;
             border-radius: 10px;
             margin-bottom: 30px;
             text-align: center;
-            position: relative;
-        }
-        
-        .sonar-logo {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-        
-        .sonar-logo::before {
-            content: "";
-            width: 40px;
-            height: 40px;
-            background: #4c9aff;
-            border-radius: 50%;
-            margin-right: 15px;
-            display: inline-block;
-            position: relative;
-        }
-        
-        .sonar-logo::after {
-            content: "";
-            position: absolute;
-            left: 8px;
-            top: 8px;
-            width: 24px;
-            height: 24px;
-            background: white;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
         }
         
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            color: #4c9aff;
+            color: white;
             font-weight: 600;
         }
         
         .header .subtitle {
             font-size: 1.2em;
             opacity: 0.7;
-            color: #8bb6ff;
+            color: white;
         }
         
         .metadata {
@@ -337,8 +306,7 @@ function generateHTML(sonarData, projectInfo) {
 <body>
     <div class="container">
         <div class="header">
-            <div class="sonar-logo"></div>
-            <h1>SonarCloud Security Report</h1>
+            <h1>🛡️ SonarCloud Security Report</h1>
             <div class="subtitle">${projectInfo.name} - Version ${projectInfo.version}</div>
         </div>
         
