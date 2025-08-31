@@ -655,7 +655,6 @@ jobs:
             
             ## 📁 Report Artifacts
             - Download: Snyk Code SAST Report from GitHub Actions artifacts
-            - View on Snyk: [Dashboard](https://app.snyk.io)
             
             This report provides comprehensive static application security testing including XSS, SQL injection, command injection, and other security vulnerabilities.
             `;
@@ -686,7 +685,6 @@ jobs:
             
             ## 📁 Report Artifacts
             - Download: Snyk Security Report from GitHub Actions artifacts
-            - View on Snyk: [Dashboard](https://app.snyk.io)
             
             This report identifies security vulnerabilities in project dependencies and provides remediation guidance.
             `;
