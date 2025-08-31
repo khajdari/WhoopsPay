@@ -52,8 +52,9 @@ function generateHTML(sonarData, projectInfo) {
   
   // Generate issue rows
   function generateIssueRows(issues) {
-    return issues.map(issue => `
+    return issues.map((issue, index) => `
       <tr class="issue-row ${issue.severity.toLowerCase()}">
+        <td class="number-cell">${index + 1}</td>
         <td class="severity-cell">
           <span class="severity-tag ${issue.severity.toLowerCase()}">${issue.severity}</span>
         </td>
@@ -100,14 +101,14 @@ function generateHTML(sonarData, projectInfo) {
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
             padding: 30px;
             border-radius: 10px;
             margin-bottom: 30px;
@@ -226,6 +227,7 @@ function generateHTML(sonarData, projectInfo) {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            table-layout: fixed;
         }
         
         .issues-table th {
@@ -237,10 +239,26 @@ function generateHTML(sonarData, projectInfo) {
             color: #495057;
         }
         
+        .issues-table th:nth-child(1) { width: 6%; }  /* # */
+        .issues-table th:nth-child(2) { width: 12%; } /* Severity */
+        .issues-table th:nth-child(3) { width: 14%; } /* Type */
+        .issues-table th:nth-child(4) { width: 35%; } /* Message */
+        .issues-table th:nth-child(5) { width: 20%; } /* File */
+        .issues-table th:nth-child(6) { width: 8%; }  /* Line */
+        .issues-table th:nth-child(7) { width: 15%; } /* Rule */
+        
         .issues-table td {
             padding: 12px;
             border-bottom: 1px solid #dee2e6;
             vertical-align: top;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .number-cell {
+            text-align: center;
+            font-weight: 600;
+            color: #666;
         }
         
         .issue-row:hover {
@@ -352,6 +370,7 @@ function generateHTML(sonarData, projectInfo) {
             <table class="issues-table">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Severity</th>
                         <th>Type</th>
                         <th>Message</th>
@@ -410,6 +429,25 @@ function loadSonarData(inputPath) {
       }
     }
     
+    // Sort local issues by severity if loaded
+    if (sonarData.issues && sonarData.issues.length > 0) {
+      const severityOrder = {
+        'BLOCKER': 1,
+        'CRITICAL': 2, 
+        'MAJOR': 3,
+        'MINOR': 4,
+        'INFO': 5
+      };
+      
+      sonarData.issues.sort((a, b) => {
+        const severityA = severityOrder[a.severity] || 999;
+        const severityB = severityOrder[b.severity] || 999;
+        return severityA - severityB;
+      });
+      
+      console.log(`🔄 Sorted ${sonarData.issues.length} local issues by severity criticality`);
+    }
+    
     return sonarData;
   } catch (error) {
     console.warn(`⚠️ Error loading SonarCloud data: ${error.message}`);
@@ -428,35 +466,87 @@ async function fetchFromSonarCloudAPI(projectKey, organization, token) {
       'Accept': 'application/json'
     };
     
-    // Fetch issues
-    const issuesResponse = await fetch(
-      `${baseUrl}/issues/search?componentKeys=${projectKey}&organization=${organization}&ps=500`,
-      { headers }
-    );
+    // Fetch ALL issues with pagination
+    let allIssues = [];
+    let page = 1;
+    const pageSize = 500;
+    let hasMore = true;
     
-    let issues = [];
-    if (issuesResponse.ok) {
-      const issuesData = await issuesResponse.json();
-      issues = issuesData.issues || [];
-      console.log(`✅ Found ${issues.length} issues`);
-    } else {
-      console.log(`⚠️ Issues API failed: ${issuesResponse.status}`);
+    while (hasMore) {
+      console.log(`📄 Fetching page ${page} of issues...`);
+      const issuesResponse = await fetch(
+        `${baseUrl}/issues/search?componentKeys=${projectKey}&organization=${organization}&ps=${pageSize}&p=${page}`,
+        { headers }
+      );
+      
+      if (issuesResponse.ok) {
+        const issuesData = await issuesResponse.json();
+        const pageIssues = issuesData.issues || [];
+        allIssues = allIssues.concat(pageIssues);
+        
+        // Check if there are more pages
+        const total = issuesData.total || 0;
+        hasMore = allIssues.length < total;
+        page++;
+        
+        console.log(`✅ Fetched ${pageIssues.length} issues from page ${page - 1} (${allIssues.length}/${total} total)`);
+      } else {
+        console.log(`⚠️ Issues API failed on page ${page}: ${issuesResponse.status}`);
+        hasMore = false;
+      }
     }
     
-    // Fetch hotspots
-    const hotspotsResponse = await fetch(
-      `${baseUrl}/hotspots/search?projectKey=${projectKey}&ps=500`,
-      { headers }
-    );
+    let issues = allIssues;
+    console.log(`✅ Found ${issues.length} total issues`);
     
-    let hotspots = [];
-    if (hotspotsResponse.ok) {
-      const hotspotsData = await hotspotsResponse.json();
-      hotspots = hotspotsData.hotspots || [];
-      console.log(`✅ Found ${hotspots.length} security hotspots`);
-    } else {
-      console.log(`⚠️ Hotspots API failed: ${hotspotsResponse.status}`);
+    // Sort issues by severity criticality (most critical first)
+    const severityOrder = {
+      'BLOCKER': 1,
+      'CRITICAL': 2, 
+      'MAJOR': 3,
+      'MINOR': 4,
+      'INFO': 5
+    };
+    
+    issues.sort((a, b) => {
+      const severityA = severityOrder[a.severity] || 999;
+      const severityB = severityOrder[b.severity] || 999;
+      return severityA - severityB;
+    });
+    
+    console.log(`🔄 Sorted ${issues.length} issues by severity criticality`);
+    
+    // Fetch ALL hotspots with pagination
+    let allHotspots = [];
+    page = 1;
+    hasMore = true;
+    
+    while (hasMore) {
+      console.log(`🔥 Fetching page ${page} of security hotspots...`);
+      const hotspotsResponse = await fetch(
+        `${baseUrl}/hotspots/search?projectKey=${projectKey}&ps=${pageSize}&p=${page}`,
+        { headers }
+      );
+      
+      if (hotspotsResponse.ok) {
+        const hotspotsData = await hotspotsResponse.json();
+        const pageHotspots = hotspotsData.hotspots || [];
+        allHotspots = allHotspots.concat(pageHotspots);
+        
+        // Check if there are more pages
+        const total = hotspotsData.paging?.total || 0;
+        hasMore = allHotspots.length < total;
+        page++;
+        
+        console.log(`✅ Fetched ${pageHotspots.length} hotspots from page ${page - 1} (${allHotspots.length}/${total} total)`);
+      } else {
+        console.log(`⚠️ Hotspots API failed on page ${page}: ${hotspotsResponse.status}`);
+        hasMore = false;
+      }
     }
+    
+    let hotspots = allHotspots;
+    console.log(`✅ Found ${hotspots.length} total security hotspots`);
     
     // Fetch measures
     const measuresResponse = await fetch(
