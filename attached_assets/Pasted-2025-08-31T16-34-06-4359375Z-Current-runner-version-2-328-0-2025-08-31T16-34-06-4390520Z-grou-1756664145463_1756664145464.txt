@@ -1,0 +1,600 @@
+2025-08-31T16:34:06.4359375Z Current runner version: '2.328.0'
+2025-08-31T16:34:06.4390520Z ##[group]Runner Image Provisioner
+2025-08-31T16:34:06.4391685Z Hosted Compute Agent
+2025-08-31T16:34:06.4392543Z Version: 20250829.383
+2025-08-31T16:34:06.4393681Z Commit: 27cb235aab5b0e52e153a26cd86b4742e89dac5d
+2025-08-31T16:34:06.4394812Z Build Date: 2025-08-29T13:48:48Z
+2025-08-31T16:34:06.4396192Z ##[endgroup]
+2025-08-31T16:34:06.4397053Z ##[group]Operating System
+2025-08-31T16:34:06.4397921Z Ubuntu
+2025-08-31T16:34:06.4398707Z 24.04.3
+2025-08-31T16:34:06.4399550Z LTS
+2025-08-31T16:34:06.4400285Z ##[endgroup]
+2025-08-31T16:34:06.4401078Z ##[group]Runner Image
+2025-08-31T16:34:06.4402021Z Image: ubuntu-24.04
+2025-08-31T16:34:06.4402863Z Version: 20250824.1.0
+2025-08-31T16:34:06.4404548Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250824.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-08-31T16:34:06.4407393Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250824.1
+2025-08-31T16:34:06.4409120Z ##[endgroup]
+2025-08-31T16:34:06.4413113Z ##[group]GITHUB_TOKEN Permissions
+2025-08-31T16:34:06.4416298Z Actions: write
+2025-08-31T16:34:06.4417161Z Attestations: write
+2025-08-31T16:34:06.4418135Z Checks: write
+2025-08-31T16:34:06.4418995Z Contents: write
+2025-08-31T16:34:06.4419761Z Deployments: write
+2025-08-31T16:34:06.4420637Z Discussions: write
+2025-08-31T16:34:06.4421542Z Issues: write
+2025-08-31T16:34:06.4422351Z Metadata: read
+2025-08-31T16:34:06.4423232Z Models: read
+2025-08-31T16:34:06.4424044Z Packages: write
+2025-08-31T16:34:06.4425032Z Pages: write
+2025-08-31T16:34:06.4425967Z PullRequests: write
+2025-08-31T16:34:06.4426874Z RepositoryProjects: write
+2025-08-31T16:34:06.4427826Z SecurityEvents: write
+2025-08-31T16:34:06.4428924Z Statuses: write
+2025-08-31T16:34:06.4429730Z ##[endgroup]
+2025-08-31T16:34:06.4432622Z Secret source: Actions
+2025-08-31T16:34:06.4433656Z Prepare workflow directory
+2025-08-31T16:34:06.5190125Z Prepare all required actions
+2025-08-31T16:34:06.5243820Z Getting action download info
+2025-08-31T16:34:06.8490313Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-08-31T16:34:06.9145564Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-08-31T16:34:07.0430630Z Download action repository 'SonarSource/sonarcloud-github-action@master' (SHA:ba3875ecf642b2129de2b589510c81a8b53dbf4e)
+2025-08-31T16:34:07.3330211Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-08-31T16:34:07.5431251Z Getting action download info
+2025-08-31T16:34:07.6559632Z Download action repository 'SonarSource/sonarqube-scan-action@v5.0.0' (SHA:0303d6b62e310685c0e34d0b9cde218036885c4d)
+2025-08-31T16:34:07.9160148Z Getting action download info
+2025-08-31T16:34:08.0882238Z Download action repository 'actions/cache@v4' (SHA:0400d5f644dc74513175e3cd8d07132dd4860809)
+2025-08-31T16:34:08.2628523Z Complete job name: 🔍 SAST - SonarCloud Analysis
+2025-08-31T16:34:08.3369911Z ##[group]Run actions/checkout@v4
+2025-08-31T16:34:08.3371195Z with:
+2025-08-31T16:34:08.3371920Z   fetch-depth: 0
+2025-08-31T16:34:08.3372703Z   ref: develop-beta1
+2025-08-31T16:34:08.3373539Z   repository: khajdari/WhoopsPay
+2025-08-31T16:34:08.3374712Z   token: ***
+2025-08-31T16:34:08.3375628Z   ssh-strict: true
+2025-08-31T16:34:08.3376395Z   ssh-user: git
+2025-08-31T16:34:08.3377187Z   persist-credentials: true
+2025-08-31T16:34:08.3378061Z   clean: true
+2025-08-31T16:34:08.3378840Z   sparse-checkout-cone-mode: true
+2025-08-31T16:34:08.3379798Z   fetch-tags: false
+2025-08-31T16:34:08.3380577Z   show-progress: true
+2025-08-31T16:34:08.3381367Z   lfs: false
+2025-08-31T16:34:08.3382104Z   submodules: false
+2025-08-31T16:34:08.3382898Z   set-safe-directory: true
+2025-08-31T16:34:08.3383975Z env:
+2025-08-31T16:34:08.3384666Z   NODE_VERSION: 20
+2025-08-31T16:34:08.3385581Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:08.3386540Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:08.3387458Z   VERSION: 1.0.0
+2025-08-31T16:34:08.3388480Z ##[endgroup]
+2025-08-31T16:34:08.4577203Z Syncing repository: khajdari/WhoopsPay
+2025-08-31T16:34:08.4581678Z ##[group]Getting Git version info
+2025-08-31T16:34:08.4584194Z Working directory is '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-08-31T16:34:08.4587682Z [command]/usr/bin/git version
+2025-08-31T16:34:08.4589283Z git version 2.51.0
+2025-08-31T16:34:08.4594219Z ##[endgroup]
+2025-08-31T16:34:08.4603039Z Temporarily overriding HOME='/home/runner/work/_temp/d1027f5e-6876-4473-af9e-cad0d9f3cee8' before making global git config changes
+2025-08-31T16:34:08.4607194Z Adding repository directory to the temporary git global config as a safe directory
+2025-08-31T16:34:08.4610844Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-08-31T16:34:08.4624557Z Deleting the contents of '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-08-31T16:34:08.4628233Z ##[group]Initializing the repository
+2025-08-31T16:34:08.4632384Z [command]/usr/bin/git init /home/runner/work/WhoopsPay/WhoopsPay
+2025-08-31T16:34:08.4692183Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-08-31T16:34:08.4695708Z hint: is subject to change. To configure the initial branch name to use in all
+2025-08-31T16:34:08.4698769Z hint: of your new repositories, which will suppress this warning, call:
+2025-08-31T16:34:08.4701042Z hint:
+2025-08-31T16:34:08.4702525Z hint: 	git config --global init.defaultBranch <name>
+2025-08-31T16:34:08.4704408Z hint:
+2025-08-31T16:34:08.4706396Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-08-31T16:34:08.4709383Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-08-31T16:34:08.4711800Z hint:
+2025-08-31T16:34:08.4713105Z hint: 	git branch -m <name>
+2025-08-31T16:34:08.4714582Z hint:
+2025-08-31T16:34:08.4716781Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-08-31T16:34:08.4720154Z Initialized empty Git repository in /home/runner/work/WhoopsPay/WhoopsPay/.git/
+2025-08-31T16:34:08.4725505Z [command]/usr/bin/git remote add origin https://github.com/khajdari/WhoopsPay
+2025-08-31T16:34:08.4742599Z ##[endgroup]
+2025-08-31T16:34:08.4745212Z ##[group]Disabling automatic garbage collection
+2025-08-31T16:34:08.4747335Z [command]/usr/bin/git config --local gc.auto 0
+2025-08-31T16:34:08.4779679Z ##[endgroup]
+2025-08-31T16:34:08.4780942Z ##[group]Setting up auth
+2025-08-31T16:34:08.4789502Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-08-31T16:34:08.4824384Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-08-31T16:34:08.5099304Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-08-31T16:34:08.5129021Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-08-31T16:34:08.5355840Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-08-31T16:34:08.5396550Z ##[endgroup]
+2025-08-31T16:34:08.5397904Z ##[group]Fetching the repository
+2025-08-31T16:34:08.5405801Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2025-08-31T16:34:09.2608418Z From https://github.com/khajdari/WhoopsPay
+2025-08-31T16:34:09.2612111Z  * [new branch]      develop-beta1      -> origin/develop-beta1
+2025-08-31T16:34:09.2615031Z  * [new branch]      develop-vulnerable -> origin/develop-vulnerable
+2025-08-31T16:34:09.2643890Z ##[endgroup]
+2025-08-31T16:34:09.2645540Z ##[group]Determining the checkout info
+2025-08-31T16:34:09.2650040Z [command]/usr/bin/git branch --list --remote origin/develop-beta1
+2025-08-31T16:34:09.2674614Z   origin/develop-beta1
+2025-08-31T16:34:09.2681244Z ##[endgroup]
+2025-08-31T16:34:09.2684736Z [command]/usr/bin/git sparse-checkout disable
+2025-08-31T16:34:09.2727579Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-08-31T16:34:09.2756514Z ##[group]Checking out the ref
+2025-08-31T16:34:09.2760233Z [command]/usr/bin/git checkout --progress --force -B develop-beta1 refs/remotes/origin/develop-beta1
+2025-08-31T16:34:09.3045894Z Switched to a new branch 'develop-beta1'
+2025-08-31T16:34:09.3048192Z branch 'develop-beta1' set up to track 'origin/develop-beta1'.
+2025-08-31T16:34:09.3058061Z ##[endgroup]
+2025-08-31T16:34:09.3096731Z [command]/usr/bin/git log -1 --format=%H
+2025-08-31T16:34:09.3118793Z 589fb819f813ccad158c31f60087feb8f4864e67
+2025-08-31T16:34:09.3400298Z ##[group]Run actions/setup-node@v4
+2025-08-31T16:34:09.3401282Z with:
+2025-08-31T16:34:09.3401990Z   node-version: 20
+2025-08-31T16:34:09.3402752Z   cache: npm
+2025-08-31T16:34:09.3403488Z   always-auth: false
+2025-08-31T16:34:09.3404319Z   check-latest: false
+2025-08-31T16:34:09.3405597Z   token: ***
+2025-08-31T16:34:09.3406307Z env:
+2025-08-31T16:34:09.3406991Z   NODE_VERSION: 20
+2025-08-31T16:34:09.3407795Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:09.3408747Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:09.3409604Z   VERSION: 1.0.0
+2025-08-31T16:34:09.3410354Z ##[endgroup]
+2025-08-31T16:34:09.5451193Z Found in cache @ /opt/hostedtoolcache/node/20.19.4/x64
+2025-08-31T16:34:09.5460178Z ##[group]Environment details
+2025-08-31T16:34:11.3691292Z node: v20.19.4
+2025-08-31T16:34:11.3691847Z npm: 10.8.2
+2025-08-31T16:34:11.3692157Z yarn: 1.22.22
+2025-08-31T16:34:11.3693220Z ##[endgroup]
+2025-08-31T16:34:11.3715487Z [command]/opt/hostedtoolcache/node/20.19.4/x64/bin/npm config get cache
+2025-08-31T16:34:11.6382661Z /home/runner/.npm
+2025-08-31T16:34:11.7407270Z Cache hit for: node-cache-Linux-x64-npm-926a530f2136df83dc8afbe3eeb034728c16ca9a4313ee63bdbd15fbe744bd38
+2025-08-31T16:34:12.2776729Z Received 93380863 of 93380863 (100.0%), 177.8 MBs/sec
+2025-08-31T16:34:12.2777908Z Cache Size: ~89 MB (93380863 B)
+2025-08-31T16:34:12.2891649Z [command]/usr/bin/tar -xf /home/runner/work/_temp/df19edd6-c4d5-4ef8-af62-c34bc99586dc/cache.tzst -P -C /home/runner/work/WhoopsPay/WhoopsPay --use-compress-program unzstd
+2025-08-31T16:34:12.5494139Z Cache restored successfully
+2025-08-31T16:34:12.5680109Z Cache restored from key: node-cache-Linux-x64-npm-926a530f2136df83dc8afbe3eeb034728c16ca9a4313ee63bdbd15fbe744bd38
+2025-08-31T16:34:12.5821648Z ##[group]Run npm ci
+2025-08-31T16:34:12.5821949Z [36;1mnpm ci[0m
+2025-08-31T16:34:12.5911426Z shell: /usr/bin/bash -e {0}
+2025-08-31T16:34:12.5911743Z env:
+2025-08-31T16:34:12.5911937Z   NODE_VERSION: 20
+2025-08-31T16:34:12.5912161Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:12.5912623Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:12.5912867Z   VERSION: 1.0.0
+2025-08-31T16:34:12.5913062Z ##[endgroup]
+2025-08-31T16:34:17.0308883Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-08-31T16:34:17.0626962Z npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+2025-08-31T16:34:17.0806075Z npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+2025-08-31T16:34:17.1243646Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+2025-08-31T16:34:17.2037977Z npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+2025-08-31T16:34:17.2336400Z npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+2025-08-31T16:34:22.3283081Z 
+2025-08-31T16:34:22.3284050Z added 626 packages, and audited 627 packages in 10s
+2025-08-31T16:34:22.3284658Z 
+2025-08-31T16:34:22.3289796Z 84 packages are looking for funding
+2025-08-31T16:34:22.3291091Z   run `npm fund` for details
+2025-08-31T16:34:22.3586582Z 
+2025-08-31T16:34:22.3587434Z 9 vulnerabilities (3 low, 5 moderate, 1 critical)
+2025-08-31T16:34:22.3588108Z 
+2025-08-31T16:34:22.3588678Z To address issues that do not require attention, run:
+2025-08-31T16:34:22.3589523Z   npm audit fix
+2025-08-31T16:34:22.3589942Z 
+2025-08-31T16:34:22.3590509Z To address all issues (including breaking changes), run:
+2025-08-31T16:34:22.3591321Z   npm audit fix --force
+2025-08-31T16:34:22.3600002Z 
+2025-08-31T16:34:22.3600278Z Run `npm audit` for details.
+2025-08-31T16:34:22.4166179Z ##[group]Run # Use version from setup job
+2025-08-31T16:34:22.4166565Z [36;1m# Use version from setup job[0m
+2025-08-31T16:34:22.4166884Z [36;1mecho "Using semantic version: v$VERSION"[0m
+2025-08-31T16:34:22.4167262Z [36;1mmkdir -p "security-reports/v$VERSION/01-sonarcloud"[0m
+2025-08-31T16:34:22.4167649Z [36;1mecho "📁 Created SonarCloud folder for v$VERSION"[0m
+2025-08-31T16:34:22.4197847Z shell: /usr/bin/bash -e {0}
+2025-08-31T16:34:22.4198107Z env:
+2025-08-31T16:34:22.4198289Z   NODE_VERSION: 20
+2025-08-31T16:34:22.4198497Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:22.4198820Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:22.4199045Z   VERSION: 1.0.0
+2025-08-31T16:34:22.4199240Z ##[endgroup]
+2025-08-31T16:34:22.4249557Z Using semantic version: v1.0.0
+2025-08-31T16:34:22.4264369Z 📁 Created SonarCloud folder for v1.0.0
+2025-08-31T16:34:22.4296583Z ##[group]Run # Check if test script exists in package.json
+2025-08-31T16:34:22.4297243Z [36;1m# Check if test script exists in package.json[0m
+2025-08-31T16:34:22.4297781Z [36;1mif npm run | grep -q "test"; then[0m
+2025-08-31T16:34:22.4298358Z [36;1m  echo "✅ Test script found - running tests with coverage"[0m
+2025-08-31T16:34:22.4299091Z [36;1m  npm run test -- --coverage --watchAll=false || echo "Tests completed"[0m
+2025-08-31T16:34:22.4299689Z [36;1melse[0m
+2025-08-31T16:34:22.4300158Z [36;1m  echo "⚠️ No test script found in package.json - skipping tests"[0m
+2025-08-31T16:34:22.4300868Z [36;1m  echo "To add tests: Add 'test' script to package.json"[0m
+2025-08-31T16:34:22.4301375Z [36;1mfi[0m
+2025-08-31T16:34:22.4301748Z [36;1mls -la coverage/ || echo "No coverage found"[0m
+2025-08-31T16:34:22.4336970Z shell: /usr/bin/bash -e {0}
+2025-08-31T16:34:22.4337345Z env:
+2025-08-31T16:34:22.4337628Z   NODE_VERSION: 20
+2025-08-31T16:34:22.4338009Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:22.4338460Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:22.4338823Z   VERSION: 1.0.0
+2025-08-31T16:34:22.4339135Z ##[endgroup]
+2025-08-31T16:34:22.5518090Z ⚠️ No test script found in package.json - skipping tests
+2025-08-31T16:34:22.5518977Z To add tests: Add 'test' script to package.json
+2025-08-31T16:34:22.5533780Z ls: cannot access 'coverage/': No such file or directory
+2025-08-31T16:34:22.5535791Z No coverage found
+2025-08-31T16:34:22.5571015Z ##[group]Run echo "Running comprehensive OWASP Top 10 security tests..."
+2025-08-31T16:34:22.5571837Z [36;1mecho "Running comprehensive OWASP Top 10 security tests..."[0m
+2025-08-31T16:34:22.5572711Z [36;1mnode security-tests/owasp-top10-tests.js || echo "OWASP Top 10 tests completed"[0m
+2025-08-31T16:34:22.5573753Z [36;1mnode security-tests/owasp-api-top10-tests.js || echo "OWASP API tests completed"[0m
+2025-08-31T16:34:22.5612336Z shell: /usr/bin/bash -e {0}
+2025-08-31T16:34:22.5612715Z env:
+2025-08-31T16:34:22.5613006Z   NODE_VERSION: 20
+2025-08-31T16:34:22.5613346Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:22.5613831Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:22.5614217Z   VERSION: 1.0.0
+2025-08-31T16:34:22.5614532Z ##[endgroup]
+2025-08-31T16:34:22.5674594Z Running comprehensive OWASP Top 10 security tests...
+2025-08-31T16:34:22.6896580Z file:///home/runner/work/WhoopsPay/WhoopsPay/security-tests/owasp-top10-tests.js:6
+2025-08-31T16:34:22.6897608Z describe('OWASP Top 10 Security Tests', () => {
+2025-08-31T16:34:22.6898057Z ^
+2025-08-31T16:34:22.6898172Z 
+2025-08-31T16:34:22.6898342Z ReferenceError: describe is not defined
+2025-08-31T16:34:22.6899150Z     at file:///home/runner/work/WhoopsPay/WhoopsPay/security-tests/owasp-top10-tests.js:6:1
+2025-08-31T16:34:22.6899716Z     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+2025-08-31T16:34:22.6900224Z     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+2025-08-31T16:34:22.6900839Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+2025-08-31T16:34:22.6901166Z 
+2025-08-31T16:34:22.6901263Z Node.js v20.19.4
+2025-08-31T16:34:22.6935086Z OWASP Top 10 tests completed
+2025-08-31T16:34:22.8103224Z file:///home/runner/work/WhoopsPay/WhoopsPay/security-tests/owasp-api-top10-tests.js:6
+2025-08-31T16:34:22.8104243Z describe('OWASP API Security Top 10 Tests', () => {
+2025-08-31T16:34:22.8105027Z ^
+2025-08-31T16:34:22.8105225Z 
+2025-08-31T16:34:22.8105503Z ReferenceError: describe is not defined
+2025-08-31T16:34:22.8106076Z     at file:///home/runner/work/WhoopsPay/WhoopsPay/security-tests/owasp-api-top10-tests.js:6:1
+2025-08-31T16:34:22.8106689Z     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+2025-08-31T16:34:22.8107174Z     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+2025-08-31T16:34:22.8107746Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+2025-08-31T16:34:22.8108076Z 
+2025-08-31T16:34:22.8108174Z Node.js v20.19.4
+2025-08-31T16:34:22.8146465Z OWASP API tests completed
+2025-08-31T16:34:22.8209217Z ##[group]Run if [ -z "***" ]; then
+2025-08-31T16:34:22.8209910Z [36;1mif [ -z "***" ]; then[0m
+2025-08-31T16:34:22.8210623Z [36;1m  echo "⚠️ SONAR_TOKEN not configured - SonarCloud analysis will be skipped"[0m
+2025-08-31T16:34:22.8211377Z [36;1m  echo "To enable SonarCloud:"[0m
+2025-08-31T16:34:22.8211904Z [36;1m  echo "1. Go to https://sonarcloud.io and sign up"[0m
+2025-08-31T16:34:22.8212306Z [36;1m  echo "2. Create a project and get your token"[0m
+2025-08-31T16:34:22.8212678Z [36;1m  echo "3. Add it as SONAR_TOKEN in GitHub repository secrets"[0m
+2025-08-31T16:34:22.8213026Z [36;1melse[0m
+2025-08-31T16:34:22.8213250Z [36;1m  echo "✅ SonarCloud token configured"[0m
+2025-08-31T16:34:22.8213562Z [36;1m  echo "🔍 Token length: ${#SONAR_TOKEN}"[0m
+2025-08-31T16:34:22.8213890Z [36;1m  echo "🔍 Project key: khajdari_WhoopsPay"[0m
+2025-08-31T16:34:22.8214204Z [36;1m  echo "🔍 Organization: khajdari"[0m
+2025-08-31T16:34:22.8214787Z [36;1mfi[0m
+2025-08-31T16:34:22.8244706Z shell: /usr/bin/bash -e {0}
+2025-08-31T16:34:22.8245128Z env:
+2025-08-31T16:34:22.8245318Z   NODE_VERSION: 20
+2025-08-31T16:34:22.8245540Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:22.8245833Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:22.8246070Z   VERSION: 1.0.0
+2025-08-31T16:34:22.8246323Z   SONAR_TOKEN: ***
+2025-08-31T16:34:22.8246517Z ##[endgroup]
+2025-08-31T16:34:22.8300412Z ✅ SonarCloud token configured
+2025-08-31T16:34:22.8300779Z 🔍 Token length: 40
+2025-08-31T16:34:22.8301107Z 🔍 Project key: khajdari_WhoopsPay
+2025-08-31T16:34:22.8301445Z 🔍 Organization: khajdari
+2025-08-31T16:34:22.8361371Z ##[group]Run SonarSource/sonarcloud-github-action@master
+2025-08-31T16:34:22.8361713Z with:
+2025-08-31T16:34:22.8362384Z   args: -Dsonar.verbose=true -Dsonar.pullrequest.github.summary_comment=true -Dsonar.analysis.mode=publish -Dsonar.log.level=DEBUG -Dsonar.scanner.disableAutoAnalysis=true
+
+2025-08-31T16:34:22.8363106Z   scannerVersion: 7.0.2.4839
+2025-08-31T16:34:22.8363516Z   scannerBinariesUrl: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
+2025-08-31T16:34:22.8363939Z env:
+2025-08-31T16:34:22.8364110Z   NODE_VERSION: 20
+2025-08-31T16:34:22.8364314Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:22.8364594Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:22.8364828Z   VERSION: 1.0.0
+2025-08-31T16:34:22.8365441Z   GITHUB_TOKEN: ***
+2025-08-31T16:34:22.8365702Z   SONAR_TOKEN: ***
+2025-08-31T16:34:22.8365892Z ##[endgroup]
+2025-08-31T16:34:22.8434491Z ##[group]Run echo "::warning title=SonarScanner::This action is deprecated and will be removed in a future release. Please use the sonarqube-scan-action action instead. The sonarqube-scan-action is a drop-in replacement for this action."
+2025-08-31T16:34:22.8437221Z [36;1mecho "::warning title=SonarScanner::This action is deprecated and will be removed in a future release. Please use the sonarqube-scan-action action instead. The sonarqube-scan-action is a drop-in replacement for this action."[0m
+2025-08-31T16:34:22.8466771Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-31T16:34:22.8467109Z env:
+2025-08-31T16:34:22.8467296Z   NODE_VERSION: 20
+2025-08-31T16:34:22.8467512Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:22.8467804Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:22.8468098Z   VERSION: 1.0.0
+2025-08-31T16:34:22.8468438Z   GITHUB_TOKEN: ***
+2025-08-31T16:34:22.8468731Z   SONAR_TOKEN: ***
+2025-08-31T16:34:22.8468933Z ##[endgroup]
+2025-08-31T16:34:22.8544615Z ##[warning]This action is deprecated and will be removed in a future release. Please use the sonarqube-scan-action action instead. The sonarqube-scan-action is a drop-in replacement for this action.
+2025-08-31T16:34:22.8620352Z ##[group]Run SonarSource/sonarqube-scan-action@v5.0.0
+2025-08-31T16:34:22.8620655Z with:
+2025-08-31T16:34:22.8621302Z   args: -Dsonar.verbose=true -Dsonar.pullrequest.github.summary_comment=true -Dsonar.analysis.mode=publish -Dsonar.log.level=DEBUG -Dsonar.scanner.disableAutoAnalysis=true
+
+2025-08-31T16:34:22.8622017Z   scannerVersion: 7.0.2.4839
+2025-08-31T16:34:22.8622421Z   scannerBinariesUrl: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
+2025-08-31T16:34:22.8622824Z env:
+2025-08-31T16:34:22.8623002Z   NODE_VERSION: 20
+2025-08-31T16:34:22.8623207Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:22.8623492Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:22.8623730Z   VERSION: 1.0.0
+2025-08-31T16:34:22.8624035Z   GITHUB_TOKEN: ***
+2025-08-31T16:34:22.8624294Z   SONAR_TOKEN: ***
+2025-08-31T16:34:22.8624486Z ##[endgroup]
+2025-08-31T16:34:22.8641585Z ##[group]Run ${GITHUB_ACTION_PATH}/scripts/sanity-checks.sh
+2025-08-31T16:34:22.8641992Z [36;1m${GITHUB_ACTION_PATH}/scripts/sanity-checks.sh[0m
+2025-08-31T16:34:22.8669023Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-31T16:34:22.8669360Z env:
+2025-08-31T16:34:22.8669543Z   NODE_VERSION: 20
+2025-08-31T16:34:22.8669747Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:22.8670026Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:22.8670247Z   VERSION: 1.0.0
+2025-08-31T16:34:22.8670553Z   GITHUB_TOKEN: ***
+2025-08-31T16:34:22.8670809Z   SONAR_TOKEN: ***
+2025-08-31T16:34:22.8671017Z   INPUT_PROJECTBASEDIR: 
+2025-08-31T16:34:22.8671242Z ##[endgroup]
+2025-08-31T16:34:22.8779961Z ##[group]Run actions/cache@v4
+2025-08-31T16:34:22.8780202Z with:
+2025-08-31T16:34:22.8780496Z   path: /home/runner/work/_temp/sonar-scanner-cli-7.0.2.4839-Linux-X64
+2025-08-31T16:34:22.8780887Z   key: sonar-scanner-cli-7.0.2.4839-Linux-X64
+2025-08-31T16:34:22.8781180Z   enableCrossOsArchive: false
+2025-08-31T16:34:22.8781419Z   fail-on-cache-miss: false
+2025-08-31T16:34:22.8781849Z   lookup-only: false
+2025-08-31T16:34:22.8782070Z   save-always: false
+2025-08-31T16:34:22.8782264Z env:
+2025-08-31T16:34:22.8782445Z   NODE_VERSION: 20
+2025-08-31T16:34:22.8782645Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:22.8782920Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:22.8783147Z   VERSION: 1.0.0
+2025-08-31T16:34:22.8783468Z   GITHUB_TOKEN: ***
+2025-08-31T16:34:22.8783731Z   SONAR_TOKEN: ***
+2025-08-31T16:34:22.8783951Z   SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
+2025-08-31T16:34:22.8784201Z ##[endgroup]
+2025-08-31T16:34:23.1340291Z Cache hit for: sonar-scanner-cli-7.0.2.4839-Linux-X64
+2025-08-31T16:34:23.5437992Z Received 51843291 of 51843291 (100.0%), 135.8 MBs/sec
+2025-08-31T16:34:23.5439162Z Cache Size: ~49 MB (51843291 B)
+2025-08-31T16:34:23.5469422Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e8d9daf0-d53e-4805-bda2-72ea4096e4e0/cache.tzst -P -C /home/runner/work/WhoopsPay/WhoopsPay --use-compress-program unzstd
+2025-08-31T16:34:23.8748905Z Cache restored successfully
+2025-08-31T16:34:23.8938954Z Cache restored from key: sonar-scanner-cli-7.0.2.4839-Linux-X64
+2025-08-31T16:34:23.9116055Z ##[group]Run echo "${RUNNER_TEMP}/sonar-scanner-cli-7.0.2.4839-Linux-X64/bin" >> $GITHUB_PATH
+2025-08-31T16:34:23.9116683Z [36;1mecho "${RUNNER_TEMP}/sonar-scanner-cli-7.0.2.4839-Linux-X64/bin" >> $GITHUB_PATH[0m
+2025-08-31T16:34:23.9145724Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-31T16:34:23.9146071Z env:
+2025-08-31T16:34:23.9146262Z   NODE_VERSION: 20
+2025-08-31T16:34:23.9146480Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:23.9146786Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:23.9147033Z   VERSION: 1.0.0
+2025-08-31T16:34:23.9147368Z   GITHUB_TOKEN: ***
+2025-08-31T16:34:23.9147640Z   SONAR_TOKEN: ***
+2025-08-31T16:34:23.9147852Z ##[endgroup]
+2025-08-31T16:34:23.9217946Z ##[group]Run ${GITHUB_ACTION_PATH}/scripts/run-sonar-scanner-cli.sh -Dsonar.verbose=true -Dsonar.pullrequest.github.summary_comment=true -Dsonar.analysis.mode=publish -Dsonar.log.level=DEBUG -Dsonar.scanner.disableAutoAnalysis=true
+2025-08-31T16:34:23.9219492Z [36;1m${GITHUB_ACTION_PATH}/scripts/run-sonar-scanner-cli.sh -Dsonar.verbose=true -Dsonar.pullrequest.github.summary_comment=true -Dsonar.analysis.mode=publish -Dsonar.log.level=DEBUG -Dsonar.scanner.disableAutoAnalysis=true[0m
+2025-08-31T16:34:23.9247269Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-08-31T16:34:23.9247814Z env:
+2025-08-31T16:34:23.9248138Z   NODE_VERSION: 20
+2025-08-31T16:34:23.9248500Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:23.9248971Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:23.9249359Z   VERSION: 1.0.0
+2025-08-31T16:34:23.9249955Z   GITHUB_TOKEN: ***
+2025-08-31T16:34:23.9250503Z   SONAR_TOKEN: ***
+2025-08-31T16:34:23.9250894Z   INPUT_PROJECTBASEDIR: 
+2025-08-31T16:34:23.9251481Z   SONAR_SCANNER_JRE: /home/runner/work/_temp/sonar-scanner-cli-7.0.2.4839-Linux-X64/jre
+2025-08-31T16:34:23.9252041Z ##[endgroup]
+2025-08-31T16:34:23.9333318Z + sonar-scanner -Dsonar.verbose=true -Dsonar.pullrequest.github.summary_comment=true -Dsonar.analysis.mode=publish -Dsonar.log.level=DEBUG -Dsonar.scanner.disableAutoAnalysis=true
+2025-08-31T16:34:24.2579728Z 16:34:24.254 INFO  Scanner configuration file: /home/runner/work/_temp/sonar-scanner-cli-7.0.2.4839-Linux-X64/conf/sonar-scanner.properties
+2025-08-31T16:34:24.2586967Z 16:34:24.258 INFO  Project root configuration file: /home/runner/work/WhoopsPay/WhoopsPay/sonar-project.properties
+2025-08-31T16:34:24.2741717Z 16:34:24.273 INFO  SonarScanner CLI 7.0.2.4839
+2025-08-31T16:34:24.2758092Z 16:34:24.275 INFO  Java 17.0.13 Eclipse Adoptium (64-bit)
+2025-08-31T16:34:24.2763831Z 16:34:24.276 INFO  Linux 6.11.0-1018-azure amd64
+2025-08-31T16:34:24.2826296Z 16:34:24.282 DEBUG Scanner max available memory: 3 GB
+2025-08-31T16:34:24.3031924Z 16:34:24.302 DEBUG uname -m returned 'x86_64'
+2025-08-31T16:34:24.3048879Z 16:34:24.304 DEBUG Using JVM default truststore: /home/runner/work/_temp/sonar-scanner-cli-7.0.2.4839-Linux-X64/jre/lib/security/cacerts
+2025-08-31T16:34:24.3058283Z 16:34:24.305 DEBUG Create: /home/runner/.sonar/cache
+2025-08-31T16:34:24.3063831Z 16:34:24.306 INFO  User cache: /home/runner/.sonar/cache
+2025-08-31T16:34:24.3064708Z 16:34:24.306 DEBUG Create: /home/runner/.sonar/cache/_tmp
+2025-08-31T16:34:24.3965307Z 16:34:24.395 DEBUG Loading OS trusted SSL certificates...
+2025-08-31T16:34:24.3966977Z 16:34:24.395 DEBUG This operation might be slow or even get stuck. You can skip it by passing the scanner property 'sonar.scanner.skipSystemTruststore=true'
+2025-08-31T16:34:24.6213925Z 16:34:24.621 DEBUG Loaded [440] system trusted certificates
+2025-08-31T16:34:24.7898601Z 16:34:24.788 DEBUG Loaded truststore from '/home/runner/work/_temp/sonar-scanner-cli-7.0.2.4839-Linux-X64/jre/lib/security/cacerts' containing 152 certificates
+2025-08-31T16:34:24.9085704Z 16:34:24.908 INFO  JRE provisioning: os[linux], arch[x86_64]
+2025-08-31T16:34:24.9259281Z 16:34:24.925 DEBUG --> GET https://api.sonarcloud.io/analysis/jres?os=linux&arch=x86_64
+2025-08-31T16:34:25.5560852Z 16:34:25.555 DEBUG <-- 200 https://api.sonarcloud.io/analysis/jres?os=linux&arch=x86_64 (630ms, 471-byte body)
+2025-08-31T16:34:25.5828305Z 16:34:25.582 DEBUG Download https://scanner.sonarcloud.io/jres/OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz to /home/runner/.sonar/cache/_tmp/fileCache12014226315807539134.tmp
+2025-08-31T16:34:25.5834523Z 16:34:25.583 DEBUG --> GET https://scanner.sonarcloud.io/jres/OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz
+2025-08-31T16:34:25.7348383Z 16:34:25.734 DEBUG <-- 200 https://scanner.sonarcloud.io/jres/OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz (151ms, 46382823-byte body)
+2025-08-31T16:34:27.0867478Z 16:34:27.085 DEBUG Executing: /home/runner/.sonar/cache/bcb1b7b8ad68c93093f09b591b7cb17161d39891f7d29d33a586f5a328603707/OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz_extracted/jdk-17.0.11+9-jre/bin/java --version
+2025-08-31T16:34:27.1106762Z 16:34:27.110 DEBUG openjdk 17.0.11 2024-04-16
+2025-08-31T16:34:27.1107753Z 16:34:27.110 DEBUG OpenJDK Runtime Environment Temurin-17.0.11+9 (build 17.0.11+9)
+2025-08-31T16:34:27.1108916Z 16:34:27.110 DEBUG OpenJDK 64-Bit Server VM Temurin-17.0.11+9 (build 17.0.11+9, mixed mode, sharing)
+2025-08-31T16:34:27.1150394Z 16:34:27.114 DEBUG --> GET https://api.sonarcloud.io/analysis/engine
+2025-08-31T16:34:27.3213408Z 16:34:27.321 DEBUG <-- 200 https://api.sonarcloud.io/analysis/engine (206ms, 292-byte body)
+2025-08-31T16:34:27.3226319Z 16:34:27.322 DEBUG Download https://scanner.sonarcloud.io/engines/sonarcloud-scanner-engine-11.19.0.895.jar to /home/runner/.sonar/cache/_tmp/fileCache15368285154139073280.tmp
+2025-08-31T16:34:27.3228350Z 16:34:27.322 DEBUG --> GET https://scanner.sonarcloud.io/engines/sonarcloud-scanner-engine-11.19.0.895.jar
+2025-08-31T16:34:27.3342630Z 16:34:27.333 DEBUG <-- 200 https://scanner.sonarcloud.io/engines/sonarcloud-scanner-engine-11.19.0.895.jar (10ms, 33346021-byte body)
+2025-08-31T16:34:27.5204488Z 16:34:27.519 INFO  Communicating with SonarQube Cloud
+2025-08-31T16:34:27.5214745Z 16:34:27.521 DEBUG Work directory: /home/runner/work/WhoopsPay/WhoopsPay/.scannerwork
+2025-08-31T16:34:27.5318505Z 16:34:27.530 DEBUG Executing: /home/runner/.sonar/cache/bcb1b7b8ad68c93093f09b591b7cb17161d39891f7d29d33a586f5a328603707/OpenJDK17U-jre_x64_linux_hotspot_17.0.11_9.tar.gz_extracted/jdk-17.0.11+9-jre/bin/java -Dorg.bouncycastle.pkcs12.ignore_useless_passwd=true -jar /home/runner/.sonar/cache/389023132d4de7124d91bd4e355ae68fe312b7440c8a1fece0f26cd2ee92ad08/sonarcloud-scanner-engine-11.19.0.895.jar
+2025-08-31T16:34:27.7909013Z 16:34:27.790 INFO  Starting SonarScanner Engine...
+2025-08-31T16:34:27.7916717Z 16:34:27.791 INFO  Java 17.0.11 Eclipse Adoptium (64-bit)
+2025-08-31T16:34:27.8292415Z 16:34:27.829 DEBUG JVM max available memory: 3 GB
+2025-08-31T16:34:28.0016462Z 16:34:28.000 DEBUG Sonar User Home: /home/runner/.sonar
+2025-08-31T16:34:28.0019642Z 16:34:28.001 DEBUG Initialize DefaultScannerWsClient
+2025-08-31T16:34:28.0887380Z 16:34:28.087 DEBUG Loading OS trusted SSL certificates...
+2025-08-31T16:34:28.0891053Z 16:34:28.088 DEBUG This operation might be slow or even get stuck. You can skip it by passing the scanner property 'sonar.scanner.skipSystemTruststore=true'
+2025-08-31T16:34:28.3229088Z 16:34:28.322 DEBUG Loaded [440] system trusted certificates
+2025-08-31T16:34:28.4846950Z 16:34:28.482 DEBUG Loaded truststore from '/home/runner/work/_temp/sonar-scanner-cli-7.0.2.4839-Linux-X64/jre/lib/security/cacerts' containing 152 certificates
+2025-08-31T16:34:28.6162495Z 16:34:28.615 INFO  Load global settings
+2025-08-31T16:34:28.6236704Z 16:34:28.623 DEBUG --> GET https://sonarcloud.io/api/settings/values.protobuf
+2025-08-31T16:34:29.2006967Z 16:34:29.200 DEBUG <-- 200 https://sonarcloud.io/api/settings/values.protobuf (576ms, unknown-length body)
+2025-08-31T16:34:29.2075724Z 16:34:29.207 INFO  Load global settings (done) | time=591ms
+2025-08-31T16:34:29.2116882Z 16:34:29.211 INFO  Server id: 1BD809FA-AWHW8ct9-T_TB3XqouNu
+2025-08-31T16:34:29.2128707Z 16:34:29.212 DEBUG Initialize DownloadPluginsScannerWsClient
+2025-08-31T16:34:29.2150583Z 16:34:29.214 DEBUG Loading OS trusted SSL certificates...
+2025-08-31T16:34:29.2153415Z 16:34:29.215 DEBUG This operation might be slow or even get stuck. You can skip it by passing the scanner property 'sonar.scanner.skipSystemTruststore=true'
+2025-08-31T16:34:29.3457554Z 16:34:29.344 DEBUG Loaded [440] system trusted certificates
+2025-08-31T16:34:29.3828531Z 16:34:29.380 DEBUG Loaded truststore from '/home/runner/work/_temp/sonar-scanner-cli-7.0.2.4839-Linux-X64/jre/lib/security/cacerts' containing 152 certificates
+2025-08-31T16:34:29.3882906Z 16:34:29.387 DEBUG Create : /home/runner/.sonar/_tmp
+2025-08-31T16:34:29.3886651Z 16:34:29.388 DEBUG User cache: /home/runner/.sonar/cache
+2025-08-31T16:34:29.4082265Z 16:34:29.407 INFO  Loading required plugins
+2025-08-31T16:34:29.4103134Z 16:34:29.410 INFO  Load plugins index
+2025-08-31T16:34:29.4106512Z 16:34:29.410 DEBUG --> GET https://sonarcloud.io/api/plugins/installed
+2025-08-31T16:34:29.5503016Z 16:34:29.549 DEBUG <-- 200 https://sonarcloud.io/api/plugins/installed (143ms, unknown-length body)
+2025-08-31T16:34:29.5572371Z 16:34:29.556 INFO  Load plugins index (done) | time=151ms
+2025-08-31T16:34:29.5573258Z 16:34:29.557 INFO  Load/download plugins
+2025-08-31T16:34:29.5581037Z 16:34:29.557 DEBUG Download plugin 'iac' to '/home/runner/.sonar/_tmp/fileCache14793719555021929160.tmp'
+2025-08-31T16:34:29.5587278Z 16:34:29.558 DEBUG --> GET https://scanner.sonarcloud.io/plugins/iac/versions/fc66f273c8e967a7fc92678e5808e19e.jar
+2025-08-31T16:34:29.6028867Z 16:34:29.602 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/iac/versions/fc66f273c8e967a7fc92678e5808e19e.jar (44ms, 21408417-byte body)
+2025-08-31T16:34:30.0757849Z 16:34:30.075 DEBUG Download plugin 'iacenterprise' to '/home/runner/.sonar/_tmp/fileCache15368353165663973094.tmp'
+2025-08-31T16:34:30.0758858Z 16:34:30.075 DEBUG --> GET https://scanner.sonarcloud.io/plugins/iacenterprise/versions/6b7392f2d2fcad60271155f3e98eb36d.jar
+2025-08-31T16:34:30.0846296Z 16:34:30.084 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/iacenterprise/versions/6b7392f2d2fcad60271155f3e98eb36d.jar (8ms, 1629803-byte body)
+2025-08-31T16:34:30.1174086Z 16:34:30.116 DEBUG Download plugin 'jacoco' to '/home/runner/.sonar/_tmp/fileCache18082359021991513875.tmp'
+2025-08-31T16:34:30.1176893Z 16:34:30.117 DEBUG --> GET https://scanner.sonarcloud.io/plugins/jacoco/versions/04bba36a445c3713a632aa358be2f99c.jar
+2025-08-31T16:34:30.1270414Z 16:34:30.126 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/jacoco/versions/04bba36a445c3713a632aa358be2f99c.jar (9ms, 23258-byte body)
+2025-08-31T16:34:30.1347066Z 16:34:30.134 DEBUG Download plugin 'textenterprise' to '/home/runner/.sonar/_tmp/fileCache6830707721213037410.tmp'
+2025-08-31T16:34:30.1359096Z 16:34:30.135 DEBUG --> GET https://scanner.sonarcloud.io/plugins/textenterprise/versions/6fa24d229685012241a3b5981bc06085.jar
+2025-08-31T16:34:30.1460309Z 16:34:30.144 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/textenterprise/versions/6fa24d229685012241a3b5981bc06085.jar (9ms, 8375822-byte body)
+2025-08-31T16:34:30.2686351Z 16:34:30.266 INFO  Load/download plugins (done) | time=708ms
+2025-08-31T16:34:30.2693646Z 16:34:30.266 DEBUG Plugins not loaded because they are optional: [abap, sonarapex, architecture, architecturejavascriptfrontend, architecturejavafrontend, csharpenterprise, cpp, cobol, dart, dbd, dbdjavafrontend, dbdpythonfrontend, flex, go, web, jcl, javasymbolicexecution, java, javascript, kotlin, php, pli, plsql, python, rpg, ruby, rust, sonarscala, jasmin, swift, tsql, vbnetenterprise, vb, security, securitycsharpfrontend, securitygofrontend, securityjsfrontend, securityjavafrontend, securitykotlinfrontend, securityphpfrontend, securitypythonfrontend, securityvbnetfrontend, xml]
+2025-08-31T16:34:30.3232458Z 16:34:30.322 DEBUG Plugins loaded:
+2025-08-31T16:34:30.3241053Z 16:34:30.323 DEBUG   * Text Code Quality and Security 2.27.0.7705 (textenterprise)
+2025-08-31T16:34:30.3243168Z 16:34:30.323 DEBUG   * JaCoCo 1.3.0.1538 (jacoco)
+2025-08-31T16:34:30.3246086Z 16:34:30.323 DEBUG   * IaC Code Quality and Security 1.49.0.16030 (iacenterprise)
+2025-08-31T16:34:30.3252031Z 16:34:30.323 DEBUG   * IaC Code Quality and Security 1.49.0.16030 (iac)
+2025-08-31T16:34:30.3253345Z 16:34:30.324 DEBUG --> GET https://sonarcloud.io/api/server/version
+2025-08-31T16:34:30.4559983Z 16:34:30.455 DEBUG <-- 200 https://sonarcloud.io/api/server/version (131ms, 11-byte body)
+2025-08-31T16:34:30.4582568Z 16:34:30.457 DEBUG Updated analysis started with a difference of -63 milliseconds
+2025-08-31T16:34:30.4627999Z 16:34:30.462 DEBUG Started at Sun Aug 31 16:34:29 UTC 2025
+2025-08-31T16:34:30.6277801Z 16:34:30.627 DEBUG register org.eclipse.jgit.util.FS$FileStoreAttributes$$Lambda$276/0x00007f6b3c2f2e00@7fb33394 with shutdown hook
+2025-08-31T16:34:30.6513292Z 16:34:30.649 INFO  Found an active CI vendor: 'Github Actions'
+2025-08-31T16:34:30.6570741Z 16:34:30.656 INFO  Load project settings for component key: 'khajdari_WhoopsPay'
+2025-08-31T16:34:30.6577064Z 16:34:30.657 DEBUG --> GET https://sonarcloud.io/api/settings/values.protobuf?component=khajdari_WhoopsPay
+2025-08-31T16:34:30.9408717Z 16:34:30.940 DEBUG <-- 200 https://sonarcloud.io/api/settings/values.protobuf?component=khajdari_WhoopsPay (283ms, unknown-length body)
+2025-08-31T16:34:30.9455612Z 16:34:30.945 INFO  Load project settings for component key: 'khajdari_WhoopsPay' (done) | time=289ms
+2025-08-31T16:34:30.9688579Z 16:34:30.968 DEBUG Cleanup org.eclipse.jgit.util.FS$FileStoreAttributes$$Lambda$276/0x00007f6b3c2f2e00@7fb33394 during JVM shutdown
+2025-08-31T16:34:30.9711645Z 16:34:30.970 ERROR You are running CI analysis while Automatic Analysis is enabled. Please consider disabling one or the other.
+2025-08-31T16:34:30.9716643Z org.sonar.api.utils.MessageException: You are running CI analysis while Automatic Analysis is enabled. Please consider disabling one or the other.
+2025-08-31T16:34:30.9719151Z 
+2025-08-31T16:34:31.2967367Z 16:34:31.296 DEBUG Java command exited with code 1
+2025-08-31T16:34:31.2968404Z 16:34:31.296 INFO  EXECUTION FAILURE
+2025-08-31T16:34:31.2978400Z 16:34:31.297 INFO  Total time: 7.046s
+2025-08-31T16:34:31.6218377Z ##[error]Process completed with exit code 3.
+2025-08-31T16:34:31.6279413Z ##[group]Run echo "🔍 Checking SonarCloud analysis results..."
+2025-08-31T16:34:31.6279913Z [36;1mecho "🔍 Checking SonarCloud analysis results..."[0m
+2025-08-31T16:34:31.6280250Z [36;1mif [ -d ".scannerwork" ]; then[0m
+2025-08-31T16:34:31.6280642Z [36;1m  echo "✅ SonarCloud analysis completed - .scannerwork directory found"[0m
+2025-08-31T16:34:31.6281112Z [36;1m  ls -la .scannerwork/ || echo "Cannot list .scannerwork contents"[0m
+2025-08-31T16:34:31.6281475Z [36;1m  [0m
+2025-08-31T16:34:31.6281689Z [36;1m  # Copy results to version folder[0m
+2025-08-31T16:34:31.6282123Z [36;1m  cp -r .scannerwork/* "security-reports/v$VERSION/01-sonarcloud/" 2>/dev/null || true[0m
+2025-08-31T16:34:31.6282625Z [36;1m  echo "📁 SonarCloud results copied to version folder v$VERSION"[0m
+2025-08-31T16:34:31.6282956Z [36;1m  [0m
+2025-08-31T16:34:31.6283216Z [36;1m  if [ -f ".scannerwork/report-task.txt" ]; then[0m
+2025-08-31T16:34:31.6283572Z [36;1m    echo "📄 Report task file found:"[0m
+2025-08-31T16:34:31.6283870Z [36;1m    cat .scannerwork/report-task.txt[0m
+2025-08-31T16:34:31.6284140Z [36;1m  else[0m
+2025-08-31T16:34:31.6284359Z [36;1m    echo "❌ No report-task.txt found"[0m
+2025-08-31T16:34:31.6284619Z [36;1m  fi[0m
+2025-08-31T16:34:31.6284795Z [36;1melse[0m
+2025-08-31T16:34:31.6285468Z [36;1m  echo "❌ No .scannerwork directory found - analysis may have failed"[0m
+2025-08-31T16:34:31.6285861Z [36;1m  # Create placeholder in version folder[0m
+2025-08-31T16:34:31.6286378Z [36;1m  echo "SonarCloud analysis failed or skipped" > "security-reports/v$VERSION/01-sonarcloud/analysis-failed.txt"[0m
+2025-08-31T16:34:31.6286864Z [36;1mfi[0m
+2025-08-31T16:34:31.6287047Z [36;1m[0m
+2025-08-31T16:34:31.6287316Z [36;1m# Check if sonar-project.properties exists and is valid[0m
+2025-08-31T16:34:31.6287691Z [36;1mif [ -f "sonar-project.properties" ]; then[0m
+2025-08-31T16:34:31.6288207Z [36;1m  echo "✅ sonar-project.properties found:"[0m
+2025-08-31T16:34:31.6288522Z [36;1m  cat sonar-project.properties[0m
+2025-08-31T16:34:31.6288988Z [36;1m  cp sonar-project.properties "security-reports/v$VERSION/01-sonarcloud/" 2>/dev/null || true[0m
+2025-08-31T16:34:31.6289427Z [36;1melse[0m
+2025-08-31T16:34:31.6289669Z [36;1m  echo "❌ sonar-project.properties not found"[0m
+2025-08-31T16:34:31.6289951Z [36;1mfi[0m
+2025-08-31T16:34:31.6319109Z shell: /usr/bin/bash -e {0}
+2025-08-31T16:34:31.6319355Z env:
+2025-08-31T16:34:31.6319545Z   NODE_VERSION: 20
+2025-08-31T16:34:31.6319763Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:31.6320115Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:31.6320349Z   VERSION: 1.0.0
+2025-08-31T16:34:31.6320549Z ##[endgroup]
+2025-08-31T16:34:31.6369139Z 🔍 Checking SonarCloud analysis results...
+2025-08-31T16:34:31.6369995Z ❌ No .scannerwork directory found - analysis may have failed
+2025-08-31T16:34:31.6370751Z ✅ sonar-project.properties found:
+2025-08-31T16:34:31.6380040Z sonar.projectKey=khajdari_WhoopsPay
+2025-08-31T16:34:31.6380545Z sonar.organization=khajdari
+2025-08-31T16:34:31.6380937Z sonar.host.url=https://sonarcloud.io
+2025-08-31T16:34:31.6381274Z 
+2025-08-31T16:34:31.6381482Z # Source code configuration
+2025-08-31T16:34:31.6382012Z sonar.sources=client/src,server,shared
+2025-08-31T16:34:31.6382629Z sonar.tests=client/src,server,security-tests
+2025-08-31T16:34:31.6383602Z sonar.test.inclusions=**/*.test.ts,**/*.test.tsx,**/*.spec.ts,**/*.test.js,**/security-tests/**
+2025-08-31T16:34:31.6383986Z 
+2025-08-31T16:34:31.6384201Z # Exclusions for build artifacts and dependencies only
+2025-08-31T16:34:31.6384721Z sonar.exclusions=**/node_modules/**,**/dist/**,**/build/**,**/coverage/**,**/*.min.js
+2025-08-31T16:34:31.6385249Z 
+2025-08-31T16:34:31.6385362Z # Coverage configuration
+2025-08-31T16:34:31.6385721Z sonar.typescript.lcov.reportPaths=coverage/lcov.info
+2025-08-31T16:34:31.6386166Z sonar.javascript.lcov.reportPaths=coverage/lcov.info
+2025-08-31T16:34:31.6386590Z sonar.coverage.exclusions=**/*.test.*,**/test/**
+2025-08-31T16:34:31.6386812Z 
+2025-08-31T16:34:31.6387157Z # Security and quality settings
+2025-08-31T16:34:31.6387484Z sonar.security.hotspots.enabled=true
+2025-08-31T16:34:31.6387795Z sonar.qualitygate.wait=true
+2025-08-31T16:34:31.6387960Z 
+2025-08-31T16:34:31.6388113Z # FULL SECURITY SCANNING - NO EXCLUSIONS
+2025-08-31T16:34:31.6388525Z # Detect all OWASP Top 10 and API Security vulnerabilities
+2025-08-31T16:34:31.6388873Z sonar.java.binaries=.
+2025-08-31T16:34:31.6389164Z sonar.security.review.enabled=true
+2025-08-31T16:34:31.6389346Z 
+2025-08-31T16:34:31.6389566Z # Force full analysis in pull requests (not just new code)
+2025-08-31T16:34:31.6389959Z sonar.pullrequest.vcs.parameter=false
+2025-08-31T16:34:31.6398683Z sonar.analysis.mode=publish
+2025-08-31T16:34:31.6419588Z ##[group]Run echo "status=completed" >> $GITHUB_OUTPUT
+2025-08-31T16:34:31.6419965Z [36;1mecho "status=completed" >> $GITHUB_OUTPUT[0m
+2025-08-31T16:34:31.6446550Z shell: /usr/bin/bash -e {0}
+2025-08-31T16:34:31.6446803Z env:
+2025-08-31T16:34:31.6446990Z   NODE_VERSION: 20
+2025-08-31T16:34:31.6447202Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:31.6447497Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:31.6447727Z   VERSION: 1.0.0
+2025-08-31T16:34:31.6447929Z ##[endgroup]
+2025-08-31T16:34:31.6531061Z ##[group]Run actions/upload-artifact@v4
+2025-08-31T16:34:31.6531364Z with:
+2025-08-31T16:34:31.6531626Z   name: 01-sonarcloud-static-analysis-report-v1.0.0
+2025-08-31T16:34:31.6532004Z   path: security-reports/v1.0.0/01-sonarcloud/
+2025-08-31T16:34:31.6532292Z   retention-days: 30
+2025-08-31T16:34:31.6532508Z   if-no-files-found: warn
+2025-08-31T16:34:31.6532736Z   compression-level: 6
+2025-08-31T16:34:31.6532950Z   overwrite: false
+2025-08-31T16:34:31.6533163Z   include-hidden-files: false
+2025-08-31T16:34:31.6533398Z env:
+2025-08-31T16:34:31.6533582Z   NODE_VERSION: 20
+2025-08-31T16:34:31.6533793Z   DOCKER_REGISTRY: docker.io
+2025-08-31T16:34:31.6534241Z   IMAGE_NAME: ***/whoopspay
+2025-08-31T16:34:31.6534473Z   VERSION: 1.0.0
+2025-08-31T16:34:31.6534673Z ##[endgroup]
+2025-08-31T16:34:31.8638136Z With the provided path, there will be 2 files uploaded
+2025-08-31T16:34:31.8643192Z Artifact name is valid!
+2025-08-31T16:34:31.8644277Z Root directory input is valid!
+2025-08-31T16:34:31.9819528Z Beginning upload of artifact content to blob storage
+2025-08-31T16:34:32.0464061Z Uploaded bytes 833
+2025-08-31T16:34:32.0663758Z Finished uploading artifact content to blob storage!
+2025-08-31T16:34:32.0667166Z SHA256 digest of uploaded artifact zip is 60c6787932e7a5ecea5f63dc3467bbc5885405814a2cf0984a7ffbd07d2f24af
+2025-08-31T16:34:32.0669272Z Finalizing artifact upload
+2025-08-31T16:34:32.1712744Z Artifact 01-sonarcloud-static-analysis-report-v1.0.0.zip successfully finalized. Artifact ID 3893047126
+2025-08-31T16:34:32.1713997Z Artifact 01-sonarcloud-static-analysis-report-v1.0.0 has been successfully uploaded! Final size is 833 bytes. Artifact ID is 3893047126
+2025-08-31T16:34:32.1719915Z Artifact download URL: https://github.com/khajdari/WhoopsPay/actions/runs/17359698162/artifacts/3893047126
+2025-08-31T16:34:32.1841333Z Post job cleanup.
+2025-08-31T16:34:32.1889249Z Post job cleanup.
+2025-08-31T16:34:32.1940787Z Post job cleanup.
+2025-08-31T16:34:32.3192906Z Cache hit occurred on the primary key sonar-scanner-cli-7.0.2.4839-Linux-X64, not saving cache.
+2025-08-31T16:34:32.3292028Z Post job cleanup.
+2025-08-31T16:34:32.4791651Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-926a530f2136df83dc8afbe3eeb034728c16ca9a4313ee63bdbd15fbe744bd38, not saving cache.
+2025-08-31T16:34:32.4887115Z Post job cleanup.
+2025-08-31T16:34:32.5819117Z [command]/usr/bin/git version
+2025-08-31T16:34:32.5854710Z git version 2.51.0
+2025-08-31T16:34:32.5896390Z Temporarily overriding HOME='/home/runner/work/_temp/a02ab389-7484-4e2f-8c8d-797433e2811a' before making global git config changes
+2025-08-31T16:34:32.5897692Z Adding repository directory to the temporary git global config as a safe directory
+2025-08-31T16:34:32.5908578Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-08-31T16:34:32.5942993Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-08-31T16:34:32.5974675Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-08-31T16:34:32.6198036Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-08-31T16:34:32.6217526Z http.https://github.com/.extraheader
+2025-08-31T16:34:32.6229499Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-08-31T16:34:32.6259465Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-08-31T16:34:32.6574043Z Evaluate and set job outputs
+2025-08-31T16:34:32.6579892Z Cleaning up orphan processes

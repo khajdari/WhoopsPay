@@ -197,6 +197,13 @@ jobs:
             echo "🔍 Token length: ${#SONAR_TOKEN}"
             echo "🔍 Project key: khajdari_WhoopsPay"
             echo "🔍 Organization: khajdari"
+            
+            # Try to disable automatic analysis via API to prevent conflicts
+            echo "🔧 Attempting to disable automatic analysis..."
+            curl -s -X POST \
+              -H "Authorization: Bearer ${{ secrets.SONAR_TOKEN }}" \
+              "https://sonarcloud.io/api/settings/set?component=khajdari_WhoopsPay&key=sonar.analysis.autoAnalysis&value=false" \
+              || echo "Could not disable automatic analysis via API - please disable manually in SonarCloud project settings"
           fi
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -213,7 +220,6 @@ jobs:
             -Dsonar.pullrequest.github.summary_comment=true
             -Dsonar.analysis.mode=publish
             -Dsonar.log.level=DEBUG
-            -Dsonar.scanner.disableAutoAnalysis=true
         continue-on-error: true
 
       - name: Check SonarCloud results and organize
