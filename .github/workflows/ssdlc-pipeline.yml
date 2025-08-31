@@ -447,6 +447,7 @@ jobs:
           target: 'http://localhost:5000'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a -j -T 30 -l WARN'
+          artifact_name: 'owasp-zap-security-scan-v${{ env.VERSION }}'
         continue-on-error: true
 
       - name: Process ZAP results
