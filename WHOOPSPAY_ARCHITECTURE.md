@@ -1,0 +1,113 @@
+# WhoopsPay - Educational Security Training Platform
+
+## Overview
+
+WhoopsPay is an educational cybersecurity training platform that simulates a comprehensive financial payment system while intentionally implementing security vulnerabilities from the OWASP Top 10 and API Security Top 10. The application combines interactive security learning with intelligent transaction processing in a realistic financial application context.
+
+The platform is designed for security professionals, developers, students, and penetration testers to learn about web application vulnerabilities, secure coding practices, and vulnerability assessment in a controlled environment. It features both a React frontend and Express.js backend with extensive MVC architecture, plus integration with OWASP Juice Shop for expanded security training scenarios.
+
+## Recent Changes
+
+**August 31, 2025**: Implemented comprehensive Secure SDLC (Software Development Lifecycle) pipeline with 4-phase security analysis:
+- **Phase 1**: ESLint Security Linting with 3 enterprise-grade security plugins
+- **Phase 2**: Snyk Code SAST with maximum depth analysis (40+ vulnerabilities detected) 
+- **Phase 3**: Snyk SCA with comprehensive dependency scanning (115+ dependencies analyzed)
+- **Phase 4**: OWASP ZAP DAST with dynamic penetration testing
+- **Integration**: Automated GitHub Issues, semantic versioning, and Docker Hub deployment
+
+**⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes. NEVER use this code in production environments!**
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+### Backend Architecture (MVC Pattern)
+The backend follows a Model-View-Controller pattern with clear separation of concerns:
+
+- **Controllers**: Handle request processing and business logic coordination for authentication, user management, transactions, money requests, notifications, and administration
+- **Models**: Data layer abstraction using Drizzle ORM with SQLite for development and PostgreSQL support for production
+- **Routes**: RESTful API endpoints with comprehensive routing configuration
+- **Middleware**: Express middleware for authentication, authorization, and admin access control
+- **Services**: Business logic layer prepared for expansion and external integrations
+
+### Frontend Architecture (React + TypeScript)
+The frontend uses modern React patterns with comprehensive component architecture:
+
+- **Component-based UI**: Reusable components using shadcn/ui design system
+- **State Management**: React Query for server state and React hooks for local state
+- **Routing**: Wouter for lightweight client-side routing
+- **Internationalization**: Custom i18n system supporting English and Greek locales
+- **Authentication**: Session-based authentication with persistent state management
+
+### Database Design
+SQLite-based development database with intentionally vulnerable schema design:
+
+- **Users Table**: Contains deliberately exposed sensitive data (SSN, plain text passwords for some users)
+- **Transactions Table**: Financial transaction records with minimal validation
+- **Payment Methods**: Credit card and bank account storage with weak encryption
+- **Sessions**: Express session storage with vulnerable configuration
+- **Notifications & Issue Reports**: User communication and support systems
+
+### Security Training Features
+The application implements specific OWASP vulnerabilities for educational purposes:
+
+- **A01 Broken Access Control**: IDOR vulnerabilities, missing authorization checks, privilege escalation opportunities
+- **A02 Cryptographic Failures**: Mixed plain text and encrypted data storage, weak session secrets
+- **A03 Injection**: SQL injection opportunities, XSS vulnerabilities through unvalidated inputs
+- **A04 Insecure Design**: Missing rate limiting, insufficient business logic validation
+- **A05 Security Misconfiguration**: Verbose error messages, exposed administrative interfaces
+- **A07 Authentication Failures**: Weak session management, account enumeration possibilities
+- **A09 Logging and Monitoring Failures**: Insufficient audit logging for critical operations
+
+### Development Environment
+The application supports multiple deployment scenarios:
+
+- **Local Development**: Direct Node.js execution with Vite development server
+- **Docker Environment**: Containerized deployment with Docker Compose integration
+- **Replit Integration**: Cloud-based development environment with proper asset handling
+- **Production Build**: Optimized static builds with proper routing fallbacks
+
+## External Dependencies
+
+### Core Framework Dependencies
+- **Express.js**: Backend web framework with session management
+- **React**: Frontend UI library with TypeScript support
+- **Drizzle ORM**: Database abstraction layer with SQLite/PostgreSQL support
+- **Vite**: Development server and build tool for frontend assets
+
+### UI and Styling
+- **shadcn/ui**: Component library built on Radix UI primitives
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **Lucide React**: Icon library for consistent visual elements
+
+### Authentication and Security
+- **bcrypt**: Password hashing (selectively applied for educational contrast)
+- **express-session**: Session management with configurable storage
+- **better-sqlite3**: SQLite database driver for development
+
+### Data Management
+- **React Query (@tanstack/react-query)**: Server state management and caching
+- **React Hook Form**: Form state management with validation
+- **Zod**: Schema validation for form inputs and API data
+
+### Payment Integration
+- **PayPal Server SDK**: External payment processing integration
+- **OWASP Juice Shop**: Integrated e-commerce platform for extended security training
+
+### Development Tools
+- **TypeScript**: Type safety and enhanced development experience
+- **ESBuild**: Fast JavaScript bundler for production builds
+- **Swagger**: API documentation generation and testing interface
+
+### Educational Security Tools
+- **ESLint Security Linting**: Comprehensive code quality and security linting with enterprise-grade plugins (eslint-plugin-security, @microsoft/eslint-plugin-sdl, eslint-plugin-sonarjs)
+- **Snyk Code SAST**: Static application security testing with maximum depth analysis (--all-projects --detection-depth=10 --severity-threshold=low)
+- **Snyk SCA**: Software composition analysis with comprehensive dependency scanning (--dev --all-projects --detection-depth=10)
+- **OWASP ZAP DAST**: Dynamic application security testing with penetration testing capabilities
+- **GitHub Actions Integration**: Automated security pipeline with semantic versioning and official HTML report generation
+- **Docker Hub Integration**: Containerized deployment with security-validated images
+- **OWASP Juice Shop Integration**: Extended vulnerability scenarios for advanced security training
+- **Custom Security Tests**: Automated OWASP Top 10 and API Security Top 10 vulnerability detection scripts
+- **Admin Monitoring**: Real-time security event logging and analysis
