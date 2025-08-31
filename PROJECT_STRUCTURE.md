@@ -2,6 +2,28 @@
 
 **⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes. NEVER use this code in production environments!**
 
+## Secure SDLC Pipeline
+
+WhoopsPay includes a comprehensive security pipeline implemented in `.github/workflows/ssdlc-pipeline.yml`:
+
+### Pipeline Phases
+1. **ESLint Security Linting** - Code quality and security rule enforcement
+2. **SAST (Snyk Code)** - Static application security testing with maximum depth
+3. **SCA (Snyk)** - Software composition analysis with dependency vulnerability scanning  
+4. **DAST (OWASP ZAP)** - Dynamic application security testing with penetration testing
+
+### Security Tools Integration
+- **ESLint Plugins**: eslint-plugin-security, @microsoft/eslint-plugin-sdl, eslint-plugin-sonarjs
+- **Snyk Code**: DeepCode AI engine with cross-file analysis and maximum sensitivity configuration
+- **Snyk Open Source**: Comprehensive dependency scanning with development dependencies included
+- **OWASP ZAP**: Automated dynamic security testing with full application coverage
+
+### Pipeline Triggers
+- **Pull Requests**: Automatically runs on pull requests to `develop-vulnerable` branch
+- **Semantic Versioning**: Synchronized version management across reports and Docker images
+- **GitHub Issues**: Automated security report issues with download-only access
+- **Artifact Storage**: All security reports preserved as GitHub Actions artifacts
+
 ## Project Organization
 
 ### Backend Structure (MVC Pattern)

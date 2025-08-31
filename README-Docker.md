@@ -2,7 +2,23 @@
 
 **⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes. NEVER use this code in production environments!**
 
-This guide explains how to run WhoopsPay and OWASP Juice Shop using Docker on localhost.
+This guide explains how to run WhoopsPay and OWASP Juice Shop using Docker on localhost with integrated security pipeline validation.
+
+## Security Pipeline Integration
+
+WhoopsPay's Docker deployment is integrated with our comprehensive Secure SDLC pipeline:
+
+### Automated Security Validation
+- **Docker images** are built only after successful completion of all 4 security phases
+- **Security-validated containers** ensure only properly analyzed code reaches deployment
+- **Semantic versioning** synchronizes Docker tags with security report versions
+- **Docker Hub integration** provides official container registry with security attestation
+
+### Security Pipeline Phases (Before Docker Build)
+1. **ESLint Security Linting** - Enterprise-grade code quality and security validation
+2. **Snyk Code SAST** - Maximum depth static application security testing  
+3. **Snyk SCA** - Comprehensive dependency vulnerability analysis
+4. **OWASP ZAP DAST** - Dynamic application security testing with penetration testing
 
 ## Prerequisites
 
