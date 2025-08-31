@@ -453,7 +453,6 @@ jobs:
           target: 'http://localhost:5000'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a -j -T 30 -l WARN'
-          artifact_name: '03-owasp-zap-security-report-v${{ env.VERSION }}'
           issue_title: false
           create_issue: false
         continue-on-error: true
