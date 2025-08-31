@@ -254,44 +254,38 @@ jobs:
             echo "❌ sonar-project.properties not found"
           fi
 
-      - name: Generate SonarCloud HTML Report
+      - name: Generate SonarCloud HTML Report with Custom Converter
         run: |
-          if [ -n "${{ secrets.SONAR_TOKEN }}" ] && [ -d ".scannerwork" ]; then
-            echo "🎨 Generating SonarCloud HTML report using CNES tool..."
+          if [ -n "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "🎨 Generating SonarCloud HTML report with custom converter..."
             
-            # Download CNES Report tool (most reliable option)
-            echo "📦 Downloading CNES Report tool..."
-            wget -q https://github.com/cnescatlab/sonar-cnes-report/releases/download/4.2.0/sonar-cnes-report-4.2.0.jar \
-              -O sonar-cnes-report.jar
+            # Wait for analysis to be available on SonarCloud API
+            sleep 10
             
-            # Wait for analysis to be available on SonarCloud
-            sleep 15
+            # Ensure scripts directory exists and converter is executable
+            chmod +x scripts/sonarcloud-to-html.js 2>/dev/null || true
             
-            # Generate comprehensive report with CNES tool
-            echo "🔄 Generating HTML report with CNES tool..."
-            java -jar sonar-cnes-report.jar \
-              -s https://sonarcloud.io \
-              -t "${{ secrets.SONAR_TOKEN }}" \
-              -p "khajdari_WhoopsPay" \
-              -o "security-reports/v$VERSION/01-sonarcloud/" \
-              || echo "⚠️ CNES HTML report generation failed - trying fallback..."
+            # Generate HTML report using our custom converter
+            echo "🔄 Converting SonarCloud data to HTML..."
+            node scripts/sonarcloud-to-html.js \
+              "security-reports/v$VERSION/01-sonarcloud" \
+              "security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html" \
+              "WhoopsPay" \
+              "$VERSION" \
+              || echo "⚠️ Custom HTML report generation failed"
             
-            # Check if HTML report was generated
-            if [ -f "security-reports/v$VERSION/01-sonarcloud/report.html" ]; then
-              mv "security-reports/v$VERSION/01-sonarcloud/report.html" \
-                 "security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html"
-              echo "✅ SonarCloud HTML report generated successfully"
+            # Verify HTML report was created
+            if [ -f "security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html" ]; then
+              echo "✅ SonarCloud HTML report generated successfully with custom converter"
               echo "📄 Report size: $(wc -c < security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html) bytes"
-            elif [ -f "security-reports/v$VERSION/01-sonarcloud"/*.docx ]; then
-              echo "✅ SonarCloud DOCX report generated (HTML not available)"
-              ls -la "security-reports/v$VERSION/01-sonarcloud"/*.docx
+              echo "📊 Report includes: Issues analysis, security hotspots, and visual dashboard"
             else
-              echo "❌ No HTML report generated - SonarCloud may not support HTML export"
-              echo "📋 Available report formats:"
-              ls -la "security-reports/v$VERSION/01-sonarcloud/" 2>/dev/null || echo "No reports found"
+              echo "❌ HTML report not generated"
+              echo "📋 Available files in SonarCloud folder:"
+              ls -la "security-reports/v$VERSION/01-sonarcloud/" 2>/dev/null || echo "No files found"
             fi
           else
-            echo "⚠️ Skipping HTML report generation (missing token or analysis results)"
+            echo "⚠️ Skipping HTML report generation (no SonarCloud token configured)"
           fi
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
