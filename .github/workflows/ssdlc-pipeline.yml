@@ -237,15 +237,17 @@ jobs:
           if [ -n "${{ secrets.SNYK_TOKEN }}" ] && [ -f "snyk-code.json" ]; then
             echo "🎨 Generating official Snyk Code HTML report..."
             
-            # Install official snyk-to-html tool
-            npm install -g snyk-to-html
+            # Install stable version of snyk-to-html tool (version with working templates)
+            npm install -g snyk-to-html@2.13.0
             
-            # Generate official HTML report from Snyk Code JSON using direct method
+            # Check if the template exists before conversion
+            SNYK_TO_HTML_PATH=$(npm root -g)/snyk-to-html
+            echo "Checking snyk-to-html installation at: $SNYK_TO_HTML_PATH"
+            ls -la "$SNYK_TO_HTML_PATH/template/" 2>/dev/null || echo "Template directory not found"
+            
+            # Generate official HTML report using pipe method (more reliable for Snyk Code)
             echo "Converting Snyk Code JSON to official HTML format..."
-            snyk-to-html \
-              -i "snyk-code.json" \
-              -o "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" \
-              -a \
+            cat snyk-code.json | snyk-to-html -o "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" -a \
               || echo "⚠️ Official HTML report generation failed - continuing without HTML"
             
             if [ -f "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" ]; then
