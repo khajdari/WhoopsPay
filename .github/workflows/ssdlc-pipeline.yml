@@ -625,15 +625,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `🔒 Pre-Validation Security Report - Pull Request`;
+            const title = '🔒 Pre-Validation Security Report';
             const body = `
             # 🔒 Pre-Validation Security Report
             
-            **Pull Request:** \`${{ github.event.number }}\`
-            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
-            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
+            **Status:** Pre-validation security checks completed
             **Timestamp:** ${new Date().toISOString()}
-            **Status:** ${{ needs.pre-commit-security.result }}
             
             ## ✅ Validation Results
             - **Lint Security Checks:** Completed
@@ -641,7 +638,7 @@ jobs:
             - **Code Quality:** Basic validation passed
             
             ## 📁 Report Artifacts
-            - Download: [Pre-Validation Report](../actions/runs/${context.runId})
+            - Download: Pre-Validation Report from GitHub Actions artifacts
             
             This report validates that the code meets basic security and quality standards before detailed analysis.
             `;
@@ -651,22 +648,19 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'pre-validation', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'pre-validation', 'automated-report']
             });
 
       - name: Create SonarCloud Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `🔍 SonarCloud Static Analysis Report - Pull Request`;
+            const title = '🔍 SonarCloud Static Analysis Report';
             const body = `
             # 🔍 SonarCloud Static Analysis Report
             
-            **Pull Request:** \`${{ github.event.number }}\`
-            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
-            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
+            **Status:** SonarCloud static analysis completed
             **Timestamp:** ${new Date().toISOString()}
-            **Status:** ${{ needs.sast-sonarcloud.result }}
             
             ## 📊 Analysis Results
             - **Static Analysis:** Code quality and security scan completed
@@ -674,7 +668,7 @@ jobs:
             - **Code Coverage:** Test coverage analysis included
             
             ## 📁 Report Artifacts
-            - Download: [SonarCloud Analysis Report](../actions/runs/${context.runId})
+            - Download: SonarCloud Analysis Report from GitHub Actions artifacts
             - View on SonarCloud: [Dashboard](https://sonarcloud.io/project/overview?id=khajdari_WhoopsPay)
             
             This report provides comprehensive static analysis including security vulnerabilities, code smells, and maintainability issues.
@@ -685,22 +679,19 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sast', 'sonarcloud', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'sast', 'sonarcloud', 'automated-report']
             });
 
       - name: Create Snyk Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `📦 Snyk Dependency Security Report - Pull Request`;
+            const title = '📦 Snyk Dependency Security Report';
             const body = `
             # 📦 Snyk Dependency Security Report
             
-            **Pull Request:** \`${{ github.event.number }}\`
-            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
-            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
+            **Status:** Snyk dependency security scan completed
             **Timestamp:** ${new Date().toISOString()}
-            **Status:** ${{ needs.sca-snyk.result }}
             
             ## 🔒 Security Scan Results
             - **Dependency Vulnerabilities:** Scanned for known security issues
@@ -708,7 +699,7 @@ jobs:
             - **License Compliance:** Checked for license conflicts
             
             ## 📁 Report Artifacts
-            - Download: [Snyk Security Report](../actions/runs/${context.runId})
+            - Download: Snyk Security Report from GitHub Actions artifacts
             - View on Snyk: [Dashboard](https://app.snyk.io)
             
             This report identifies security vulnerabilities in project dependencies and provides remediation guidance.
@@ -719,22 +710,19 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report']
             });
 
       - name: Create OWASP ZAP Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `🎯 OWASP ZAP Dynamic Security Report - Pull Request`;
+            const title = '🎯 OWASP ZAP Dynamic Security Report';
             const body = `
             # 🎯 OWASP ZAP Dynamic Security Report
             
-            **Pull Request:** \`${{ github.event.number }}\`
-            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
-            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
+            **Status:** OWASP ZAP dynamic security testing completed
             **Timestamp:** ${new Date().toISOString()}
-            **Status:** ${{ needs.dast-owasp-zap.result }}
             
             ## 🛡️ Dynamic Security Testing Results
             - **Runtime Vulnerabilities:** Live application security scan
@@ -742,8 +730,7 @@ jobs:
             - **Penetration Testing:** Automated security assessment
             
             ## 📁 Report Artifacts
-            - Download: [OWASP ZAP Security Report (HTML)](../actions/runs/${context.runId})
-            - Download: [OWASP ZAP Security Report (JSON)](../actions/runs/${context.runId})
+            - Download: OWASP ZAP Security Reports from GitHub Actions artifacts
             
             This report provides dynamic application security testing results from scanning the running application for vulnerabilities.
             `;
@@ -753,22 +740,20 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report']
             });
 
       - name: Create Summary Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `📊 Security Pipeline Summary - Pull Request`;
+            const title = '📊 Security Pipeline Summary';
             const body = `
             # 📊 Complete Security Pipeline Summary
             
-            **Pull Request:** \`${{ github.event.number }}\`
-            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
-            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
+            **Status:** Complete security pipeline analysis finished
             **Timestamp:** ${new Date().toISOString()}
-            **Pipeline Run:** [#${context.runNumber}](../actions/runs/${context.runId})
+            **Pipeline Run:** See GitHub Actions tab for details
             
             ## 🛡️ Security Phase Results
             
@@ -783,7 +768,7 @@ jobs:
             Check the repository issues for individual detailed security reports from each phase.
             
             ## 📁 All Artifacts
-            - [Download All Reports](../actions/runs/${context.runId})
+            - Download All Reports from GitHub Actions artifacts
             
             **Pipeline Status:** ${{ (needs.pre-commit-security.result == 'success' && needs.sast-sonarcloud.result == 'success' && needs.sca-snyk.result == 'success' && needs.dast-owasp-zap.result == 'success') && '✅ All Passed' || '⚠️ Some Issues Found' }}
             `;
@@ -793,5 +778,5 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'pipeline-summary', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'pipeline-summary', 'automated-report']
             });
