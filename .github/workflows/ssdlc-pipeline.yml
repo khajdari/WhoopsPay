@@ -240,12 +240,19 @@ jobs:
             # Install snyk-to-html tool (same version as SCA phase)
             npm install -g snyk-to-html
             
-            # Generate HTML report from JSON results (same approach as SCA)
+            # Generate HTML report from JSON results (with correct template)
             if [ -f "security-reports/v$VERSION/01-snyk-code/snyk-code.json" ]; then
               echo "Converting Snyk Code JSON to HTML..."
+              
+              # Use the correct template path for Snyk Code
+              SNYK_TO_HTML_PATH=$(npm root -g)/snyk-to-html
+              TEMPLATE_PATH="$SNYK_TO_HTML_PATH/template/code/test-report.hbs"
+              
+              echo "Using Snyk Code template: $TEMPLATE_PATH"
               snyk-to-html \
                 -i "security-reports/v$VERSION/01-snyk-code/snyk-code.json" \
                 -o "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" \
+                -t "$TEMPLATE_PATH" \
                 -a \
                 || echo "⚠️ HTML report generation failed - continuing without HTML"
             else
