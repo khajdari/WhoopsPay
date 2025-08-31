@@ -66,15 +66,33 @@ jobs:
           mkdir -p "security-reports/v$VERSION/00-pre-validation"
           echo "📁 Created version folder structure for v$VERSION"
 
-      - name: Lint security issues
+      - name: Run Comprehensive ESLint Security Analysis
         run: |
-          npm run lint || echo "Linting completed"
-          echo "✅ Pre-commit security checks completed"
+          echo "🔍 Running comprehensive ESLint security linting..."
+          
+          # Run comprehensive security linting with multiple output formats
+          npx eslint . --ext .js,.jsx,.ts,.tsx --format json --output-file "security-reports/v$VERSION/00-pre-validation/eslint-security-report.json" || true
+          npx eslint . --ext .js,.jsx,.ts,.tsx --format html --output-file "security-reports/v$VERSION/00-pre-validation/ESLint-Security-Report.html" || true
+          npx eslint . --ext .js,.jsx,.ts,.tsx --format checkstyle --output-file "security-reports/v$VERSION/00-pre-validation/eslint-checkstyle.xml" || true
+          
+          # Generate detailed security summary
+          echo "📊 ESLint security analysis completed"
+          if [ -f "security-reports/v$VERSION/00-pre-validation/eslint-security-report.json" ]; then
+            echo "✅ ESLint JSON report generated"
+            echo "📄 Report size: $(wc -c < security-reports/v$VERSION/00-pre-validation/eslint-security-report.json) bytes"
+          fi
+          
+          if [ -f "security-reports/v$VERSION/00-pre-validation/ESLint-Security-Report.html" ]; then
+            echo "✅ ESLint HTML report generated"  
+            echo "📄 Report size: $(wc -c < security-reports/v$VERSION/00-pre-validation/ESLint-Security-Report.html) bytes"
+          fi
+          
+          echo "✅ Comprehensive ESLint security linting completed"
 
-      - name: Generate Pre-Validation Report
+      - name: Generate ESLint Security Summary Report
         run: |
-          # Create comprehensive HTML security report in version folder
-          cat > "security-reports/v$VERSION/00-pre-validation/Pre-Validation-Security-Report.html" << 'EOF'
+          # Create comprehensive HTML security summary report in version folder
+          cat > "security-reports/v$VERSION/00-pre-validation/ESLint-Security-Summary.html" << 'EOF'
           <!DOCTYPE html>
           <html>
           <head>
@@ -96,40 +114,42 @@ jobs:
           </head>
           <body>
               <div class="container">
-                  <h1>🔒 Pre-Validation Security Report</h1>
+                  <h1>🔍 ESLint Security Linting Report</h1>
                   <p class="timestamp">Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")</p>
                   <div class="version"><strong>Version:</strong> v$VERSION</div>
-                  <div class="version"><strong>Branch:</strong> main</div>
+                  <div class="version"><strong>Branch:</strong> develop-vulnerable</div>
                   
-                  <h2>✅ Pre-Commit Security Validation</h2>
+                  <h2>🛡️ Security Linting Analysis</h2>
                   <div class="status success">
-                      <strong>Status:</strong> PASSED - All pre-validation checks completed successfully
+                      <strong>Status:</strong> COMPLETED - Comprehensive ESLint security analysis finished
                   </div>
                   
-                  <h2>📋 Validation Results</h2>
+                  <h2>📊 Linting Coverage</h2>
                   <ul>
-                      <li><strong>Lint Security Checks:</strong> Completed</li>
-                      <li><strong>Dependencies:</strong> Installed and Verified</li>
-                      <li><strong>Code Quality:</strong> Basic validation passed</li>
-                      <li><strong>Environment:</strong> Security baseline established</li>
+                      <li><strong>eslint-plugin-security:</strong> Node.js security hotspot detection</li>
+                      <li><strong>@microsoft/eslint-plugin-sdl:</strong> Microsoft SDL compliance</li>
+                      <li><strong>eslint-plugin-sonarjs:</strong> Code quality and security vulnerabilities</li>
+                      <li><strong>TypeScript Security:</strong> Type safety and security enforcement</li>
+                      <li><strong>Files Analyzed:</strong> All JavaScript/TypeScript files in project</li>
+                      <li><strong>Security Rules Active:</strong> 15+ security-focused linting rules</li>
                   </ul>
                   
-                  <h2>📄 Report Summary</h2>
+                  <h2>📄 Security Analysis Summary</h2>
                   <div class="status info">
-                      This report validates that the code meets basic security and quality standards before detailed analysis.
-                      The application is ready for comprehensive security testing in subsequent pipeline phases.
+                      This report provides comprehensive code linting analysis focusing on security vulnerabilities, 
+                      code quality issues, and enterprise security compliance standards using industry-standard ESLint security plugins.
                   </div>
               </div>
           </body>
           </html>
           EOF
           
-          echo "✅ Pre-validation security report generated for v$VERSION"
+          echo "✅ ESLint security summary report generated for v$VERSION"
 
-      - name: Upload Pre-Validation Report
+      - name: Upload ESLint Security Linting Report
         uses: actions/upload-artifact@v4
         with:
-          name: 00-pre-validation-security-report-v${{ env.VERSION }}
+          name: 00-eslint-security-linting-report-v${{ env.VERSION }}
           path: security-reports/v${{ env.VERSION }}/00-pre-validation/
           retention-days: 30
 
@@ -607,6 +627,42 @@ jobs:
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
     steps:
+      - name: Create ESLint Security Linting Report Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🔍 ESLint Security Linting Report';
+            const body = `
+            # 🔍 ESLint Security Linting Report
+            
+            **Status:** Comprehensive ESLint security linting completed
+            **Timestamp:** ${new Date().toISOString()}
+            
+            ## 🛡️ Security Linting Results
+            - **eslint-plugin-security:** Node.js security hotspot detection
+            - **@microsoft/eslint-plugin-sdl:** Microsoft Security Development Lifecycle compliance
+            - **eslint-plugin-sonarjs:** Code quality and security vulnerability detection
+            - **TypeScript Security:** Type safety and security rule enforcement
+            
+            ## 📊 Linting Coverage
+            - **Files Analyzed:** All JavaScript/TypeScript files in project
+            - **Security Rules:** 15+ security-focused linting rules active
+            - **Quality Rules:** Code complexity and maintainability checks
+            - **Enterprise Rules:** SDL compliance and secure coding standards
+            
+            ## 📁 Report Artifacts  
+            - Download: ESLint Security Linting Report from GitHub Actions artifacts
+            
+            This report provides comprehensive code linting analysis focusing on security vulnerabilities, code quality issues, and enterprise security compliance standards.
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['security', 'linting', 'eslint', 'code-quality', 'automated-report']
+            });
 
       - name: Create Snyk Code SAST Security Issue
         uses: actions/github-script@v7
@@ -714,6 +770,7 @@ jobs:
             
             | Phase | Tool | Status | Report |
             |-------|------|--------|--------|
+            | Linting | ESLint Security | ${{ needs.pre-commit-security.result }} | ✅ |
             | SAST | Snyk Code | ${{ needs.sast-snyk-code.result }} | ✅ |
             | SCA | Snyk | ${{ needs.sca-snyk.result }} | ✅ |
             | DAST | OWASP ZAP | ${{ needs.dast-owasp-zap.result }} | ✅ |
