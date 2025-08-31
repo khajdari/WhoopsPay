@@ -5,8 +5,12 @@
  * Converts SonarCloud API responses and analysis data to professional HTML reports
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function generateHTML(sonarData, projectInfo) {
   const timestamp = new Date().toISOString();
@@ -417,7 +421,7 @@ async function fetchFromSonarCloudAPI(projectKey, organization, token) {
   try {
     console.log('🌐 Fetching live data from SonarCloud API...');
     
-    const fetch = require('node-fetch');
+    const fetch = (await import('node-fetch')).default;
     const baseUrl = 'https://sonarcloud.io/api';
     const headers = {
       'Authorization': `Bearer ${token}`,
@@ -533,11 +537,12 @@ async function main() {
   console.log(`📏 Size: ${Math.round(fs.statSync(outputFile).size / 1024)} KB`);
 }
 
-if (require.main === module) {
+// Run main function if this is the entry point
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(error => {
     console.error('❌ Error generating HTML report:', error);
     process.exit(1);
   });
 }
 
-module.exports = { generateHTML, loadSonarData };
+export { generateHTML, loadSonarData };
