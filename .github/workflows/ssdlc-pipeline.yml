@@ -624,34 +624,6 @@ jobs:
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
     steps:
-      - name: Upload HTML Reports to Object Storage for Browser Preview
-        run: |
-          echo "🌐 Uploading HTML reports for browser preview..."
-          
-          # Note: This step prepares HTML reports for browser viewing
-          # The reports will be accessible via the application's /security-reports/ endpoint
-          echo "📁 HTML Reports available:"
-          
-          if [ -f "security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html" ]; then
-            echo "✅ SonarCloud HTML: security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html"
-            echo "🌐 Browser Preview: https://your-app-url.replit.dev/security-reports/SonarCloud-Security-Report-v$VERSION.html"
-          fi
-          
-          if [ -f "security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html" ]; then
-            echo "✅ Snyk HTML: security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html"
-            echo "🌐 Browser Preview: https://your-app-url.replit.dev/security-reports/Snyk-Security-Report-v$VERSION.html"
-          fi
-          
-          if [ -f "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html" ]; then
-            echo "✅ ZAP HTML: security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html"
-            echo "🌐 Browser Preview: https://your-app-url.replit.dev/security-reports/OWASP-ZAP-Security-Report-v$VERSION.html"
-          fi
-          
-          echo "📝 HTML reports are ready for browser preview integration"
-        env:
-          VERSION: ${{ needs.setup-version.outputs.version }}
-        continue-on-error: true
-
       - name: Create Pre-Validation Security Issue
         uses: actions/github-script@v7
         with:
@@ -707,9 +679,8 @@ jobs:
             - **Code Coverage:** Test coverage analysis included
             
             ## 📁 Report Artifacts
-            - 📥 Download: [SonarCloud Analysis Report](../actions/runs/${context.runId})
-            - 🌐 **Browser Preview:** [View HTML Report](https://your-app-url.replit.dev/security-reports/SonarCloud-Security-Report-v${{ needs.setup-version.outputs.version }}.html)
-            - 📊 View on SonarCloud: [Dashboard](https://sonarcloud.io/project/overview?id=khajdari_WhoopsPay)
+            - Download: [SonarCloud Analysis Report](../actions/runs/${context.runId})
+            - View on SonarCloud: [Dashboard](https://sonarcloud.io/project/overview?id=khajdari_WhoopsPay)
             
             This report provides comprehensive static analysis including security vulnerabilities, code smells, and maintainability issues.
             `;
@@ -743,9 +714,8 @@ jobs:
             - **License Compliance:** Checked for license conflicts
             
             ## 📁 Report Artifacts
-            - 📥 Download: [Snyk Security Report](../actions/runs/${context.runId})
-            - 🌐 **Browser Preview:** [View HTML Report](https://your-app-url.replit.dev/security-reports/Snyk-Security-Report-v${{ needs.setup-version.outputs.version }}.html)
-            - 📊 View on Snyk: [Dashboard](https://app.snyk.io)
+            - Download: [Snyk Security Report](../actions/runs/${context.runId})
+            - View on Snyk: [Dashboard](https://app.snyk.io)
             
             This report identifies security vulnerabilities in project dependencies and provides remediation guidance.
             `;
@@ -779,9 +749,8 @@ jobs:
             - **Penetration Testing:** Automated security assessment
             
             ## 📁 Report Artifacts
-            - 📥 Download: [OWASP ZAP Security Report (HTML)](../actions/runs/${context.runId})
-            - 📥 Download: [OWASP ZAP Security Report (JSON)](../actions/runs/${context.runId})
-            - 🌐 **Browser Preview:** [View HTML Report](https://your-app-url.replit.dev/security-reports/OWASP-ZAP-Security-Report-v${{ needs.setup-version.outputs.version }}.html)
+            - Download: [OWASP ZAP Security Report (HTML)](../actions/runs/${context.runId})
+            - Download: [OWASP ZAP Security Report (JSON)](../actions/runs/${context.runId})
             
             This report provides dynamic application security testing results from scanning the running application for vulnerabilities.
             `;
