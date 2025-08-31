@@ -334,6 +334,46 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start application for DAST testing
+        run: |
+          echo "Starting application for DAST security testing..."
+          
+          # Start application in background for DAST testing
+          npm run dev &
+          APP_PID=$!
+          echo "Application PID: $APP_PID"
+          echo "APP_PID=$APP_PID" >> $GITHUB_ENV
+          
+          # Wait for application to be ready
+          echo "Waiting for application to start..."
+          for i in {1..60}; do
+            if curl -s http://localhost:5000/health >/dev/null 2>&1; then
+              echo "✅ Application is ready for DAST testing"
+              break
+            fi
+            if [ $i -eq 60 ]; then
+              echo "❌ Application failed to start within timeout"
+              exit 1
+            fi
+            echo "Waiting for app... ($i/60)"
+            sleep 3
+          done
+          
+          # Verify application is responding
+          curl -s http://localhost:5000/ | grep -q "WhoopsPay" && echo "✅ Application verified"
+        env:
+          NODE_ENV: development
+          DATABASE_URL: sqlite:./test.db
+
       - name: Create OWASP ZAP configuration
         run: |
           mkdir -p .zap
@@ -357,24 +397,11 @@ jobs:
           echo "Rules file content:"
           cat .zap/rules.tsv
 
-      - name: Wait for application to be ready
-        run: |
-          echo "Waiting for application at ${{ needs.secure-deployment.outputs.app-url }}"
-          sleep 10
-          for i in {1..30}; do
-            if curl -s ${{ needs.secure-deployment.outputs.app-url }} | grep -q "WhoopsPay"; then
-              echo "Application is ready"
-              break
-            fi
-            echo "Waiting... ($i/30)"
-            sleep 5
-          done
-
       - name: OWASP ZAP baseline security scan
         id: zap
         uses: zaproxy/action-baseline@v0.12.0
         with:
-          target: '${{ needs.secure-deployment.outputs.app-url }}'
+          target: 'http://localhost:5000'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a -j -T 30 -l WARN'
         continue-on-error: true
