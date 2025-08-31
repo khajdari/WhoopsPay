@@ -107,22 +107,34 @@ function generateHTML(sonarData, projectInfo) {
         }
         
         .header {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            color: #1565c0;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #74b9ff;
             padding: 30px;
             border-radius: 10px;
             margin-bottom: 30px;
             text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: "☁️";
+            font-size: 2em;
+            margin-right: 15px;
+            vertical-align: middle;
         }
         
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
+            color: #74b9ff;
+            display: inline-block;
+            vertical-align: middle;
         }
         
         .header .subtitle {
             font-size: 1.2em;
-            opacity: 0.9;
+            opacity: 0.8;
+            color: #a0c4ff;
         }
         
         .metadata {
