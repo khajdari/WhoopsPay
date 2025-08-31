@@ -52,8 +52,9 @@ function generateHTML(sonarData, projectInfo) {
   
   // Generate issue rows
   function generateIssueRows(issues) {
-    return issues.map(issue => `
+    return issues.map((issue, index) => `
       <tr class="issue-row ${issue.severity.toLowerCase()}">
+        <td class="number-cell">${index + 1}</td>
         <td class="severity-cell">
           <span class="severity-tag ${issue.severity.toLowerCase()}">${issue.severity}</span>
         </td>
@@ -100,14 +101,14 @@ function generateHTML(sonarData, projectInfo) {
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
             padding: 30px;
             border-radius: 10px;
             margin-bottom: 30px;
@@ -226,6 +227,7 @@ function generateHTML(sonarData, projectInfo) {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            table-layout: fixed;
         }
         
         .issues-table th {
@@ -237,10 +239,26 @@ function generateHTML(sonarData, projectInfo) {
             color: #495057;
         }
         
+        .issues-table th:nth-child(1) { width: 6%; }  /* # */
+        .issues-table th:nth-child(2) { width: 12%; } /* Severity */
+        .issues-table th:nth-child(3) { width: 14%; } /* Type */
+        .issues-table th:nth-child(4) { width: 35%; } /* Message */
+        .issues-table th:nth-child(5) { width: 20%; } /* File */
+        .issues-table th:nth-child(6) { width: 8%; }  /* Line */
+        .issues-table th:nth-child(7) { width: 15%; } /* Rule */
+        
         .issues-table td {
             padding: 12px;
             border-bottom: 1px solid #dee2e6;
             vertical-align: top;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .number-cell {
+            text-align: center;
+            font-weight: 600;
+            color: #666;
         }
         
         .issue-row:hover {
@@ -352,6 +370,7 @@ function generateHTML(sonarData, projectInfo) {
             <table class="issues-table">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Severity</th>
                         <th>Type</th>
                         <th>Message</th>
