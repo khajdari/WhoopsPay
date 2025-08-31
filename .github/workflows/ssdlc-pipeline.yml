@@ -31,7 +31,7 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           echo "Extracted version: v$VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "docker-tag=${{ env.IMAGE_NAME }}:$VERSION" >> $GITHUB_OUTPUT
+          echo "docker-tag=\${IMAGE_NAME}:\${VERSION}" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
   # PHASE 1: Pre-commit Security Checks
@@ -99,7 +99,7 @@ jobs:
                   <h1>🔒 Pre-Validation Security Report</h1>
                   <p class="timestamp">Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")</p>
                   <div class="version"><strong>Version:</strong> v$VERSION</div>
-                  <div class="version"><strong>Branch:</strong> ${GITHUB_REF_NAME}</div>
+                  <div class="version"><strong>Branch:</strong> main</div>
                   
                   <h2>✅ Pre-Commit Security Validation</h2>
                   <div class="status success">
@@ -201,7 +201,7 @@ jobs:
             # Try to disable automatic analysis via API to prevent conflicts
             echo "🔧 Attempting to disable automatic analysis..."
             curl -s -X POST \
-              -H "Authorization: Bearer ${{ secrets.SONAR_TOKEN }}" \
+              -H "Authorization: Bearer \${SONAR_TOKEN}" \
               "https://sonarcloud.io/api/settings/set?component=khajdari_WhoopsPay&key=sonar.analysis.autoAnalysis&value=false" \
               || echo "Could not disable automatic analysis via API - please disable manually in SonarCloud project settings"
           fi
@@ -210,16 +210,11 @@ jobs:
 
       - name: SonarCloud static analysis
         id: sonar
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v5.3.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.verbose=true
-            -Dsonar.pullrequest.github.summary_comment=true
-            -Dsonar.analysis.mode=publish
-            -Dsonar.log.level=DEBUG
+          SONAR_HOST_URL: https://sonarcloud.io
         continue-on-error: true
 
       - name: Check SonarCloud results and organize
@@ -605,8 +600,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
-            ${{ env.IMAGE_NAME }}:latest
+            khajdari/whoopspay:${{ needs.setup-version.outputs.version }}
+            khajdari/whoopspay:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -614,9 +609,9 @@ jobs:
         run: |
           echo "✅ Docker image pushed successfully with semantic version"
           echo "🐳 Image tags pushed:"
-          echo "   - ${{ env.IMAGE_NAME }}:$VERSION"
-          echo "   - ${{ env.IMAGE_NAME }}:latest"
-          echo "🔗 View on Docker Hub: https://hub.docker.com/r/${{ secrets.DOCKER_HUB_USERNAME }}/whoopspay"
+          echo "   - \${IMAGE_NAME}:\${VERSION}"
+          echo "   - \${IMAGE_NAME}:latest"
+          echo "🔗 View on Docker Hub: https://hub.docker.com/r/\${DOCKER_HUB_USERNAME}/whoopspay"
 
   create-security-issues:
     name: "📋 Create Security Report Issues"
@@ -630,12 +625,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
-            const title = `🔒 Pre-Validation Security Report - ${branchName}`;
+            const title = `🔒 Pre-Validation Security Report - Pull Request`;
             const body = `
             # 🔒 Pre-Validation Security Report
             
-            **Branch:** \`${branchName}\`
+            **Pull Request:** \`${{ github.event.number }}\`
             **Version:** \`v${{ needs.setup-version.outputs.version }}\`
             **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
@@ -657,19 +651,18 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'pre-validation', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'pre-validation', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
 
       - name: Create SonarCloud Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
-            const title = `🔍 SonarCloud Static Analysis Report - ${branchName}`;
+            const title = `🔍 SonarCloud Static Analysis Report - Pull Request`;
             const body = `
             # 🔍 SonarCloud Static Analysis Report
             
-            **Branch:** \`${branchName}\`
+            **Pull Request:** \`${{ github.event.number }}\`
             **Version:** \`v${{ needs.setup-version.outputs.version }}\`
             **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
@@ -692,19 +685,18 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sast', 'sonarcloud', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'sast', 'sonarcloud', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
 
       - name: Create Snyk Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
-            const title = `📦 Snyk Dependency Security Report - ${branchName}`;
+            const title = `📦 Snyk Dependency Security Report - Pull Request`;
             const body = `
             # 📦 Snyk Dependency Security Report
             
-            **Branch:** \`${branchName}\`
+            **Pull Request:** \`${{ github.event.number }}\`
             **Version:** \`v${{ needs.setup-version.outputs.version }}\`
             **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
@@ -727,19 +719,18 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
 
       - name: Create OWASP ZAP Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
-            const title = `🎯 OWASP ZAP Dynamic Security Report - ${branchName}`;
+            const title = `🎯 OWASP ZAP Dynamic Security Report - Pull Request`;
             const body = `
             # 🎯 OWASP ZAP Dynamic Security Report
             
-            **Branch:** \`${branchName}\`
+            **Pull Request:** \`${{ github.event.number }}\`
             **Version:** \`v${{ needs.setup-version.outputs.version }}\`
             **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
@@ -762,19 +753,18 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
 
       - name: Create Summary Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const branchName = context.payload.pull_request?.head?.ref || context.ref.replace('refs/heads/', '');
-            const title = `📊 Security Pipeline Summary - ${branchName}`;
+            const title = `📊 Security Pipeline Summary - Pull Request`;
             const body = `
             # 📊 Complete Security Pipeline Summary
             
-            **Branch:** \`${branchName}\`
+            **Pull Request:** \`${{ github.event.number }}\`
             **Version:** \`v${{ needs.setup-version.outputs.version }}\`
             **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
@@ -803,5 +793,5 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'pipeline-summary', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
+              labels: ['security', 'pipeline-summary', 'automated-report', `pr:${{ github.event.number }}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
