@@ -6,6 +6,10 @@ WhoopsPay is an educational cybersecurity training platform that simulates a com
 
 The platform is designed for security professionals, developers, students, and penetration testers to learn about web application vulnerabilities, secure coding practices, and vulnerability assessment in a controlled environment. It features both a React frontend and Express.js backend with extensive MVC architecture, plus integration with OWASP Juice Shop for expanded security training scenarios.
 
+## Recent Changes
+
+**August 31, 2025**: Migrated security pipeline from SonarCloud to Snyk Code for SAST analysis to eliminate GitHub Actions security vulnerabilities and improve security-focused analysis.
+
 **⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes. NEVER use this code in production environments!**
 
 ## User Preferences
@@ -93,6 +97,9 @@ The application supports multiple deployment scenarios:
 - **Swagger**: API documentation generation and testing interface
 
 ### Educational Security Tools
+- **Snyk Code SAST**: Static application security testing for source code vulnerabilities
+- **Snyk SCA**: Software composition analysis for dependency vulnerabilities  
+- **OWASP ZAP DAST**: Dynamic application security testing
 - **OWASP Juice Shop Integration**: Extended vulnerability scenarios
 - **Custom Security Tests**: Automated vulnerability detection scripts
 - **Admin Monitoring**: Real-time security event logging and analysis

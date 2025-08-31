@@ -134,14 +134,14 @@ jobs:
           retention-days: 30
 
   # PHASE 2: SAST - Static Application Security Testing
-  sast-sonarcloud:
-    name: "🔍 SAST - SonarCloud Analysis"
+  sast-snyk-code:
+    name: "🔍 SAST - Snyk Code Analysis"
     runs-on: ubuntu-latest
     needs: [setup-version, pre-commit-security]
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
     outputs:
-      sonar-status: ${{ steps.sonar.outputs.status }}
+      snyk-code-status: ${{ steps.snyk-code.outputs.status }}
     steps:
       - name: Checkout code with full history
         uses: actions/checkout@v4
@@ -162,8 +162,8 @@ jobs:
         run: |
           # Use version from setup job
           echo "Using semantic version: v$VERSION"
-          mkdir -p "security-reports/v$VERSION/01-sonarcloud"
-          echo "📁 Created SonarCloud folder for v$VERSION"
+          mkdir -p "security-reports/v$VERSION/01-snyk-code"
+          echo "📁 Created Snyk Code folder for v$VERSION"
 
       - name: Run tests with coverage
         run: |
@@ -184,123 +184,256 @@ jobs:
           node security-tests/owasp-api-top10-tests.js || echo "OWASP API tests completed"
         continue-on-error: true
 
-      - name: Check SonarCloud configuration
+      - name: Check Snyk configuration
         run: |
-          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
-            echo "⚠️ SONAR_TOKEN not configured - SonarCloud analysis will be skipped"
-            echo "To enable SonarCloud:"
-            echo "1. Go to https://sonarcloud.io and sign up"
-            echo "2. Create a project and get your token"
-            echo "3. Add it as SONAR_TOKEN in GitHub repository secrets"
+          if [ -z "\${SNYK_TOKEN}" ]; then
+            echo "⚠️ SNYK_TOKEN not configured - Snyk Code analysis will be skipped"
+            echo "To enable Snyk Code:"
+            echo "1. Go to https://snyk.io and sign up"
+            echo "2. Get your API token from Account Settings"
+            echo "3. Add it as SNYK_TOKEN in GitHub repository secrets"
           else
-            echo "✅ SonarCloud token configured"
-            echo "🔍 Token length: ${#SONAR_TOKEN}"
-            echo "🔍 Project key: khajdari_WhoopsPay"
-            echo "🔍 Organization: khajdari"
-            
-            # Try to disable automatic analysis via API to prevent conflicts
-            echo "🔧 Attempting to disable automatic analysis..."
-            curl -s -X POST \
-              -H "Authorization: Bearer \${SONAR_TOKEN}" \
-              "https://sonarcloud.io/api/settings/set?component=khajdari_WhoopsPay&key=sonar.analysis.autoAnalysis&value=false" \
-              || echo "Could not disable automatic analysis via API - please disable manually in SonarCloud project settings"
+            echo "✅ Snyk token configured"
+            echo "🔍 Token length: ${#SNYK_TOKEN}"
+            echo "🔍 Running Snyk Code SAST analysis..."
           fi
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      - name: SonarCloud static analysis
-        id: sonar
-        uses: SonarSource/sonarqube-scan-action@v5.3.1
+      - name: Snyk Code SAST analysis
+        id: snyk-code
+        uses: snyk/actions/node@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: https://sonarcloud.io
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: code test
+          args: --sarif-file-output=snyk-code.sarif --json-file-output=snyk-code.json
         continue-on-error: true
 
-      - name: Check SonarCloud results and organize
+      - name: Check Snyk Code results and organize
         run: |
-          echo "🔍 Checking SonarCloud analysis results..."
-          if [ -d ".scannerwork" ]; then
-            echo "✅ SonarCloud analysis completed - .scannerwork directory found"
-            ls -la .scannerwork/ || echo "Cannot list .scannerwork contents"
+          echo "🔍 Checking Snyk Code analysis results..."
+          if [ -f "snyk-code.json" ]; then
+            echo "✅ Snyk Code analysis completed - JSON report found"
+            ls -la snyk-code.* || echo "Cannot list Snyk Code files"
             
             # Copy results to version folder
-            cp -r .scannerwork/* "security-reports/v$VERSION/01-sonarcloud/" 2>/dev/null || true
-            echo "📁 SonarCloud results copied to version folder v$VERSION"
+            cp snyk-code.json "security-reports/v$VERSION/01-snyk-code/" 2>/dev/null || true
+            cp snyk-code.sarif "security-reports/v$VERSION/01-snyk-code/" 2>/dev/null || true
+            echo "📁 Snyk Code results copied to version folder v$VERSION"
             
-            if [ -f ".scannerwork/report-task.txt" ]; then
-              echo "📄 Report task file found:"
-              cat .scannerwork/report-task.txt
-            else
-              echo "❌ No report-task.txt found"
-            fi
+            # Display summary of vulnerabilities found
+            echo "📄 Snyk Code Analysis Summary:"
+            jq -r '.runs[0].results | length' snyk-code.sarif 2>/dev/null || echo "SARIF parsing failed"
+            jq -r '.runs[0].results[].level' snyk-code.sarif 2>/dev/null | sort | uniq -c || echo "Cannot parse vulnerability levels"
           else
-            echo "❌ No .scannerwork directory found - analysis may have failed"
+            echo "❌ No Snyk Code results found - analysis may have failed or been skipped"
             # Create placeholder in version folder
-            echo "SonarCloud analysis failed or skipped" > "security-reports/v$VERSION/01-sonarcloud/analysis-failed.txt"
-          fi
-          
-          # Check if sonar-project.properties exists and is valid
-          if [ -f "sonar-project.properties" ]; then
-            echo "✅ sonar-project.properties found:"
-            cat sonar-project.properties
-            cp sonar-project.properties "security-reports/v$VERSION/01-sonarcloud/" 2>/dev/null || true
-          else
-            echo "❌ sonar-project.properties not found"
+            echo "Snyk Code analysis failed or skipped" > "security-reports/v$VERSION/01-snyk-code/analysis-failed.txt"
           fi
 
-      - name: Generate SonarCloud HTML Report with Custom Converter
+      - name: Generate Snyk Code HTML Report
         run: |
-          if [ -n "${{ secrets.SONAR_TOKEN }}" ]; then
-            echo "🎨 Generating SonarCloud HTML report with custom converter..."
+          if [ -n "\${SNYK_TOKEN}" ] && [ -f "snyk-code.json" ]; then
+            echo "🎨 Generating Snyk Code HTML report..."
             
-            # Wait for analysis to be available on SonarCloud API
-            sleep 10
+            # Create HTML report from Snyk Code JSON
+            cat > "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Snyk Code SAST Security Report</title>
+              <style>
+                  * {
+                      margin: 0;
+                      padding: 0;
+                      box-sizing: border-box;
+                  }
+                  body {
+                      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                      line-height: 1.6;
+                      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                      min-height: 100vh;
+                  }
+                  .header {
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                      color: white;
+                      padding: 2rem 0;
+                      text-align: center;
+                      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                  }
+                  .header h1 {
+                      font-size: 2.5em;
+                      margin-bottom: 0.5rem;
+                      font-weight: 300;
+                  }
+                  .container {
+                      max-width: 1400px;
+                      margin: 2rem auto;
+                      padding: 0 1rem;
+                  }
+                  .summary-cards {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                      gap: 1rem;
+                      margin-bottom: 2rem;
+                  }
+                  .card {
+                      background: white;
+                      padding: 1.5rem;
+                      border-radius: 10px;
+                      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                      text-align: center;
+                  }
+                  .card h3 {
+                      color: #333;
+                      margin-bottom: 0.5rem;
+                  }
+                  .card .number {
+                      font-size: 2em;
+                      font-weight: bold;
+                      color: #667eea;
+                  }
+                  table {
+                      width: 100%;
+                      border-collapse: collapse;
+                      background: white;
+                      border-radius: 10px;
+                      overflow: hidden;
+                      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                      margin-bottom: 2rem;
+                  }
+                  th, td {
+                      padding: 12px 15px;
+                      text-align: left;
+                      border-bottom: 1px solid #ddd;
+                  }
+                  th {
+                      background: linear-gradient(135deg, #87ceeb 0%, #98d8eb 100%);
+                      color: white;
+                      font-weight: 600;
+                      text-transform: uppercase;
+                      font-size: 0.9em;
+                  }
+                  .severity-high { background-color: #fee; color: #c53030; font-weight: bold; }
+                  .severity-medium { background-color: #fff3cd; color: #856404; }
+                  .severity-low { background-color: #d1ecf1; color: #0c5460; }
+                  .severity-info { background-color: #e2e3e5; color: #383d41; }
+                  .timestamp {
+                      color: #666;
+                      font-size: 0.9em;
+                      margin-bottom: 1rem;
+                  }
+              </style>
+          </head>
+          <body>
+              <header class="header">
+                  <h1>🔍 Snyk Code SAST Security Report</h1>
+                  <p>Static Application Security Testing Results</p>
+              </header>
+              <div class="container">
+                  <div class="timestamp">Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")</div>
+                  <div class="version"><strong>Version:</strong> v$VERSION</div>
+                  <div class="version"><strong>Analysis Type:</strong> Snyk Code SAST</div>
+                  
+          EOF
             
-            # Ensure scripts directory exists and converter is executable
-            chmod +x scripts/sonarcloud-to-html.js 2>/dev/null || true
-            
-            # Generate HTML report using our custom converter
-            echo "🔄 Converting SonarCloud data to HTML..."
-            node scripts/sonarcloud-to-html.js \
-              "security-reports/v$VERSION/01-sonarcloud" \
-              "security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html" \
-              "WhoopsPay" \
-              "$VERSION" \
-              || echo "⚠️ Custom HTML report generation failed"
-            
-            # Verify HTML report was created
-            if [ -f "security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html" ]; then
-              echo "✅ SonarCloud HTML report generated successfully with custom converter"
-              echo "📄 Report size: $(wc -c < security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html) bytes"
-              echo "📊 Report includes: Issues analysis, security hotspots, and visual dashboard"
+            # Process JSON results and add to HTML
+            if [ -f "snyk-code.json" ]; then
+              echo "Processing Snyk Code vulnerabilities..."
+              
+              # Extract vulnerability count
+              VULN_COUNT=$(jq '.vulnerabilities | length' snyk-code.json 2>/dev/null || echo "0")
+              echo "Found $VULN_COUNT vulnerabilities"
+              
+              # Add summary cards to HTML
+              cat >> "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" << EOF
+                  <div class="summary-cards">
+                      <div class="card">
+                          <h3>Total Issues</h3>
+                          <div class="number">$VULN_COUNT</div>
+                      </div>
+                      <div class="card">
+                          <h3>Analysis Status</h3>
+                          <div class="number">✅</div>
+                      </div>
+                  </div>
+                  
+                  <h2>🔍 Security Vulnerabilities</h2>
+                  <table>
+                      <thead>
+                          <tr>
+                              <th>#</th>
+                              <th>Severity</th>
+                              <th>Issue Type</th>
+                              <th>Message</th>
+                              <th>File</th>
+                              <th>Line</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+          EOF
+              
+              # Process vulnerabilities and add to table
+              jq -r '.vulnerabilities[] | [.severity, .type, .title, .file, .line] | @tsv' snyk-code.json 2>/dev/null | \
+              awk -F'   ' 'BEGIN{i=1} {
+                severity = $1
+                type = $2  
+                title = $3
+                file = $4
+                line = $5
+                
+                if(severity == "high") css_class = "severity-high"
+                else if(severity == "medium") css_class = "severity-medium" 
+                else if(severity == "low") css_class = "severity-low"
+                else css_class = "severity-info"
+                
+                printf "<tr class=\"%s\"><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n", css_class, i++, severity, type, title, file, line
+              }' >> "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html"
+              
+              # Close HTML
+              cat >> "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" << 'EOF'
+                      </tbody>
+                  </table>
+                  
+                  <h2>📄 Report Summary</h2>
+                  <div class="status info">
+                      This Snyk Code SAST analysis scans your source code for security vulnerabilities including XSS, SQL injection, 
+                      command injection, and other OWASP Top 10 security issues. Review and remediate all high-severity issues.
+                  </div>
+              </div>
+          </body>
+          </html>
+          EOF
             else
-              echo "❌ HTML report not generated"
-              echo "📋 Available files in SonarCloud folder:"
-              ls -la "security-reports/v$VERSION/01-sonarcloud/" 2>/dev/null || echo "No files found"
+              echo "No Snyk Code JSON results to process"
             fi
+            
+            echo "✅ Snyk Code HTML report generated successfully"
           else
-            echo "⚠️ Skipping HTML report generation (no SonarCloud token configured)"
+            echo "⚠️ Skipping HTML report generation (no Snyk token or results)"
           fi
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         continue-on-error: true
 
-      - name: Set SonarCloud status
+      - name: Set Snyk Code status
         run: echo "status=completed" >> $GITHUB_OUTPUT
 
-      - name: Upload SonarCloud Report
+      - name: Upload Snyk Code SAST Report
         uses: actions/upload-artifact@v4
         with:
-          name: 01-sonarcloud-static-analysis-report-v${{ env.VERSION }}
-          path: security-reports/v${{ env.VERSION }}/01-sonarcloud/
+          name: 01-snyk-code-sast-report-v${{ env.VERSION }}
+          path: security-reports/v${{ env.VERSION }}/01-snyk-code/
           retention-days: 30
 
   # PHASE 3: SCA - Software Composition Analysis
   sca-snyk:
     name: "📦 SCA - Snyk Dependency Scan"
     runs-on: ubuntu-latest
-    needs: [setup-version, sast-sonarcloud]
+    needs: [setup-version, sast-snyk-code]
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
     outputs:
@@ -616,7 +749,7 @@ jobs:
   create-security-issues:
     name: "📋 Create Security Report Issues"
     runs-on: ubuntu-latest
-    needs: [setup-version, pre-commit-security, sast-sonarcloud, sca-snyk, dast-owasp-zap]
+    needs: [setup-version, pre-commit-security, sast-snyk-code, sca-snyk, dast-owasp-zap]
     if: always()
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
@@ -651,27 +784,27 @@ jobs:
               labels: ['security', 'pre-validation', 'automated-report']
             });
 
-      - name: Create SonarCloud Security Issue
+      - name: Create Snyk Code SAST Security Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🔍 SonarCloud Static Analysis Report';
+            const title = '🔍 Snyk Code SAST Analysis Report';
             const body = `
-            # 🔍 SonarCloud Static Analysis Report
+            # 🔍 Snyk Code SAST Analysis Report
             
-            **Status:** SonarCloud static analysis completed
+            **Status:** Snyk Code static analysis completed
             **Timestamp:** ${new Date().toISOString()}
             
             ## 📊 Analysis Results
-            - **Static Analysis:** Code quality and security scan completed
-            - **Security Hotspots:** Identified potential vulnerabilities
-            - **Code Coverage:** Test coverage analysis included
+            - **Static Application Security Testing:** Source code security scan completed
+            - **Security Vulnerabilities:** Identified potential code-level security issues
+            - **OWASP Top 10:** Comprehensive coverage of web application vulnerabilities
             
             ## 📁 Report Artifacts
-            - Download: SonarCloud Analysis Report from GitHub Actions artifacts
-            - View on SonarCloud: [Dashboard](https://sonarcloud.io/project/overview?id=khajdari_WhoopsPay)
+            - Download: Snyk Code SAST Report from GitHub Actions artifacts
+            - View on Snyk: [Dashboard](https://app.snyk.io)
             
-            This report provides comprehensive static analysis including security vulnerabilities, code smells, and maintainability issues.
+            This report provides comprehensive static application security testing including XSS, SQL injection, command injection, and other security vulnerabilities.
             `;
             
             await github.rest.issues.create({
@@ -679,7 +812,7 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sast', 'sonarcloud', 'automated-report']
+              labels: ['security', 'sast', 'snyk-code', 'automated-report']
             });
 
       - name: Create Snyk Security Issue
@@ -760,7 +893,7 @@ jobs:
             | Phase | Tool | Status | Report |
             |-------|------|--------|--------|
             | Pre-Validation | Lint & Basic Checks | ${{ needs.pre-commit-security.result }} | ✅ |
-            | SAST | SonarCloud | ${{ needs.sast-sonarcloud.result }} | ✅ |
+            | SAST | Snyk Code | ${{ needs.sast-snyk-code.result }} | ✅ |
             | SCA | Snyk | ${{ needs.sca-snyk.result }} | ✅ |
             | DAST | OWASP ZAP | ${{ needs.dast-owasp-zap.result }} | ✅ |
             
@@ -770,7 +903,7 @@ jobs:
             ## 📁 All Artifacts
             - Download All Reports from GitHub Actions artifacts
             
-            **Pipeline Status:** ${{ (needs.pre-commit-security.result == 'success' && needs.sast-sonarcloud.result == 'success' && needs.sca-snyk.result == 'success' && needs.dast-owasp-zap.result == 'success') && '✅ All Passed' || '⚠️ Some Issues Found' }}
+            **Pipeline Status:** ${{ (needs.pre-commit-security.result == 'success' && needs.sast-snyk-code.result == 'success' && needs.sca-snyk.result == 'success' && needs.dast-owasp-zap.result == 'success') && '✅ All Passed' || '⚠️ Some Issues Found' }}
             `;
             
             await github.rest.issues.create({
