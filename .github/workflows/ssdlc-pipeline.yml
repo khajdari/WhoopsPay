@@ -12,10 +12,35 @@ env:
   IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/whoopspay
 
 jobs:
+  # Setup shared version for Docker and Security Reports
+  setup-version:
+    name: "📋 Extract Semantic Version"
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      docker-tag: ${{ steps.version.outputs.docker-tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      
+      - name: Extract semantic version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Extracted version: v$VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "docker-tag=${{ env.IMAGE_NAME }}:$VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
   # PHASE 1: Pre-commit Security Checks
   pre-commit-security:
     name: "🔒 Pre-commit Security Validation"
     runs-on: ubuntu-latest
+    needs: setup-version
+    env:
+      VERSION: ${{ needs.setup-version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,10 +59,8 @@ jobs:
 
       - name: Extract version and create folder structure
         run: |
-          # Extract semantic version from package.json
-          VERSION=$(node -p "require('./package.json').version")
-          echo "Detected version: $VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          # Use version from setup job
+          echo "Using semantic version: v$VERSION"
           
           # Create version-specific folder structure
           mkdir -p "security-reports/v$VERSION/00-pre-validation"
@@ -114,7 +137,9 @@ jobs:
   sast-sonarcloud:
     name: "🔍 SAST - SonarCloud Analysis"
     runs-on: ubuntu-latest
-    needs: pre-commit-security
+    needs: [setup-version, pre-commit-security]
+    env:
+      VERSION: ${{ needs.setup-version.outputs.version }}
     outputs:
       sonar-status: ${{ steps.sonar.outputs.status }}
     steps:
@@ -135,9 +160,8 @@ jobs:
 
       - name: Setup version-specific folders
         run: |
-          # Extract version and create SonarCloud folder
-          VERSION=$(node -p "require('./package.json').version")
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          # Use version from setup job
+          echo "Using semantic version: v$VERSION"
           mkdir -p "security-reports/v$VERSION/01-sonarcloud"
           echo "📁 Created SonarCloud folder for v$VERSION"
 
@@ -230,7 +254,9 @@ jobs:
   sca-snyk:
     name: "📦 SCA - Snyk Dependency Scan"
     runs-on: ubuntu-latest
-    needs: sast-sonarcloud
+    needs: [setup-version, sast-sonarcloud]
+    env:
+      VERSION: ${{ needs.setup-version.outputs.version }}
     outputs:
       snyk-status: ${{ steps.snyk.outputs.status }}
     steps:
@@ -250,9 +276,8 @@ jobs:
 
       - name: Setup version-specific folders
         run: |
-          # Extract version and create Snyk folder
-          VERSION=$(node -p "require('./package.json').version")
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          # Use version from setup job
+          echo "Using semantic version: v$VERSION"
           mkdir -p "security-reports/v$VERSION/02-snyk"
           echo "📁 Created Snyk folder for v$VERSION"
 
@@ -326,7 +351,9 @@ jobs:
   dast-owasp-zap:
     name: "🎯 DAST - OWASP ZAP Security Scan"
     runs-on: ubuntu-latest
-    needs: sca-snyk
+    needs: [setup-version, sca-snyk]
+    env:
+      VERSION: ${{ needs.setup-version.outputs.version }}
     outputs:
       zap-status: ${{ steps.zap.outputs.status }}
     steps:
@@ -346,9 +373,8 @@ jobs:
 
       - name: Setup version-specific folders
         run: |
-          # Extract version and create OWASP ZAP folder
-          VERSION=$(node -p "require('./package.json').version")
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          # Use version from setup job
+          echo "Using semantic version: v$VERSION"
           mkdir -p "security-reports/v$VERSION/03-owasp-zap"
           echo "📁 Created OWASP ZAP folder for v$VERSION"
 
@@ -464,11 +490,40 @@ jobs:
           retention-days: 30
 
   # Create GitHub Issues with Security Reports
+  # Docker Build with Semantic Versioning
+  docker-build:
+    name: "🐳 Build Docker Image with Semantic Version"
+    runs-on: ubuntu-latest
+    needs: [setup-version, dast-owasp-zap]
+    if: always()
+    env:
+      VERSION: ${{ needs.setup-version.outputs.version }}
+      DOCKER_TAG: ${{ needs.setup-version.outputs.docker-tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      
+      - name: Build Docker image with semantic version
+        run: |
+          echo "🐳 Building Docker image with semantic version..."
+          echo "Version: v$VERSION"
+          echo "Docker tag: $DOCKER_TAG"
+          
+          # Build image with semantic version tag
+          docker build -t "${{ env.IMAGE_NAME }}:$VERSION" -t "${{ env.IMAGE_NAME }}:latest" .
+          
+          echo "✅ Docker image built successfully with version v$VERSION"
+          docker images | grep whoopspay || echo "Image not found in local registry"
+
   create-security-issues:
     name: "📋 Create Security Report Issues"
     runs-on: ubuntu-latest
-    needs: [pre-commit-security, sast-sonarcloud, sca-snyk, dast-owasp-zap]
+    needs: [setup-version, pre-commit-security, sast-sonarcloud, sca-snyk, dast-owasp-zap]
     if: always()
+    env:
+      VERSION: ${{ needs.setup-version.outputs.version }}
     steps:
       - name: Create Pre-Validation Security Issue
         uses: actions/github-script@v7
@@ -479,7 +534,9 @@ jobs:
             const body = `
             # 🔒 Pre-Validation Security Report
             
-            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Branch:** \`${branchName}\`
+            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
+            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
             **Status:** ${{ needs.pre-commit-security.result }}
             
@@ -499,7 +556,7 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'pre-validation', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
+              labels: ['security', 'pre-validation', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
 
       - name: Create SonarCloud Security Issue
@@ -511,7 +568,9 @@ jobs:
             const body = `
             # 🔍 SonarCloud Static Analysis Report
             
-            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Branch:** \`${branchName}\`
+            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
+            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
             **Status:** ${{ needs.sast-sonarcloud.result }}
             
@@ -532,7 +591,7 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sast', 'sonarcloud', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
+              labels: ['security', 'sast', 'sonarcloud', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
 
       - name: Create Snyk Security Issue
@@ -544,7 +603,9 @@ jobs:
             const body = `
             # 📦 Snyk Dependency Security Report
             
-            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Branch:** \`${branchName}\`
+            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
+            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
             **Status:** ${{ needs.sca-snyk.result }}
             
@@ -565,7 +626,7 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
+              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
 
       - name: Create OWASP ZAP Security Issue
@@ -577,7 +638,9 @@ jobs:
             const body = `
             # 🎯 OWASP ZAP Dynamic Security Report
             
-            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Branch:** \`${branchName}\`
+            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
+            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
             **Status:** ${{ needs.dast-owasp-zap.result }}
             
@@ -598,7 +661,7 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
+              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
 
       - name: Create Summary Security Issue
@@ -610,7 +673,9 @@ jobs:
             const body = `
             # 📊 Complete Security Pipeline Summary
             
-            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Branch:** \`${branchName}\`
+            **Version:** \`v${{ needs.setup-version.outputs.version }}\`
+            **Docker Tag:** \`${{ needs.setup-version.outputs.docker-tag }}\`
             **Timestamp:** ${new Date().toISOString()}
             **Pipeline Run:** [#${context.runNumber}](../actions/runs/${context.runId})
             
@@ -637,5 +702,5 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'pipeline-summary', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`]
+              labels: ['security', 'pipeline-summary', 'automated-report', `branch:${branchName}`, `run:${context.runNumber}`, `version:${{ needs.setup-version.outputs.version }}`]
             });
