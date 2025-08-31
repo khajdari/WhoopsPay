@@ -2,6 +2,48 @@
 
 **⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes. NEVER use this code in production environments!**
 
+## Comprehensive Security Pipeline (SSDLC)
+
+WhoopsPay implements a complete Secure Software Development Lifecycle pipeline with automated security analysis across 4 phases:
+
+### Phase 1: ESLint Security Linting
+- **Tool**: ESLint with enterprise security plugins
+- **Plugins**: 
+  - `eslint-plugin-security` - Node.js security hotspot detection
+  - `@microsoft/eslint-plugin-sdl` - Microsoft Security Development Lifecycle compliance
+  - `eslint-plugin-sonarjs` - Code quality and security vulnerability detection
+- **Coverage**: All JavaScript/TypeScript files with 15+ security rules
+- **Output**: JSON, HTML, and Checkstyle XML reports
+- **Purpose**: Foundation-level code quality and security validation
+
+### Phase 2: SAST - Static Application Security Testing  
+- **Tool**: Snyk Code with DeepCode AI engine
+- **Configuration**: Maximum depth analysis (--all-projects --detection-depth=10 --severity-threshold=low)
+- **Coverage**: Cross-file data flow analysis, type inference, buffer overflow detection
+- **Output**: Official Snyk HTML reports, JSON, and SARIF formats
+- **Detects**: XSS, SQL injection, command injection, cryptographic issues, authentication flaws
+
+### Phase 3: SCA - Software Composition Analysis
+- **Tool**: Snyk Open Source dependency scanner
+- **Configuration**: Comprehensive dependency analysis (--dev --all-projects --detection-depth=10)
+- **Coverage**: Production and development dependencies with transitive vulnerability analysis
+- **Output**: Official Snyk HTML reports with remediation guidance
+- **Detects**: Known vulnerabilities in 115+ project dependencies
+
+### Phase 4: DAST - Dynamic Application Security Testing
+- **Tool**: OWASP ZAP with automated penetration testing
+- **Configuration**: Full application scan with spider and active security tests
+- **Coverage**: OWASP Top 10 and API Security Top 10 vulnerabilities on running application
+- **Output**: HTML reports with vulnerability evidence and exploitation proof
+- **Detects**: Runtime vulnerabilities, authentication bypass, injection flaws
+
+### Security Pipeline Features
+- **Automated Execution**: Triggered on pull requests to develop-vulnerable branch
+- **Semantic Versioning**: Synchronized across Docker images and security reports
+- **GitHub Issues Integration**: Automated security report issues with download-only access
+- **Docker Hub Integration**: Security-validated container deployment
+- **Report Artifacts**: All reports available as GitHub Actions artifacts for download
+
 ## Educational Security Vulnerabilities
 
 WhoopsPay is designed as a comprehensive security training platform that demonstrates real-world vulnerabilities in a controlled environment. Each vulnerability is carefully implemented with detailed educational comments.

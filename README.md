@@ -129,9 +129,17 @@ The application includes pre-configured demo users for testing:
 
 ### Development Tools
 - **Vite** - Lightning-fast build tool
-- **ESLint** - Code quality and consistency
+- **ESLint + Security Plugins** - Comprehensive code linting with security analysis
 - **Prettier** - Code formatting
 - **Concurrently** - Run multiple npm scripts
+
+### Security Pipeline Tools
+- **ESLint Security Linting** - Multi-plugin security analysis (eslint-plugin-security, @microsoft/eslint-plugin-sdl, eslint-plugin-sonarjs)
+- **Snyk Code SAST** - Static application security testing with maximum depth scanning
+- **Snyk SCA** - Software composition analysis with dependency vulnerability detection
+- **OWASP ZAP DAST** - Dynamic application security testing with automated penetration testing
+- **GitHub Actions** - Automated CI/CD security pipeline with semantic versioning
+- **Docker Hub** - Containerized deployment with security-validated images
 
 ## 📚 Learning Objectives
 
@@ -147,7 +155,31 @@ After using WhoopsPay, users will understand:
 
 ## 🧪 Testing and Exploration
 
-### Security Testing
+### Automated Security Pipeline
+WhoopsPay includes a comprehensive Secure SDLC pipeline that runs on pull requests to `develop-vulnerable` branch:
+
+**Phase 1: ESLint Security Linting**
+- **eslint-plugin-security**: Node.js security hotspot detection
+- **@microsoft/eslint-plugin-sdl**: Microsoft Security Development Lifecycle compliance  
+- **eslint-plugin-sonarjs**: Code quality and security vulnerability detection
+- **Output**: JSON, HTML, and Checkstyle XML reports
+
+**Phase 2: SAST - Static Application Security Testing**
+- **Snyk Code**: Maximum depth source code analysis (--all-projects --detection-depth=10)
+- **Coverage**: All JavaScript/TypeScript files with cross-file analysis
+- **Output**: Official Snyk HTML reports, JSON, and SARIF formats
+
+**Phase 3: SCA - Software Composition Analysis**  
+- **Snyk Open Source**: Comprehensive dependency vulnerability scanning (--dev --all-projects)
+- **Coverage**: Production and development dependencies with transitive analysis
+- **Output**: Official Snyk HTML reports with vulnerability details and remediation guidance
+
+**Phase 4: DAST - Dynamic Application Security Testing**
+- **OWASP ZAP**: Automated penetration testing of running application
+- **Coverage**: OWASP Top 10 vulnerabilities and API security testing
+- **Output**: HTML reports with vulnerability evidence and exploitation details
+
+### Manual Security Testing
 - Use tools like Burp Suite, OWASP ZAP, or browser dev tools
 - Explore different user roles and permission levels
 - Test input validation and error handling
@@ -161,11 +193,13 @@ After using WhoopsPay, users will understand:
 
 ## 📖 Documentation Structure
 
-- `README.md` - This overview and setup guide
-- `PROJECT_STRUCTURE.md` - Detailed MVC architecture and project organization
-- `SECURITY_TRAINING.md` - Comprehensive vulnerability documentation and learning guide
-- `README-Docker.md` - Docker setup and containerization guide  
-- `replit.md` - Project architecture and development guidelines
+- `README.md` - This overview and setup guide with security pipeline documentation
+- `PROJECT_STRUCTURE.md` - Detailed MVC architecture, project organization, and SSDLC pipeline configuration
+- `SECURITY_TRAINING.md` - Comprehensive vulnerability documentation, learning guide, and automated security analysis phases
+- `README-Docker.md` - Docker setup and containerization guide with security validation
+- `replit.md` - Project architecture, development guidelines, and security tool integration
+- `eslint.config.js` - Comprehensive ESLint security configuration with enterprise plugins
+- `.github/workflows/ssdlc-pipeline.yml` - Complete Secure SDLC automation pipeline
 - Inline code comments - Detailed OWASP vulnerability explanations throughout codebase
 
 ## 🤝 Contributing
