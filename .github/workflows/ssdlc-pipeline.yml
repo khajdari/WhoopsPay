@@ -74,6 +74,23 @@ jobs:
           node security-tests/owasp-api-top10-tests.js || echo "OWASP API tests completed"
         continue-on-error: true
 
+      - name: Check SonarCloud configuration
+        run: |
+          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "⚠️ SONAR_TOKEN not configured - SonarCloud analysis will be skipped"
+            echo "To enable SonarCloud:"
+            echo "1. Go to https://sonarcloud.io and sign up"
+            echo "2. Create a project and get your token"
+            echo "3. Add it as SONAR_TOKEN in GitHub repository secrets"
+          else
+            echo "✅ SonarCloud token configured"
+            echo "🔍 Token length: ${#SONAR_TOKEN}"
+            echo "🔍 Project key: khajdari_WhoopsPay"
+            echo "🔍 Organization: khajdari"
+          fi
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: SonarCloud static analysis
         id: sonar
         uses: SonarSource/sonarcloud-github-action@master
@@ -85,7 +102,32 @@ jobs:
             -Dsonar.verbose=true
             -Dsonar.pullrequest.github.summary_comment=true
             -Dsonar.analysis.mode=publish
+            -Dsonar.log.level=DEBUG
         continue-on-error: true
+
+      - name: Check SonarCloud results
+        run: |
+          echo "🔍 Checking SonarCloud analysis results..."
+          if [ -d ".scannerwork" ]; then
+            echo "✅ SonarCloud analysis completed - .scannerwork directory found"
+            ls -la .scannerwork/ || echo "Cannot list .scannerwork contents"
+            if [ -f ".scannerwork/report-task.txt" ]; then
+              echo "📄 Report task file found:"
+              cat .scannerwork/report-task.txt
+            else
+              echo "❌ No report-task.txt found"
+            fi
+          else
+            echo "❌ No .scannerwork directory found - analysis may have failed"
+          fi
+          
+          # Check if sonar-project.properties exists and is valid
+          if [ -f "sonar-project.properties" ]; then
+            echo "✅ sonar-project.properties found:"
+            cat sonar-project.properties
+          else
+            echo "❌ sonar-project.properties not found"
+          fi
 
       - name: Set SonarCloud status
         run: echo "status=completed" >> $GITHUB_OUTPUT
