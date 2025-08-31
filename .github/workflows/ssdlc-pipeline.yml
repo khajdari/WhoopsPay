@@ -207,7 +207,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: code test
-          args: --sarif-file-output=snyk-code.sarif --json-file-output=snyk-code.json
+          args: --all-projects --detection-depth=10 --severity-threshold=low --sarif-file-output=snyk-code.sarif --json-file-output=snyk-code.json
         continue-on-error: true
 
       - name: Check Snyk Code results and organize
@@ -343,16 +343,16 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=low --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif
+          args: --all-projects --dev --detection-depth=10 --severity-threshold=low --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif
         continue-on-error: true
 
       - name: Generate comprehensive security reports
         id: snyk
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "Generating Snyk security reports for v$VERSION..."
-            npx snyk test --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || true
-            npx snyk test --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || true
+            echo "Generating comprehensive Snyk security reports for v$VERSION..."
+            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || true
+            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || true
             npx snyk monitor || true
             
             # Copy any additional results to version folder
