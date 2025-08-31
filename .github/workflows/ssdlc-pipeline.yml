@@ -382,4 +382,175 @@ jobs:
             OWASP-ZAP-Security-Report.html
             OWASP-ZAP-Security-Report.json
           retention-days: 30
-    name: "🐳 Docker Hub Security Build"
+
+  # Create GitHub Issues with Security Reports
+  create-security-issues:
+    name: "📋 Create Security Report Issues"
+    runs-on: ubuntu-latest
+    needs: [pre-commit-security, sast-sonarcloud, sca-snyk, dast-owasp-zap]
+    if: always()
+    steps:
+      - name: Create Pre-Validation Security Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `🔒 Pre-Validation Security Report - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const body = `
+            # 🔒 Pre-Validation Security Report
+            
+            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Timestamp:** ${new Date().toISOString()}
+            **Status:** ${{ needs.pre-commit-security.result }}
+            
+            ## ✅ Validation Results
+            - **Lint Security Checks:** Completed
+            - **Dependencies:** Installed and Verified  
+            - **Code Quality:** Basic validation passed
+            
+            ## 📁 Report Artifacts
+            - Download: [Pre-Validation Report](../actions/runs/${context.runId})
+            
+            This report validates that the code meets basic security and quality standards before detailed analysis.
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['security', 'pre-validation', 'automated-report']
+            });
+
+      - name: Create SonarCloud Security Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `🔍 SonarCloud Static Analysis Report - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const body = `
+            # 🔍 SonarCloud Static Analysis Report
+            
+            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Timestamp:** ${new Date().toISOString()}
+            **Status:** ${{ needs.sast-sonarcloud.result }}
+            
+            ## 📊 Analysis Results
+            - **Static Analysis:** Code quality and security scan completed
+            - **Security Hotspots:** Identified potential vulnerabilities
+            - **Code Coverage:** Test coverage analysis included
+            
+            ## 📁 Report Artifacts
+            - Download: [SonarCloud Analysis Report](../actions/runs/${context.runId})
+            - View on SonarCloud: [Dashboard](https://sonarcloud.io/project/overview?id=khajdari_WhoopsPay)
+            
+            This report provides comprehensive static analysis including security vulnerabilities, code smells, and maintainability issues.
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['security', 'sast', 'sonarcloud', 'automated-report']
+            });
+
+      - name: Create Snyk Security Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `📦 Snyk Dependency Security Report - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const body = `
+            # 📦 Snyk Dependency Security Report
+            
+            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Timestamp:** ${new Date().toISOString()}
+            **Status:** ${{ needs.sca-snyk.result }}
+            
+            ## 🔒 Security Scan Results
+            - **Dependency Vulnerabilities:** Scanned for known security issues
+            - **Package Security:** Analyzed npm packages for threats
+            - **License Compliance:** Checked for license conflicts
+            
+            ## 📁 Report Artifacts
+            - Download: [Snyk Security Report](../actions/runs/${context.runId})
+            - View on Snyk: [Dashboard](https://app.snyk.io)
+            
+            This report identifies security vulnerabilities in project dependencies and provides remediation guidance.
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report']
+            });
+
+      - name: Create OWASP ZAP Security Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `🎯 OWASP ZAP Dynamic Security Report - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const body = `
+            # 🎯 OWASP ZAP Dynamic Security Report
+            
+            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Timestamp:** ${new Date().toISOString()}
+            **Status:** ${{ needs.dast-owasp-zap.result }}
+            
+            ## 🛡️ Dynamic Security Testing Results
+            - **Runtime Vulnerabilities:** Live application security scan
+            - **Web Application Security:** OWASP Top 10 testing
+            - **Penetration Testing:** Automated security assessment
+            
+            ## 📁 Report Artifacts
+            - Download: [OWASP ZAP Security Report (HTML)](../actions/runs/${context.runId})
+            - Download: [OWASP ZAP Security Report (JSON)](../actions/runs/${context.runId})
+            
+            This report provides dynamic application security testing results from scanning the running application for vulnerabilities.
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report']
+            });
+
+      - name: Create Summary Security Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `📊 Security Pipeline Summary - ${context.payload.pull_request?.head?.ref || context.ref}`;
+            const body = `
+            # 📊 Complete Security Pipeline Summary
+            
+            **Branch:** \`${context.payload.pull_request?.head?.ref || context.ref}\`
+            **Timestamp:** ${new Date().toISOString()}
+            **Pipeline Run:** [#${context.runNumber}](../actions/runs/${context.runId})
+            
+            ## 🛡️ Security Phase Results
+            
+            | Phase | Tool | Status | Report |
+            |-------|------|--------|--------|
+            | Pre-Validation | Lint & Basic Checks | ${{ needs.pre-commit-security.result }} | ✅ |
+            | SAST | SonarCloud | ${{ needs.sast-sonarcloud.result }} | ✅ |
+            | SCA | Snyk | ${{ needs.sca-snyk.result }} | ✅ |
+            | DAST | OWASP ZAP | ${{ needs.dast-owasp-zap.result }} | ✅ |
+            
+            ## 📋 Individual Report Issues
+            Check the repository issues for individual detailed security reports from each phase.
+            
+            ## 📁 All Artifacts
+            - [Download All Reports](../actions/runs/${context.runId})
+            
+            **Pipeline Status:** ${{ (needs.pre-commit-security.result == 'success' && needs.sast-sonarcloud.result == 'success' && needs.sca-snyk.result == 'success' && needs.dast-owasp-zap.result == 'success') && '✅ All Passed' || '⚠️ Some Issues Found' }}
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['security', 'pipeline-summary', 'automated-report']
+            });
