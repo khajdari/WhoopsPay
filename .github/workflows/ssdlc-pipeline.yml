@@ -234,19 +234,23 @@ jobs:
 
       - name: Generate Snyk Code HTML Report
         run: |
-          if [ -n "${{ secrets.SNYK_TOKEN }}" ] && [ -f "snyk-code.json" ]; then
+          if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
             echo "🎨 Generating official Snyk Code HTML report..."
             
-            # Install official snyk-to-html tool
+            # Install snyk-to-html tool (same version as SCA phase)
             npm install -g snyk-to-html
             
-            # Generate official HTML report from Snyk Code JSON using direct method
-            echo "Converting Snyk Code JSON to official HTML format..."
-            snyk-to-html \
-              -i "snyk-code.json" \
-              -o "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" \
-              -a \
-              || echo "⚠️ Official HTML report generation failed - continuing without HTML"
+            # Generate HTML report from JSON results (same approach as SCA)
+            if [ -f "security-reports/v$VERSION/01-snyk-code/snyk-code.json" ]; then
+              echo "Converting Snyk Code JSON to HTML..."
+              snyk-to-html \
+                -i "security-reports/v$VERSION/01-snyk-code/snyk-code.json" \
+                -o "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" \
+                -a \
+                || echo "⚠️ HTML report generation failed - continuing without HTML"
+            else
+              echo "⚠️ No JSON results found for HTML conversion"
+            fi
             
             if [ -f "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" ]; then
               echo "✅ Official Snyk Code HTML report generated successfully"
