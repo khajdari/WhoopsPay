@@ -254,6 +254,41 @@ jobs:
             echo "❌ sonar-project.properties not found"
           fi
 
+      - name: Generate SonarCloud HTML Report
+        run: |
+          if [ -n "${{ secrets.SONAR_TOKEN }}" ] && [ -d ".scannerwork" ]; then
+            echo "🎨 Generating SonarCloud HTML report..."
+            
+            # Install sonar-report tool
+            npm install -g sonar-report
+            
+            # Wait for analysis to be available
+            sleep 10
+            
+            # Generate HTML report
+            sonar-report \
+              --sonarurl="https://sonarcloud.io" \
+              --sonarcomponent="khajdari_WhoopsPay" \
+              --sonarorganization="khajdari" \
+              --project="WhoopsPay Security Analysis" \
+              --application="WhoopsPay" \
+              --release="v$VERSION" \
+              --output="security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html" \
+              || echo "⚠️ HTML report generation failed - continuing without HTML"
+            
+            if [ -f "security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html" ]; then
+              echo "✅ SonarCloud HTML report generated successfully"
+              echo "📄 Report size: $(wc -c < security-reports/v$VERSION/01-sonarcloud/SonarCloud-Security-Report.html) bytes"
+            else
+              echo "❌ HTML report not generated"
+            fi
+          else
+            echo "⚠️ Skipping HTML report generation (missing token or analysis results)"
+          fi
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        continue-on-error: true
+
       - name: Set SonarCloud status
         run: echo "status=completed" >> $GITHUB_OUTPUT
 
@@ -354,6 +389,39 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
+      - name: Generate Snyk HTML Report
+        run: |
+          if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
+            echo "🎨 Generating Snyk HTML report..."
+            
+            # Install snyk-to-html tool
+            npm install -g snyk-to-html
+            
+            # Generate HTML report from JSON results
+            if [ -f "security-reports/v$VERSION/02-snyk/snyk-test.json" ]; then
+              echo "Converting Snyk JSON to HTML..."
+              snyk-to-html \
+                -i "security-reports/v$VERSION/02-snyk/snyk-test.json" \
+                -o "security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html" \
+                -a \
+                || echo "⚠️ HTML report generation failed - continuing without HTML"
+              
+              if [ -f "security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html" ]; then
+                echo "✅ Snyk HTML report generated successfully"
+                echo "📄 Report size: $(wc -c < security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html) bytes"
+              else
+                echo "❌ HTML report not generated"
+              fi
+            else
+              echo "⚠️ No JSON results found for HTML conversion"
+            fi
+          else
+            echo "⚠️ Skipping HTML report generation (no Snyk token)"
+          fi
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
+
       - name: Upload Snyk Security Report
         uses: actions/upload-artifact@v4
         with:
@@ -453,9 +521,7 @@ jobs:
           target: 'http://localhost:5000'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a -j -T 30 -l WARN'
-          artifact_name: '03-owasp-zap-security-report-v${{ env.VERSION }}'
-          issue_title: false
-          create_issue: false
+          allow_issue_writing: false
         continue-on-error: true
 
       - name: Process ZAP results
