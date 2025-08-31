@@ -235,28 +235,24 @@ jobs:
       - name: Generate Snyk Code HTML Report
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ] && [ -f "snyk-code.json" ]; then
-            echo "🎨 Generating Snyk Code HTML report..."
+            echo "🎨 Generating official Snyk Code HTML report..."
             
-            # Install snyk-to-html tool
+            # Install official snyk-to-html tool
             npm install -g snyk-to-html
             
-            # Generate HTML report from JSON results
-            if [ -f "snyk-code.json" ]; then
-              echo "Converting Snyk Code JSON to HTML..."
-              snyk-to-html \
-                -i "snyk-code.json" \
-                -o "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" \
-                -a \
-                || echo "⚠️ HTML report generation failed - continuing without HTML"
-              
-              if [ -f "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" ]; then
-                echo "✅ Snyk Code HTML report generated successfully"
-                echo "📄 Report size: $(wc -c < security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html) bytes"
-              else
-                echo "❌ HTML report not generated"
-              fi
+            # Generate official HTML report from Snyk Code JSON using direct method
+            echo "Converting Snyk Code JSON to official HTML format..."
+            snyk-to-html \
+              -i "snyk-code.json" \
+              -o "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" \
+              -a \
+              || echo "⚠️ Official HTML report generation failed - continuing without HTML"
+            
+            if [ -f "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" ]; then
+              echo "✅ Official Snyk Code HTML report generated successfully"
+              echo "📄 Report size: $(wc -c < security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html) bytes"
             else
-              echo "⚠️ No JSON results found for HTML conversion"
+              echo "❌ Official HTML report not generated"
             fi
           else
             echo "⚠️ Skipping HTML report generation (no Snyk token or results)"
