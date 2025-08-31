@@ -429,6 +429,25 @@ function loadSonarData(inputPath) {
       }
     }
     
+    // Sort local issues by severity if loaded
+    if (sonarData.issues && sonarData.issues.length > 0) {
+      const severityOrder = {
+        'BLOCKER': 1,
+        'CRITICAL': 2, 
+        'MAJOR': 3,
+        'MINOR': 4,
+        'INFO': 5
+      };
+      
+      sonarData.issues.sort((a, b) => {
+        const severityA = severityOrder[a.severity] || 999;
+        const severityB = severityOrder[b.severity] || 999;
+        return severityA - severityB;
+      });
+      
+      console.log(`🔄 Sorted ${sonarData.issues.length} local issues by severity criticality`);
+    }
+    
     return sonarData;
   } catch (error) {
     console.warn(`⚠️ Error loading SonarCloud data: ${error.message}`);
@@ -447,35 +466,87 @@ async function fetchFromSonarCloudAPI(projectKey, organization, token) {
       'Accept': 'application/json'
     };
     
-    // Fetch issues
-    const issuesResponse = await fetch(
-      `${baseUrl}/issues/search?componentKeys=${projectKey}&organization=${organization}&ps=500`,
-      { headers }
-    );
+    // Fetch ALL issues with pagination
+    let allIssues = [];
+    let page = 1;
+    const pageSize = 500;
+    let hasMore = true;
     
-    let issues = [];
-    if (issuesResponse.ok) {
-      const issuesData = await issuesResponse.json();
-      issues = issuesData.issues || [];
-      console.log(`✅ Found ${issues.length} issues`);
-    } else {
-      console.log(`⚠️ Issues API failed: ${issuesResponse.status}`);
+    while (hasMore) {
+      console.log(`📄 Fetching page ${page} of issues...`);
+      const issuesResponse = await fetch(
+        `${baseUrl}/issues/search?componentKeys=${projectKey}&organization=${organization}&ps=${pageSize}&p=${page}`,
+        { headers }
+      );
+      
+      if (issuesResponse.ok) {
+        const issuesData = await issuesResponse.json();
+        const pageIssues = issuesData.issues || [];
+        allIssues = allIssues.concat(pageIssues);
+        
+        // Check if there are more pages
+        const total = issuesData.total || 0;
+        hasMore = allIssues.length < total;
+        page++;
+        
+        console.log(`✅ Fetched ${pageIssues.length} issues from page ${page - 1} (${allIssues.length}/${total} total)`);
+      } else {
+        console.log(`⚠️ Issues API failed on page ${page}: ${issuesResponse.status}`);
+        hasMore = false;
+      }
     }
     
-    // Fetch hotspots
-    const hotspotsResponse = await fetch(
-      `${baseUrl}/hotspots/search?projectKey=${projectKey}&ps=500`,
-      { headers }
-    );
+    let issues = allIssues;
+    console.log(`✅ Found ${issues.length} total issues`);
     
-    let hotspots = [];
-    if (hotspotsResponse.ok) {
-      const hotspotsData = await hotspotsResponse.json();
-      hotspots = hotspotsData.hotspots || [];
-      console.log(`✅ Found ${hotspots.length} security hotspots`);
-    } else {
-      console.log(`⚠️ Hotspots API failed: ${hotspotsResponse.status}`);
+    // Sort issues by severity criticality (most critical first)
+    const severityOrder = {
+      'BLOCKER': 1,
+      'CRITICAL': 2, 
+      'MAJOR': 3,
+      'MINOR': 4,
+      'INFO': 5
+    };
+    
+    issues.sort((a, b) => {
+      const severityA = severityOrder[a.severity] || 999;
+      const severityB = severityOrder[b.severity] || 999;
+      return severityA - severityB;
+    });
+    
+    console.log(`🔄 Sorted ${issues.length} issues by severity criticality`);
+    
+    // Fetch ALL hotspots with pagination
+    let allHotspots = [];
+    page = 1;
+    hasMore = true;
+    
+    while (hasMore) {
+      console.log(`🔥 Fetching page ${page} of security hotspots...`);
+      const hotspotsResponse = await fetch(
+        `${baseUrl}/hotspots/search?projectKey=${projectKey}&ps=${pageSize}&p=${page}`,
+        { headers }
+      );
+      
+      if (hotspotsResponse.ok) {
+        const hotspotsData = await hotspotsResponse.json();
+        const pageHotspots = hotspotsData.hotspots || [];
+        allHotspots = allHotspots.concat(pageHotspots);
+        
+        // Check if there are more pages
+        const total = hotspotsData.paging?.total || 0;
+        hasMore = allHotspots.length < total;
+        page++;
+        
+        console.log(`✅ Fetched ${pageHotspots.length} hotspots from page ${page - 1} (${allHotspots.length}/${total} total)`);
+      } else {
+        console.log(`⚠️ Hotspots API failed on page ${page}: ${hotspotsResponse.status}`);
+        hasMore = false;
+      }
     }
+    
+    let hotspots = allHotspots;
+    console.log(`✅ Found ${hotspots.length} total security hotspots`);
     
     // Fetch measures
     const measuresResponse = await fetch(
