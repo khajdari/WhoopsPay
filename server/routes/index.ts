@@ -47,7 +47,6 @@ import { NotificationController } from '../controllers/NotificationController';
 import { AdminController } from '../controllers/AdminController';
 import { IssueReportController } from '../controllers/IssueReportController';
 import { juiceShopRoutes, JuiceShopController } from '../modules/juice-shop/index';
-import { ObjectStorageService } from '../objectStorage';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Log current domain configuration
@@ -554,34 +553,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Juice Shop module API routes (for integration)
   app.use('/api/juice-shop', juiceShopRoutes);
-
-  // ============================================================================
-  // SECURITY REPORT PREVIEW ROUTES
-  // ============================================================================
-  
-  // Serve HTML security reports for browser preview
-  app.get('/security-reports/:filename', async (req, res) => {
-    try {
-      const filename = req.params.filename;
-      
-      // Only allow HTML files for security
-      if (!filename.endsWith('.html')) {
-        return res.status(400).json({ error: 'Only HTML files are supported for preview' });
-      }
-      
-      const objectStorageService = new ObjectStorageService();
-      const file = await objectStorageService.searchPublicObject(`security-reports/${filename}`);
-      
-      if (!file) {
-        return res.status(404).json({ error: 'Security report not found' });
-      }
-      
-      await objectStorageService.downloadObject(file, res);
-    } catch (error) {
-      console.error('Error serving security report:', error);
-      res.status(500).json({ error: 'Error loading security report' });
-    }
-  });
 
   // ============================================================================
   // HEALTH CHECK ROUTES
