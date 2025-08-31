@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global layout styles for proper footer positioning */
+/* Global layout styles for proper footer spositioning */
 html, body {
   height: 100%;
 }
