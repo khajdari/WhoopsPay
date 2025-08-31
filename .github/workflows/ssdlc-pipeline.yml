@@ -235,126 +235,24 @@ jobs:
       - name: Generate Snyk Code HTML Report
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ] && [ -f "snyk-code.json" ]; then
-            echo "🎨 Generating Snyk Code HTML report..."
+            echo "🎨 Generating official Snyk Code HTML report..."
             
-            # Note: snyk-to-html doesn't support Snyk Code JSON format, only dependency JSON
-            # Generate custom HTML report from Snyk Code JSON for consistency
+            # Install official snyk-to-html tool
+            npm install -g snyk-to-html
             
-            if [ -f "snyk-code.json" ]; then
-              echo "Processing Snyk Code JSON results..."
-              
-              # Count vulnerabilities by severity
-              HIGH_COUNT=$(jq '[.runs[0].results[] | select(.level == "error")] | length' snyk-code.sarif 2>/dev/null || echo "0")
-              MEDIUM_COUNT=$(jq '[.runs[0].results[] | select(.level == "warning")] | length' snyk-code.sarif 2>/dev/null || echo "0")
-              LOW_COUNT=$(jq '[.runs[0].results[] | select(.level == "note")] | length' snyk-code.sarif 2>/dev/null || echo "0")
-              INFO_COUNT=$(jq '[.runs[0].results[] | select(.level == "info")] | length' snyk-code.sarif 2>/dev/null || echo "0")
-              TOTAL_COUNT=$((HIGH_COUNT + MEDIUM_COUNT + LOW_COUNT + INFO_COUNT))
-              
-              # Generate native Snyk-style HTML report
-              cat > "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" << EOF
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Snyk Code Security Report</title>
-    <meta charset="utf-8">
-    <style>
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 20px; background: #f8f9fa; }
-        .header { background: #4c4a73; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        .summary { display: flex; gap: 15px; margin: 20px 0; }
-        .metric { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; flex: 1; }
-        .metric-number { font-size: 24px; font-weight: bold; color: #4c4a73; }
-        .metric-label { color: #666; font-size: 14px; }
-        .vulnerabilities { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .vuln-item { border-left: 4px solid #ddd; padding: 15px; margin: 10px 0; background: #fafafa; }
-        .vuln-high { border-left-color: #d73a49; }
-        .vuln-medium { border-left-color: #f66a0a; }
-        .vuln-low { border-left-color: #28a745; }
-        .vuln-info { border-left-color: #0366d6; }
-        .vuln-title { font-weight: bold; color: #24292e; margin-bottom: 5px; }
-        .vuln-path { color: #586069; font-size: 14px; font-family: monospace; }
-        .severity { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
-        .severity-high { background: #ffeaea; color: #d73a49; }
-        .severity-medium { background: #fff8f2; color: #f66a0a; }
-        .severity-low { background: #f0fff4; color: #28a745; }
-        .severity-info { background: #f1f8ff; color: #0366d6; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>🔍 Snyk Code Security Report</h1>
-        <p>Static Application Security Testing (SAST) Results</p>
-        <p><strong>Version:</strong> v$VERSION | <strong>Generated:</strong> $(date -u +"%Y-%m-%d %H:%M:%S UTC")</p>
-    </div>
-    
-    <div class="summary">
-        <div class="metric">
-            <div class="metric-number">$TOTAL_COUNT</div>
-            <div class="metric-label">Total Issues</div>
-        </div>
-        <div class="metric">
-            <div class="metric-number">$HIGH_COUNT</div>
-            <div class="metric-label">High Severity</div>
-        </div>
-        <div class="metric">
-            <div class="metric-number">$MEDIUM_COUNT</div>
-            <div class="metric-label">Medium Severity</div>
-        </div>
-        <div class="metric">
-            <div class="metric-number">$LOW_COUNT</div>
-            <div class="metric-label">Low Severity</div>
-        </div>
-    </div>
-    
-    <div class="vulnerabilities">
-        <h2>Security Issues Found</h2>
-EOF
-              
-              # Process SARIF results and generate HTML vulnerabilities
-              jq -r '.runs[0].results[] | 
-                {
-                  level: .level,
-                  message: .message.text,
-                  file: .locations[0].physicalLocation.artifactLocation.uri,
-                  line: .locations[0].physicalLocation.region.startLine,
-                  ruleId: .ruleId
-                } | 
-                [.level, .message, .file, .line, .ruleId] | @tsv' snyk-code.sarif 2>/dev/null | \
-              sort -k1,1 | \
-              awk -F'\t' '{
-                level = $1
-                message = $2
-                file = $3
-                line = $4
-                ruleId = $5
-                
-                if(level == "error") { severity = "high"; css_class = "vuln-high"; badge_class = "severity-high" }
-                else if(level == "warning") { severity = "medium"; css_class = "vuln-medium"; badge_class = "severity-medium" }
-                else if(level == "note") { severity = "low"; css_class = "vuln-low"; badge_class = "severity-low" }
-                else { severity = "info"; css_class = "vuln-info"; badge_class = "severity-info" }
-                
-                printf "<div class=\"vuln-item %s\">\n", css_class
-                printf "    <div class=\"vuln-title\">%s <span class=\"severity %s\">%s</span></div>\n", message, badge_class, toupper(severity)
-                printf "    <div class=\"vuln-path\">📁 %s:%s</div>\n", file, line
-                printf "    <div style=\"margin-top: 8px; color: #666; font-size: 14px;\">Rule: %s</div>\n", ruleId
-                printf "</div>\n"
-              }' >> "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html"
-              
-              # Close HTML
-              cat >> "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" << 'EOF'
-    </div>
-    
-    <div style="margin-top: 30px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
-        <strong>📊 Analysis Complete:</strong> This SAST scan analyzed your entire WhoopsPay source code for security vulnerabilities. 
-        Review and address high-severity issues first, then work through medium and low-priority findings.
-    </div>
-</body>
-</html>
-EOF
-              
-              echo "✅ Snyk Code HTML report generated successfully"
+            # Generate official HTML report from Snyk Code JSON using direct method
+            echo "Converting Snyk Code JSON to official HTML format..."
+            snyk-to-html \
+              -i "snyk-code.json" \
+              -o "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" \
+              -a \
+              || echo "⚠️ Official HTML report generation failed - continuing without HTML"
+            
+            if [ -f "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" ]; then
+              echo "✅ Official Snyk Code HTML report generated successfully"
               echo "📄 Report size: $(wc -c < security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html) bytes"
             else
-              echo "⚠️ No SARIF results found for HTML conversion"
+              echo "❌ Official HTML report not generated"
             fi
           else
             echo "⚠️ Skipping HTML report generation (no Snyk token or results)"
