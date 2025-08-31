@@ -1,5 +1,5 @@
 // OWASP API Security Top 10 Tests for WhoopsPay
-const axios = require('axios');
+import axios from 'axios';
 
 const BASE_URL = process.env.TEST_URL || 'http://localhost:5000';
 

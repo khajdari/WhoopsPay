@@ -167,7 +167,14 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          npm run test -- --coverage --watchAll=false || echo "Tests completed"
+          # Check if test script exists in package.json
+          if npm run | grep -q "test"; then
+            echo "✅ Test script found - running tests with coverage"
+            npm run test -- --coverage --watchAll=false || echo "Tests completed"
+          else
+            echo "⚠️ No test script found in package.json - skipping tests"
+            echo "To add tests: Add 'test' script to package.json"
+          fi
           ls -la coverage/ || echo "No coverage found"
 
       - name: Run OWASP Top 10 Security Tests
@@ -206,6 +213,7 @@ jobs:
             -Dsonar.pullrequest.github.summary_comment=true
             -Dsonar.analysis.mode=publish
             -Dsonar.log.level=DEBUG
+            -Dsonar.scanner.disableAutoAnalysis=true
         continue-on-error: true
 
       - name: Check SonarCloud results and organize
