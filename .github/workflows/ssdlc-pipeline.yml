@@ -36,7 +36,7 @@ jobs:
 
   # PHASE 1: ESLint Security Linting
   eslint-security-linting:
-    name: "🔍 ESLint Security Linting"
+    name: "🛡️ ESLint Security Linting"
     runs-on: ubuntu-latest
     needs: setup-version
     env:
@@ -131,7 +131,7 @@ jobs:
 
   # PHASE 2: SAST - Static Application Security Testing
   sast-snyk-code:
-    name: "🔍 SAST - Snyk Code Analysis"
+    name: "🔒 SAST - Snyk Code Analysis"
     runs-on: ubuntu-latest
     needs: [setup-version, eslint-security-linting]
     env:
@@ -410,7 +410,7 @@ jobs:
 
   # PHASE 4: DAST - Dynamic Application Security Testing
   dast-owasp-zap:
-    name: "🎯 DAST - OWASP ZAP Security Scan"
+    name: "⚡ DAST - OWASP ZAP Security Scan"
     runs-on: ubuntu-latest
     needs: [setup-version, sca-snyk]
     env:
@@ -726,7 +726,7 @@ jobs:
 
   # FINAL STEP: Docker Hub Deployment (After Security Analysis)
   docker-hub-publish:
-    name: "🐳 Docker Hub Deployment"
+    name: "🚀 Docker Hub Deployment"
     runs-on: ubuntu-latest
     needs: [setup-version, publish-security-findings]
     if: always()
