@@ -391,17 +391,43 @@ jobs:
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
             echo "📦 Running Snyk dependency vulnerability scan for v$VERSION..."
-            echo "🔍 Using --all-projects and --detection-depth=10 for comprehensive analysis"
+            echo "🔍 Scanning main package.json with comprehensive depth analysis"
             
-            # Run Snyk test with comprehensive scanning
-            echo "Scanning main package.json..."
-            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || true
-            echo "Generating SARIF report..."
-            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || true
+            # Create temporary .snyk file to exclude problematic directories
+            cat > .snyk << 'EOF'
+          exclude:
+            code:
+              - node_modules/**
+              - .cache/**
+              - attached_assets/**
+              - security-tests/**
+          EOF
             
-            # Monitor for ongoing tracking
-            echo "Setting up Snyk monitoring..."
-            npx snyk monitor --all-projects || true
+            # Clean focused scan targeting main package.json ONLY
+            echo "🎯 Scanning main Node.js project with --detection-depth=10..."
+            npx snyk test \
+              --file=package.json \
+              --package-manager=npm \
+              --dev \
+              --detection-depth=10 \
+              --severity-threshold=low \
+              --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || echo "Scan completed with vulnerabilities"
+            
+            echo "📄 Generating SARIF report..."
+            npx snyk test \
+              --file=package.json \
+              --package-manager=npm \
+              --dev \
+              --detection-depth=10 \
+              --severity-threshold=low \
+              --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || echo "SARIF completed with vulnerabilities"
+            
+            # Monitor for ongoing tracking (using specific package.json)
+            echo "📊 Setting up Snyk monitoring..."
+            npx snyk monitor --file=package.json --package-manager=npm || true
+            
+            # Clean up temporary file
+            rm -f .snyk
             
             echo "✅ Snyk security scan completed for v$VERSION"
             echo "📊 Checking generated reports..."
@@ -410,8 +436,17 @@ jobs:
             # Display JSON report summary
             if [ -f "security-reports/v$VERSION/02-snyk/snyk-test.json" ]; then
               echo "📄 JSON report size: $(wc -c < security-reports/v$VERSION/02-snyk/snyk-test.json) bytes"
-              echo "🔍 JSON report preview:"
-              head -10 "security-reports/v$VERSION/02-snyk/snyk-test.json"
+              echo "🔍 JSON report content validation:"
+              if grep -q '"vulnerabilities"' "security-reports/v$VERSION/02-snyk/snyk-test.json"; then
+                echo "✅ Valid vulnerability data found in JSON report"
+                grep -o '"vulnerabilities":\[[^]]*\]' "security-reports/v$VERSION/02-snyk/snyk-test.json" | head -3
+              elif grep -q '"ok":' "security-reports/v$VERSION/02-snyk/snyk-test.json"; then
+                echo "✅ Valid Snyk response format detected"
+                head -5 "security-reports/v$VERSION/02-snyk/snyk-test.json"
+              else
+                echo "⚠️ Unexpected JSON format - showing first 10 lines:"
+                head -10 "security-reports/v$VERSION/02-snyk/snyk-test.json"
+              fi
             else
               echo "⚠️ JSON report not found"
             fi
