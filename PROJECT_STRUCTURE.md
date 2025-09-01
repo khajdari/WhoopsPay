@@ -131,7 +131,7 @@ shared/
 - **Purpose**: Dynamic URL adaptation for different environments
 - **Functionality**: 
   - Adapts localhost URLs to current domain
-  - Supports localhost, Replit, and production environments
+  - Supports localhost and production environments
   - Ensures external payment redirects work correctly
 
 ### MVC Route Organization
