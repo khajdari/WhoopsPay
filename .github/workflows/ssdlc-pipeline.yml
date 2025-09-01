@@ -71,33 +71,45 @@ jobs:
           mkdir -p "security-reports/v$VERSION/00-eslint-security"
           echo "📁 Created directory: security-reports/v$VERSION/00-eslint-security"
           
-          # Create a working ESLint config for security linting only
-          cat > .eslintrc-security.json << 'EOF'
-          {
-            "extends": ["eslint:recommended"],
-            "plugins": ["security"],
-            "env": {
-              "node": true,
-              "es2022": true,
-              "browser": true
-            },
-            "parserOptions": {
-              "ecmaVersion": 2022,
-              "sourceType": "module"
-            },
-            "rules": {
-              "security/detect-eval-with-expression": "error",
-              "security/detect-child-process": "error",
-              "security/detect-object-injection": "warn",
-              "security/detect-non-literal-fs-filename": "warn",
-              "security/detect-buffer-noassert": "error",
-              "security/detect-disable-mustache-escape": "error",
-              "security/detect-non-literal-regexp": "warn",
-              "security/detect-non-literal-require": "warn",
-              "security/detect-possible-timing-attacks": "warn",
-              "security/detect-unsafe-regex": "error"
+          # Create ESLint v9 flat config for security linting
+          cat > eslint-security.config.js << 'EOF'
+          import js from '@eslint/js';
+          import security from 'eslint-plugin-security';
+          
+          export default [
+            js.configs.recommended,
+            {
+              plugins: {
+                security
+              },
+              languageOptions: {
+                ecmaVersion: 2022,
+                sourceType: 'module',
+                globals: {
+                  ...globalThis,
+                  process: 'readonly',
+                  Buffer: 'readonly',
+                  console: 'readonly',
+                  setTimeout: 'readonly',
+                  setInterval: 'readonly',
+                  clearTimeout: 'readonly',
+                  clearInterval: 'readonly'
+                }
+              },
+              rules: {
+                'security/detect-eval-with-expression': 'error',
+                'security/detect-child-process': 'error',
+                'security/detect-object-injection': 'warn',
+                'security/detect-non-literal-fs-filename': 'warn',
+                'security/detect-buffer-noassert': 'error',
+                'security/detect-disable-mustache-escape': 'error',
+                'security/detect-non-literal-regexp': 'warn',
+                'security/detect-non-literal-require': 'warn',
+                'security/detect-possible-timing-attacks': 'warn',
+                'security/detect-unsafe-regex': 'error'
+              }
             }
-          }
+          ];
           EOF
           
           echo "📄 ESLint security config created"
@@ -105,22 +117,21 @@ jobs:
           # Test ESLint configuration first
           echo "🧪 Testing ESLint configuration..."
           npx eslint --version
-          npx eslint --print-config .eslintrc-security.json 2>/dev/null || echo "Config test failed"
           
-          # Run ESLint with security-only configuration
+          # Run ESLint with security-only configuration using flat config
           echo "🛡️ Running ESLint security scan..."
-          npx eslint . --ext .js,.jsx,.ts,.tsx \
-            --config .eslintrc-security.json \
+          npx eslint . \
+            --config eslint-security.config.js \
             --format @microsoft/eslint-formatter-sarif \
             --output-file "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" || echo "SARIF generation failed"
           
-          npx eslint . --ext .js,.jsx,.ts,.tsx \
-            --config .eslintrc-security.json \
+          npx eslint . \
+            --config eslint-security.config.js \
             --format json \
             --output-file "security-reports/v$VERSION/00-eslint-security/eslint-security-report.json" || echo "JSON generation failed"
           
-          npx eslint . --ext .js,.jsx,.ts,.tsx \
-            --config .eslintrc-security.json \
+          npx eslint . \
+            --config eslint-security.config.js \
             --format html \
             --output-file "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" || echo "HTML generation failed"
           
