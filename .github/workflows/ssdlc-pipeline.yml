@@ -127,16 +127,7 @@ jobs:
           # Create a basic report even if ESLint fails
           if [ ! -f "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" ]; then
             echo "⚠️ Creating fallback HTML report..."
-            cat > "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" << 'HTMLEOF'
-<!DOCTYPE html>
-<html><head><title>ESLint Security Report</title></head>
-<body>
-<h1>ESLint Security Linting Report</h1>
-<p><strong>Status:</strong> ESLint security scan completed</p>
-<p><strong>Timestamp:</strong> $(date -u +"%Y-%m-%dT%H:%M:%SZ")</p>
-<p><strong>Note:</strong> This is a basic security linting report. For detailed results, check the JSON and SARIF files.</p>
-</body></html>
-HTMLEOF
+            echo '<!DOCTYPE html><html><head><title>ESLint Security Report</title></head><body><h1>ESLint Security Linting Report</h1><p><strong>Status:</strong> ESLint security scan completed</p><p><strong>Note:</strong> This is a basic security linting report. For detailed results, check the JSON and SARIF files.</p></body></html>' > "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html"
           fi
           
           # Display results
