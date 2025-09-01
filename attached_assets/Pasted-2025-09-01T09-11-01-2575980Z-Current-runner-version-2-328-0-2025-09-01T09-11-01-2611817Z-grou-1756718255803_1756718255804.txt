@@ -1,0 +1,2509 @@
+2025-09-01T09:11:01.2575980Z Current runner version: '2.328.0'
+2025-09-01T09:11:01.2611817Z ##[group]Runner Image Provisioner
+2025-09-01T09:11:01.2613029Z Hosted Compute Agent
+2025-09-01T09:11:01.2614125Z Version: 20250821.380
+2025-09-01T09:11:01.2615261Z Commit: 438d12cb4fe092871db9867344e3bc0bc5319035
+2025-09-01T09:11:01.2616529Z Build Date: 2025-08-21T20:49:43Z
+2025-09-01T09:11:01.2617717Z ##[endgroup]
+2025-09-01T09:11:01.2618728Z ##[group]Operating System
+2025-09-01T09:11:01.2619680Z Ubuntu
+2025-09-01T09:11:01.2620699Z 24.04.3
+2025-09-01T09:11:01.2621890Z LTS
+2025-09-01T09:11:01.2622789Z ##[endgroup]
+2025-09-01T09:11:01.2623670Z ##[group]Runner Image
+2025-09-01T09:11:01.2624676Z Image: ubuntu-24.04
+2025-09-01T09:11:01.2625671Z Version: 20250824.1.0
+2025-09-01T09:11:01.2627573Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250824.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-09-01T09:11:01.2630463Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250824.1
+2025-09-01T09:11:01.2632419Z ##[endgroup]
+2025-09-01T09:11:01.2636975Z ##[group]GITHUB_TOKEN Permissions
+2025-09-01T09:11:01.2639781Z Actions: write
+2025-09-01T09:11:01.2640914Z Attestations: write
+2025-09-01T09:11:01.2642076Z Checks: write
+2025-09-01T09:11:01.2642942Z Contents: write
+2025-09-01T09:11:01.2643976Z Deployments: write
+2025-09-01T09:11:01.2644854Z Discussions: write
+2025-09-01T09:11:01.2645647Z Issues: write
+2025-09-01T09:11:01.2646637Z Metadata: read
+2025-09-01T09:11:01.2647551Z Models: read
+2025-09-01T09:11:01.2648506Z Packages: write
+2025-09-01T09:11:01.2649458Z Pages: write
+2025-09-01T09:11:01.2650396Z PullRequests: write
+2025-09-01T09:11:01.2651302Z RepositoryProjects: write
+2025-09-01T09:11:01.2652520Z SecurityEvents: write
+2025-09-01T09:11:01.2653588Z Statuses: write
+2025-09-01T09:11:01.2654703Z ##[endgroup]
+2025-09-01T09:11:01.2657689Z Secret source: Actions
+2025-09-01T09:11:01.2658951Z Prepare workflow directory
+2025-09-01T09:11:01.3454626Z Prepare all required actions
+2025-09-01T09:11:01.3511121Z Getting action download info
+2025-09-01T09:11:01.6189715Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-09-01T09:11:01.6869047Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-09-01T09:11:01.9858786Z Download action repository 'snyk/actions@master' (SHA:e2221410bff24446ba09102212d8bc75a567237d)
+2025-09-01T09:11:02.2687503Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-09-01T09:11:02.4472280Z Complete job name: 📦 SCA - Snyk Dependency Scan
+2025-09-01T09:11:02.4893923Z ##[group]Pull down action image 'snyk/snyk:node'
+2025-09-01T09:11:02.4944091Z ##[command]/usr/bin/docker pull snyk/snyk:node
+2025-09-01T09:11:02.7199627Z node: Pulling from snyk/snyk
+2025-09-01T09:11:02.7782916Z f014853ae203: Pulling fs layer
+2025-09-01T09:11:02.7785372Z 6d6401b7636b: Pulling fs layer
+2025-09-01T09:11:02.7786953Z cffef7dc6f99: Pulling fs layer
+2025-09-01T09:11:02.7788223Z 1e6ffe3614ab: Pulling fs layer
+2025-09-01T09:11:02.7789070Z 3a57b4856774: Pulling fs layer
+2025-09-01T09:11:02.7789992Z 401b11ef6dcc: Pulling fs layer
+2025-09-01T09:11:02.7790911Z 1f36d3d25f39: Pulling fs layer
+2025-09-01T09:11:02.7792081Z 1653d34b60a8: Pulling fs layer
+2025-09-01T09:11:02.7793007Z 50427bd9fd29: Pulling fs layer
+2025-09-01T09:11:02.7793936Z a065cb043b93: Pulling fs layer
+2025-09-01T09:11:02.7794870Z b1ec8dc5d3d7: Pulling fs layer
+2025-09-01T09:11:02.7795808Z 4f4fb700ef54: Pulling fs layer
+2025-09-01T09:11:02.7796720Z 1e6ffe3614ab: Waiting
+2025-09-01T09:11:02.7797559Z 50427bd9fd29: Waiting
+2025-09-01T09:11:02.7798353Z 3a57b4856774: Waiting
+2025-09-01T09:11:02.7799151Z a065cb043b93: Waiting
+2025-09-01T09:11:02.7799938Z 401b11ef6dcc: Waiting
+2025-09-01T09:11:02.7800963Z 1653d34b60a8: Waiting
+2025-09-01T09:11:02.7802240Z b1ec8dc5d3d7: Waiting
+2025-09-01T09:11:02.7803340Z 1f36d3d25f39: Waiting
+2025-09-01T09:11:02.7804435Z 4f4fb700ef54: Waiting
+2025-09-01T09:11:03.0614606Z f014853ae203: Verifying Checksum
+2025-09-01T09:11:03.0618699Z f014853ae203: Download complete
+2025-09-01T09:11:03.1108336Z 6d6401b7636b: Verifying Checksum
+2025-09-01T09:11:03.1117086Z 6d6401b7636b: Download complete
+2025-09-01T09:11:03.1614059Z 3a57b4856774: Verifying Checksum
+2025-09-01T09:11:03.1615911Z 3a57b4856774: Download complete
+2025-09-01T09:11:03.1937755Z cffef7dc6f99: Verifying Checksum
+2025-09-01T09:11:03.1939739Z cffef7dc6f99: Download complete
+2025-09-01T09:11:03.2697041Z 1f36d3d25f39: Verifying Checksum
+2025-09-01T09:11:03.2699104Z 1f36d3d25f39: Download complete
+2025-09-01T09:11:03.3437732Z 1653d34b60a8: Download complete
+2025-09-01T09:11:03.4134599Z 50427bd9fd29: Verifying Checksum
+2025-09-01T09:11:03.4137060Z 50427bd9fd29: Download complete
+2025-09-01T09:11:03.5300503Z a065cb043b93: Verifying Checksum
+2025-09-01T09:11:03.5302809Z a065cb043b93: Download complete
+2025-09-01T09:11:03.6210541Z 401b11ef6dcc: Verifying Checksum
+2025-09-01T09:11:03.6218815Z 401b11ef6dcc: Download complete
+2025-09-01T09:11:03.6827776Z 4f4fb700ef54: Verifying Checksum
+2025-09-01T09:11:03.6832186Z 4f4fb700ef54: Download complete
+2025-09-01T09:11:03.9213063Z b1ec8dc5d3d7: Verifying Checksum
+2025-09-01T09:11:03.9220245Z b1ec8dc5d3d7: Download complete
+2025-09-01T09:11:04.2809480Z 1e6ffe3614ab: Verifying Checksum
+2025-09-01T09:11:04.2811791Z 1e6ffe3614ab: Download complete
+2025-09-01T09:11:05.0090438Z f014853ae203: Pull complete
+2025-09-01T09:11:07.4272748Z 6d6401b7636b: Pull complete
+2025-09-01T09:11:09.6806017Z cffef7dc6f99: Pull complete
+2025-09-01T09:11:15.9973764Z 1e6ffe3614ab: Pull complete
+2025-09-01T09:11:16.0164154Z 3a57b4856774: Pull complete
+2025-09-01T09:11:18.3186178Z 401b11ef6dcc: Pull complete
+2025-09-01T09:11:18.3550047Z 1f36d3d25f39: Pull complete
+2025-09-01T09:11:18.3703961Z 1653d34b60a8: Pull complete
+2025-09-01T09:11:18.3783840Z 50427bd9fd29: Pull complete
+2025-09-01T09:11:18.3873325Z a065cb043b93: Pull complete
+2025-09-01T09:11:18.9768091Z b1ec8dc5d3d7: Pull complete
+2025-09-01T09:11:18.9865201Z 4f4fb700ef54: Pull complete
+2025-09-01T09:11:18.9909724Z Digest: sha256:9239717e4e919068ce46ae9e66f9665447dae2979eef342988907451c73d73e5
+2025-09-01T09:11:18.9922608Z Status: Downloaded newer image for snyk/snyk:node
+2025-09-01T09:11:18.9932061Z docker.io/snyk/snyk:node
+2025-09-01T09:11:18.9959882Z ##[endgroup]
+2025-09-01T09:11:19.0203381Z ##[group]Run actions/checkout@v4
+2025-09-01T09:11:19.0203936Z with:
+2025-09-01T09:11:19.0204161Z   ref: c150214064a173af2a37d4c380232f7c6e3a695e
+2025-09-01T09:11:19.0204451Z   repository: khajdari/WhoopsPay
+2025-09-01T09:11:19.0204834Z   token: ***
+2025-09-01T09:11:19.0205034Z   ssh-strict: true
+2025-09-01T09:11:19.0205221Z   ssh-user: git
+2025-09-01T09:11:19.0205422Z   persist-credentials: true
+2025-09-01T09:11:19.0205645Z   clean: true
+2025-09-01T09:11:19.0205845Z   sparse-checkout-cone-mode: true
+2025-09-01T09:11:19.0206082Z   fetch-depth: 1
+2025-09-01T09:11:19.0206268Z   fetch-tags: false
+2025-09-01T09:11:19.0206457Z   show-progress: true
+2025-09-01T09:11:19.0206673Z   lfs: false
+2025-09-01T09:11:19.0206887Z   submodules: false
+2025-09-01T09:11:19.0207083Z   set-safe-directory: true
+2025-09-01T09:11:19.0207472Z env:
+2025-09-01T09:11:19.0207655Z   NODE_VERSION: 20
+2025-09-01T09:11:19.0207852Z   DOCKER_REGISTRY: docker.io
+2025-09-01T09:11:19.0208121Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T09:11:19.0208368Z   VERSION: 1.0.0
+2025-09-01T09:11:19.0208559Z ##[endgroup]
+2025-09-01T09:11:19.1296988Z Syncing repository: khajdari/WhoopsPay
+2025-09-01T09:11:19.1298320Z ##[group]Getting Git version info
+2025-09-01T09:11:19.1298726Z Working directory is '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-01T09:11:19.1299353Z [command]/usr/bin/git version
+2025-09-01T09:11:19.1319937Z git version 2.51.0
+2025-09-01T09:11:19.1345802Z ##[endgroup]
+2025-09-01T09:11:19.1367698Z Temporarily overriding HOME='/home/runner/work/_temp/735802c9-adf4-4339-8010-c4e26420aa86' before making global git config changes
+2025-09-01T09:11:19.1368963Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-01T09:11:19.1372735Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-01T09:11:19.1405011Z Deleting the contents of '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-01T09:11:19.1408286Z ##[group]Initializing the repository
+2025-09-01T09:11:19.1412237Z [command]/usr/bin/git init /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-01T09:11:19.1488941Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-09-01T09:11:19.1490154Z hint: is subject to change. To configure the initial branch name to use in all
+2025-09-01T09:11:19.1491508Z hint: of your new repositories, which will suppress this warning, call:
+2025-09-01T09:11:19.1491912Z hint:
+2025-09-01T09:11:19.1492331Z hint: 	git config --global init.defaultBranch <name>
+2025-09-01T09:11:19.1492881Z hint:
+2025-09-01T09:11:19.1493405Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-09-01T09:11:19.1494311Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-09-01T09:11:19.1495032Z hint:
+2025-09-01T09:11:19.1495408Z hint: 	git branch -m <name>
+2025-09-01T09:11:19.1495832Z hint:
+2025-09-01T09:11:19.1496419Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-09-01T09:11:19.1497460Z Initialized empty Git repository in /home/runner/work/WhoopsPay/WhoopsPay/.git/
+2025-09-01T09:11:19.1503917Z [command]/usr/bin/git remote add origin https://github.com/khajdari/WhoopsPay
+2025-09-01T09:11:19.1617227Z ##[endgroup]
+2025-09-01T09:11:19.1618271Z ##[group]Disabling automatic garbage collection
+2025-09-01T09:11:19.1620537Z [command]/usr/bin/git config --local gc.auto 0
+2025-09-01T09:11:19.1622169Z ##[endgroup]
+2025-09-01T09:11:19.1622911Z ##[group]Setting up auth
+2025-09-01T09:11:19.1623566Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-01T09:11:19.1625654Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-01T09:11:19.1881211Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-01T09:11:19.1909649Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-01T09:11:19.2126226Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-09-01T09:11:19.2167510Z ##[endgroup]
+2025-09-01T09:11:19.2168239Z ##[group]Fetching the repository
+2025-09-01T09:11:19.2176435Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin c150214064a173af2a37d4c380232f7c6e3a695e
+2025-09-01T09:11:19.4896778Z From https://github.com/khajdari/WhoopsPay
+2025-09-01T09:11:19.4897524Z  * branch            c150214064a173af2a37d4c380232f7c6e3a695e -> FETCH_HEAD
+2025-09-01T09:11:19.4924769Z ##[endgroup]
+2025-09-01T09:11:19.4925406Z ##[group]Determining the checkout info
+2025-09-01T09:11:19.4927179Z ##[endgroup]
+2025-09-01T09:11:19.4932269Z [command]/usr/bin/git sparse-checkout disable
+2025-09-01T09:11:19.4968871Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-09-01T09:11:19.4995359Z ##[group]Checking out the ref
+2025-09-01T09:11:19.4999589Z [command]/usr/bin/git checkout --progress --force c150214064a173af2a37d4c380232f7c6e3a695e
+2025-09-01T09:11:19.5234948Z Note: switching to 'c150214064a173af2a37d4c380232f7c6e3a695e'.
+2025-09-01T09:11:19.5235247Z 
+2025-09-01T09:11:19.5235508Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-09-01T09:11:19.5236043Z changes and commit them, and you can discard any commits you make in this
+2025-09-01T09:11:19.5236573Z state without impacting any branches by switching back to a branch.
+2025-09-01T09:11:19.5236864Z 
+2025-09-01T09:11:19.5237094Z If you want to create a new branch to retain commits you create, you may
+2025-09-01T09:11:19.5237812Z do so (now or later) by using -c with the switch command. Example:
+2025-09-01T09:11:19.5238080Z 
+2025-09-01T09:11:19.5238207Z   git switch -c <new-branch-name>
+2025-09-01T09:11:19.5238396Z 
+2025-09-01T09:11:19.5238741Z Or undo this operation with:
+2025-09-01T09:11:19.5239028Z 
+2025-09-01T09:11:19.5239203Z   git switch -
+2025-09-01T09:11:19.5239458Z 
+2025-09-01T09:11:19.5239875Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-09-01T09:11:19.5240485Z 
+2025-09-01T09:11:19.5241222Z HEAD is now at c150214 Merge branch 'develop-vulnerable' of https://github.com/khajdari/WhoopsPay into develop-beta2
+2025-09-01T09:11:19.5243496Z ##[endgroup]
+2025-09-01T09:11:19.5277587Z [command]/usr/bin/git log -1 --format=%H
+2025-09-01T09:11:19.5298889Z c150214064a173af2a37d4c380232f7c6e3a695e
+2025-09-01T09:11:19.5501179Z ##[group]Run actions/setup-node@v4
+2025-09-01T09:11:19.5501755Z with:
+2025-09-01T09:11:19.5501967Z   node-version: 20
+2025-09-01T09:11:19.5502153Z   cache: npm
+2025-09-01T09:11:19.5502337Z   always-auth: false
+2025-09-01T09:11:19.5502533Z   check-latest: false
+2025-09-01T09:11:19.5502856Z   token: ***
+2025-09-01T09:11:19.5503034Z env:
+2025-09-01T09:11:19.5503203Z   NODE_VERSION: 20
+2025-09-01T09:11:19.5503393Z   DOCKER_REGISTRY: docker.io
+2025-09-01T09:11:19.5503649Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T09:11:19.5503860Z   VERSION: 1.0.0
+2025-09-01T09:11:19.5504036Z ##[endgroup]
+2025-09-01T09:11:19.8108068Z Found in cache @ /opt/hostedtoolcache/node/20.19.4/x64
+2025-09-01T09:11:19.8114558Z ##[group]Environment details
+2025-09-01T09:11:28.0406014Z node: v20.19.4
+2025-09-01T09:11:28.0406384Z npm: 10.8.2
+2025-09-01T09:11:28.0406662Z yarn: 1.22.22
+2025-09-01T09:11:28.0407373Z ##[endgroup]
+2025-09-01T09:11:28.0428075Z [command]/opt/hostedtoolcache/node/20.19.4/x64/bin/npm config get cache
+2025-09-01T09:11:28.9118814Z /home/runner/.npm
+2025-09-01T09:11:29.0530611Z Cache hit for: node-cache-Linux-x64-npm-0cff4e10f1fa11b83775b02b67f4a898066ab13058512c37b16bbff72bf89e9a
+2025-09-01T09:11:29.7601099Z Received 101187156 of 101187156 (100.0%), 161.6 MBs/sec
+2025-09-01T09:11:29.7603661Z Cache Size: ~96 MB (101187156 B)
+2025-09-01T09:11:29.7638543Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e56401eb-53f1-489a-b783-f4bd92434536/cache.tzst -P -C /home/runner/work/WhoopsPay/WhoopsPay --use-compress-program unzstd
+2025-09-01T09:11:30.0210791Z Cache restored successfully
+2025-09-01T09:11:30.0410391Z Cache restored from key: node-cache-Linux-x64-npm-0cff4e10f1fa11b83775b02b67f4a898066ab13058512c37b16bbff72bf89e9a
+2025-09-01T09:11:30.0575599Z ##[group]Run npm ci
+2025-09-01T09:11:30.0575884Z [36;1mnpm ci[0m
+2025-09-01T09:11:30.0624977Z shell: /usr/bin/bash -e {0}
+2025-09-01T09:11:30.0625245Z env:
+2025-09-01T09:11:30.0625429Z   NODE_VERSION: 20
+2025-09-01T09:11:30.0625646Z   DOCKER_REGISTRY: docker.io
+2025-09-01T09:11:30.0626017Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T09:11:30.0626248Z   VERSION: 1.0.0
+2025-09-01T09:11:30.0626447Z ##[endgroup]
+2025-09-01T09:11:40.1951583Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-09-01T09:11:40.2429227Z npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+2025-09-01T09:11:40.2675000Z npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+2025-09-01T09:11:40.3229890Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+2025-09-01T09:11:40.3412674Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2025-09-01T09:11:40.3524476Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2025-09-01T09:11:40.4381129Z npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+2025-09-01T09:11:40.4639345Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2025-09-01T09:11:40.4846685Z npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+2025-09-01T09:11:40.9779063Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2025-09-01T09:11:42.8453658Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2025-09-01T09:11:47.3306095Z 
+2025-09-01T09:11:47.3306920Z added 841 packages, and audited 842 packages in 17s
+2025-09-01T09:11:47.3307347Z 
+2025-09-01T09:11:47.3307611Z 196 packages are looking for funding
+2025-09-01T09:11:47.3308155Z   run `npm fund` for details
+2025-09-01T09:11:47.3606754Z 
+2025-09-01T09:11:47.3607439Z 9 vulnerabilities (3 low, 5 moderate, 1 critical)
+2025-09-01T09:11:47.3607870Z 
+2025-09-01T09:11:47.3608275Z To address issues that do not require attention, run:
+2025-09-01T09:11:47.3608843Z   npm audit fix
+2025-09-01T09:11:47.3609059Z 
+2025-09-01T09:11:47.3609434Z To address all issues (including breaking changes), run:
+2025-09-01T09:11:47.3610002Z   npm audit fix --force
+2025-09-01T09:11:47.3610253Z 
+2025-09-01T09:11:47.3610448Z Run `npm audit` for details.
+2025-09-01T09:11:47.4266808Z ##[group]Run # Use version from setup job
+2025-09-01T09:11:47.4267347Z [36;1m# Use version from setup job[0m
+2025-09-01T09:11:47.4267809Z [36;1mecho "Using semantic version: v$VERSION"[0m
+2025-09-01T09:11:47.4268355Z [36;1mmkdir -p "security-reports/v$VERSION/02-snyk"[0m
+2025-09-01T09:11:47.4268944Z [36;1mecho "📁 Created Snyk folder for v$VERSION"[0m
+2025-09-01T09:11:47.4298996Z shell: /usr/bin/bash -e {0}
+2025-09-01T09:11:47.4299238Z env:
+2025-09-01T09:11:47.4299415Z   NODE_VERSION: 20
+2025-09-01T09:11:47.4299623Z   DOCKER_REGISTRY: docker.io
+2025-09-01T09:11:47.4299964Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T09:11:47.4300182Z   VERSION: 1.0.0
+2025-09-01T09:11:47.4300386Z ##[endgroup]
+2025-09-01T09:11:47.4349646Z Using semantic version: v1.0.0
+2025-09-01T09:11:47.4363620Z 📁 Created Snyk folder for v1.0.0
+2025-09-01T09:11:47.4389179Z ##[group]Run if [ -z "***" ]; then
+2025-09-01T09:11:47.4389585Z [36;1mif [ -z "***" ]; then[0m
+2025-09-01T09:11:47.4389910Z [36;1m  echo "⚠️ SNYK_TOKEN not configured - skipping Snyk scan"[0m
+2025-09-01T09:11:47.4390234Z [36;1m  echo ""[0m
+2025-09-01T09:11:47.4390462Z [36;1m  echo "To enable Snyk scanning:"[0m
+2025-09-01T09:11:47.4390795Z [36;1m  echo "1. Go to https://snyk.io and create an account"[0m
+2025-09-01T09:11:47.4391160Z [36;1m  echo "2. Generate an API token from Account Settings"[0m
+2025-09-01T09:11:47.4391820Z [36;1m  echo "3. Add it as SNYK_TOKEN in GitHub repository secrets"[0m
+2025-09-01T09:11:47.4392134Z [36;1m  echo ""[0m
+2025-09-01T09:11:47.4392355Z [36;1m  echo "Using npm audit as fallback..."[0m
+2025-09-01T09:11:47.4392825Z [36;1m  npm audit --audit-level=low --json > "security-reports/v$VERSION/02-snyk/npm-audit.json" || true[0m
+2025-09-01T09:11:47.4393365Z [36;1m  echo "✅ NPM audit completed as security fallback for v$VERSION"[0m
+2025-09-01T09:11:47.4393742Z [36;1melse[0m
+2025-09-01T09:11:47.4394009Z [36;1m  echo "✅ Snyk token configured - proceeding with scan"[0m
+2025-09-01T09:11:47.4394345Z [36;1m  echo "🔍 Token length: ${#SNYK_TOKEN}"[0m
+2025-09-01T09:11:47.4394659Z [36;1m  echo "🔍 Token prefix: ${SNYK_TOKEN:0:10}..."[0m
+2025-09-01T09:11:47.4395071Z [36;1m  # Test authentication with environment variable (no interactive auth needed)[0m
+2025-09-01T09:11:47.4395492Z [36;1m  echo "Testing Snyk authentication..."[0m
+2025-09-01T09:11:47.4395907Z [36;1m  npx snyk test --dry-run --json || echo "⚠️ Dry run test failed - will proceed anyway"[0m
+2025-09-01T09:11:47.4396335Z [36;1m  echo "✅ Snyk authentication check completed"[0m
+2025-09-01T09:11:47.4396611Z [36;1mfi[0m
+2025-09-01T09:11:47.4423008Z shell: /usr/bin/bash -e {0}
+2025-09-01T09:11:47.4423247Z env:
+2025-09-01T09:11:47.4423588Z   NODE_VERSION: 20
+2025-09-01T09:11:47.4423793Z   DOCKER_REGISTRY: docker.io
+2025-09-01T09:11:47.4424071Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T09:11:47.4424301Z   VERSION: 1.0.0
+2025-09-01T09:11:47.4424540Z   SNYK_TOKEN: ***
+2025-09-01T09:11:47.4424736Z ##[endgroup]
+2025-09-01T09:11:47.4470871Z ✅ Snyk token configured - proceeding with scan
+2025-09-01T09:11:47.4471674Z 🔍 Token length: 36
+2025-09-01T09:11:47.4472204Z 🔍 Token prefix: f8eaa957-3...
+2025-09-01T09:11:47.4472718Z Testing Snyk authentication...
+2025-09-01T09:11:48.6472249Z npm warn exec The following package was not found and will be installed: snyk@1.1298.3
+2025-09-01T09:11:49.7695250Z npm warn deprecated boolean@3.2.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+2025-09-01T09:11:55.4494643Z {
+2025-09-01T09:11:55.4495185Z   "vulnerabilities": [
+2025-09-01T09:11:55.4495787Z     {
+2025-09-01T09:11:55.4496519Z       "id": "SNYK-JS-BRACEEXPANSION-9789073",
+2025-09-01T09:11:55.4497673Z       "title": "Regular Expression Denial of Service (ReDoS)",
+2025-09-01T09:11:55.4498996Z       "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.4499919Z       "credit": [
+2025-09-01T09:11:55.4500582Z         "mmmsssttt404"
+2025-09-01T09:11:55.4501066Z       ],
+2025-09-01T09:11:55.4501767Z       "semver": {
+2025-09-01T09:11:55.4502259Z         "vulnerable": [
+2025-09-01T09:11:55.4502789Z           ">=1.0.0 <1.1.12",
+2025-09-01T09:11:55.4503342Z           ">=2.0.0 <2.0.2",
+2025-09-01T09:11:55.4503857Z           ">=3.0.0 <3.0.1",
+2025-09-01T09:11:55.4504291Z           ">=4.0.0 <4.0.1"
+2025-09-01T09:11:55.4504721Z         ]
+2025-09-01T09:11:55.4505090Z       },
+2025-09-01T09:11:55.4505534Z       "exploit": "Proof of Concept",
+2025-09-01T09:11:55.4506008Z       "fixedIn": [
+2025-09-01T09:11:55.4506480Z         "1.1.12",
+2025-09-01T09:11:55.4506999Z         "2.0.2",
+2025-09-01T09:11:55.4507536Z         "3.0.1",
+2025-09-01T09:11:55.4507932Z         "4.0.1"
+2025-09-01T09:11:55.4508256Z       ],
+2025-09-01T09:11:55.4508628Z       "patches": [],
+2025-09-01T09:11:55.4509043Z       "insights": {
+2025-09-01T09:11:55.4509887Z         "triageAdvice": null
+2025-09-01T09:11:55.4510354Z       },
+2025-09-01T09:11:55.4510719Z       "language": "js",
+2025-09-01T09:11:55.4511138Z       "severity": "low",
+2025-09-01T09:11:55.4511742Z       "cvssScore": 2.3,
+2025-09-01T09:11:55.4512162Z       "functions": [],
+2025-09-01T09:11:55.4512583Z       "malicious": false,
+2025-09-01T09:11:55.4513027Z       "isDisputed": false,
+2025-09-01T09:11:55.4513873Z       "moduleName": "brace-expansion",
+2025-09-01T09:11:55.4514354Z       "references": [
+2025-09-01T09:11:55.4514682Z         {
+2025-09-01T09:11:55.4515182Z           "url": "https://github.com/advisories/GHSA-v6h2-p8h4-qcjw",
+2025-09-01T09:11:55.4515771Z           "title": "GitHub Advisory"
+2025-09-01T09:11:55.4516171Z         },
+2025-09-01T09:11:55.4516513Z         {
+2025-09-01T09:11:55.4517349Z           "url": "https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2",
+2025-09-01T09:11:55.4518272Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4518694Z         },
+2025-09-01T09:11:55.4518973Z         {
+2025-09-01T09:11:55.4519614Z           "url": "https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466",
+2025-09-01T09:11:55.4520338Z           "title": "GitHub Gist"
+2025-09-01T09:11:55.4520753Z         },
+2025-09-01T09:11:55.4521088Z         {
+2025-09-01T09:11:55.4521962Z           "url": "https://github.com/juliangruber/brace-expansion/pull/65",
+2025-09-01T09:11:55.4522672Z           "title": "GitHub PR"
+2025-09-01T09:11:55.4523077Z         }
+2025-09-01T09:11:55.4523385Z       ],
+2025-09-01T09:11:55.4523709Z       "cvssDetails": [
+2025-09-01T09:11:55.4524083Z         {
+2025-09-01T09:11:55.4524422Z           "assigner": "NVD",
+2025-09-01T09:11:55.4524848Z           "severity": "low",
+2025-09-01T09:11:55.4525506Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4526476Z           "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.4527074Z           "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.4527604Z         },
+2025-09-01T09:11:55.4527909Z         {
+2025-09-01T09:11:55.4528262Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4528682Z           "severity": "low",
+2025-09-01T09:11:55.4529311Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4529967Z           "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.4530518Z           "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.4531008Z         }
+2025-09-01T09:11:55.4531302Z       ],
+2025-09-01T09:11:55.4531838Z       "cvssSources": [
+2025-09-01T09:11:55.4532201Z         {
+2025-09-01T09:11:55.4532516Z           "type": "primary",
+2025-09-01T09:11:55.4533202Z           "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:P",
+2025-09-01T09:11:55.4533863Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4534275Z           "severity": "low",
+2025-09-01T09:11:55.4534698Z           "baseScore": 2.3,
+2025-09-01T09:11:55.4535144Z           "cvssVersion": "4.0",
+2025-09-01T09:11:55.4535692Z           "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.4536252Z         },
+2025-09-01T09:11:55.4536566Z         {
+2025-09-01T09:11:55.4536920Z           "type": "secondary",
+2025-09-01T09:11:55.4537537Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.4538128Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4538556Z           "severity": "low",
+2025-09-01T09:11:55.4538973Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4539434Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4540005Z           "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.4540522Z         },
+2025-09-01T09:11:55.4540832Z         {
+2025-09-01T09:11:55.4541196Z           "type": "secondary",
+2025-09-01T09:11:55.4542032Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4542642Z           "assigner": "NVD",
+2025-09-01T09:11:55.4543087Z           "severity": "low",
+2025-09-01T09:11:55.4543780Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4544285Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4544858Z           "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.4545377Z         },
+2025-09-01T09:11:55.4545707Z         {
+2025-09-01T09:11:55.4546076Z           "type": "secondary",
+2025-09-01T09:11:55.4546675Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4547285Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4547707Z           "severity": "low",
+2025-09-01T09:11:55.4548108Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4548546Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4549094Z           "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.4549604Z         }
+2025-09-01T09:11:55.4549908Z       ],
+2025-09-01T09:11:55.4579839Z       "description": "## Overview\n[brace-expansion](https://github.com/juliangruber/brace-expansion) is a Brace expansion as known from sh/bash\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) in the `expand()` function, which is prone to catastrophic backtracking on very long malicious inputs.\n## PoC\n```js\r\nimport index from \"./index.js\";\r\n\r\nlet str = \"{a}\" + \",\".repeat(100000) + \"\\u0000\";\r\n\r\nlet startTime = performance.now();\r\n\r\nconst result = index(str);\r\n\r\nlet endTime = performance.now();\r\n\r\nlet timeTaken = endTime - startTime;\r\n\r\nconsole.log(`匹配耗时: ${timeTaken.toFixed(3)} 毫秒`);\r\n```\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `brace-expansion` to version 1.1.12, 2.0.2, 3.0.1, 4.0.1 or higher.\n## References\n- [GitHub Advisory](https://github.com/advisories/GHSA-v6h2-p8h4-qcjw)\n- [GitHub Commit](https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2)\n- [GitHub Gist](https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466)\n- [GitHub PR](https://github.com/juliangruber/brace-expansion/pull/65)\n",
+2025-09-01T09:11:55.4603563Z       "epssDetails": {
+2025-09-01T09:11:55.4603966Z         "percentile": "0.04029",
+2025-09-01T09:11:55.4604380Z         "probability": "0.00022",
+2025-09-01T09:11:55.4604808Z         "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.4605391Z       },
+2025-09-01T09:11:55.4605666Z       "identifiers": {
+2025-09-01T09:11:55.4606337Z         "CVE": [
+2025-09-01T09:11:55.4634119Z           "CVE-2025-5889"
+2025-09-01T09:11:55.4634499Z         ],
+2025-09-01T09:11:55.4634799Z         "CWE": [
+2025-09-01T09:11:55.4635153Z           "CWE-1333"
+2025-09-01T09:11:55.4635488Z         ],
+2025-09-01T09:11:55.4635782Z         "GHSA": [
+2025-09-01T09:11:55.4636186Z           "GHSA-v6h2-p8h4-qcjw"
+2025-09-01T09:11:55.4636587Z         ]
+2025-09-01T09:11:55.4636870Z       },
+2025-09-01T09:11:55.4637260Z       "packageName": "brace-expansion",
+2025-09-01T09:11:55.4637741Z       "proprietary": false,
+2025-09-01T09:11:55.4638234Z       "creationTime": "2025-04-22T10:41:28.859488Z",
+2025-09-01T09:11:55.4638726Z       "functions_new": [],
+2025-09-01T09:11:55.4639116Z       "alternativeIds": [],
+2025-09-01T09:11:55.4639756Z       "disclosureTime": "2025-04-22T09:04:33Z",
+2025-09-01T09:11:55.4640236Z       "exploitDetails": {
+2025-09-01T09:11:55.4640552Z         "sources": [
+2025-09-01T09:11:55.4640756Z           "Snyk"
+2025-09-01T09:11:55.4641029Z         ],
+2025-09-01T09:11:55.4641251Z         "maturityLevels": [
+2025-09-01T09:11:55.4641689Z           {
+2025-09-01T09:11:55.4641902Z             "type": "secondary",
+2025-09-01T09:11:55.4642188Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4642590Z             "format": "CVSSv3"
+2025-09-01T09:11:55.4642818Z           },
+2025-09-01T09:11:55.4643009Z           {
+2025-09-01T09:11:55.4643323Z             "type": "primary",
+2025-09-01T09:11:55.4643584Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4644055Z             "format": "CVSSv4"
+2025-09-01T09:11:55.4644278Z           }
+2025-09-01T09:11:55.4644455Z         ]
+2025-09-01T09:11:55.4644625Z       },
+2025-09-01T09:11:55.4644934Z       "packageManager": "npm",
+2025-09-01T09:11:55.4645238Z       "publicationTime": "2025-06-12T06:58:37.742572Z",
+2025-09-01T09:11:55.4645625Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.4645952Z       "modificationTime": "2025-06-19T05:30:43.149011Z",
+2025-09-01T09:11:55.4646502Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.4646820Z       "severityWithCritical": "low",
+2025-09-01T09:11:55.4647078Z       "from": [
+2025-09-01T09:11:55.4647387Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.4647646Z         "swagger-jsdoc@6.2.8",
+2025-09-01T09:11:55.4647872Z         "glob@7.1.6",
+2025-09-01T09:11:55.4648176Z         "minimatch@3.1.2",
+2025-09-01T09:11:55.4648422Z         "brace-expansion@1.1.11"
+2025-09-01T09:11:55.4648640Z       ],
+2025-09-01T09:11:55.4648889Z       "upgradePath": [],
+2025-09-01T09:11:55.4649152Z       "isUpgradable": false,
+2025-09-01T09:11:55.4649381Z       "isPatchable": false,
+2025-09-01T09:11:55.4649684Z       "name": "brace-expansion",
+2025-09-01T09:11:55.4649965Z       "version": "1.1.11"
+2025-09-01T09:11:55.4650168Z     },
+2025-09-01T09:11:55.4650332Z     {
+2025-09-01T09:11:55.4650658Z       "id": "SNYK-JS-BRACEEXPANSION-9789073",
+2025-09-01T09:11:55.4651033Z       "title": "Regular Expression Denial of Service (ReDoS)",
+2025-09-01T09:11:55.4651741Z       "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.4652119Z       "credit": [
+2025-09-01T09:11:55.4652399Z         "mmmsssttt404"
+2025-09-01T09:11:55.4652600Z       ],
+2025-09-01T09:11:55.4652773Z       "semver": {
+2025-09-01T09:11:55.4653081Z         "vulnerable": [
+2025-09-01T09:11:55.4653296Z           ">=1.0.0 <1.1.12",
+2025-09-01T09:11:55.4653509Z           ">=2.0.0 <2.0.2",
+2025-09-01T09:11:55.4653764Z           ">=3.0.0 <3.0.1",
+2025-09-01T09:11:55.4654067Z           ">=4.0.0 <4.0.1"
+2025-09-01T09:11:55.4654274Z         ]
+2025-09-01T09:11:55.4654442Z       },
+2025-09-01T09:11:55.4654774Z       "exploit": "Proof of Concept",
+2025-09-01T09:11:55.4655029Z       "fixedIn": [
+2025-09-01T09:11:55.4655225Z         "1.1.12",
+2025-09-01T09:11:55.4655468Z         "2.0.2",
+2025-09-01T09:11:55.4655710Z         "3.0.1",
+2025-09-01T09:11:55.4655890Z         "4.0.1"
+2025-09-01T09:11:55.4656262Z       ],
+2025-09-01T09:11:55.4656538Z       "patches": [],
+2025-09-01T09:11:55.4656744Z       "insights": {
+2025-09-01T09:11:55.4656967Z         "triageAdvice": null
+2025-09-01T09:11:55.4657303Z       },
+2025-09-01T09:11:55.4657484Z       "language": "js",
+2025-09-01T09:11:55.4657697Z       "severity": "low",
+2025-09-01T09:11:55.4657945Z       "cvssScore": 2.3,
+2025-09-01T09:11:55.4658249Z       "functions": [],
+2025-09-01T09:11:55.4658458Z       "malicious": false,
+2025-09-01T09:11:55.4658687Z       "isDisputed": false,
+2025-09-01T09:11:55.4659071Z       "moduleName": "brace-expansion",
+2025-09-01T09:11:55.4659335Z       "references": [
+2025-09-01T09:11:55.4659527Z         {
+2025-09-01T09:11:55.4659943Z           "url": "https://github.com/advisories/GHSA-v6h2-p8h4-qcjw",
+2025-09-01T09:11:55.4660299Z           "title": "GitHub Advisory"
+2025-09-01T09:11:55.4660640Z         },
+2025-09-01T09:11:55.4660813Z         {
+2025-09-01T09:11:55.4661449Z           "url": "https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2",
+2025-09-01T09:11:55.4662022Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4662350Z         },
+2025-09-01T09:11:55.4662551Z         {
+2025-09-01T09:11:55.4662910Z           "url": "https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466",
+2025-09-01T09:11:55.4663438Z           "title": "GitHub Gist"
+2025-09-01T09:11:55.4663663Z         },
+2025-09-01T09:11:55.4663828Z         {
+2025-09-01T09:11:55.4664268Z           "url": "https://github.com/juliangruber/brace-expansion/pull/65",
+2025-09-01T09:11:55.4664628Z           "title": "GitHub PR"
+2025-09-01T09:11:55.4664961Z         }
+2025-09-01T09:11:55.4665131Z       ],
+2025-09-01T09:11:55.4665309Z       "cvssDetails": [
+2025-09-01T09:11:55.4665502Z         {
+2025-09-01T09:11:55.4665801Z           "assigner": "NVD",
+2025-09-01T09:11:55.4666029Z           "severity": "low",
+2025-09-01T09:11:55.4666411Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4666862Z           "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.4667375Z           "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.4667712Z         },
+2025-09-01T09:11:55.4667885Z         {
+2025-09-01T09:11:55.4668136Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4668441Z           "severity": "low",
+2025-09-01T09:11:55.4668784Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4669260Z           "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.4669575Z           "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.4669958Z         }
+2025-09-01T09:11:55.4670134Z       ],
+2025-09-01T09:11:55.4670316Z       "cvssSources": [
+2025-09-01T09:11:55.4670516Z         {
+2025-09-01T09:11:55.4670807Z           "type": "primary",
+2025-09-01T09:11:55.4671177Z           "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:P",
+2025-09-01T09:11:55.4671776Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4672013Z           "severity": "low",
+2025-09-01T09:11:55.4672226Z           "baseScore": 2.3,
+2025-09-01T09:11:55.4672588Z           "cvssVersion": "4.0",
+2025-09-01T09:11:55.4672891Z           "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.4673163Z         },
+2025-09-01T09:11:55.4673365Z         {
+2025-09-01T09:11:55.4673645Z           "type": "secondary",
+2025-09-01T09:11:55.4673965Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.4674277Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4674503Z           "severity": "low",
+2025-09-01T09:11:55.4674721Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4675080Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4675370Z           "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.4675633Z         },
+2025-09-01T09:11:55.4675796Z         {
+2025-09-01T09:11:55.4675990Z           "type": "secondary",
+2025-09-01T09:11:55.4676299Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4676741Z           "assigner": "NVD",
+2025-09-01T09:11:55.4676976Z           "severity": "low",
+2025-09-01T09:11:55.4677332Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4677568Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4677851Z           "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.4678116Z         },
+2025-09-01T09:11:55.4678281Z         {
+2025-09-01T09:11:55.4678471Z           "type": "secondary",
+2025-09-01T09:11:55.4678774Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4679091Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4679318Z           "severity": "low",
+2025-09-01T09:11:55.4679533Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4679763Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4680045Z           "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.4680315Z         }
+2025-09-01T09:11:55.4680483Z       ],
+2025-09-01T09:11:55.4700115Z       "description": "## Overview\n[brace-expansion](https://github.com/juliangruber/brace-expansion) is a Brace expansion as known from sh/bash\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) in the `expand()` function, which is prone to catastrophic backtracking on very long malicious inputs.\n## PoC\n```js\r\nimport index from \"./index.js\";\r\n\r\nlet str = \"{a}\" + \",\".repeat(100000) + \"\\u0000\";\r\n\r\nlet startTime = performance.now();\r\n\r\nconst result = index(str);\r\n\r\nlet endTime = performance.now();\r\n\r\nlet timeTaken = endTime - startTime;\r\n\r\nconsole.log(`匹配耗时: ${timeTaken.toFixed(3)} 毫秒`);\r\n```\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `brace-expansion` to version 1.1.12, 2.0.2, 3.0.1, 4.0.1 or higher.\n## References\n- [GitHub Advisory](https://github.com/advisories/GHSA-v6h2-p8h4-qcjw)\n- [GitHub Commit](https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2)\n- [GitHub Gist](https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466)\n- [GitHub PR](https://github.com/juliangruber/brace-expansion/pull/65)\n",
+2025-09-01T09:11:55.4714305Z       "epssDetails": {
+2025-09-01T09:11:55.4714547Z         "percentile": "0.04029",
+2025-09-01T09:11:55.4714805Z         "probability": "0.00022",
+2025-09-01T09:11:55.4715074Z         "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.4715310Z       },
+2025-09-01T09:11:55.4715615Z       "identifiers": {
+2025-09-01T09:11:55.4715821Z         "CVE": [
+2025-09-01T09:11:55.4716012Z           "CVE-2025-5889"
+2025-09-01T09:11:55.4716214Z         ],
+2025-09-01T09:11:55.4716385Z         "CWE": [
+2025-09-01T09:11:55.4716563Z           "CWE-1333"
+2025-09-01T09:11:55.4716749Z         ],
+2025-09-01T09:11:55.4716924Z         "GHSA": [
+2025-09-01T09:11:55.4717146Z           "GHSA-v6h2-p8h4-qcjw"
+2025-09-01T09:11:55.4717364Z         ]
+2025-09-01T09:11:55.4717529Z       },
+2025-09-01T09:11:55.4717745Z       "packageName": "brace-expansion",
+2025-09-01T09:11:55.4718016Z       "proprietary": false,
+2025-09-01T09:11:55.4718299Z       "creationTime": "2025-04-22T10:41:28.859488Z",
+2025-09-01T09:11:55.4718579Z       "functions_new": [],
+2025-09-01T09:11:55.4718800Z       "alternativeIds": [],
+2025-09-01T09:11:55.4719062Z       "disclosureTime": "2025-04-22T09:04:33Z",
+2025-09-01T09:11:55.4719337Z       "exploitDetails": {
+2025-09-01T09:11:55.4719543Z         "sources": [
+2025-09-01T09:11:55.4719738Z           "Snyk"
+2025-09-01T09:11:55.4719920Z         ],
+2025-09-01T09:11:55.4720102Z         "maturityLevels": [
+2025-09-01T09:11:55.4720308Z           {
+2025-09-01T09:11:55.4720517Z             "type": "secondary",
+2025-09-01T09:11:55.4720778Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4721045Z             "format": "CVSSv3"
+2025-09-01T09:11:55.4721253Z           },
+2025-09-01T09:11:55.4721528Z           {
+2025-09-01T09:11:55.4721724Z             "type": "primary",
+2025-09-01T09:11:55.4721980Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4722244Z             "format": "CVSSv4"
+2025-09-01T09:11:55.4722451Z           }
+2025-09-01T09:11:55.4722613Z         ]
+2025-09-01T09:11:55.4722774Z       },
+2025-09-01T09:11:55.4722967Z       "packageManager": "npm",
+2025-09-01T09:11:55.4723257Z       "publicationTime": "2025-06-12T06:58:37.742572Z",
+2025-09-01T09:11:55.4723697Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.4723994Z       "modificationTime": "2025-06-19T05:30:43.149011Z",
+2025-09-01T09:11:55.4724304Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.4724578Z       "severityWithCritical": "low",
+2025-09-01T09:11:55.4724823Z       "from": [
+2025-09-01T09:11:55.4725018Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.4725290Z         "@microsoft/eslint-plugin-sdl@1.1.0",
+2025-09-01T09:11:55.4725579Z         "eslint-plugin-react@7.37.3",
+2025-09-01T09:11:55.4725833Z         "minimatch@3.1.2",
+2025-09-01T09:11:55.4726070Z         "brace-expansion@1.1.11"
+2025-09-01T09:11:55.4726288Z       ],
+2025-09-01T09:11:55.4726463Z       "upgradePath": [
+2025-09-01T09:11:55.4726672Z         false,
+2025-09-01T09:11:55.4726912Z         "@microsoft/eslint-plugin-sdl@1.1.0",
+2025-09-01T09:11:55.4727207Z         "eslint-plugin-react@7.37.3",
+2025-09-01T09:11:55.4727456Z         "minimatch@3.1.2",
+2025-09-01T09:11:55.4727771Z         "brace-expansion@1.1.12"
+2025-09-01T09:11:55.4728070Z       ],
+2025-09-01T09:11:55.4728253Z       "isUpgradable": true,
+2025-09-01T09:11:55.4728476Z       "isPatchable": false,
+2025-09-01T09:11:55.4728723Z       "name": "brace-expansion",
+2025-09-01T09:11:55.4728960Z       "version": "1.1.11"
+2025-09-01T09:11:55.4729161Z     },
+2025-09-01T09:11:55.4729323Z     {
+2025-09-01T09:11:55.4729541Z       "id": "SNYK-JS-BRACEEXPANSION-9789073",
+2025-09-01T09:11:55.4729898Z       "title": "Regular Expression Denial of Service (ReDoS)",
+2025-09-01T09:11:55.4730303Z       "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.4730611Z       "credit": [
+2025-09-01T09:11:55.4730805Z         "mmmsssttt404"
+2025-09-01T09:11:55.4730998Z       ],
+2025-09-01T09:11:55.4731167Z       "semver": {
+2025-09-01T09:11:55.4731526Z         "vulnerable": [
+2025-09-01T09:11:55.4731755Z           ">=1.0.0 <1.1.12",
+2025-09-01T09:11:55.4731961Z           ">=2.0.0 <2.0.2",
+2025-09-01T09:11:55.4732165Z           ">=3.0.0 <3.0.1",
+2025-09-01T09:11:55.4732373Z           ">=4.0.0 <4.0.1"
+2025-09-01T09:11:55.4732572Z         ]
+2025-09-01T09:11:55.4732735Z       },
+2025-09-01T09:11:55.4733068Z       "exploit": "Proof of Concept",
+2025-09-01T09:11:55.4733314Z       "fixedIn": [
+2025-09-01T09:11:55.4733498Z         "1.1.12",
+2025-09-01T09:11:55.4733670Z         "2.0.2",
+2025-09-01T09:11:55.4733848Z         "3.0.1",
+2025-09-01T09:11:55.4734023Z         "4.0.1"
+2025-09-01T09:11:55.4734197Z       ],
+2025-09-01T09:11:55.4734369Z       "patches": [],
+2025-09-01T09:11:55.4734566Z       "insights": {
+2025-09-01T09:11:55.4734768Z         "triageAdvice": null
+2025-09-01T09:11:55.4734976Z       },
+2025-09-01T09:11:55.4735144Z       "language": "js",
+2025-09-01T09:11:55.4735351Z       "severity": "low",
+2025-09-01T09:11:55.4735561Z       "cvssScore": 2.3,
+2025-09-01T09:11:55.4735762Z       "functions": [],
+2025-09-01T09:11:55.4735964Z       "malicious": false,
+2025-09-01T09:11:55.4736179Z       "isDisputed": false,
+2025-09-01T09:11:55.4736431Z       "moduleName": "brace-expansion",
+2025-09-01T09:11:55.4736686Z       "references": [
+2025-09-01T09:11:55.4736873Z         {
+2025-09-01T09:11:55.4737162Z           "url": "https://github.com/advisories/GHSA-v6h2-p8h4-qcjw",
+2025-09-01T09:11:55.4737505Z           "title": "GitHub Advisory"
+2025-09-01T09:11:55.4737734Z         },
+2025-09-01T09:11:55.4737899Z         {
+2025-09-01T09:11:55.4738355Z           "url": "https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2",
+2025-09-01T09:11:55.4738844Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4739071Z         },
+2025-09-01T09:11:55.4739235Z         {
+2025-09-01T09:11:55.4739580Z           "url": "https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466",
+2025-09-01T09:11:55.4739967Z           "title": "GitHub Gist"
+2025-09-01T09:11:55.4740182Z         },
+2025-09-01T09:11:55.4740338Z         {
+2025-09-01T09:11:55.4740633Z           "url": "https://github.com/juliangruber/brace-expansion/pull/65",
+2025-09-01T09:11:55.4740986Z           "title": "GitHub PR"
+2025-09-01T09:11:55.4741459Z         }
+2025-09-01T09:11:55.4741626Z       ],
+2025-09-01T09:11:55.4741804Z       "cvssDetails": [
+2025-09-01T09:11:55.4741997Z         {
+2025-09-01T09:11:55.4742165Z           "assigner": "NVD",
+2025-09-01T09:11:55.4742380Z           "severity": "low",
+2025-09-01T09:11:55.4742711Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4743060Z           "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.4743362Z           "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.4743632Z         },
+2025-09-01T09:11:55.4743796Z         {
+2025-09-01T09:11:55.4743986Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4744219Z           "severity": "low",
+2025-09-01T09:11:55.4744541Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4744882Z           "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.4745177Z           "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.4745449Z         }
+2025-09-01T09:11:55.4745612Z       ],
+2025-09-01T09:11:55.4745784Z       "cvssSources": [
+2025-09-01T09:11:55.4745979Z         {
+2025-09-01T09:11:55.4746155Z           "type": "primary",
+2025-09-01T09:11:55.4746517Z           "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:P",
+2025-09-01T09:11:55.4746862Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4747087Z           "severity": "low",
+2025-09-01T09:11:55.4747302Z           "baseScore": 2.3,
+2025-09-01T09:11:55.4747535Z           "cvssVersion": "4.0",
+2025-09-01T09:11:55.4747821Z           "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.4748083Z         },
+2025-09-01T09:11:55.4748247Z         {
+2025-09-01T09:11:55.4748440Z           "type": "secondary",
+2025-09-01T09:11:55.4748762Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.4749069Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4749288Z           "severity": "low",
+2025-09-01T09:11:55.4749513Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4749745Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4750156Z           "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.4750430Z         },
+2025-09-01T09:11:55.4750594Z         {
+2025-09-01T09:11:55.4750787Z           "type": "secondary",
+2025-09-01T09:11:55.4751090Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4751492Z           "assigner": "NVD",
+2025-09-01T09:11:55.4751709Z           "severity": "low",
+2025-09-01T09:11:55.4751925Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4752154Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4752433Z           "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.4752692Z         },
+2025-09-01T09:11:55.4752853Z         {
+2025-09-01T09:11:55.4753043Z           "type": "secondary",
+2025-09-01T09:11:55.4753340Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4753657Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4753882Z           "severity": "low",
+2025-09-01T09:11:55.4754108Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4754339Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4754618Z           "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.4754883Z         }
+2025-09-01T09:11:55.4755045Z       ],
+2025-09-01T09:11:55.4774096Z       "description": "## Overview\n[brace-expansion](https://github.com/juliangruber/brace-expansion) is a Brace expansion as known from sh/bash\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) in the `expand()` function, which is prone to catastrophic backtracking on very long malicious inputs.\n## PoC\n```js\r\nimport index from \"./index.js\";\r\n\r\nlet str = \"{a}\" + \",\".repeat(100000) + \"\\u0000\";\r\n\r\nlet startTime = performance.now();\r\n\r\nconst result = index(str);\r\n\r\nlet endTime = performance.now();\r\n\r\nlet timeTaken = endTime - startTime;\r\n\r\nconsole.log(`匹配耗时: ${timeTaken.toFixed(3)} 毫秒`);\r\n```\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `brace-expansion` to version 1.1.12, 2.0.2, 3.0.1, 4.0.1 or higher.\n## References\n- [GitHub Advisory](https://github.com/advisories/GHSA-v6h2-p8h4-qcjw)\n- [GitHub Commit](https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2)\n- [GitHub Gist](https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466)\n- [GitHub PR](https://github.com/juliangruber/brace-expansion/pull/65)\n",
+2025-09-01T09:11:55.4788252Z       "epssDetails": {
+2025-09-01T09:11:55.4788491Z         "percentile": "0.04029",
+2025-09-01T09:11:55.4788753Z         "probability": "0.00022",
+2025-09-01T09:11:55.4789018Z         "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.4789252Z       },
+2025-09-01T09:11:55.4789430Z       "identifiers": {
+2025-09-01T09:11:55.4789630Z         "CVE": [
+2025-09-01T09:11:55.4789823Z           "CVE-2025-5889"
+2025-09-01T09:11:55.4790026Z         ],
+2025-09-01T09:11:55.4790193Z         "CWE": [
+2025-09-01T09:11:55.4790378Z           "CWE-1333"
+2025-09-01T09:11:55.4790566Z         ],
+2025-09-01T09:11:55.4790735Z         "GHSA": [
+2025-09-01T09:11:55.4790958Z           "GHSA-v6h2-p8h4-qcjw"
+2025-09-01T09:11:55.4791177Z         ]
+2025-09-01T09:11:55.4791431Z       },
+2025-09-01T09:11:55.4791653Z       "packageName": "brace-expansion",
+2025-09-01T09:11:55.4791912Z       "proprietary": false,
+2025-09-01T09:11:55.4792191Z       "creationTime": "2025-04-22T10:41:28.859488Z",
+2025-09-01T09:11:55.4792469Z       "functions_new": [],
+2025-09-01T09:11:55.4792688Z       "alternativeIds": [],
+2025-09-01T09:11:55.4792953Z       "disclosureTime": "2025-04-22T09:04:33Z",
+2025-09-01T09:11:55.4793223Z       "exploitDetails": {
+2025-09-01T09:11:55.4793432Z         "sources": [
+2025-09-01T09:11:55.4793617Z           "Snyk"
+2025-09-01T09:11:55.4793789Z         ],
+2025-09-01T09:11:55.4793969Z         "maturityLevels": [
+2025-09-01T09:11:55.4794172Z           {
+2025-09-01T09:11:55.4794374Z             "type": "secondary",
+2025-09-01T09:11:55.4794635Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4794906Z             "format": "CVSSv3"
+2025-09-01T09:11:55.4795122Z           },
+2025-09-01T09:11:55.4795291Z           {
+2025-09-01T09:11:55.4795485Z             "type": "primary",
+2025-09-01T09:11:55.4795734Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4795996Z             "format": "CVSSv4"
+2025-09-01T09:11:55.4796325Z           }
+2025-09-01T09:11:55.4796489Z         ]
+2025-09-01T09:11:55.4796647Z       },
+2025-09-01T09:11:55.4796842Z       "packageManager": "npm",
+2025-09-01T09:11:55.4797131Z       "publicationTime": "2025-06-12T06:58:37.742572Z",
+2025-09-01T09:11:55.4797427Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.4797721Z       "modificationTime": "2025-06-19T05:30:43.149011Z",
+2025-09-01T09:11:55.4798018Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.4798280Z       "severityWithCritical": "low",
+2025-09-01T09:11:55.4798517Z       "from": [
+2025-09-01T09:11:55.4798706Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.4798925Z         "eslint@9.34.0",
+2025-09-01T09:11:55.4799157Z         "@eslint/config-array@0.21.0",
+2025-09-01T09:11:55.4799399Z         "minimatch@3.1.2",
+2025-09-01T09:11:55.4799630Z         "brace-expansion@1.1.11"
+2025-09-01T09:11:55.4799841Z       ],
+2025-09-01T09:11:55.4800010Z       "upgradePath": [
+2025-09-01T09:11:55.4800199Z         false,
+2025-09-01T09:11:55.4800385Z         "eslint@9.34.0",
+2025-09-01T09:11:55.4800614Z         "@eslint/config-array@0.21.0",
+2025-09-01T09:11:55.4800862Z         "minimatch@3.1.2",
+2025-09-01T09:11:55.4801096Z         "brace-expansion@1.1.12"
+2025-09-01T09:11:55.4801311Z       ],
+2025-09-01T09:11:55.4801591Z       "isUpgradable": true,
+2025-09-01T09:11:55.4801815Z       "isPatchable": false,
+2025-09-01T09:11:55.4802063Z       "name": "brace-expansion",
+2025-09-01T09:11:55.4802299Z       "version": "1.1.11"
+2025-09-01T09:11:55.4802498Z     },
+2025-09-01T09:11:55.4802661Z     {
+2025-09-01T09:11:55.4802890Z       "id": "SNYK-JS-BRACEEXPANSION-9789073",
+2025-09-01T09:11:55.4803255Z       "title": "Regular Expression Denial of Service (ReDoS)",
+2025-09-01T09:11:55.4803659Z       "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.4803964Z       "credit": [
+2025-09-01T09:11:55.4804284Z         "mmmsssttt404"
+2025-09-01T09:11:55.4804477Z       ],
+2025-09-01T09:11:55.4804645Z       "semver": {
+2025-09-01T09:11:55.4804841Z         "vulnerable": [
+2025-09-01T09:11:55.4805048Z           ">=1.0.0 <1.1.12",
+2025-09-01T09:11:55.4805260Z           ">=2.0.0 <2.0.2",
+2025-09-01T09:11:55.4805463Z           ">=3.0.0 <3.0.1",
+2025-09-01T09:11:55.4805663Z           ">=4.0.0 <4.0.1"
+2025-09-01T09:11:55.4805855Z         ]
+2025-09-01T09:11:55.4806019Z       },
+2025-09-01T09:11:55.4806224Z       "exploit": "Proof of Concept",
+2025-09-01T09:11:55.4806466Z       "fixedIn": [
+2025-09-01T09:11:55.4806684Z         "1.1.12",
+2025-09-01T09:11:55.4806861Z         "2.0.2",
+2025-09-01T09:11:55.4807037Z         "3.0.1",
+2025-09-01T09:11:55.4807210Z         "4.0.1"
+2025-09-01T09:11:55.4807375Z       ],
+2025-09-01T09:11:55.4807539Z       "patches": [],
+2025-09-01T09:11:55.4807736Z       "insights": {
+2025-09-01T09:11:55.4807938Z         "triageAdvice": null
+2025-09-01T09:11:55.4808149Z       },
+2025-09-01T09:11:55.4808329Z       "language": "js",
+2025-09-01T09:11:55.4808532Z       "severity": "low",
+2025-09-01T09:11:55.4808745Z       "cvssScore": 2.3,
+2025-09-01T09:11:55.4808944Z       "functions": [],
+2025-09-01T09:11:55.4809149Z       "malicious": false,
+2025-09-01T09:11:55.4809368Z       "isDisputed": false,
+2025-09-01T09:11:55.4809621Z       "moduleName": "brace-expansion",
+2025-09-01T09:11:55.4809868Z       "references": [
+2025-09-01T09:11:55.4810059Z         {
+2025-09-01T09:11:55.4810343Z           "url": "https://github.com/advisories/GHSA-v6h2-p8h4-qcjw",
+2025-09-01T09:11:55.4810691Z           "title": "GitHub Advisory"
+2025-09-01T09:11:55.4810929Z         },
+2025-09-01T09:11:55.4811093Z         {
+2025-09-01T09:11:55.4811728Z           "url": "https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2",
+2025-09-01T09:11:55.4812235Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4812463Z         },
+2025-09-01T09:11:55.4812625Z         {
+2025-09-01T09:11:55.4812982Z           "url": "https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466",
+2025-09-01T09:11:55.4813496Z           "title": "GitHub Gist"
+2025-09-01T09:11:55.4813720Z         },
+2025-09-01T09:11:55.4813882Z         {
+2025-09-01T09:11:55.4814180Z           "url": "https://github.com/juliangruber/brace-expansion/pull/65",
+2025-09-01T09:11:55.4814547Z           "title": "GitHub PR"
+2025-09-01T09:11:55.4814763Z         }
+2025-09-01T09:11:55.4814927Z       ],
+2025-09-01T09:11:55.4815105Z       "cvssDetails": [
+2025-09-01T09:11:55.4815302Z         {
+2025-09-01T09:11:55.4815480Z           "assigner": "NVD",
+2025-09-01T09:11:55.4815715Z           "severity": "low",
+2025-09-01T09:11:55.4816059Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4816411Z           "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.4816723Z           "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.4816995Z         },
+2025-09-01T09:11:55.4817160Z         {
+2025-09-01T09:11:55.4817360Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4817591Z           "severity": "low",
+2025-09-01T09:11:55.4817924Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4818272Z           "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.4818569Z           "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.4818827Z         }
+2025-09-01T09:11:55.4818990Z       ],
+2025-09-01T09:11:55.4819167Z       "cvssSources": [
+2025-09-01T09:11:55.4819361Z         {
+2025-09-01T09:11:55.4819543Z           "type": "primary",
+2025-09-01T09:11:55.4819908Z           "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:P",
+2025-09-01T09:11:55.4820260Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4820486Z           "severity": "low",
+2025-09-01T09:11:55.4820700Z           "baseScore": 2.3,
+2025-09-01T09:11:55.4820938Z           "cvssVersion": "4.0",
+2025-09-01T09:11:55.4821227Z           "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.4821761Z         },
+2025-09-01T09:11:55.4821930Z         {
+2025-09-01T09:11:55.4822133Z           "type": "secondary",
+2025-09-01T09:11:55.4822456Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.4822767Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4822993Z           "severity": "low",
+2025-09-01T09:11:55.4823209Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4823450Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4823740Z           "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.4824007Z         },
+2025-09-01T09:11:55.4824175Z         {
+2025-09-01T09:11:55.4824371Z           "type": "secondary",
+2025-09-01T09:11:55.4824683Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4824988Z           "assigner": "NVD",
+2025-09-01T09:11:55.4825208Z           "severity": "low",
+2025-09-01T09:11:55.4825422Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4825657Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4825948Z           "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.4826215Z         },
+2025-09-01T09:11:55.4826381Z         {
+2025-09-01T09:11:55.4826573Z           "type": "secondary",
+2025-09-01T09:11:55.4826878Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.4827192Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4827424Z           "severity": "low",
+2025-09-01T09:11:55.4827635Z           "baseScore": 3.1,
+2025-09-01T09:11:55.4827865Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4828149Z           "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.4828412Z         }
+2025-09-01T09:11:55.4828580Z       ],
+2025-09-01T09:11:55.4847714Z       "description": "## Overview\n[brace-expansion](https://github.com/juliangruber/brace-expansion) is a Brace expansion as known from sh/bash\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) in the `expand()` function, which is prone to catastrophic backtracking on very long malicious inputs.\n## PoC\n```js\r\nimport index from \"./index.js\";\r\n\r\nlet str = \"{a}\" + \",\".repeat(100000) + \"\\u0000\";\r\n\r\nlet startTime = performance.now();\r\n\r\nconst result = index(str);\r\n\r\nlet endTime = performance.now();\r\n\r\nlet timeTaken = endTime - startTime;\r\n\r\nconsole.log(`匹配耗时: ${timeTaken.toFixed(3)} 毫秒`);\r\n```\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `brace-expansion` to version 1.1.12, 2.0.2, 3.0.1, 4.0.1 or higher.\n## References\n- [GitHub Advisory](https://github.com/advisories/GHSA-v6h2-p8h4-qcjw)\n- [GitHub Commit](https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2)\n- [GitHub Gist](https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466)\n- [GitHub PR](https://github.com/juliangruber/brace-expansion/pull/65)\n",
+2025-09-01T09:11:55.4861807Z       "epssDetails": {
+2025-09-01T09:11:55.4862052Z         "percentile": "0.04029",
+2025-09-01T09:11:55.4862314Z         "probability": "0.00022",
+2025-09-01T09:11:55.4862582Z         "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.4862814Z       },
+2025-09-01T09:11:55.4862997Z       "identifiers": {
+2025-09-01T09:11:55.4863202Z         "CVE": [
+2025-09-01T09:11:55.4863398Z           "CVE-2025-5889"
+2025-09-01T09:11:55.4863606Z         ],
+2025-09-01T09:11:55.4863776Z         "CWE": [
+2025-09-01T09:11:55.4863964Z           "CWE-1333"
+2025-09-01T09:11:55.4864157Z         ],
+2025-09-01T09:11:55.4864325Z         "GHSA": [
+2025-09-01T09:11:55.4864552Z           "GHSA-v6h2-p8h4-qcjw"
+2025-09-01T09:11:55.4864775Z         ]
+2025-09-01T09:11:55.4864939Z       },
+2025-09-01T09:11:55.4865154Z       "packageName": "brace-expansion",
+2025-09-01T09:11:55.4865419Z       "proprietary": false,
+2025-09-01T09:11:55.4865695Z       "creationTime": "2025-04-22T10:41:28.859488Z",
+2025-09-01T09:11:55.4865971Z       "functions_new": [],
+2025-09-01T09:11:55.4866195Z       "alternativeIds": [],
+2025-09-01T09:11:55.4866454Z       "disclosureTime": "2025-04-22T09:04:33Z",
+2025-09-01T09:11:55.4866724Z       "exploitDetails": {
+2025-09-01T09:11:55.4866937Z         "sources": [
+2025-09-01T09:11:55.4867126Z           "Snyk"
+2025-09-01T09:11:55.4867303Z         ],
+2025-09-01T09:11:55.4867485Z         "maturityLevels": [
+2025-09-01T09:11:55.4867825Z           {
+2025-09-01T09:11:55.4868028Z             "type": "secondary",
+2025-09-01T09:11:55.4868291Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4868562Z             "format": "CVSSv3"
+2025-09-01T09:11:55.4868777Z           },
+2025-09-01T09:11:55.4868947Z           {
+2025-09-01T09:11:55.4869141Z             "type": "primary",
+2025-09-01T09:11:55.4869399Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4869666Z             "format": "CVSSv4"
+2025-09-01T09:11:55.4869878Z           }
+2025-09-01T09:11:55.4870041Z         ]
+2025-09-01T09:11:55.4870206Z       },
+2025-09-01T09:11:55.4870407Z       "packageManager": "npm",
+2025-09-01T09:11:55.4870703Z       "publicationTime": "2025-06-12T06:58:37.742572Z",
+2025-09-01T09:11:55.4871011Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.4871314Z       "modificationTime": "2025-06-19T05:30:43.149011Z",
+2025-09-01T09:11:55.4872009Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.4872404Z       "severityWithCritical": "low",
+2025-09-01T09:11:55.4872661Z       "from": [
+2025-09-01T09:11:55.4872854Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.4873143Z         "@microsoft/eslint-formatter-sarif@3.1.0",
+2025-09-01T09:11:55.4873419Z         "eslint@8.57.1",
+2025-09-01T09:11:55.4873655Z         "@eslint/eslintrc@2.1.4",
+2025-09-01T09:11:55.4873893Z         "minimatch@3.1.2",
+2025-09-01T09:11:55.4874131Z         "brace-expansion@1.1.11"
+2025-09-01T09:11:55.4874351Z       ],
+2025-09-01T09:11:55.4874531Z       "upgradePath": [],
+2025-09-01T09:11:55.4874753Z       "isUpgradable": false,
+2025-09-01T09:11:55.4874978Z       "isPatchable": false,
+2025-09-01T09:11:55.4875233Z       "name": "brace-expansion",
+2025-09-01T09:11:55.4875466Z       "version": "1.1.11"
+2025-09-01T09:11:55.4875668Z     },
+2025-09-01T09:11:55.4875837Z     {
+2025-09-01T09:11:55.4876058Z       "id": "SNYK-JS-FORMDATA-10841150",
+2025-09-01T09:11:55.4876408Z       "title": "Predictable Value Range from Previous Values",
+2025-09-01T09:11:55.4876820Z       "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N/E:P",
+2025-09-01T09:11:55.4877132Z       "credit": [
+2025-09-01T09:11:55.4877461Z         "Ben Shonaldmann"
+2025-09-01T09:11:55.4877670Z       ],
+2025-09-01T09:11:55.4877840Z       "semver": {
+2025-09-01T09:11:55.4878027Z         "vulnerable": [
+2025-09-01T09:11:55.4878230Z           "<2.5.4",
+2025-09-01T09:11:55.4878415Z           ">=3.0.0 <3.0.4",
+2025-09-01T09:11:55.4878620Z           ">=4.0.0 <4.0.4"
+2025-09-01T09:11:55.4878816Z         ]
+2025-09-01T09:11:55.4878975Z       },
+2025-09-01T09:11:55.4879181Z       "exploit": "Proof of Concept",
+2025-09-01T09:11:55.4879419Z       "fixedIn": [
+2025-09-01T09:11:55.4879608Z         "2.5.4",
+2025-09-01T09:11:55.4879787Z         "3.0.4",
+2025-09-01T09:11:55.4879964Z         "4.0.4"
+2025-09-01T09:11:55.4880137Z       ],
+2025-09-01T09:11:55.4880352Z       "patches": [],
+2025-09-01T09:11:55.4880667Z       "insights": {
+2025-09-01T09:11:55.4880875Z         "triageAdvice": null
+2025-09-01T09:11:55.4881089Z       },
+2025-09-01T09:11:55.4881268Z       "language": "js",
+2025-09-01T09:11:55.4881583Z       "severity": "critical",
+2025-09-01T09:11:55.4881817Z       "cvssScore": 9.4,
+2025-09-01T09:11:55.4882020Z       "functions": [],
+2025-09-01T09:11:55.4882225Z       "malicious": false,
+2025-09-01T09:11:55.4882433Z       "isDisputed": false,
+2025-09-01T09:11:55.4882675Z       "moduleName": "form-data",
+2025-09-01T09:11:55.4882903Z       "references": [
+2025-09-01T09:11:55.4883095Z         {
+2025-09-01T09:11:55.4883516Z           "url": "https://github.com/form-data/form-data/commit/3d1723080e6577a66f17f163ecd345a21d8d0fd0",
+2025-09-01T09:11:55.4883968Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4884198Z         },
+2025-09-01T09:11:55.4884365Z         {
+2025-09-01T09:11:55.4884765Z           "url": "https://github.com/form-data/form-data/commit/b88316c94bb004323669cd3639dc8bb8262539eb",
+2025-09-01T09:11:55.4885202Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4885428Z         },
+2025-09-01T09:11:55.4885592Z         {
+2025-09-01T09:11:55.4886136Z           "url": "https://github.com/form-data/form-data/commit/c6ced61d4fae8f617ee2fd692133ed87baa5d0fd",
+2025-09-01T09:11:55.4886589Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4886808Z         },
+2025-09-01T09:11:55.4886972Z         {
+2025-09-01T09:11:55.4887246Z           "url": "https://github.com/benweissmann/CVE-2025-7783-poc",
+2025-09-01T09:11:55.4887562Z           "title": "POC"
+2025-09-01T09:11:55.4887759Z         },
+2025-09-01T09:11:55.4887923Z         {
+2025-09-01T09:11:55.4888427Z           "url": "https://github.com/form-data/form-data/blob/426ba9ac440f95d1998dac9a5cd8d738043b048f/lib/form_data.js%23L347",
+2025-09-01T09:11:55.4888969Z           "title": "Vulnerable Code"
+2025-09-01T09:11:55.4889199Z         }
+2025-09-01T09:11:55.4889361Z       ],
+2025-09-01T09:11:55.4889536Z       "cvssDetails": [
+2025-09-01T09:11:55.4889731Z         {
+2025-09-01T09:11:55.4889927Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4890170Z           "severity": "medium",
+2025-09-01T09:11:55.4890517Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:N",
+2025-09-01T09:11:55.4890871Z           "cvssV3BaseScore": 5.4,
+2025-09-01T09:11:55.4891179Z           "modificationTime": "2025-07-19T15:04:32.791635Z"
+2025-09-01T09:11:55.4891622Z         }
+2025-09-01T09:11:55.4891789Z       ],
+2025-09-01T09:11:55.4891968Z       "cvssSources": [
+2025-09-01T09:11:55.4892160Z         {
+2025-09-01T09:11:55.4892339Z           "type": "primary",
+2025-09-01T09:11:55.4892699Z           "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N/E:P",
+2025-09-01T09:11:55.4893050Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4893294Z           "severity": "critical",
+2025-09-01T09:11:55.4893528Z           "baseScore": 9.4,
+2025-09-01T09:11:55.4893761Z           "cvssVersion": "4.0",
+2025-09-01T09:11:55.4894050Z           "modificationTime": "2025-07-24T06:39:27.679970Z"
+2025-09-01T09:11:55.4894320Z         },
+2025-09-01T09:11:55.4894483Z         {
+2025-09-01T09:11:55.4894683Z           "type": "secondary",
+2025-09-01T09:11:55.4895126Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N/E:P",
+2025-09-01T09:11:55.4895444Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4895668Z           "severity": "high",
+2025-09-01T09:11:55.4895892Z           "baseScore": 8.7,
+2025-09-01T09:11:55.4896131Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4896416Z           "modificationTime": "2025-07-24T06:39:27.679970Z"
+2025-09-01T09:11:55.4896682Z         },
+2025-09-01T09:11:55.4896845Z         {
+2025-09-01T09:11:55.4897041Z           "type": "secondary",
+2025-09-01T09:11:55.4897350Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:N",
+2025-09-01T09:11:55.4897672Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4897918Z           "severity": "medium",
+2025-09-01T09:11:55.4898135Z           "baseScore": 5.4,
+2025-09-01T09:11:55.4898369Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4898651Z           "modificationTime": "2025-07-19T15:04:32.791635Z"
+2025-09-01T09:11:55.4898922Z         }
+2025-09-01T09:11:55.4899087Z       ],
+2025-09-01T09:11:55.4902588Z       "description": "## Overview\n\nAffected versions of this package are vulnerable to Predictable Value Range from Previous Values via the `boundary` value, which uses `Math.random()`. An attacker can manipulate HTTP request boundaries by exploiting predictable values, potentially leading to HTTP parameter pollution.\n## Remediation\nUpgrade `form-data` to version 2.5.4, 3.0.4, 4.0.4 or higher.\n## References\n- [GitHub Commit](https://github.com/form-data/form-data/commit/3d1723080e6577a66f17f163ecd345a21d8d0fd0)\n- [GitHub Commit](https://github.com/form-data/form-data/commit/b88316c94bb004323669cd3639dc8bb8262539eb)\n- [GitHub Commit](https://github.com/form-data/form-data/commit/c6ced61d4fae8f617ee2fd692133ed87baa5d0fd)\n- [POC](https://github.com/benweissmann/CVE-2025-7783-poc)\n- [Vulnerable Code](https://github.com/form-data/form-data/blob/426ba9ac440f95d1998dac9a5cd8d738043b048f/lib/form_data.js#L347)\n",
+2025-09-01T09:11:55.4905731Z       "epssDetails": {
+2025-09-01T09:11:55.4905965Z         "percentile": "0.04706",
+2025-09-01T09:11:55.4906221Z         "probability": "0.00024",
+2025-09-01T09:11:55.4906486Z         "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.4906752Z       },
+2025-09-01T09:11:55.4906927Z       "identifiers": {
+2025-09-01T09:11:55.4907125Z         "CVE": [
+2025-09-01T09:11:55.4907314Z           "CVE-2025-7783"
+2025-09-01T09:11:55.4907514Z         ],
+2025-09-01T09:11:55.4907677Z         "CWE": [
+2025-09-01T09:11:55.4907858Z           "CWE-343"
+2025-09-01T09:11:55.4908040Z         ],
+2025-09-01T09:11:55.4908210Z         "GHSA": [
+2025-09-01T09:11:55.4908426Z           "GHSA-fjxv-7rqg-78g4",
+2025-09-01T09:11:55.4908681Z           "GHSA-rm8p-cx58-hcvx"
+2025-09-01T09:11:55.4908897Z         ]
+2025-09-01T09:11:55.4909058Z       },
+2025-09-01T09:11:55.4909253Z       "packageName": "form-data",
+2025-09-01T09:11:55.4909495Z       "proprietary": false,
+2025-09-01T09:11:55.4909778Z       "creationTime": "2025-07-20T07:10:33.211640Z",
+2025-09-01T09:11:55.4910052Z       "functions_new": [],
+2025-09-01T09:11:55.4910277Z       "alternativeIds": [],
+2025-09-01T09:11:55.4910554Z       "disclosureTime": "2025-07-18T16:43:35Z",
+2025-09-01T09:11:55.4910897Z       "exploitDetails": {
+2025-09-01T09:11:55.4911203Z         "sources": [
+2025-09-01T09:11:55.4911738Z           "PoC in GitHub",
+2025-09-01T09:11:55.4912076Z           "Snyk"
+2025-09-01T09:11:55.4912329Z         ],
+2025-09-01T09:11:55.4912673Z         "maturityLevels": [
+2025-09-01T09:11:55.4912933Z           {
+2025-09-01T09:11:55.4913213Z             "type": "secondary",
+2025-09-01T09:11:55.4913634Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4914029Z             "format": "CVSSv3"
+2025-09-01T09:11:55.4914377Z           },
+2025-09-01T09:11:55.4914659Z           {
+2025-09-01T09:11:55.4914945Z             "type": "primary",
+2025-09-01T09:11:55.4915339Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.4915729Z             "format": "CVSSv4"
+2025-09-01T09:11:55.4915991Z           }
+2025-09-01T09:11:55.4916296Z         ]
+2025-09-01T09:11:55.4916667Z       },
+2025-09-01T09:11:55.4916952Z       "packageManager": "npm",
+2025-09-01T09:11:55.4917438Z       "publicationTime": "2025-07-20T10:16:27.524069Z",
+2025-09-01T09:11:55.4917834Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.4918258Z       "modificationTime": "2025-07-27T05:20:01.299407Z",
+2025-09-01T09:11:55.4918668Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.4969755Z       "severityWithCritical": "critical",
+2025-09-01T09:11:55.4970065Z       "from": [
+2025-09-01T09:11:55.4970279Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.4970571Z         "@paypal/paypal-server-sdk@1.1.0",
+2025-09-01T09:11:55.4970898Z         "@apimatic/axios-client-adapter@0.3.9",
+2025-09-01T09:11:55.4971182Z         "form-data@4.0.3"
+2025-09-01T09:11:55.4971626Z       ],
+2025-09-01T09:11:55.4971883Z       "upgradePath": [
+2025-09-01T09:11:55.4972088Z         false,
+2025-09-01T09:11:55.4972336Z         "@paypal/paypal-server-sdk@1.1.0",
+2025-09-01T09:11:55.4972655Z         "@apimatic/axios-client-adapter@0.3.15",
+2025-09-01T09:11:55.4972925Z         "form-data@4.0.4"
+2025-09-01T09:11:55.4973129Z       ],
+2025-09-01T09:11:55.4973313Z       "isUpgradable": true,
+2025-09-01T09:11:55.4973543Z       "isPatchable": false,
+2025-09-01T09:11:55.4973761Z       "name": "form-data",
+2025-09-01T09:11:55.4973982Z       "version": "4.0.3"
+2025-09-01T09:11:55.4974180Z     },
+2025-09-01T09:11:55.4974338Z     {
+2025-09-01T09:11:55.4974554Z       "id": "SNYK-JS-FORMDATA-10841150",
+2025-09-01T09:11:55.4974908Z       "title": "Predictable Value Range from Previous Values",
+2025-09-01T09:11:55.4975314Z       "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N/E:P",
+2025-09-01T09:11:55.4975620Z       "credit": [
+2025-09-01T09:11:55.4975821Z         "Ben Shonaldmann"
+2025-09-01T09:11:55.4976022Z       ],
+2025-09-01T09:11:55.4976192Z       "semver": {
+2025-09-01T09:11:55.4976387Z         "vulnerable": [
+2025-09-01T09:11:55.4976763Z           "<2.5.4",
+2025-09-01T09:11:55.4976955Z           ">=3.0.0 <3.0.4",
+2025-09-01T09:11:55.4977170Z           ">=4.0.0 <4.0.4"
+2025-09-01T09:11:55.4977375Z         ]
+2025-09-01T09:11:55.4977541Z       },
+2025-09-01T09:11:55.4977744Z       "exploit": "Proof of Concept",
+2025-09-01T09:11:55.4977991Z       "fixedIn": [
+2025-09-01T09:11:55.4978175Z         "2.5.4",
+2025-09-01T09:11:55.4978358Z         "3.0.4",
+2025-09-01T09:11:55.4978537Z         "4.0.4"
+2025-09-01T09:11:55.4978710Z       ],
+2025-09-01T09:11:55.4978884Z       "patches": [],
+2025-09-01T09:11:55.4979080Z       "insights": {
+2025-09-01T09:11:55.4979278Z         "triageAdvice": null
+2025-09-01T09:11:55.4979492Z       },
+2025-09-01T09:11:55.4979665Z       "language": "js",
+2025-09-01T09:11:55.4979873Z       "severity": "critical",
+2025-09-01T09:11:55.4980095Z       "cvssScore": 9.4,
+2025-09-01T09:11:55.4980296Z       "functions": [],
+2025-09-01T09:11:55.4980500Z       "malicious": false,
+2025-09-01T09:11:55.4980724Z       "isDisputed": false,
+2025-09-01T09:11:55.4980964Z       "moduleName": "form-data",
+2025-09-01T09:11:55.4981693Z       "references": [
+2025-09-01T09:11:55.4982021Z         {
+2025-09-01T09:11:55.4982457Z           "url": "https://github.com/form-data/form-data/commit/3d1723080e6577a66f17f163ecd345a21d8d0fd0",
+2025-09-01T09:11:55.4982913Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4983142Z         },
+2025-09-01T09:11:55.4983309Z         {
+2025-09-01T09:11:55.4983711Z           "url": "https://github.com/form-data/form-data/commit/b88316c94bb004323669cd3639dc8bb8262539eb",
+2025-09-01T09:11:55.4984148Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4984370Z         },
+2025-09-01T09:11:55.4984538Z         {
+2025-09-01T09:11:55.4984938Z           "url": "https://github.com/form-data/form-data/commit/c6ced61d4fae8f617ee2fd692133ed87baa5d0fd",
+2025-09-01T09:11:55.4985377Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.4985593Z         },
+2025-09-01T09:11:55.4985757Z         {
+2025-09-01T09:11:55.4986039Z           "url": "https://github.com/benweissmann/CVE-2025-7783-poc",
+2025-09-01T09:11:55.4986487Z           "title": "POC"
+2025-09-01T09:11:55.4986698Z         },
+2025-09-01T09:11:55.4986858Z         {
+2025-09-01T09:11:55.4987361Z           "url": "https://github.com/form-data/form-data/blob/426ba9ac440f95d1998dac9a5cd8d738043b048f/lib/form_data.js%23L347",
+2025-09-01T09:11:55.4987895Z           "title": "Vulnerable Code"
+2025-09-01T09:11:55.4988125Z         }
+2025-09-01T09:11:55.4988284Z       ],
+2025-09-01T09:11:55.4988458Z       "cvssDetails": [
+2025-09-01T09:11:55.4988652Z         {
+2025-09-01T09:11:55.4988846Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4989093Z           "severity": "medium",
+2025-09-01T09:11:55.4989436Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:N",
+2025-09-01T09:11:55.4989792Z           "cvssV3BaseScore": 5.4,
+2025-09-01T09:11:55.4990105Z           "modificationTime": "2025-07-19T15:04:32.791635Z"
+2025-09-01T09:11:55.4990379Z         }
+2025-09-01T09:11:55.4990540Z       ],
+2025-09-01T09:11:55.4990711Z       "cvssSources": [
+2025-09-01T09:11:55.4990907Z         {
+2025-09-01T09:11:55.4991084Z           "type": "primary",
+2025-09-01T09:11:55.4991639Z           "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N/E:P",
+2025-09-01T09:11:55.4992004Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4992252Z           "severity": "critical",
+2025-09-01T09:11:55.4992484Z           "baseScore": 9.4,
+2025-09-01T09:11:55.4992724Z           "cvssVersion": "4.0",
+2025-09-01T09:11:55.4993068Z           "modificationTime": "2025-07-24T06:39:27.679970Z"
+2025-09-01T09:11:55.4993334Z         },
+2025-09-01T09:11:55.4993495Z         {
+2025-09-01T09:11:55.4993689Z           "type": "secondary",
+2025-09-01T09:11:55.4994020Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N/E:P",
+2025-09-01T09:11:55.4994340Z           "assigner": "Snyk",
+2025-09-01T09:11:55.4994559Z           "severity": "high",
+2025-09-01T09:11:55.4994917Z           "baseScore": 8.7,
+2025-09-01T09:11:55.4995150Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4995440Z           "modificationTime": "2025-07-24T06:39:27.679970Z"
+2025-09-01T09:11:55.4995704Z         },
+2025-09-01T09:11:55.4995867Z         {
+2025-09-01T09:11:55.4996060Z           "type": "secondary",
+2025-09-01T09:11:55.4996376Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:N",
+2025-09-01T09:11:55.4996693Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.4996942Z           "severity": "medium",
+2025-09-01T09:11:55.4997163Z           "baseScore": 5.4,
+2025-09-01T09:11:55.4997393Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.4997670Z           "modificationTime": "2025-07-19T15:04:32.791635Z"
+2025-09-01T09:11:55.4997932Z         }
+2025-09-01T09:11:55.4998095Z       ],
+2025-09-01T09:11:55.5001686Z       "description": "## Overview\n\nAffected versions of this package are vulnerable to Predictable Value Range from Previous Values via the `boundary` value, which uses `Math.random()`. An attacker can manipulate HTTP request boundaries by exploiting predictable values, potentially leading to HTTP parameter pollution.\n## Remediation\nUpgrade `form-data` to version 2.5.4, 3.0.4, 4.0.4 or higher.\n## References\n- [GitHub Commit](https://github.com/form-data/form-data/commit/3d1723080e6577a66f17f163ecd345a21d8d0fd0)\n- [GitHub Commit](https://github.com/form-data/form-data/commit/b88316c94bb004323669cd3639dc8bb8262539eb)\n- [GitHub Commit](https://github.com/form-data/form-data/commit/c6ced61d4fae8f617ee2fd692133ed87baa5d0fd)\n- [POC](https://github.com/benweissmann/CVE-2025-7783-poc)\n- [Vulnerable Code](https://github.com/form-data/form-data/blob/426ba9ac440f95d1998dac9a5cd8d738043b048f/lib/form_data.js#L347)\n",
+2025-09-01T09:11:55.5004694Z       "epssDetails": {
+2025-09-01T09:11:55.5004926Z         "percentile": "0.04706",
+2025-09-01T09:11:55.5005181Z         "probability": "0.00024",
+2025-09-01T09:11:55.5005451Z         "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.5005692Z       },
+2025-09-01T09:11:55.5005874Z       "identifiers": {
+2025-09-01T09:11:55.5006075Z         "CVE": [
+2025-09-01T09:11:55.5006388Z           "CVE-2025-7783"
+2025-09-01T09:11:55.5006594Z         ],
+2025-09-01T09:11:55.5006799Z         "CWE": [
+2025-09-01T09:11:55.5006982Z           "CWE-343"
+2025-09-01T09:11:55.5007166Z         ],
+2025-09-01T09:11:55.5007341Z         "GHSA": [
+2025-09-01T09:11:55.5007563Z           "GHSA-fjxv-7rqg-78g4",
+2025-09-01T09:11:55.5007824Z           "GHSA-rm8p-cx58-hcvx"
+2025-09-01T09:11:55.5008037Z         ]
+2025-09-01T09:11:55.5008194Z       },
+2025-09-01T09:11:55.5008396Z       "packageName": "form-data",
+2025-09-01T09:11:55.5008637Z       "proprietary": false,
+2025-09-01T09:11:55.5008917Z       "creationTime": "2025-07-20T07:10:33.211640Z",
+2025-09-01T09:11:55.5009193Z       "functions_new": [],
+2025-09-01T09:11:55.5009416Z       "alternativeIds": [],
+2025-09-01T09:11:55.5009680Z       "disclosureTime": "2025-07-18T16:43:35Z",
+2025-09-01T09:11:55.5009952Z       "exploitDetails": {
+2025-09-01T09:11:55.5010162Z         "sources": [
+2025-09-01T09:11:55.5010360Z           "PoC in GitHub",
+2025-09-01T09:11:55.5010572Z           "Snyk"
+2025-09-01T09:11:55.5010765Z         ],
+2025-09-01T09:11:55.5010968Z         "maturityLevels": [
+2025-09-01T09:11:55.5011172Z           {
+2025-09-01T09:11:55.5011612Z             "type": "secondary",
+2025-09-01T09:11:55.5011941Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.5012215Z             "format": "CVSSv3"
+2025-09-01T09:11:55.5012423Z           },
+2025-09-01T09:11:55.5012594Z           {
+2025-09-01T09:11:55.5012787Z             "type": "primary",
+2025-09-01T09:11:55.5013037Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.5013300Z             "format": "CVSSv4"
+2025-09-01T09:11:55.5013505Z           }
+2025-09-01T09:11:55.5013671Z         ]
+2025-09-01T09:11:55.5013832Z       },
+2025-09-01T09:11:55.5014028Z       "packageManager": "npm",
+2025-09-01T09:11:55.5014320Z       "publicationTime": "2025-07-20T10:16:27.524069Z",
+2025-09-01T09:11:55.5014763Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.5015063Z       "modificationTime": "2025-07-27T05:20:01.299407Z",
+2025-09-01T09:11:55.5015362Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.5015634Z       "severityWithCritical": "critical",
+2025-09-01T09:11:55.5015886Z       "from": [
+2025-09-01T09:11:55.5016080Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.5016347Z         "@paypal/paypal-server-sdk@1.1.0",
+2025-09-01T09:11:55.5016636Z         "@apimatic/core@0.10.19",
+2025-09-01T09:11:55.5016868Z         "form-data@4.0.3"
+2025-09-01T09:11:55.5017070Z       ],
+2025-09-01T09:11:55.5017244Z       "upgradePath": [
+2025-09-01T09:11:55.5017441Z         false,
+2025-09-01T09:11:55.5017665Z         "@paypal/paypal-server-sdk@1.1.0",
+2025-09-01T09:11:55.5017944Z         "@apimatic/core@0.10.24",
+2025-09-01T09:11:55.5018173Z         "form-data@4.0.4"
+2025-09-01T09:11:55.5018371Z       ],
+2025-09-01T09:11:55.5018549Z       "isUpgradable": true,
+2025-09-01T09:11:55.5018779Z       "isPatchable": false,
+2025-09-01T09:11:55.5018994Z       "name": "form-data",
+2025-09-01T09:11:55.5019210Z       "version": "4.0.3"
+2025-09-01T09:11:55.5019407Z     },
+2025-09-01T09:11:55.5019570Z     {
+2025-09-01T09:11:55.5019786Z       "id": "SNYK-JS-FORMDATA-10841150",
+2025-09-01T09:11:55.5020131Z       "title": "Predictable Value Range from Previous Values",
+2025-09-01T09:11:55.5020528Z       "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N/E:P",
+2025-09-01T09:11:55.5020828Z       "credit": [
+2025-09-01T09:11:55.5021023Z         "Ben Shonaldmann"
+2025-09-01T09:11:55.5021217Z       ],
+2025-09-01T09:11:55.5021604Z       "semver": {
+2025-09-01T09:11:55.5021804Z         "vulnerable": [
+2025-09-01T09:11:55.5022004Z           "<2.5.4",
+2025-09-01T09:11:55.5022183Z           ">=3.0.0 <3.0.4",
+2025-09-01T09:11:55.5022384Z           ">=4.0.0 <4.0.4"
+2025-09-01T09:11:55.5022580Z         ]
+2025-09-01T09:11:55.5022740Z       },
+2025-09-01T09:11:55.5022945Z       "exploit": "Proof of Concept",
+2025-09-01T09:11:55.5023188Z       "fixedIn": [
+2025-09-01T09:11:55.5023370Z         "2.5.4",
+2025-09-01T09:11:55.5023664Z         "3.0.4",
+2025-09-01T09:11:55.5023846Z         "4.0.4"
+2025-09-01T09:11:55.5024013Z       ],
+2025-09-01T09:11:55.5024177Z       "patches": [],
+2025-09-01T09:11:55.5024367Z       "insights": {
+2025-09-01T09:11:55.5024563Z         "triageAdvice": null
+2025-09-01T09:11:55.5024768Z       },
+2025-09-01T09:11:55.5024935Z       "language": "js",
+2025-09-01T09:11:55.5025142Z       "severity": "critical",
+2025-09-01T09:11:55.5025365Z       "cvssScore": 9.4,
+2025-09-01T09:11:55.5025562Z       "functions": [],
+2025-09-01T09:11:55.5025766Z       "malicious": false,
+2025-09-01T09:11:55.5025982Z       "isDisputed": false,
+2025-09-01T09:11:55.5026221Z       "moduleName": "form-data",
+2025-09-01T09:11:55.5026452Z       "references": [
+2025-09-01T09:11:55.5026644Z         {
+2025-09-01T09:11:55.5027064Z           "url": "https://github.com/form-data/form-data/commit/3d1723080e6577a66f17f163ecd345a21d8d0fd0",
+2025-09-01T09:11:55.5027525Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.5027753Z         },
+2025-09-01T09:11:55.5027918Z         {
+2025-09-01T09:11:55.5028320Z           "url": "https://github.com/form-data/form-data/commit/b88316c94bb004323669cd3639dc8bb8262539eb",
+2025-09-01T09:11:55.5028765Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.5028985Z         },
+2025-09-01T09:11:55.5029148Z         {
+2025-09-01T09:11:55.5029553Z           "url": "https://github.com/form-data/form-data/commit/c6ced61d4fae8f617ee2fd692133ed87baa5d0fd",
+2025-09-01T09:11:55.5029659Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.5029737Z         },
+2025-09-01T09:11:55.5029807Z         {
+2025-09-01T09:11:55.5029995Z           "url": "https://github.com/benweissmann/CVE-2025-7783-poc",
+2025-09-01T09:11:55.5030079Z           "title": "POC"
+2025-09-01T09:11:55.5030155Z         },
+2025-09-01T09:11:55.5030223Z         {
+2025-09-01T09:11:55.5030634Z           "url": "https://github.com/form-data/form-data/blob/426ba9ac440f95d1998dac9a5cd8d738043b048f/lib/form_data.js%23L347",
+2025-09-01T09:11:55.5030866Z           "title": "Vulnerable Code"
+2025-09-01T09:11:55.5030941Z         }
+2025-09-01T09:11:55.5031012Z       ],
+2025-09-01T09:11:55.5031101Z       "cvssDetails": [
+2025-09-01T09:11:55.5031170Z         {
+2025-09-01T09:11:55.5031275Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.5031486Z           "severity": "medium",
+2025-09-01T09:11:55.5031700Z           "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:N",
+2025-09-01T09:11:55.5031810Z           "cvssV3BaseScore": 5.4,
+2025-09-01T09:11:55.5031968Z           "modificationTime": "2025-07-19T15:04:32.791635Z"
+2025-09-01T09:11:55.5032039Z         }
+2025-09-01T09:11:55.5032114Z       ],
+2025-09-01T09:11:55.5032195Z       "cvssSources": [
+2025-09-01T09:11:55.5032268Z         {
+2025-09-01T09:11:55.5032356Z           "type": "primary",
+2025-09-01T09:11:55.5032592Z           "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N/E:P",
+2025-09-01T09:11:55.5032685Z           "assigner": "Snyk",
+2025-09-01T09:11:55.5032799Z           "severity": "critical",
+2025-09-01T09:11:55.5032883Z           "baseScore": 9.4,
+2025-09-01T09:11:55.5032990Z           "cvssVersion": "4.0",
+2025-09-01T09:11:55.5033137Z           "modificationTime": "2025-07-24T06:39:27.679970Z"
+2025-09-01T09:11:55.5033213Z         },
+2025-09-01T09:11:55.5033282Z         {
+2025-09-01T09:11:55.5033387Z           "type": "secondary",
+2025-09-01T09:11:55.5033571Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N/E:P",
+2025-09-01T09:11:55.5033660Z           "assigner": "Snyk",
+2025-09-01T09:11:55.5033743Z           "severity": "high",
+2025-09-01T09:11:55.5033831Z           "baseScore": 8.7,
+2025-09-01T09:11:55.5033931Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.5034082Z           "modificationTime": "2025-07-24T06:39:27.679970Z"
+2025-09-01T09:11:55.5034152Z         },
+2025-09-01T09:11:55.5034226Z         {
+2025-09-01T09:11:55.5034328Z           "type": "secondary",
+2025-09-01T09:11:55.5034503Z           "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:N",
+2025-09-01T09:11:55.5034720Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.5034827Z           "severity": "medium",
+2025-09-01T09:11:55.5034910Z           "baseScore": 5.4,
+2025-09-01T09:11:55.5035015Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.5035158Z           "modificationTime": "2025-07-19T15:04:32.791635Z"
+2025-09-01T09:11:55.5035233Z         }
+2025-09-01T09:11:55.5035304Z       ],
+2025-09-01T09:11:55.5038604Z       "description": "## Overview\n\nAffected versions of this package are vulnerable to Predictable Value Range from Previous Values via the `boundary` value, which uses `Math.random()`. An attacker can manipulate HTTP request boundaries by exploiting predictable values, potentially leading to HTTP parameter pollution.\n## Remediation\nUpgrade `form-data` to version 2.5.4, 3.0.4, 4.0.4 or higher.\n## References\n- [GitHub Commit](https://github.com/form-data/form-data/commit/3d1723080e6577a66f17f163ecd345a21d8d0fd0)\n- [GitHub Commit](https://github.com/form-data/form-data/commit/b88316c94bb004323669cd3639dc8bb8262539eb)\n- [GitHub Commit](https://github.com/form-data/form-data/commit/c6ced61d4fae8f617ee2fd692133ed87baa5d0fd)\n- [POC](https://github.com/benweissmann/CVE-2025-7783-poc)\n- [Vulnerable Code](https://github.com/form-data/form-data/blob/426ba9ac440f95d1998dac9a5cd8d738043b048f/lib/form_data.js#L347)\n",
+2025-09-01T09:11:55.5038698Z       "epssDetails": {
+2025-09-01T09:11:55.5038803Z         "percentile": "0.04706",
+2025-09-01T09:11:55.5038912Z         "probability": "0.00024",
+2025-09-01T09:11:55.5039025Z         "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.5039101Z       },
+2025-09-01T09:11:55.5039184Z       "identifiers": {
+2025-09-01T09:11:55.5039263Z         "CVE": [
+2025-09-01T09:11:55.5039346Z           "CVE-2025-7783"
+2025-09-01T09:11:55.5039422Z         ],
+2025-09-01T09:11:55.5039507Z         "CWE": [
+2025-09-01T09:11:55.5039734Z           "CWE-343"
+2025-09-01T09:11:55.5039804Z         ],
+2025-09-01T09:11:55.5039887Z         "GHSA": [
+2025-09-01T09:11:55.5039998Z           "GHSA-fjxv-7rqg-78g4",
+2025-09-01T09:11:55.5040107Z           "GHSA-rm8p-cx58-hcvx"
+2025-09-01T09:11:55.5040176Z         ]
+2025-09-01T09:11:55.5040249Z       },
+2025-09-01T09:11:55.5040358Z       "packageName": "form-data",
+2025-09-01T09:11:55.5040449Z       "proprietary": false,
+2025-09-01T09:11:55.5040587Z       "creationTime": "2025-07-20T07:10:33.211640Z",
+2025-09-01T09:11:55.5040677Z       "functions_new": [],
+2025-09-01T09:11:55.5040763Z       "alternativeIds": [],
+2025-09-01T09:11:55.5040895Z       "disclosureTime": "2025-07-18T16:43:35Z",
+2025-09-01T09:11:55.5040979Z       "exploitDetails": {
+2025-09-01T09:11:55.5041063Z         "sources": [
+2025-09-01T09:11:55.5041146Z           "PoC in GitHub",
+2025-09-01T09:11:55.5041224Z           "Snyk"
+2025-09-01T09:11:55.5041295Z         ],
+2025-09-01T09:11:55.5041878Z         "maturityLevels": [
+2025-09-01T09:11:55.5041970Z           {
+2025-09-01T09:11:55.5042083Z             "type": "secondary",
+2025-09-01T09:11:55.5042210Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.5042318Z             "format": "CVSSv3"
+2025-09-01T09:11:55.5042391Z           },
+2025-09-01T09:11:55.5042466Z           {
+2025-09-01T09:11:55.5042566Z             "type": "primary",
+2025-09-01T09:11:55.5042683Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.5042780Z             "format": "CVSSv4"
+2025-09-01T09:11:55.5042854Z           }
+2025-09-01T09:11:55.5042925Z         ]
+2025-09-01T09:11:55.5042999Z       },
+2025-09-01T09:11:55.5043107Z       "packageManager": "npm",
+2025-09-01T09:11:55.5043263Z       "publicationTime": "2025-07-20T10:16:27.524069Z",
+2025-09-01T09:11:55.5043370Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.5043522Z       "modificationTime": "2025-07-27T05:20:01.299407Z",
+2025-09-01T09:11:55.5043630Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.5043756Z       "severityWithCritical": "critical",
+2025-09-01T09:11:55.5043838Z       "from": [
+2025-09-01T09:11:55.5043925Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.5044181Z         "@paypal/paypal-server-sdk@1.1.0",
+2025-09-01T09:11:55.5044321Z         "@apimatic/axios-client-adapter@0.3.9",
+2025-09-01T09:11:55.5044400Z         "axios@1.9.0",
+2025-09-01T09:11:55.5044483Z         "form-data@4.0.3"
+2025-09-01T09:11:55.5044556Z       ],
+2025-09-01T09:11:55.5044638Z       "upgradePath": [
+2025-09-01T09:11:55.5044716Z         false,
+2025-09-01T09:11:55.5044836Z         "@paypal/paypal-server-sdk@1.1.0",
+2025-09-01T09:11:55.5044972Z         "@apimatic/axios-client-adapter@0.3.15",
+2025-09-01T09:11:55.5045052Z         "axios@1.11.0",
+2025-09-01T09:11:55.5045142Z         "form-data@4.0.4"
+2025-09-01T09:11:55.5045211Z       ],
+2025-09-01T09:11:55.5045302Z       "isUpgradable": true,
+2025-09-01T09:11:55.5045386Z       "isPatchable": false,
+2025-09-01T09:11:55.5045476Z       "name": "form-data",
+2025-09-01T09:11:55.5045557Z       "version": "4.0.3"
+2025-09-01T09:11:55.5045637Z     },
+2025-09-01T09:11:55.5045705Z     {
+2025-09-01T09:11:55.5045831Z       "id": "SNYK-JS-INFLIGHT-6095116",
+2025-09-01T09:11:55.5046036Z       "title": "Missing Release of Resource after Effective Lifetime",
+2025-09-01T09:11:55.5046227Z       "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+2025-09-01T09:11:55.5046308Z       "credit": [
+2025-09-01T09:11:55.5046388Z         "jkomyno"
+2025-09-01T09:11:55.5046458Z       ],
+2025-09-01T09:11:55.5046538Z       "semver": {
+2025-09-01T09:11:55.5046619Z         "vulnerable": [
+2025-09-01T09:11:55.5046697Z           "*"
+2025-09-01T09:11:55.5046767Z         ]
+2025-09-01T09:11:55.5046840Z       },
+2025-09-01T09:11:55.5046954Z       "exploit": "Proof of Concept",
+2025-09-01T09:11:55.5047038Z       "fixedIn": [],
+2025-09-01T09:11:55.5047120Z       "patches": [],
+2025-09-01T09:11:55.5047201Z       "insights": {
+2025-09-01T09:11:55.5047287Z         "triageAdvice": null
+2025-09-01T09:11:55.5047360Z       },
+2025-09-01T09:11:55.5047581Z       "language": "js",
+2025-09-01T09:11:55.5047668Z       "severity": "medium",
+2025-09-01T09:11:55.5047751Z       "cvssScore": 6.2,
+2025-09-01T09:11:55.5047838Z       "functions": [],
+2025-09-01T09:11:55.5047919Z       "malicious": false,
+2025-09-01T09:11:55.5048008Z       "isDisputed": false,
+2025-09-01T09:11:55.5048111Z       "moduleName": "inflight",
+2025-09-01T09:11:55.5048195Z       "references": [
+2025-09-01T09:11:55.5048265Z         {
+2025-09-01T09:11:55.5048443Z           "url": "https://github.com/isaacs/inflight/issues/5",
+2025-09-01T09:11:55.5048548Z           "title": "GitHub Issue"
+2025-09-01T09:11:55.5048622Z         },
+2025-09-01T09:11:55.5048691Z         {
+2025-09-01T09:11:55.5048869Z           "url": "https://github.com/logdna/logdna-agent/pull/157",
+2025-09-01T09:11:55.5048971Z           "title": "GitHub PR"
+2025-09-01T09:11:55.5049044Z         }
+2025-09-01T09:11:55.5049113Z       ],
+2025-09-01T09:11:55.5049203Z       "cvssDetails": [],
+2025-09-01T09:11:55.5049286Z       "cvssSources": [
+2025-09-01T09:11:55.5049368Z         {
+2025-09-01T09:11:55.5049452Z           "type": "primary",
+2025-09-01T09:11:55.5049646Z           "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+2025-09-01T09:11:55.5049730Z           "assigner": "Snyk",
+2025-09-01T09:11:55.5049836Z           "severity": "medium",
+2025-09-01T09:11:55.5049919Z           "baseScore": 6.2,
+2025-09-01T09:11:55.5050025Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.5050175Z           "modificationTime": "2024-03-13T12:24:01.140165Z"
+2025-09-01T09:11:55.5050249Z         }
+2025-09-01T09:11:55.5050317Z       ],
+2025-09-01T09:11:55.5057220Z       "description": "## Overview\n\nAffected versions of this package are vulnerable to Missing Release of Resource after Effective Lifetime via the `makeres` function due to improperly deleting keys from the `reqs` object after execution of callbacks. This behavior causes the keys to remain in the `reqs` object, which leads to resource exhaustion.\r\n\r\nExploiting this vulnerability results in crashing the `node` process or in the application crash.\r\n\r\n**Note:**\r\nThis library is not maintained, and currently, there is no fix for this issue. To overcome this vulnerability, several dependent packages have eliminated the use of this library.\r\n\r\nTo trigger the memory leak, an attacker would need to have the ability to execute or influence the asynchronous operations that use the inflight module within the application. This typically requires access to the internal workings of the server or application, which is not commonly exposed to remote users. Therefore, “Attack vector” is marked as “Local”.\n## PoC\n```js\r\nconst inflight = require('inflight');\r\n\r\nfunction testInflight() {\r\n  let i = 0;\r\n  function scheduleNext() {\r\n    let key = `key-${i++}`;\r\n    const callback = () => {\r\n    };\r\n    for (let j = 0; j < 1000000; j++) {\r\n      inflight(key, callback);\r\n    }\r\n\r\n    setImmediate(scheduleNext);\r\n  }\r\n\r\n\r\n  if (i % 100 === 0) {\r\n    console.log(process.memoryUsage());\r\n  }\r\n\r\n  scheduleNext();\r\n}\r\n\r\ntestInflight();\r\n```\n## Remediation\nThere is no fixed version for `inflight`.\n## References\n- [GitHub Issue](https://github.com/isaacs/inflight/issues/5)\n- [GitHub PR](https://github.com/logdna/logdna-agent/pull/157)\n",
+2025-09-01T09:11:55.5057346Z       "epssDetails": null,
+2025-09-01T09:11:55.5057437Z       "identifiers": {
+2025-09-01T09:11:55.5057516Z         "CVE": [],
+2025-09-01T09:11:55.5057597Z         "CWE": [
+2025-09-01T09:11:55.5057675Z           "CWE-772"
+2025-09-01T09:11:55.5057751Z         ]
+2025-09-01T09:11:55.5057822Z       },
+2025-09-01T09:11:55.5057940Z       "packageName": "inflight",
+2025-09-01T09:11:55.5058029Z       "proprietary": false,
+2025-09-01T09:11:55.5058176Z       "creationTime": "2023-11-30T12:51:43.483198Z",
+2025-09-01T09:11:55.5058263Z       "functions_new": [],
+2025-09-01T09:11:55.5058356Z       "alternativeIds": [],
+2025-09-01T09:11:55.5058484Z       "disclosureTime": "2023-11-28T12:47:27Z",
+2025-09-01T09:11:55.5058686Z       "exploitDetails": {
+2025-09-01T09:11:55.5058767Z         "sources": [
+2025-09-01T09:11:55.5058846Z           "Snyk"
+2025-09-01T09:11:55.5058921Z         ],
+2025-09-01T09:11:55.5059012Z         "maturityLevels": [
+2025-09-01T09:11:55.5059085Z           {
+2025-09-01T09:11:55.5059197Z             "type": "secondary",
+2025-09-01T09:11:55.5059316Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.5059420Z             "format": "CVSSv3"
+2025-09-01T09:11:55.5059493Z           },
+2025-09-01T09:11:55.5059562Z           {
+2025-09-01T09:11:55.5059665Z             "type": "primary",
+2025-09-01T09:11:55.5059779Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.5059881Z             "format": "CVSSv4"
+2025-09-01T09:11:55.5059950Z           }
+2025-09-01T09:11:55.5060025Z         ]
+2025-09-01T09:11:55.5060094Z       },
+2025-09-01T09:11:55.5060204Z       "packageManager": "npm",
+2025-09-01T09:11:55.5060355Z       "publicationTime": "2023-11-30T12:52:55.469185Z",
+2025-09-01T09:11:55.5060471Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.5060622Z       "modificationTime": "2024-03-13T12:24:01.140165Z",
+2025-09-01T09:11:55.5060737Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.5060859Z       "severityWithCritical": "medium",
+2025-09-01T09:11:55.5060940Z       "from": [
+2025-09-01T09:11:55.5061030Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.5061139Z         "swagger-jsdoc@6.2.8",
+2025-09-01T09:11:55.5061220Z         "glob@7.1.6",
+2025-09-01T09:11:55.5061307Z         "inflight@1.0.6"
+2025-09-01T09:11:55.5061572Z       ],
+2025-09-01T09:11:55.5061670Z       "upgradePath": [],
+2025-09-01T09:11:55.5061760Z       "isUpgradable": false,
+2025-09-01T09:11:55.5061849Z       "isPatchable": false,
+2025-09-01T09:11:55.5061930Z       "name": "inflight",
+2025-09-01T09:11:55.5062014Z       "version": "1.0.6"
+2025-09-01T09:11:55.5062083Z     },
+2025-09-01T09:11:55.5062156Z     {
+2025-09-01T09:11:55.5062274Z       "id": "SNYK-JS-INFLIGHT-6095116",
+2025-09-01T09:11:55.5062485Z       "title": "Missing Release of Resource after Effective Lifetime",
+2025-09-01T09:11:55.5062796Z       "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+2025-09-01T09:11:55.5062885Z       "credit": [
+2025-09-01T09:11:55.5062962Z         "jkomyno"
+2025-09-01T09:11:55.5063036Z       ],
+2025-09-01T09:11:55.5063111Z       "semver": {
+2025-09-01T09:11:55.5063195Z         "vulnerable": [
+2025-09-01T09:11:55.5063269Z           "*"
+2025-09-01T09:11:55.5063343Z         ]
+2025-09-01T09:11:55.5063413Z       },
+2025-09-01T09:11:55.5063533Z       "exploit": "Proof of Concept",
+2025-09-01T09:11:55.5063615Z       "fixedIn": [],
+2025-09-01T09:11:55.5063698Z       "patches": [],
+2025-09-01T09:11:55.5063776Z       "insights": {
+2025-09-01T09:11:55.5063868Z         "triageAdvice": null
+2025-09-01T09:11:55.5063937Z       },
+2025-09-01T09:11:55.5064021Z       "language": "js",
+2025-09-01T09:11:55.5064105Z       "severity": "medium",
+2025-09-01T09:11:55.5064191Z       "cvssScore": 6.2,
+2025-09-01T09:11:55.5064271Z       "functions": [],
+2025-09-01T09:11:55.5064362Z       "malicious": false,
+2025-09-01T09:11:55.5064447Z       "isDisputed": false,
+2025-09-01T09:11:55.5064559Z       "moduleName": "inflight",
+2025-09-01T09:11:55.5064640Z       "references": [
+2025-09-01T09:11:55.5064716Z         {
+2025-09-01T09:11:55.5064892Z           "url": "https://github.com/isaacs/inflight/issues/5",
+2025-09-01T09:11:55.5065004Z           "title": "GitHub Issue"
+2025-09-01T09:11:55.5065076Z         },
+2025-09-01T09:11:55.5065153Z         {
+2025-09-01T09:11:55.5065333Z           "url": "https://github.com/logdna/logdna-agent/pull/157",
+2025-09-01T09:11:55.5065443Z           "title": "GitHub PR"
+2025-09-01T09:11:55.5065513Z         }
+2025-09-01T09:11:55.5065582Z       ],
+2025-09-01T09:11:55.5065668Z       "cvssDetails": [],
+2025-09-01T09:11:55.5065748Z       "cvssSources": [
+2025-09-01T09:11:55.5065823Z         {
+2025-09-01T09:11:55.5065908Z           "type": "primary",
+2025-09-01T09:11:55.5066100Z           "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+2025-09-01T09:11:55.5066304Z           "assigner": "Snyk",
+2025-09-01T09:11:55.5066417Z           "severity": "medium",
+2025-09-01T09:11:55.5066500Z           "baseScore": 6.2,
+2025-09-01T09:11:55.5066608Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.5066763Z           "modificationTime": "2024-03-13T12:24:01.140165Z"
+2025-09-01T09:11:55.5066837Z         }
+2025-09-01T09:11:55.5066907Z       ],
+2025-09-01T09:11:55.5073453Z       "description": "## Overview\n\nAffected versions of this package are vulnerable to Missing Release of Resource after Effective Lifetime via the `makeres` function due to improperly deleting keys from the `reqs` object after execution of callbacks. This behavior causes the keys to remain in the `reqs` object, which leads to resource exhaustion.\r\n\r\nExploiting this vulnerability results in crashing the `node` process or in the application crash.\r\n\r\n**Note:**\r\nThis library is not maintained, and currently, there is no fix for this issue. To overcome this vulnerability, several dependent packages have eliminated the use of this library.\r\n\r\nTo trigger the memory leak, an attacker would need to have the ability to execute or influence the asynchronous operations that use the inflight module within the application. This typically requires access to the internal workings of the server or application, which is not commonly exposed to remote users. Therefore, “Attack vector” is marked as “Local”.\n## PoC\n```js\r\nconst inflight = require('inflight');\r\n\r\nfunction testInflight() {\r\n  let i = 0;\r\n  function scheduleNext() {\r\n    let key = `key-${i++}`;\r\n    const callback = () => {\r\n    };\r\n    for (let j = 0; j < 1000000; j++) {\r\n      inflight(key, callback);\r\n    }\r\n\r\n    setImmediate(scheduleNext);\r\n  }\r\n\r\n\r\n  if (i % 100 === 0) {\r\n    console.log(process.memoryUsage());\r\n  }\r\n\r\n  scheduleNext();\r\n}\r\n\r\ntestInflight();\r\n```\n## Remediation\nThere is no fixed version for `inflight`.\n## References\n- [GitHub Issue](https://github.com/isaacs/inflight/issues/5)\n- [GitHub PR](https://github.com/logdna/logdna-agent/pull/157)\n",
+2025-09-01T09:11:55.5073719Z       "epssDetails": null,
+2025-09-01T09:11:55.5073806Z       "identifiers": {
+2025-09-01T09:11:55.5073888Z         "CVE": [],
+2025-09-01T09:11:55.5073967Z         "CWE": [
+2025-09-01T09:11:55.5074044Z           "CWE-772"
+2025-09-01T09:11:55.5074118Z         ]
+2025-09-01T09:11:55.5074187Z       },
+2025-09-01T09:11:55.5074303Z       "packageName": "inflight",
+2025-09-01T09:11:55.5074391Z       "proprietary": false,
+2025-09-01T09:11:55.5074535Z       "creationTime": "2023-11-30T12:51:43.483198Z",
+2025-09-01T09:11:55.5074621Z       "functions_new": [],
+2025-09-01T09:11:55.5074713Z       "alternativeIds": [],
+2025-09-01T09:11:55.5074840Z       "disclosureTime": "2023-11-28T12:47:27Z",
+2025-09-01T09:11:55.5074931Z       "exploitDetails": {
+2025-09-01T09:11:55.5075008Z         "sources": [
+2025-09-01T09:11:55.5075087Z           "Snyk"
+2025-09-01T09:11:55.5075157Z         ],
+2025-09-01T09:11:55.5075251Z         "maturityLevels": [
+2025-09-01T09:11:55.5075321Z           {
+2025-09-01T09:11:55.5075433Z             "type": "secondary",
+2025-09-01T09:11:55.5075552Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.5075655Z             "format": "CVSSv3"
+2025-09-01T09:11:55.5075728Z           },
+2025-09-01T09:11:55.5075804Z           {
+2025-09-01T09:11:55.5075903Z             "type": "primary",
+2025-09-01T09:11:55.5076021Z             "level": "Proof of Concept",
+2025-09-01T09:11:55.5076118Z             "format": "CVSSv4"
+2025-09-01T09:11:55.5076192Z           }
+2025-09-01T09:11:55.5076262Z         ]
+2025-09-01T09:11:55.5076332Z       },
+2025-09-01T09:11:55.5076442Z       "packageManager": "npm",
+2025-09-01T09:11:55.5076591Z       "publicationTime": "2023-11-30T12:52:55.469185Z",
+2025-09-01T09:11:55.5076702Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.5076850Z       "modificationTime": "2024-03-13T12:24:01.140165Z",
+2025-09-01T09:11:55.5076961Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.5077194Z       "severityWithCritical": "medium",
+2025-09-01T09:11:55.5077272Z       "from": [
+2025-09-01T09:11:55.5077364Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.5077509Z         "@microsoft/eslint-formatter-sarif@3.1.0",
+2025-09-01T09:11:55.5077589Z         "eslint@8.57.1",
+2025-09-01T09:11:55.5077700Z         "file-entry-cache@6.0.1",
+2025-09-01T09:11:55.5077783Z         "flat-cache@3.2.0",
+2025-09-01T09:11:55.5077868Z         "rimraf@3.0.2",
+2025-09-01T09:11:55.5077946Z         "glob@7.1.6",
+2025-09-01T09:11:55.5078028Z         "inflight@1.0.6"
+2025-09-01T09:11:55.5078101Z       ],
+2025-09-01T09:11:55.5078189Z       "upgradePath": [],
+2025-09-01T09:11:55.5078275Z       "isUpgradable": false,
+2025-09-01T09:11:55.5078363Z       "isPatchable": false,
+2025-09-01T09:11:55.5078445Z       "name": "inflight",
+2025-09-01T09:11:55.5078529Z       "version": "1.0.6"
+2025-09-01T09:11:55.5078599Z     },
+2025-09-01T09:11:55.5078672Z     {
+2025-09-01T09:11:55.5078795Z       "id": "SNYK-JS-ONHEADERS-10773729",
+2025-09-01T09:11:55.5078968Z       "title": "Improper Handling of Unexpected Data Type",
+2025-09-01T09:11:55.5079143Z       "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N",
+2025-09-01T09:11:55.5079227Z       "credit": [
+2025-09-01T09:11:55.5079309Z         "Kaung Zin Hein",
+2025-09-01T09:11:55.5079399Z         "Sebastian Podjasek"
+2025-09-01T09:11:55.5079470Z       ],
+2025-09-01T09:11:55.5079550Z       "semver": {
+2025-09-01T09:11:55.5079629Z         "vulnerable": [
+2025-09-01T09:11:55.5079708Z           "<1.1.0"
+2025-09-01T09:11:55.5079777Z         ]
+2025-09-01T09:11:55.5079853Z       },
+2025-09-01T09:11:55.5079958Z       "exploit": "Not Defined",
+2025-09-01T09:11:55.5080038Z       "fixedIn": [
+2025-09-01T09:11:55.5080111Z         "1.1.0"
+2025-09-01T09:11:55.5080184Z       ],
+2025-09-01T09:11:55.5080263Z       "patches": [],
+2025-09-01T09:11:55.5080346Z       "insights": {
+2025-09-01T09:11:55.5080432Z         "triageAdvice": null
+2025-09-01T09:11:55.5080507Z       },
+2025-09-01T09:11:55.5080592Z       "language": "js",
+2025-09-01T09:11:55.5080677Z       "severity": "medium",
+2025-09-01T09:11:55.5080838Z       "cvssScore": 4.6,
+2025-09-01T09:11:55.5080926Z       "functions": [],
+2025-09-01T09:11:55.5081008Z       "malicious": false,
+2025-09-01T09:11:55.5081100Z       "isDisputed": false,
+2025-09-01T09:11:55.5081207Z       "moduleName": "on-headers",
+2025-09-01T09:11:55.5081292Z       "references": [
+2025-09-01T09:11:55.5081515Z         {
+2025-09-01T09:11:55.5081951Z           "url": "https://github.com/jshttp/on-headers/commit/c6e384908c9c6127d18831d16ab0bd96e1231867",
+2025-09-01T09:11:55.5082126Z           "title": "GitHub Commit"
+2025-09-01T09:11:55.5082207Z         },
+2025-09-01T09:11:55.5082278Z         {
+2025-09-01T09:11:55.5082461Z           "url": "https://github.com/expressjs/morgan/issues/315",
+2025-09-01T09:11:55.5082567Z           "title": "GitHub Issue"
+2025-09-01T09:11:55.5082641Z         },
+2025-09-01T09:11:55.5082709Z         {
+2025-09-01T09:11:55.5082886Z           "url": "https://github.com/jshttp/on-headers/issues/15",
+2025-09-01T09:11:55.5082988Z           "title": "GitHub Issue"
+2025-09-01T09:11:55.5083068Z         },
+2025-09-01T09:11:55.5083136Z         {
+2025-09-01T09:11:55.5083331Z           "url": "https://cna.openjsf.org/security-advisories.html",
+2025-09-01T09:11:55.5083447Z           "title": "OpenJS Advisories"
+2025-09-01T09:11:55.5083519Z         }
+2025-09-01T09:11:55.5083588Z       ],
+2025-09-01T09:11:55.5083669Z       "cvssDetails": [
+2025-09-01T09:11:55.5083741Z         {
+2025-09-01T09:11:55.5083841Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.5083928Z           "severity": "low",
+2025-09-01T09:11:55.5084131Z           "cvssV3Vector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N",
+2025-09-01T09:11:55.5084241Z           "cvssV3BaseScore": 3.4,
+2025-09-01T09:11:55.5084389Z           "modificationTime": "2025-07-18T05:27:29.173694Z"
+2025-09-01T09:11:55.5084463Z         }
+2025-09-01T09:11:55.5084532Z       ],
+2025-09-01T09:11:55.5084750Z       "cvssSources": [
+2025-09-01T09:11:55.5084820Z         {
+2025-09-01T09:11:55.5084905Z           "type": "primary",
+2025-09-01T09:11:55.5085214Z           "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:H/UI:N/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
+2025-09-01T09:11:55.5085303Z           "assigner": "Snyk",
+2025-09-01T09:11:55.5085405Z           "severity": "medium",
+2025-09-01T09:11:55.5085490Z           "baseScore": 4.6,
+2025-09-01T09:11:55.5085588Z           "cvssVersion": "4.0",
+2025-09-01T09:11:55.5085737Z           "modificationTime": "2025-07-18T07:24:24.849543Z"
+2025-09-01T09:11:55.5085807Z         },
+2025-09-01T09:11:55.5085878Z         {
+2025-09-01T09:11:55.5085980Z           "type": "secondary",
+2025-09-01T09:11:55.5086155Z           "vector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N",
+2025-09-01T09:11:55.5086240Z           "assigner": "Snyk",
+2025-09-01T09:11:55.5086328Z           "severity": "low",
+2025-09-01T09:11:55.5086410Z           "baseScore": 3.4,
+2025-09-01T09:11:55.5086516Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.5086664Z           "modificationTime": "2025-07-18T07:24:24.849543Z"
+2025-09-01T09:11:55.5086745Z         },
+2025-09-01T09:11:55.5086815Z         {
+2025-09-01T09:11:55.5086921Z           "type": "secondary",
+2025-09-01T09:11:55.5087088Z           "vector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N",
+2025-09-01T09:11:55.5087195Z           "assigner": "Red Hat",
+2025-09-01T09:11:55.5087279Z           "severity": "low",
+2025-09-01T09:11:55.5087365Z           "baseScore": 3.4,
+2025-09-01T09:11:55.5087466Z           "cvssVersion": "3.1",
+2025-09-01T09:11:55.5087613Z           "modificationTime": "2025-07-18T05:27:29.173694Z"
+2025-09-01T09:11:55.5087683Z         }
+2025-09-01T09:11:55.5087758Z       ],
+2025-09-01T09:11:55.5090890Z       "description": "## Overview\n\nAffected versions of this package are vulnerable to Improper Handling of Unexpected Data Type via the `response.writeHead` function. An attacker can manipulate HTTP response headers by passing an array to this function, potentially leading to unintended disclosure or modification of header information.\r\n\r\n## Workaround\r\n\r\nThis vulnerability can be mitigated by passing an object to `response.writeHead()` instead of an array.\n## Remediation\nUpgrade `on-headers` to version 1.1.0 or higher.\n## References\n- [GitHub Commit](https://github.com/jshttp/on-headers/commit/c6e384908c9c6127d18831d16ab0bd96e1231867)\n- [GitHub Issue](https://github.com/expressjs/morgan/issues/315)\n- [GitHub Issue](https://github.com/jshttp/on-headers/issues/15)\n- [OpenJS Advisories](https://cna.openjsf.org/security-advisories.html)\n",
+2025-09-01T09:11:55.5090985Z       "epssDetails": {
+2025-09-01T09:11:55.5091095Z         "percentile": "0.00239",
+2025-09-01T09:11:55.5091198Z         "probability": "0.00006",
+2025-09-01T09:11:55.5091317Z         "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.5091494Z       },
+2025-09-01T09:11:55.5091584Z       "identifiers": {
+2025-09-01T09:11:55.5091661Z         "CVE": [
+2025-09-01T09:11:55.5091753Z           "CVE-2025-7339"
+2025-09-01T09:11:55.5091822Z         ],
+2025-09-01T09:11:55.5091899Z         "CWE": [
+2025-09-01T09:11:55.5091980Z           "CWE-241"
+2025-09-01T09:11:55.5092055Z         ],
+2025-09-01T09:11:55.5092131Z         "GHSA": [
+2025-09-01T09:11:55.5092241Z           "GHSA-76c9-3jph-rj3q"
+2025-09-01T09:11:55.5092311Z         ]
+2025-09-01T09:11:55.5092384Z       },
+2025-09-01T09:11:55.5092497Z       "packageName": "on-headers",
+2025-09-01T09:11:55.5092589Z       "proprietary": false,
+2025-09-01T09:11:55.5092728Z       "creationTime": "2025-07-18T07:00:58.351908Z",
+2025-09-01T09:11:55.5092820Z       "functions_new": [],
+2025-09-01T09:11:55.5092907Z       "alternativeIds": [],
+2025-09-01T09:11:55.5093038Z       "disclosureTime": "2025-07-17T16:41:46Z",
+2025-09-01T09:11:55.5093123Z       "exploitDetails": {
+2025-09-01T09:11:55.5093207Z         "sources": [],
+2025-09-01T09:11:55.5093293Z         "maturityLevels": [
+2025-09-01T09:11:55.5093369Z           {
+2025-09-01T09:11:55.5093473Z             "type": "secondary",
+2025-09-01T09:11:55.5093702Z             "level": "Not Defined",
+2025-09-01T09:11:55.5093806Z             "format": "CVSSv3"
+2025-09-01T09:11:55.5093883Z           },
+2025-09-01T09:11:55.5093954Z           {
+2025-09-01T09:11:55.5094059Z             "type": "primary",
+2025-09-01T09:11:55.5094162Z             "level": "Not Defined",
+2025-09-01T09:11:55.5094266Z             "format": "CVSSv4"
+2025-09-01T09:11:55.5094337Z           }
+2025-09-01T09:11:55.5094411Z         ]
+2025-09-01T09:11:55.5094483Z       },
+2025-09-01T09:11:55.5094593Z       "packageManager": "npm",
+2025-09-01T09:11:55.5094739Z       "publicationTime": "2025-07-18T07:00:58.630331Z",
+2025-09-01T09:11:55.5094850Z       "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.5094998Z       "modificationTime": "2025-07-18T07:24:24.849543Z",
+2025-09-01T09:11:55.5095108Z       "socialTrendAlert": false,
+2025-09-01T09:11:55.5095227Z       "severityWithCritical": "medium",
+2025-09-01T09:11:55.5095304Z       "from": [
+2025-09-01T09:11:55.5095397Z         "rest-express@1.0.0",
+2025-09-01T09:11:55.5095507Z         "express-session@1.18.1",
+2025-09-01T09:11:55.5095594Z         "on-headers@1.0.2"
+2025-09-01T09:11:55.5095670Z       ],
+2025-09-01T09:11:55.5095751Z       "upgradePath": [
+2025-09-01T09:11:55.5095832Z         false,
+2025-09-01T09:11:55.5095937Z         "express-session@1.18.2",
+2025-09-01T09:11:55.5096027Z         "on-headers@1.1.0"
+2025-09-01T09:11:55.5096096Z       ],
+2025-09-01T09:11:55.5096182Z       "isUpgradable": true,
+2025-09-01T09:11:55.5096275Z       "isPatchable": false,
+2025-09-01T09:11:55.5096356Z       "name": "on-headers",
+2025-09-01T09:11:55.5096440Z       "version": "1.0.2"
+2025-09-01T09:11:55.5096509Z     }
+2025-09-01T09:11:55.5096586Z   ],
+2025-09-01T09:11:55.5096663Z   "ok": false,
+2025-09-01T09:11:55.5096754Z   "dependencyCount": 650,
+2025-09-01T09:11:55.5096836Z   "org": "khajdari",
+2025-09-01T09:11:55.5097943Z   "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\nignore: {}\npatch: {}\nlanguage-settings:\n  javascript: true\n  typescript: true\nfailureThreshold: low\nexclude:\n  global:\n    - '**/node_modules/**'\n    - '**/dist/**'\n    - '**/build/**'\n",
+2025-09-01T09:11:55.5098040Z   "isPrivate": true,
+2025-09-01T09:11:55.5098125Z   "licensesPolicy": {
+2025-09-01T09:11:55.5098213Z     "severities": {},
+2025-09-01T09:11:55.5098298Z     "orgLicenseRules": {
+2025-09-01T09:11:55.5098386Z       "AGPL-1.0": {
+2025-09-01T09:11:55.5098500Z         "licenseType": "AGPL-1.0",
+2025-09-01T09:11:55.5098586Z         "severity": "high",
+2025-09-01T09:11:55.5098669Z         "instructions": ""
+2025-09-01T09:11:55.5098743Z       },
+2025-09-01T09:11:55.5098820Z       "AGPL-3.0": {
+2025-09-01T09:11:55.5098927Z         "licenseType": "AGPL-3.0",
+2025-09-01T09:11:55.5099013Z         "severity": "high",
+2025-09-01T09:11:55.5099096Z         "instructions": ""
+2025-09-01T09:11:55.5099168Z       },
+2025-09-01T09:11:55.5099251Z       "Artistic-1.0": {
+2025-09-01T09:11:55.5099379Z         "licenseType": "Artistic-1.0",
+2025-09-01T09:11:55.5099463Z         "severity": "medium",
+2025-09-01T09:11:55.5099558Z         "instructions": ""
+2025-09-01T09:11:55.5099626Z       },
+2025-09-01T09:11:55.5099711Z       "Artistic-2.0": {
+2025-09-01T09:11:55.5099825Z         "licenseType": "Artistic-2.0",
+2025-09-01T09:11:55.5099913Z         "severity": "medium",
+2025-09-01T09:11:55.5099996Z         "instructions": ""
+2025-09-01T09:11:55.5100071Z       },
+2025-09-01T09:11:55.5100147Z       "CDDL-1.0": {
+2025-09-01T09:11:55.5100263Z         "licenseType": "CDDL-1.0",
+2025-09-01T09:11:55.5100348Z         "severity": "medium",
+2025-09-01T09:11:55.5100438Z         "instructions": ""
+2025-09-01T09:11:55.5100507Z       },
+2025-09-01T09:11:55.5100591Z       "CPOL-1.02": {
+2025-09-01T09:11:55.5100704Z         "licenseType": "CPOL-1.02",
+2025-09-01T09:11:55.5100792Z         "severity": "high",
+2025-09-01T09:11:55.5100876Z         "instructions": ""
+2025-09-01T09:11:55.5100951Z       },
+2025-09-01T09:11:55.5101112Z       "EPL-1.0": {
+2025-09-01T09:11:55.5101224Z         "licenseType": "EPL-1.0",
+2025-09-01T09:11:55.5101313Z         "severity": "medium",
+2025-09-01T09:11:55.5101574Z         "instructions": ""
+2025-09-01T09:11:55.5101649Z       },
+2025-09-01T09:11:55.5101731Z       "GPL-2.0": {
+2025-09-01T09:11:55.5101838Z         "licenseType": "GPL-2.0",
+2025-09-01T09:11:55.5101924Z         "severity": "high",
+2025-09-01T09:11:55.5102006Z         "instructions": ""
+2025-09-01T09:11:55.5102080Z       },
+2025-09-01T09:11:55.5102155Z       "GPL-3.0": {
+2025-09-01T09:11:55.5102266Z         "licenseType": "GPL-3.0",
+2025-09-01T09:11:55.5102347Z         "severity": "high",
+2025-09-01T09:11:55.5102436Z         "instructions": ""
+2025-09-01T09:11:55.5102505Z       },
+2025-09-01T09:11:55.5102591Z       "LGPL-2.0": {
+2025-09-01T09:11:55.5102698Z         "licenseType": "LGPL-2.0",
+2025-09-01T09:11:55.5102787Z         "severity": "medium",
+2025-09-01T09:11:55.5102871Z         "instructions": ""
+2025-09-01T09:11:55.5102945Z       },
+2025-09-01T09:11:55.5103029Z       "LGPL-2.1": {
+2025-09-01T09:11:55.5103141Z         "licenseType": "LGPL-2.1",
+2025-09-01T09:11:55.5103228Z         "severity": "medium",
+2025-09-01T09:11:55.5103316Z         "instructions": ""
+2025-09-01T09:11:55.5103385Z       },
+2025-09-01T09:11:55.5103469Z       "LGPL-3.0": {
+2025-09-01T09:11:55.5103574Z         "licenseType": "LGPL-3.0",
+2025-09-01T09:11:55.5103660Z         "severity": "medium",
+2025-09-01T09:11:55.5103749Z         "instructions": ""
+2025-09-01T09:11:55.5103818Z       },
+2025-09-01T09:11:55.5103899Z       "MPL-1.1": {
+2025-09-01T09:11:55.5104002Z         "licenseType": "MPL-1.1",
+2025-09-01T09:11:55.5104091Z         "severity": "medium",
+2025-09-01T09:11:55.5104173Z         "instructions": ""
+2025-09-01T09:11:55.5104248Z       },
+2025-09-01T09:11:55.5104324Z       "MPL-2.0": {
+2025-09-01T09:11:55.5104434Z         "licenseType": "MPL-2.0",
+2025-09-01T09:11:55.5104518Z         "severity": "medium",
+2025-09-01T09:11:55.5104605Z         "instructions": ""
+2025-09-01T09:11:55.5104677Z       },
+2025-09-01T09:11:55.5104755Z       "MS-RL": {
+2025-09-01T09:11:55.5104984Z         "licenseType": "MS-RL",
+2025-09-01T09:11:55.5105075Z         "severity": "medium",
+2025-09-01T09:11:55.5105158Z         "instructions": ""
+2025-09-01T09:11:55.5105231Z       },
+2025-09-01T09:11:55.5105309Z       "SimPL-2.0": {
+2025-09-01T09:11:55.5105423Z         "licenseType": "SimPL-2.0",
+2025-09-01T09:11:55.5105505Z         "severity": "high",
+2025-09-01T09:11:55.5105589Z         "instructions": ""
+2025-09-01T09:11:55.5105660Z       }
+2025-09-01T09:11:55.5105733Z     }
+2025-09-01T09:11:55.5105802Z   },
+2025-09-01T09:11:55.5105899Z   "packageManager": "npm",
+2025-09-01T09:11:55.5106059Z   "projectId": "17ec7611-2b3f-4161-9c62-00a3faf2a0a2",
+2025-09-01T09:11:55.5106148Z   "ignoreSettings": {
+2025-09-01T09:11:55.5106232Z     "adminOnly": false,
+2025-09-01T09:11:55.5106324Z     "reasonRequired": false,
+2025-09-01T09:11:55.5106451Z     "disregardFilesystemIgnores": false
+2025-09-01T09:11:55.5106529Z   },
+2025-09-01T09:11:55.5106701Z   "summary": "10 vulnerable dependency paths",
+2025-09-01T09:11:55.5106786Z   "remediation": {
+2025-09-01T09:11:55.5106871Z     "unresolved": [
+2025-09-01T09:11:55.5106948Z       {
+2025-09-01T09:11:55.5107084Z         "id": "SNYK-JS-BRACEEXPANSION-9789073",
+2025-09-01T09:11:55.5107264Z         "title": "Regular Expression Denial of Service (ReDoS)",
+2025-09-01T09:11:55.5107449Z         "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.5107530Z         "credit": [
+2025-09-01T09:11:55.5107615Z           "mmmsssttt404"
+2025-09-01T09:11:55.5107692Z         ],
+2025-09-01T09:11:55.5107767Z         "semver": {
+2025-09-01T09:11:55.5107853Z           "vulnerable": [
+2025-09-01T09:11:55.5107949Z             ">=1.0.0 <1.1.12",
+2025-09-01T09:11:55.5108031Z             ">=2.0.0 <2.0.2",
+2025-09-01T09:11:55.5108108Z             ">=3.0.0 <3.0.1",
+2025-09-01T09:11:55.5108188Z             ">=4.0.0 <4.0.1"
+2025-09-01T09:11:55.5108260Z           ]
+2025-09-01T09:11:55.5108449Z         },
+2025-09-01T09:11:55.5108569Z         "exploit": "Proof of Concept",
+2025-09-01T09:11:55.5108655Z         "fixedIn": [
+2025-09-01T09:11:55.5108730Z           "1.1.12",
+2025-09-01T09:11:55.5108808Z           "2.0.2",
+2025-09-01T09:11:55.5108882Z           "3.0.1",
+2025-09-01T09:11:55.5108960Z           "4.0.1"
+2025-09-01T09:11:55.5109029Z         ],
+2025-09-01T09:11:55.5109112Z         "patches": [],
+2025-09-01T09:11:55.5109196Z         "insights": {
+2025-09-01T09:11:55.5109298Z           "triageAdvice": null
+2025-09-01T09:11:55.5109373Z         },
+2025-09-01T09:11:55.5109454Z         "language": "js",
+2025-09-01T09:11:55.5109542Z         "severity": "low",
+2025-09-01T09:11:55.5109623Z         "cvssScore": 2.3,
+2025-09-01T09:11:55.5109714Z         "functions": [],
+2025-09-01T09:11:55.5109798Z         "malicious": false,
+2025-09-01T09:11:55.5109892Z         "isDisputed": false,
+2025-09-01T09:11:55.5110013Z         "moduleName": "brace-expansion",
+2025-09-01T09:11:55.5110105Z         "references": [
+2025-09-01T09:11:55.5110176Z           {
+2025-09-01T09:11:55.5110379Z             "url": "https://github.com/advisories/GHSA-v6h2-p8h4-qcjw",
+2025-09-01T09:11:55.5110493Z             "title": "GitHub Advisory"
+2025-09-01T09:11:55.5110574Z           },
+2025-09-01T09:11:55.5110644Z           {
+2025-09-01T09:11:55.5111015Z             "url": "https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2",
+2025-09-01T09:11:55.5111126Z             "title": "GitHub Commit"
+2025-09-01T09:11:55.5111204Z           },
+2025-09-01T09:11:55.5111273Z           {
+2025-09-01T09:11:55.5111636Z             "url": "https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466",
+2025-09-01T09:11:55.5111742Z             "title": "GitHub Gist"
+2025-09-01T09:11:55.5111824Z           },
+2025-09-01T09:11:55.5111901Z           {
+2025-09-01T09:11:55.5112112Z             "url": "https://github.com/juliangruber/brace-expansion/pull/65",
+2025-09-01T09:11:55.5112223Z             "title": "GitHub PR"
+2025-09-01T09:11:55.5112300Z           }
+2025-09-01T09:11:55.5112375Z         ],
+2025-09-01T09:11:55.5112570Z         "cvssDetails": [
+2025-09-01T09:11:55.5112650Z           {
+2025-09-01T09:11:55.5112751Z             "assigner": "NVD",
+2025-09-01T09:11:55.5112854Z             "severity": "low",
+2025-09-01T09:11:55.5113058Z             "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.5113174Z             "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.5113330Z             "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.5113405Z           },
+2025-09-01T09:11:55.5113474Z           {
+2025-09-01T09:11:55.5113581Z             "assigner": "Red Hat",
+2025-09-01T09:11:55.5113681Z             "severity": "low",
+2025-09-01T09:11:55.5113880Z             "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.5113988Z             "cvssV3BaseScore": 3.1,
+2025-09-01T09:11:55.5114140Z             "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.5114214Z           }
+2025-09-01T09:11:55.5114288Z         ],
+2025-09-01T09:11:55.5114374Z         "cvssSources": [
+2025-09-01T09:11:55.5114446Z           {
+2025-09-01T09:11:55.5114545Z             "type": "primary",
+2025-09-01T09:11:55.5114781Z             "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:P",
+2025-09-01T09:11:55.5114882Z             "assigner": "Snyk",
+2025-09-01T09:11:55.5114985Z             "severity": "low",
+2025-09-01T09:11:55.5115069Z             "baseScore": 2.3,
+2025-09-01T09:11:55.5115183Z             "cvssVersion": "4.0",
+2025-09-01T09:11:55.5115334Z             "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.5115410Z           },
+2025-09-01T09:11:55.5115480Z           {
+2025-09-01T09:11:55.5115585Z             "type": "secondary",
+2025-09-01T09:11:55.5115766Z             "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L/E:P",
+2025-09-01T09:11:55.5115871Z             "assigner": "Snyk",
+2025-09-01T09:11:55.5116083Z             "severity": "low",
+2025-09-01T09:11:55.5116171Z             "baseScore": 3.1,
+2025-09-01T09:11:55.5116279Z             "cvssVersion": "3.1",
+2025-09-01T09:11:55.5116429Z             "modificationTime": "2025-06-16T08:51:48.041497Z"
+2025-09-01T09:11:55.5116502Z           },
+2025-09-01T09:11:55.5116576Z           {
+2025-09-01T09:11:55.5116678Z             "type": "secondary",
+2025-09-01T09:11:55.5116854Z             "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.5116953Z             "assigner": "NVD",
+2025-09-01T09:11:55.5117054Z             "severity": "low",
+2025-09-01T09:11:55.5117135Z             "baseScore": 3.1,
+2025-09-01T09:11:55.5117240Z             "cvssVersion": "3.1",
+2025-09-01T09:11:55.5117385Z             "modificationTime": "2025-06-10T01:13:43.537639Z"
+2025-09-01T09:11:55.5117460Z           },
+2025-09-01T09:11:55.5117529Z           {
+2025-09-01T09:11:55.5117635Z             "type": "secondary",
+2025-09-01T09:11:55.5117807Z             "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+2025-09-01T09:11:55.5117916Z             "assigner": "Red Hat",
+2025-09-01T09:11:55.5118017Z             "severity": "low",
+2025-09-01T09:11:55.5118105Z             "baseScore": 3.1,
+2025-09-01T09:11:55.5118207Z             "cvssVersion": "3.1",
+2025-09-01T09:11:55.5118359Z             "modificationTime": "2025-06-19T05:30:43.149011Z"
+2025-09-01T09:11:55.5118429Z           }
+2025-09-01T09:11:55.5118502Z         ],
+2025-09-01T09:11:55.5137437Z         "description": "## Overview\n[brace-expansion](https://github.com/juliangruber/brace-expansion) is a Brace expansion as known from sh/bash\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) in the `expand()` function, which is prone to catastrophic backtracking on very long malicious inputs.\n## PoC\n```js\r\nimport index from \"./index.js\";\r\n\r\nlet str = \"{a}\" + \",\".repeat(100000) + \"\\u0000\";\r\n\r\nlet startTime = performance.now();\r\n\r\nconst result = index(str);\r\n\r\nlet endTime = performance.now();\r\n\r\nlet timeTaken = endTime - startTime;\r\n\r\nconsole.log(`匹配耗时: ${timeTaken.toFixed(3)} 毫秒`);\r\n```\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `brace-expansion` to version 1.1.12, 2.0.2, 3.0.1, 4.0.1 or higher.\n## References\n- [GitHub Advisory](https://github.com/advisories/GHSA-v6h2-p8h4-qcjw)\n- [GitHub Commit](https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2)\n- [GitHub Gist](https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466)\n- [GitHub PR](https://github.com/juliangruber/brace-expansion/pull/65)\n",
+2025-09-01T09:11:55.5137674Z         "epssDetails": {
+2025-09-01T09:11:55.5137783Z           "percentile": "0.04029",
+2025-09-01T09:11:55.5137894Z           "probability": "0.00022",
+2025-09-01T09:11:55.5138010Z           "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.5138086Z         },
+2025-09-01T09:11:55.5138169Z         "identifiers": {
+2025-09-01T09:11:55.5138251Z           "CVE": [
+2025-09-01T09:11:55.5138336Z             "CVE-2025-5889"
+2025-09-01T09:11:55.5138416Z           ],
+2025-09-01T09:11:55.5138491Z           "CWE": [
+2025-09-01T09:11:55.5138574Z             "CWE-1333"
+2025-09-01T09:11:55.5138645Z           ],
+2025-09-01T09:11:55.5138723Z           "GHSA": [
+2025-09-01T09:11:55.5138837Z             "GHSA-v6h2-p8h4-qcjw"
+2025-09-01T09:11:55.5138911Z           ]
+2025-09-01T09:11:55.5138980Z         },
+2025-09-01T09:11:55.5139211Z         "packageName": "brace-expansion",
+2025-09-01T09:11:55.5139306Z         "proprietary": false,
+2025-09-01T09:11:55.5139511Z         "creationTime": "2025-04-22T10:41:28.859488Z",
+2025-09-01T09:11:55.5139662Z         "functions_new": [],
+2025-09-01T09:11:55.5139820Z         "alternativeIds": [],
+2025-09-01T09:11:55.5140312Z         "disclosureTime": "2025-04-22T09:04:33Z",
+2025-09-01T09:11:55.5140759Z         "exploitDetails": {
+2025-09-01T09:11:55.5141147Z           "sources": [
+2025-09-01T09:11:55.5141632Z             "Snyk"
+2025-09-01T09:11:55.5141925Z           ],
+2025-09-01T09:11:55.5142237Z           "maturityLevels": [
+2025-09-01T09:11:55.5142650Z             {
+2025-09-01T09:11:55.5143041Z               "type": "secondary",
+2025-09-01T09:11:55.5143542Z               "level": "Proof of Concept",
+2025-09-01T09:11:55.5144063Z               "format": "CVSSv3"
+2025-09-01T09:11:55.5144769Z             },
+2025-09-01T09:11:55.5145104Z             {
+2025-09-01T09:11:55.5145505Z               "type": "primary",
+2025-09-01T09:11:55.5146000Z               "level": "Proof of Concept",
+2025-09-01T09:11:55.5146509Z               "format": "CVSSv4"
+2025-09-01T09:11:55.5146907Z             }
+2025-09-01T09:11:55.5147213Z           ]
+2025-09-01T09:11:55.5147511Z         },
+2025-09-01T09:11:55.5147902Z         "packageManager": "npm",
+2025-09-01T09:11:55.5148485Z         "publicationTime": "2025-06-12T06:58:37.742572Z",
+2025-09-01T09:11:55.5149036Z         "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.5149586Z         "modificationTime": "2025-06-19T05:30:43.149011Z",
+2025-09-01T09:11:55.5149987Z         "socialTrendAlert": false,
+2025-09-01T09:11:55.5150268Z         "packagePopularityRank": 99,
+2025-09-01T09:11:55.5150519Z         "from": [
+2025-09-01T09:11:55.5150740Z           "rest-express@1.0.0",
+2025-09-01T09:11:55.5151037Z           "@microsoft/eslint-formatter-sarif@3.1.0",
+2025-09-01T09:11:55.5151497Z           "eslint@8.57.1",
+2025-09-01T09:11:55.5151775Z           "@eslint/eslintrc@2.1.4",
+2025-09-01T09:11:55.5152027Z           "minimatch@3.1.2",
+2025-09-01T09:11:55.5152280Z           "brace-expansion@1.1.11"
+2025-09-01T09:11:55.5152516Z         ],
+2025-09-01T09:11:55.5152707Z         "upgradePath": [],
+2025-09-01T09:11:55.5152950Z         "isUpgradable": false,
+2025-09-01T09:11:55.5153184Z         "isPatchable": false,
+2025-09-01T09:11:55.5153410Z         "isPinnable": false,
+2025-09-01T09:11:55.5153637Z         "isRuntime": false,
+2025-09-01T09:11:55.5153888Z         "name": "brace-expansion",
+2025-09-01T09:11:55.5154136Z         "version": "1.1.11",
+2025-09-01T09:11:55.5154396Z         "severityWithCritical": "low"
+2025-09-01T09:11:55.5154645Z       },
+2025-09-01T09:11:55.5154816Z       {
+2025-09-01T09:11:55.5155034Z         "id": "SNYK-JS-FORMDATA-10841150",
+2025-09-01T09:11:55.5155392Z         "title": "Predictable Value Range from Previous Values",
+2025-09-01T09:11:55.5155810Z         "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N/E:P",
+2025-09-01T09:11:55.5156266Z         "credit": [
+2025-09-01T09:11:55.5156477Z           "Ben Shonaldmann"
+2025-09-01T09:11:55.5156692Z         ],
+2025-09-01T09:11:55.5156864Z         "semver": {
+2025-09-01T09:11:55.5157061Z           "vulnerable": [
+2025-09-01T09:11:55.5157274Z             "<2.5.4",
+2025-09-01T09:11:55.5157470Z             ">=3.0.0 <3.0.4",
+2025-09-01T09:11:55.5157679Z             ">=4.0.0 <4.0.4"
+2025-09-01T09:11:55.5157877Z           ]
+2025-09-01T09:11:55.5158047Z         },
+2025-09-01T09:11:55.5158259Z         "exploit": "Proof of Concept",
+2025-09-01T09:11:55.5158509Z         "fixedIn": [
+2025-09-01T09:11:55.5158702Z           "2.5.4",
+2025-09-01T09:11:55.5158883Z           "3.0.4",
+2025-09-01T09:11:55.5159062Z           "4.0.4"
+2025-09-01T09:11:55.5159237Z         ],
+2025-09-01T09:11:55.5159409Z         "patches": [],
+2025-09-01T09:11:55.5159613Z         "insights": {
+2025-09-01T09:11:55.5159845Z           "triageAdvice": null
+2025-09-01T09:11:55.5160087Z         },
+2025-09-01T09:11:55.5160268Z         "language": "js",
+2025-09-01T09:11:55.5160512Z         "severity": "critical",
+2025-09-01T09:11:55.5160745Z         "cvssScore": 9.4,
+2025-09-01T09:11:55.5160957Z         "functions": [],
+2025-09-01T09:11:55.5161169Z         "malicious": false,
+2025-09-01T09:11:55.5161570Z         "isDisputed": false,
+2025-09-01T09:11:55.5161831Z         "moduleName": "form-data",
+2025-09-01T09:11:55.5162072Z         "references": [
+2025-09-01T09:11:55.5162267Z           {
+2025-09-01T09:11:55.5162692Z             "url": "https://github.com/form-data/form-data/commit/3d1723080e6577a66f17f163ecd345a21d8d0fd0",
+2025-09-01T09:11:55.5163146Z             "title": "GitHub Commit"
+2025-09-01T09:11:55.5163731Z           },
+2025-09-01T09:11:55.5163921Z           {
+2025-09-01T09:11:55.5164338Z             "url": "https://github.com/form-data/form-data/commit/b88316c94bb004323669cd3639dc8bb8262539eb",
+2025-09-01T09:11:55.5164951Z             "title": "GitHub Commit"
+2025-09-01T09:11:55.5165196Z           },
+2025-09-01T09:11:55.5165371Z           {
+2025-09-01T09:11:55.5165801Z             "url": "https://github.com/form-data/form-data/commit/c6ced61d4fae8f617ee2fd692133ed87baa5d0fd",
+2025-09-01T09:11:55.5166689Z             "title": "GitHub Commit"
+2025-09-01T09:11:55.5166930Z           },
+2025-09-01T09:11:55.5167101Z           {
+2025-09-01T09:11:55.5167384Z             "url": "https://github.com/benweissmann/CVE-2025-7783-poc",
+2025-09-01T09:11:55.5167702Z             "title": "POC"
+2025-09-01T09:11:55.5167907Z           },
+2025-09-01T09:11:55.5168076Z           {
+2025-09-01T09:11:55.5168587Z             "url": "https://github.com/form-data/form-data/blob/426ba9ac440f95d1998dac9a5cd8d738043b048f/lib/form_data.js%23L347",
+2025-09-01T09:11:55.5169134Z             "title": "Vulnerable Code"
+2025-09-01T09:11:55.5169371Z           }
+2025-09-01T09:11:55.5169539Z         ],
+2025-09-01T09:11:55.5169721Z         "cvssDetails": [
+2025-09-01T09:11:55.5169934Z           {
+2025-09-01T09:11:55.5170134Z             "assigner": "Red Hat",
+2025-09-01T09:11:55.5170399Z             "severity": "medium",
+2025-09-01T09:11:55.5170767Z             "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:N",
+2025-09-01T09:11:55.5171128Z             "cvssV3BaseScore": 5.4,
+2025-09-01T09:11:55.5171561Z             "modificationTime": "2025-07-19T15:04:32.791635Z"
+2025-09-01T09:11:55.5171836Z           }
+2025-09-01T09:11:55.5172005Z         ],
+2025-09-01T09:11:55.5172190Z         "cvssSources": [
+2025-09-01T09:11:55.5172388Z           {
+2025-09-01T09:11:55.5172582Z             "type": "primary",
+2025-09-01T09:11:55.5172961Z             "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N/E:P",
+2025-09-01T09:11:55.5173336Z             "assigner": "Snyk",
+2025-09-01T09:11:55.5173590Z             "severity": "critical",
+2025-09-01T09:11:55.5173831Z             "baseScore": 9.4,
+2025-09-01T09:11:55.5174076Z             "cvssVersion": "4.0",
+2025-09-01T09:11:55.5174382Z             "modificationTime": "2025-07-24T06:39:27.679970Z"
+2025-09-01T09:11:55.5174656Z           },
+2025-09-01T09:11:55.5174952Z           {
+2025-09-01T09:11:55.5175159Z             "type": "secondary",
+2025-09-01T09:11:55.5175490Z             "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N/E:P",
+2025-09-01T09:11:55.5175826Z             "assigner": "Snyk",
+2025-09-01T09:11:55.5176068Z             "severity": "high",
+2025-09-01T09:11:55.5176295Z             "baseScore": 8.7,
+2025-09-01T09:11:55.5176540Z             "cvssVersion": "3.1",
+2025-09-01T09:11:55.5176846Z             "modificationTime": "2025-07-24T06:39:27.679970Z"
+2025-09-01T09:11:55.5185624Z           },
+2025-09-01T09:11:55.5185824Z           {
+2025-09-01T09:11:55.5186043Z             "type": "secondary",
+2025-09-01T09:11:55.5186653Z             "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:N",
+2025-09-01T09:11:55.5187115Z             "assigner": "Red Hat",
+2025-09-01T09:11:55.5187383Z             "severity": "medium",
+2025-09-01T09:11:55.5187632Z             "baseScore": 5.4,
+2025-09-01T09:11:55.5187889Z             "cvssVersion": "3.1",
+2025-09-01T09:11:55.5188190Z             "modificationTime": "2025-07-19T15:04:32.791635Z"
+2025-09-01T09:11:55.5188461Z           }
+2025-09-01T09:11:55.5188630Z         ],
+2025-09-01T09:11:55.5192184Z         "description": "## Overview\n\nAffected versions of this package are vulnerable to Predictable Value Range from Previous Values via the `boundary` value, which uses `Math.random()`. An attacker can manipulate HTTP request boundaries by exploiting predictable values, potentially leading to HTTP parameter pollution.\n## Remediation\nUpgrade `form-data` to version 2.5.4, 3.0.4, 4.0.4 or higher.\n## References\n- [GitHub Commit](https://github.com/form-data/form-data/commit/3d1723080e6577a66f17f163ecd345a21d8d0fd0)\n- [GitHub Commit](https://github.com/form-data/form-data/commit/b88316c94bb004323669cd3639dc8bb8262539eb)\n- [GitHub Commit](https://github.com/form-data/form-data/commit/c6ced61d4fae8f617ee2fd692133ed87baa5d0fd)\n- [POC](https://github.com/benweissmann/CVE-2025-7783-poc)\n- [Vulnerable Code](https://github.com/form-data/form-data/blob/426ba9ac440f95d1998dac9a5cd8d738043b048f/lib/form_data.js#L347)\n",
+2025-09-01T09:11:55.5195371Z         "epssDetails": {
+2025-09-01T09:11:55.5195625Z           "percentile": "0.04706",
+2025-09-01T09:11:55.5195904Z           "probability": "0.00024",
+2025-09-01T09:11:55.5196174Z           "modelVersion": "v2025.03.14"
+2025-09-01T09:11:55.5196414Z         },
+2025-09-01T09:11:55.5196587Z         "identifiers": {
+2025-09-01T09:11:55.5196795Z           "CVE": [
+2025-09-01T09:11:55.5196989Z             "CVE-2025-7783"
+2025-09-01T09:11:55.5197195Z           ],
+2025-09-01T09:11:55.5197369Z           "CWE": [
+2025-09-01T09:11:55.5197554Z             "CWE-343"
+2025-09-01T09:11:55.5197741Z           ],
+2025-09-01T09:11:55.5197913Z           "GHSA": [
+2025-09-01T09:11:55.5198129Z             "GHSA-fjxv-7rqg-78g4",
+2025-09-01T09:11:55.5198404Z             "GHSA-rm8p-cx58-hcvx"
+2025-09-01T09:11:55.5198636Z           ]
+2025-09-01T09:11:55.5198805Z         },
+2025-09-01T09:11:55.5199021Z         "packageName": "form-data",
+2025-09-01T09:11:55.5199272Z         "proprietary": false,
+2025-09-01T09:11:55.5199558Z         "creationTime": "2025-07-20T07:10:33.211640Z",
+2025-09-01T09:11:55.5199835Z         "functions_new": [],
+2025-09-01T09:11:55.5200063Z         "alternativeIds": [],
+2025-09-01T09:11:55.5200330Z         "disclosureTime": "2025-07-18T16:43:35Z",
+2025-09-01T09:11:55.5200594Z         "exploitDetails": {
+2025-09-01T09:11:55.5200808Z           "sources": [
+2025-09-01T09:11:55.5201011Z             "PoC in GitHub",
+2025-09-01T09:11:55.5201220Z             "Snyk"
+2025-09-01T09:11:55.5201594Z           ],
+2025-09-01T09:11:55.5201792Z           "maturityLevels": [
+2025-09-01T09:11:55.5202008Z             {
+2025-09-01T09:11:55.5202212Z               "type": "secondary",
+2025-09-01T09:11:55.5202482Z               "level": "Proof of Concept",
+2025-09-01T09:11:55.5202762Z               "format": "CVSSv3"
+2025-09-01T09:11:55.5202980Z             },
+2025-09-01T09:11:55.5203280Z             {
+2025-09-01T09:11:55.5203491Z               "type": "primary",
+2025-09-01T09:11:55.5203751Z               "level": "Proof of Concept",
+2025-09-01T09:11:55.5204015Z               "format": "CVSSv4"
+2025-09-01T09:11:55.5204229Z             }
+2025-09-01T09:11:55.5204397Z           ]
+2025-09-01T09:11:55.5204564Z         },
+2025-09-01T09:11:55.5204765Z         "packageManager": "npm",
+2025-09-01T09:11:55.5205060Z         "publicationTime": "2025-07-20T10:16:27.524069Z",
+2025-09-01T09:11:55.5205373Z         "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.5205687Z         "modificationTime": "2025-07-27T05:20:01.299407Z",
+2025-09-01T09:11:55.5205996Z         "socialTrendAlert": false,
+2025-09-01T09:11:55.5206266Z         "packagePopularityRank": 99,
+2025-09-01T09:11:55.5206514Z         "from": [
+2025-09-01T09:11:55.5206759Z           "rest-express@1.0.0",
+2025-09-01T09:11:55.5207038Z           "@paypal/paypal-server-sdk@1.1.0",
+2025-09-01T09:11:55.5207347Z           "@apimatic/axios-client-adapter@0.3.9",
+2025-09-01T09:11:55.5207618Z           "axios@1.9.0",
+2025-09-01T09:11:55.5207831Z           "form-data@4.0.3"
+2025-09-01T09:11:55.5208035Z         ],
+2025-09-01T09:11:55.5208214Z         "upgradePath": [
+2025-09-01T09:11:55.5208415Z           false,
+2025-09-01T09:11:55.5208644Z           "@paypal/paypal-server-sdk@1.1.0",
+2025-09-01T09:11:55.5208954Z           "@apimatic/axios-client-adapter@0.3.15",
+2025-09-01T09:11:55.5209224Z           "axios@1.11.0",
+2025-09-01T09:11:55.5209430Z           "form-data@4.0.4"
+2025-09-01T09:11:55.5209633Z         ],
+2025-09-01T09:11:55.5209815Z         "isUpgradable": true,
+2025-09-01T09:11:55.5210045Z         "isPatchable": false,
+2025-09-01T09:11:55.5210269Z         "isPinnable": false,
+2025-09-01T09:11:55.5210487Z         "isRuntime": false,
+2025-09-01T09:11:55.5210702Z         "name": "form-data",
+2025-09-01T09:11:55.5210917Z         "version": "4.0.3",
+2025-09-01T09:11:55.5211291Z         "severityWithCritical": "critical"
+2025-09-01T09:11:55.5211640Z       },
+2025-09-01T09:11:55.5211806Z       {
+2025-09-01T09:11:55.5212016Z         "id": "SNYK-JS-INFLIGHT-6095116",
+2025-09-01T09:11:55.5212388Z         "title": "Missing Release of Resource after Effective Lifetime",
+2025-09-01T09:11:55.5212813Z         "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+2025-09-01T09:11:55.5213112Z         "credit": [
+2025-09-01T09:11:55.5213294Z           "jkomyno"
+2025-09-01T09:11:55.5213472Z         ],
+2025-09-01T09:11:55.5213636Z         "semver": {
+2025-09-01T09:11:55.5213826Z           "vulnerable": [
+2025-09-01T09:11:55.5214027Z             "*"
+2025-09-01T09:11:55.5214202Z           ]
+2025-09-01T09:11:55.5214363Z         },
+2025-09-01T09:11:55.5214571Z         "exploit": "Proof of Concept",
+2025-09-01T09:11:55.5214810Z         "fixedIn": [],
+2025-09-01T09:11:55.5215012Z         "patches": [],
+2025-09-01T09:11:55.5215209Z         "insights": {
+2025-09-01T09:11:55.5215434Z           "triageAdvice": null
+2025-09-01T09:11:55.5215648Z         },
+2025-09-01T09:11:55.5215822Z         "language": "js",
+2025-09-01T09:11:55.5216030Z         "severity": "medium",
+2025-09-01T09:11:55.5216246Z         "cvssScore": 6.2,
+2025-09-01T09:11:55.5216445Z         "functions": [],
+2025-09-01T09:11:55.5216651Z         "malicious": false,
+2025-09-01T09:11:55.5216865Z         "isDisputed": false,
+2025-09-01T09:11:55.5217106Z         "moduleName": "inflight",
+2025-09-01T09:11:55.5217337Z         "references": [
+2025-09-01T09:11:55.5217529Z           {
+2025-09-01T09:11:55.5217796Z             "url": "https://github.com/isaacs/inflight/issues/5",
+2025-09-01T09:11:55.5218118Z             "title": "GitHub Issue"
+2025-09-01T09:11:55.5218345Z           },
+2025-09-01T09:11:55.5218509Z           {
+2025-09-01T09:11:55.5218776Z             "url": "https://github.com/logdna/logdna-agent/pull/157",
+2025-09-01T09:11:55.5219096Z             "title": "GitHub PR"
+2025-09-01T09:11:55.5219320Z           }
+2025-09-01T09:11:55.5219479Z         ],
+2025-09-01T09:11:55.5219657Z         "cvssDetails": [],
+2025-09-01T09:11:55.5219992Z         "cvssSources": [
+2025-09-01T09:11:55.5220193Z           {
+2025-09-01T09:11:55.5220383Z             "type": "primary",
+2025-09-01T09:11:55.5220708Z             "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+2025-09-01T09:11:55.5221038Z             "assigner": "Snyk",
+2025-09-01T09:11:55.5221282Z             "severity": "medium",
+2025-09-01T09:11:55.5221698Z             "baseScore": 6.2,
+2025-09-01T09:11:55.5221943Z             "cvssVersion": "3.1",
+2025-09-01T09:11:55.5222237Z             "modificationTime": "2024-03-13T12:24:01.140165Z"
+2025-09-01T09:11:55.5222503Z           }
+2025-09-01T09:11:55.5222665Z         ],
+2025-09-01T09:11:55.5229140Z         "description": "## Overview\n\nAffected versions of this package are vulnerable to Missing Release of Resource after Effective Lifetime via the `makeres` function due to improperly deleting keys from the `reqs` object after execution of callbacks. This behavior causes the keys to remain in the `reqs` object, which leads to resource exhaustion.\r\n\r\nExploiting this vulnerability results in crashing the `node` process or in the application crash.\r\n\r\n**Note:**\r\nThis library is not maintained, and currently, there is no fix for this issue. To overcome this vulnerability, several dependent packages have eliminated the use of this library.\r\n\r\nTo trigger the memory leak, an attacker would need to have the ability to execute or influence the asynchronous operations that use the inflight module within the application. This typically requires access to the internal workings of the server or application, which is not commonly exposed to remote users. Therefore, “Attack vector” is marked as “Local”.\n## PoC\n```js\r\nconst inflight = require('inflight');\r\n\r\nfunction testInflight() {\r\n  let i = 0;\r\n  function scheduleNext() {\r\n    let key = `key-${i++}`;\r\n    const callback = () => {\r\n    };\r\n    for (let j = 0; j < 1000000; j++) {\r\n      inflight(key, callback);\r\n    }\r\n\r\n    setImmediate(scheduleNext);\r\n  }\r\n\r\n\r\n  if (i % 100 === 0) {\r\n    console.log(process.memoryUsage());\r\n  }\r\n\r\n  scheduleNext();\r\n}\r\n\r\ntestInflight();\r\n```\n## Remediation\nThere is no fixed version for `inflight`.\n## References\n- [GitHub Issue](https://github.com/isaacs/inflight/issues/5)\n- [GitHub PR](https://github.com/logdna/logdna-agent/pull/157)\n",
+2025-09-01T09:11:55.5234203Z         "epssDetails": null,
+2025-09-01T09:11:55.5234432Z         "identifiers": {
+2025-09-01T09:11:55.5234640Z           "CVE": [],
+2025-09-01T09:11:55.5234831Z           "CWE": [
+2025-09-01T09:11:55.5235018Z             "CWE-772"
+2025-09-01T09:11:55.5235205Z           ]
+2025-09-01T09:11:55.5235368Z         },
+2025-09-01T09:11:55.5235575Z         "packageName": "inflight",
+2025-09-01T09:11:55.5235824Z         "proprietary": false,
+2025-09-01T09:11:55.5236107Z         "creationTime": "2023-11-30T12:51:43.483198Z",
+2025-09-01T09:11:55.5236390Z         "functions_new": [],
+2025-09-01T09:11:55.5236616Z         "alternativeIds": [],
+2025-09-01T09:11:55.5236885Z         "disclosureTime": "2023-11-28T12:47:27Z",
+2025-09-01T09:11:55.5237150Z         "exploitDetails": {
+2025-09-01T09:11:55.5237365Z           "sources": [
+2025-09-01T09:11:55.5237557Z             "Snyk"
+2025-09-01T09:11:55.5237734Z           ],
+2025-09-01T09:11:55.5237922Z           "maturityLevels": [
+2025-09-01T09:11:55.5238134Z             {
+2025-09-01T09:11:55.5238343Z               "type": "secondary",
+2025-09-01T09:11:55.5238616Z               "level": "Proof of Concept",
+2025-09-01T09:11:55.5238893Z               "format": "CVSSv3"
+2025-09-01T09:11:55.5239115Z             },
+2025-09-01T09:11:55.5239288Z             {
+2025-09-01T09:11:55.5239487Z               "type": "primary",
+2025-09-01T09:11:55.5239741Z               "level": "Proof of Concept",
+2025-09-01T09:11:55.5240005Z               "format": "CVSSv4"
+2025-09-01T09:11:55.5240218Z             }
+2025-09-01T09:11:55.5240389Z           ]
+2025-09-01T09:11:55.5240555Z         },
+2025-09-01T09:11:55.5240874Z         "packageManager": "npm",
+2025-09-01T09:11:55.5241181Z         "publicationTime": "2023-11-30T12:52:55.469185Z",
+2025-09-01T09:11:55.5241673Z         "severityBasedOn": "CVSS",
+2025-09-01T09:11:55.5241985Z         "modificationTime": "2024-03-13T12:24:01.140165Z",
+2025-09-01T09:11:55.5242292Z         "socialTrendAlert": false,
+2025-09-01T09:11:55.5242569Z         "packagePopularityRank": 99,
+2025-09-01T09:11:55.5242823Z         "from": [
+2025-09-01T09:11:55.5243041Z           "rest-express@1.0.0",
+2025-09-01T09:11:55.5243331Z           "@microsoft/eslint-formatter-sarif@3.1.0",
+2025-09-01T09:11:55.5243610Z           "eslint@8.57.1",
+2025-09-01T09:11:55.5243851Z           "file-entry-cache@6.0.1",
+2025-09-01T09:11:55.5244100Z           "flat-cache@3.2.0",
+2025-09-01T09:11:55.5244324Z           "rimraf@3.0.2",
+2025-09-01T09:11:55.5244526Z           "glob@7.1.6",
+2025-09-01T09:11:55.5244732Z           "inflight@1.0.6"
+2025-09-01T09:11:55.5244932Z         ],
+2025-09-01T09:11:55.5245118Z         "upgradePath": [],
+2025-09-01T09:11:55.5245361Z         "isUpgradable": false,
+2025-09-01T09:11:55.5245593Z         "isPatchable": false,
+2025-09-01T09:11:55.5245821Z         "isPinnable": false,
+2025-09-01T09:11:55.5246038Z         "isRuntime": false,
+2025-09-01T09:11:55.5246252Z         "name": "inflight",
+2025-09-01T09:11:55.5246459Z         "version": "1.0.6",
+2025-09-01T09:11:55.5246707Z         "severityWithCritical": "medium"
+2025-09-01T09:11:55.5246952Z       }
+2025-09-01T09:11:55.5247113Z     ],
+2025-09-01T09:11:55.5247281Z     "upgrade": {
+2025-09-01T09:11:55.5247499Z       "express-session@1.18.1": {
+2025-09-01T09:11:55.5247785Z         "upgradeTo": "express-session@1.18.2",
+2025-09-01T09:11:55.5248044Z         "upgrades": [
+2025-09-01T09:11:55.5248249Z           "on-headers@1.0.2"
+2025-09-01T09:11:55.5248454Z         ],
+2025-09-01T09:11:55.5248620Z         "vulns": [
+2025-09-01T09:11:55.5248969Z           "SNYK-JS-ONHEADERS-10773729"
+2025-09-01T09:11:55.5249210Z         ]
+2025-09-01T09:11:55.5249369Z       }
+2025-09-01T09:11:55.5249532Z     },
+2025-09-01T09:11:55.5249696Z     "patch": {},
+2025-09-01T09:11:55.5249885Z     "ignore": {},
+2025-09-01T09:11:55.5250072Z     "pin": {}
+2025-09-01T09:11:55.5250245Z   },
+2025-09-01T09:11:55.5250428Z   "filesystemPolicy": true,
+2025-09-01T09:11:55.5250643Z   "filtered": {
+2025-09-01T09:11:55.5250828Z     "ignore": [],
+2025-09-01T09:11:55.5251012Z     "patch": []
+2025-09-01T09:11:55.5251182Z   },
+2025-09-01T09:11:55.5251456Z   "uniqueCount": 4,
+2025-09-01T09:11:55.5251692Z   "projectName": "rest-express",
+2025-09-01T09:11:55.5251939Z   "foundProjectCount": 1,
+2025-09-01T09:11:55.5252212Z   "displayTargetFile": "package-lock.json",
+2025-09-01T09:11:55.5252510Z   "hasUnknownVersions": false,
+2025-09-01T09:11:55.5252796Z   "path": "/home/runner/work/WhoopsPay/WhoopsPay"
+2025-09-01T09:11:55.5253062Z }
+2025-09-01T09:11:56.0377504Z ⚠️ Dry run test failed - will proceed anyway
+2025-09-01T09:11:56.0378272Z ✅ Snyk authentication check completed
+2025-09-01T09:11:56.0433434Z ##[group]Run snyk/actions/node@master
+2025-09-01T09:11:56.0433715Z with:
+2025-09-01T09:11:56.0434283Z   args: --all-projects --dev --detection-depth=10 --severity-threshold=low --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif
+2025-09-01T09:11:56.0434900Z   command: test
+2025-09-01T09:11:56.0435083Z   json: false
+2025-09-01T09:11:56.0435255Z env:
+2025-09-01T09:11:56.0435423Z   NODE_VERSION: 20
+2025-09-01T09:11:56.0435622Z   DOCKER_REGISTRY: docker.io
+2025-09-01T09:11:56.0436102Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T09:11:56.0436331Z   VERSION: 1.0.0
+2025-09-01T09:11:56.0436594Z   SNYK_TOKEN: ***
+2025-09-01T09:11:56.0436785Z ##[endgroup]
+2025-09-01T09:11:56.0542985Z ##[command]/usr/bin/docker run --name snyksnyknode_88fc14 --label 397887 --workdir /github/workspace --rm -e "NODE_VERSION" -e "DOCKER_REGISTRY" -e "IMAGE_NAME" -e "VERSION" -e "SNYK_TOKEN" -e "INPUT_ARGS" -e "INPUT_COMMAND" -e "INPUT_JSON" -e "FORCE_COLOR" -e "SNYK_INTEGRATION_NAME" -e "SNYK_INTEGRATION_VERSION" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/WhoopsPay/WhoopsPay":"/github/workspace" snyk/snyk:node  "snyk" "test" "--all-projects --dev --detection-depth=10 --severity-threshold=low --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif"
+2025-09-01T09:11:59.0329646Z 
+2025-09-01T09:11:59.0330166Z  ERROR   Unspecified Error (SNYK-CLI-0000)
+2025-09-01T09:11:59.0330857Z                                                                                         
+2025-09-01T09:11:59.0331702Z            Failed to get dependencies for all 4 potential projects.                     
+2025-09-01T09:11:59.0332624Z            Tip: Re-run in debug mode to see more information: DEBUG=*snyk* <COMMAND>    
+2025-09-01T09:11:59.0333814Z            If the issue persists contact support@snyk.io                                
+2025-09-01T09:11:59.0334285Z 
+2025-09-01T09:11:59.0334783Z Docs:    https://docs.snyk.io/scan-with-snyk/error-catalog#snyk-cli-0000 
+2025-09-01T09:11:59.0335535Z                                                                          
+2025-09-01T09:11:59.0336273Z ID:      urn:snyk:interaction:e04b45c5-f5c3-43b2-926e-dffb83c21bb7 
+2025-09-01T09:11:59.3515266Z ##[group]Run if [ -n "***" ]; then
+2025-09-01T09:11:59.3515683Z [36;1mif [ -n "***" ]; then[0m
+2025-09-01T09:11:59.3516050Z [36;1m  echo "Generating comprehensive Snyk security reports for v$VERSION..."[0m
+2025-09-01T09:11:59.3516790Z [36;1m  npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || true[0m
+2025-09-01T09:11:59.3517725Z [36;1m  npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || true[0m
+2025-09-01T09:11:59.3518354Z [36;1m  npx snyk monitor || true[0m
+2025-09-01T09:11:59.3518589Z [36;1m  [0m
+2025-09-01T09:11:59.3518823Z [36;1m  # Copy any additional results to version folder[0m
+2025-09-01T09:11:59.3519291Z [36;1m  [ -f "snyk-results.json" ] && cp snyk-results.json "security-reports/v$VERSION/02-snyk/" || true[0m
+2025-09-01T09:11:59.3519933Z [36;1m  [ -f "snyk-results.sarif" ] && cp snyk-results.sarif "security-reports/v$VERSION/02-snyk/" || true[0m
+2025-09-01T09:11:59.3520346Z [36;1m  [0m
+2025-09-01T09:11:59.3520599Z [36;1m  echo "✅ Snyk security scan completed for v$VERSION"[0m
+2025-09-01T09:11:59.3521076Z [36;1m  ls -la "security-reports/v$VERSION/02-snyk/" 2>/dev/null || echo "Snyk reports generated"[0m
+2025-09-01T09:11:59.3521789Z [36;1melse[0m
+2025-09-01T09:11:59.3522058Z [36;1m  echo "✅ NPM audit security scan completed (Snyk fallback)"[0m
+2025-09-01T09:11:59.3522485Z [36;1m  if [ -f "security-reports/v$VERSION/02-snyk/npm-audit.json" ]; then[0m
+2025-09-01T09:11:59.3522888Z [36;1m    echo "Security audit results available for v$VERSION"[0m
+2025-09-01T09:11:59.3523298Z [36;1m    cat "security-reports/v$VERSION/02-snyk/npm-audit.json" | head -20[0m
+2025-09-01T09:11:59.3523631Z [36;1m  fi[0m
+2025-09-01T09:11:59.3523805Z [36;1mfi[0m
+2025-09-01T09:11:59.3524023Z [36;1mecho "status=completed" >> $GITHUB_OUTPUT[0m
+2025-09-01T09:11:59.3553639Z shell: /usr/bin/bash -e {0}
+2025-09-01T09:11:59.3553880Z env:
+2025-09-01T09:11:59.3554061Z   NODE_VERSION: 20
+2025-09-01T09:11:59.3554267Z   DOCKER_REGISTRY: docker.io
+2025-09-01T09:11:59.3554542Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T09:11:59.3554764Z   VERSION: 1.0.0
+2025-09-01T09:11:59.3554999Z   SNYK_TOKEN: ***
+2025-09-01T09:11:59.3555185Z ##[endgroup]
+2025-09-01T09:11:59.3605346Z Generating comprehensive Snyk security reports for v1.0.0...
+2025-09-01T09:12:09.6889662Z 
+2025-09-01T09:12:09.6890404Z Monitoring /home/runner/work/WhoopsPay/WhoopsPay (rest-express)...
+2025-09-01T09:12:09.6890824Z 
+2025-09-01T09:12:09.6891826Z Explore this snapshot at https://app.snyk.io/org/khajdari/project/17ec7611-2b3f-4161-9c62-00a3faf2a0a2/history/aaaf29a1-e54d-4721-b0db-afaffcc1a719
+2025-09-01T09:12:09.6892500Z 
+2025-09-01T09:12:09.6892972Z Tip: Detected multiple supported manifests (1), use --all-projects to scan all of them at once.
+2025-09-01T09:12:09.6893408Z 
+2025-09-01T09:12:09.6893888Z Notifications about newly disclosed issues related to these dependencies will be emailed to you.
+2025-09-01T09:12:09.6894327Z 
+2025-09-01T09:12:09.9932270Z ✅ Snyk security scan completed for v1.0.0
+2025-09-01T09:12:09.9948515Z total 16
+2025-09-01T09:12:09.9949740Z drwxr-xr-x 2 runner docker 4096 Sep  1 09:12 .
+2025-09-01T09:12:09.9950458Z drwxr-xr-x 3 runner docker 4096 Sep  1 09:11 ..
+2025-09-01T09:12:09.9951186Z -rw-r--r-- 1 runner docker  262 Sep  1 09:12 snyk-test.json
+2025-09-01T09:12:09.9952146Z -rw-r--r-- 1 runner docker   94 Sep  1 09:12 snyk-test.sarif
+2025-09-01T09:12:09.9993264Z ##[group]Run if [ -n "***" ]; then
+2025-09-01T09:12:09.9993657Z [36;1mif [ -n "***" ]; then[0m
+2025-09-01T09:12:09.9993944Z [36;1m  echo "🎨 Generating Snyk HTML report..."[0m
+2025-09-01T09:12:09.9994226Z [36;1m  [0m
+2025-09-01T09:12:09.9994425Z [36;1m  # Install snyk-to-html tool[0m
+2025-09-01T09:12:09.9994688Z [36;1m  npm install -g snyk-to-html[0m
+2025-09-01T09:12:09.9994930Z [36;1m  [0m
+2025-09-01T09:12:09.9995145Z [36;1m  # Generate HTML report from JSON results[0m
+2025-09-01T09:12:09.9995517Z [36;1m  if [ -f "security-reports/v$VERSION/02-snyk/snyk-test.json" ]; then[0m
+2025-09-01T09:12:09.9995892Z [36;1m    echo "Converting Snyk JSON to HTML..."[0m
+2025-09-01T09:12:09.9996164Z [36;1m    snyk-to-html \[0m
+2025-09-01T09:12:09.9996464Z [36;1m      -i "security-reports/v$VERSION/02-snyk/snyk-test.json" \[0m
+2025-09-01T09:12:09.9996900Z [36;1m      -o "security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html" \[0m
+2025-09-01T09:12:09.9997331Z [36;1m      -a \[0m
+2025-09-01T09:12:09.9997641Z [36;1m      || echo "⚠️ HTML report generation failed - continuing without HTML"[0m
+2025-09-01T09:12:09.9997978Z [36;1m    [0m
+2025-09-01T09:12:09.9998305Z [36;1m    if [ -f "security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html" ]; then[0m
+2025-09-01T09:12:09.9998738Z [36;1m      echo "✅ Snyk HTML report generated successfully"[0m
+2025-09-01T09:12:09.9999224Z [36;1m      echo "📄 Report size: $(wc -c < security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html) bytes"[0m
+2025-09-01T09:12:09.9999670Z [36;1m    else[0m
+2025-09-01T09:12:09.9999884Z [36;1m      echo "❌ HTML report not generated"[0m
+2025-09-01T09:12:10.0000149Z [36;1m    fi[0m
+2025-09-01T09:12:10.0000325Z [36;1m  else[0m
+2025-09-01T09:12:10.0000569Z [36;1m    echo "⚠️ No JSON results found for HTML conversion"[0m
+2025-09-01T09:12:10.0000862Z [36;1m  fi[0m
+2025-09-01T09:12:10.0001040Z [36;1melse[0m
+2025-09-01T09:12:10.0001305Z [36;1m  echo "⚠️ Skipping HTML report generation (no Snyk token)"[0m
+2025-09-01T09:12:10.0002013Z [36;1mfi[0m
+2025-09-01T09:12:10.0030927Z shell: /usr/bin/bash -e {0}
+2025-09-01T09:12:10.0031160Z env:
+2025-09-01T09:12:10.0031530Z   NODE_VERSION: 20
+2025-09-01T09:12:10.0031748Z   DOCKER_REGISTRY: docker.io
+2025-09-01T09:12:10.0032014Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T09:12:10.0032228Z   VERSION: 1.0.0
+2025-09-01T09:12:10.0032472Z   SNYK_TOKEN: ***
+2025-09-01T09:12:10.0032661Z ##[endgroup]
+2025-09-01T09:12:10.0080139Z 🎨 Generating Snyk HTML report...
+2025-09-01T09:12:10.9547998Z 
+2025-09-01T09:12:10.9548458Z added 19 packages in 889ms
+2025-09-01T09:12:10.9548783Z 
+2025-09-01T09:12:10.9549041Z 3 packages are looking for funding
+2025-09-01T09:12:10.9550200Z   run `npm fund` for details
+2025-09-01T09:12:10.9643595Z Converting Snyk JSON to HTML...
+2025-09-01T09:12:11.0583178Z Vulnerability snapshot saved at security-reports/v1.0.0/02-snyk/Snyk-Security-Report.html
+2025-09-01T09:12:11.0741187Z ✅ Snyk HTML report generated successfully
+2025-09-01T09:12:11.1859990Z 📄 Report size: 21287 bytes
+2025-09-01T09:12:11.1907615Z ##[group]Run actions/upload-artifact@v4
+2025-09-01T09:12:11.1907907Z with:
+2025-09-01T09:12:11.1908154Z   name: 02-snyk-dependency-security-report-v1.0.0
+2025-09-01T09:12:11.1908472Z   path: security-reports/v1.0.0/02-snyk/
+2025-09-01T09:12:11.1908739Z   retention-days: 30
+2025-09-01T09:12:11.1908953Z   if-no-files-found: warn
+2025-09-01T09:12:11.1909172Z   compression-level: 6
+2025-09-01T09:12:11.1909379Z   overwrite: false
+2025-09-01T09:12:11.1909582Z   include-hidden-files: false
+2025-09-01T09:12:11.1909797Z env:
+2025-09-01T09:12:11.1909966Z   NODE_VERSION: 20
+2025-09-01T09:12:11.1910163Z   DOCKER_REGISTRY: docker.io
+2025-09-01T09:12:11.1910450Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T09:12:11.1910671Z   VERSION: 1.0.0
+2025-09-01T09:12:11.1910863Z ##[endgroup]
+2025-09-01T09:12:11.4024267Z With the provided path, there will be 3 files uploaded
+2025-09-01T09:12:11.4030100Z Artifact name is valid!
+2025-09-01T09:12:11.4032132Z Root directory input is valid!
+2025-09-01T09:12:11.5049502Z Beginning upload of artifact content to blob storage
+2025-09-01T09:12:11.5913336Z Uploaded bytes 5816
+2025-09-01T09:12:11.6102953Z Finished uploading artifact content to blob storage!
+2025-09-01T09:12:11.6106093Z SHA256 digest of uploaded artifact zip is b82fa581600ce387218a6e6dd9ac30de66c84c90ff97ec1049a0afec67ca1ed9
+2025-09-01T09:12:11.6108037Z Finalizing artifact upload
+2025-09-01T09:12:11.7092705Z Artifact 02-snyk-dependency-security-report-v1.0.0.zip successfully finalized. Artifact ID 3896623196
+2025-09-01T09:12:11.7094556Z Artifact 02-snyk-dependency-security-report-v1.0.0 has been successfully uploaded! Final size is 5816 bytes. Artifact ID is 3896623196
+2025-09-01T09:12:11.7101655Z Artifact download URL: https://github.com/khajdari/WhoopsPay/actions/runs/17373050687/artifacts/3896623196
+2025-09-01T09:12:11.7217670Z Post job cleanup.
+2025-09-01T09:12:11.8720267Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-0cff4e10f1fa11b83775b02b67f4a898066ab13058512c37b16bbff72bf89e9a, not saving cache.
+2025-09-01T09:12:11.8823315Z Post job cleanup.
+2025-09-01T09:12:11.9731238Z [command]/usr/bin/git version
+2025-09-01T09:12:11.9766373Z git version 2.51.0
+2025-09-01T09:12:11.9809120Z Temporarily overriding HOME='/home/runner/work/_temp/7c4cd1d3-b435-4b75-a807-3840284cd478' before making global git config changes
+2025-09-01T09:12:11.9810636Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-01T09:12:11.9822200Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-01T09:12:11.9856248Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-01T09:12:11.9888939Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-01T09:12:12.0111928Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-01T09:12:12.0131993Z http.https://github.com/.extraheader
+2025-09-01T09:12:12.0145386Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-09-01T09:12:12.0176033Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-01T09:12:12.0494267Z Evaluate and set job outputs
+2025-09-01T09:12:12.0498781Z Set output 'snyk-status'
+2025-09-01T09:12:12.0500616Z Cleaning up orphan processes

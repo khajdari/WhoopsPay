@@ -386,29 +386,35 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Snyk dependency vulnerability scan
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --all-projects --dev --detection-depth=10 --severity-threshold=low --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif
-        continue-on-error: true
-
       - name: Generate comprehensive security reports
         id: snyk
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "Generating comprehensive Snyk security reports for v$VERSION..."
-            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || true
-            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || true
-            npx snyk monitor || true
+            echo "📦 Running Snyk dependency vulnerability scan for v$VERSION..."
+            echo "🔍 Using --all-projects and --detection-depth=10 for comprehensive analysis"
             
-            # Copy any additional results to version folder
-            [ -f "snyk-results.json" ] && cp snyk-results.json "security-reports/v$VERSION/02-snyk/" || true
-            [ -f "snyk-results.sarif" ] && cp snyk-results.sarif "security-reports/v$VERSION/02-snyk/" || true
+            # Run Snyk test with comprehensive scanning
+            echo "Scanning main package.json..."
+            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || true
+            echo "Generating SARIF report..."
+            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || true
+            
+            # Monitor for ongoing tracking
+            echo "Setting up Snyk monitoring..."
+            npx snyk monitor --all-projects || true
             
             echo "✅ Snyk security scan completed for v$VERSION"
-            ls -la "security-reports/v$VERSION/02-snyk/" 2>/dev/null || echo "Snyk reports generated"
+            echo "📊 Checking generated reports..."
+            ls -la "security-reports/v$VERSION/02-snyk/" 2>/dev/null || echo "Reports directory created"
+            
+            # Display JSON report summary
+            if [ -f "security-reports/v$VERSION/02-snyk/snyk-test.json" ]; then
+              echo "📄 JSON report size: $(wc -c < security-reports/v$VERSION/02-snyk/snyk-test.json) bytes"
+              echo "🔍 JSON report preview:"
+              head -10 "security-reports/v$VERSION/02-snyk/snyk-test.json"
+            else
+              echo "⚠️ JSON report not found"
+            fi
           else
             echo "✅ NPM audit security scan completed (Snyk fallback)"
             if [ -f "security-reports/v$VERSION/02-snyk/npm-audit.json" ]; then
