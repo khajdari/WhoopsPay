@@ -598,7 +598,7 @@ jobs:
   create-security-issues:
     name: "📋 Create Security Report Issues"
     runs-on: ubuntu-latest
-    needs: [setup-version, pre-commit-security, sast-snyk-code, sca-snyk, dast-owasp-zap]
+    needs: [setup-version, eslint-security-linting, sast-snyk-code, sca-snyk, dast-owasp-zap]
     if: always()
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
@@ -746,7 +746,7 @@ jobs:
             
             | Phase | Tool | Status | Report |
             |-------|------|--------|--------|
-            | Linting | ESLint Security | ${{ needs.pre-commit-security.result }} | ✅ |
+            | Linting | ESLint Security | ${{ needs.eslint-security-linting.result }} | ✅ |
             | SAST | Snyk Code | ${{ needs.sast-snyk-code.result }} | ✅ |
             | SCA | Snyk | ${{ needs.sca-snyk.result }} | ✅ |
             | DAST | OWASP ZAP | ${{ needs.dast-owasp-zap.result }} | ✅ |
@@ -757,7 +757,7 @@ jobs:
             ## 📁 All Artifacts
             - Download All Reports from GitHub Actions artifacts
             
-            **Pipeline Status:** ${{ (needs.pre-commit-security.result == 'success' && needs.sast-snyk-code.result == 'success' && needs.sca-snyk.result == 'success' && needs.dast-owasp-zap.result == 'success') && '✅ All Passed' || '⚠️ Some Issues Found' }}
+            **Pipeline Status:** ${{ (needs.eslint-security-linting.result == 'success' && needs.sast-snyk-code.result == 'success' && needs.sca-snyk.result == 'success' && needs.dast-owasp-zap.result == 'success') && '✅ All Passed' || '⚠️ Some Issues Found' }}
             `;
             
             await github.rest.issues.create({
