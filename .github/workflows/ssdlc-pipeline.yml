@@ -563,37 +563,169 @@ jobs:
           NODE_ENV: development
           DATABASE_URL: sqlite:./test.db
 
-      - name: Create OWASP ZAP configuration
+      - name: Create comprehensive OWASP ZAP configuration
         run: |
           mkdir -p .zap
           
-          # Configure ZAP rules file - proper format without comments
-          cat > .zap/rules.tsv << 'EOF'
-          10011   WARN    (Cookie Slack Detector)
-          10015   WARN    (Incomplete Cache Control)
-          10027   WARN    (Information Disclosure)
-          10054   WARN    (Cookie Security)
-          10096   WARN    (Timestamp Disclosure)
-          10109   WARN    (Modern Web Application)
-          40012   WARN    (Cross Domain Script Inclusion)
-          40014   WARN    (Cross-Domain Misconfiguration)
-          40016   WARN    (Web Browser XSS Protection)
-          40017   WARN    (Cross-Domain JavaScript Source)
-          90001   WARN    (Insecure JSF ViewState)
+          # Create authentication script for WhoopsPay
+          cat > .zap/auth-script.js << 'EOF'
+          // Authentication script for WhoopsPay
+          function authenticate(helper, paramsValues, credentials) {
+              var loginUrl = "http://localhost:5000/api/login";
+              var loginData = "email=" + credentials.getParam("username") + "&password=" + credentials.getParam("password");
+              
+              var msg = helper.prepareMessage();
+              msg.setRequestHeader("Content-Type: application/x-www-form-urlencoded");
+              msg.setRequestBody(loginData);
+              msg.getRequestHeader().setURI(new org.apache.commons.httpclient.URI(loginUrl, false));
+              msg.getRequestHeader().setMethod("POST");
+              
+              helper.sendAndReceive(msg);
+              return msg;
+          }
+          
+          function getRequiredParamsNames() {
+              return ["username", "password"];
+          }
+          
+          function getOptionalParamsNames() {
+              return [];
+          }
+          
+          function getCredentialsParamsNames() {
+              return ["username", "password"];
+          }
           EOF
           
-          echo "OWASP ZAP configuration created"
-          echo "Rules file content:"
-          cat .zap/rules.tsv
+          # Create comprehensive ZAP configuration
+          cat > .zap/zap-config.conf << 'EOF'
+          # OWASP ZAP Configuration for WhoopsPay Security Testing
+          
+          # Authentication Configuration
+          auth.method=form-based
+          auth.loginurl=http://localhost:5000/api/login
+          auth.username=sarah.wilson@example.com
+          auth.password=password123
+          auth.usernamefield=email
+          auth.passwordfield=password
+          
+          # Session Management
+          session.method=cookie
+          session.name=connect.sid
+          
+          # Spider Configuration
+          spider.maxdepth=10
+          spider.maxchildren=20
+          spider.maxduration=10
+          spider.threads=10
+          
+          # Active Scanner Configuration
+          scanner.strength=high
+          scanner.threshold=low
+          scanner.maxruletime=5
+          scanner.maxscantime=20
+          
+          # Include OWASP Top 10 Tests
+          scanner.policy=high-threshold
+          EOF
+          
+          # Create specific target URLs for comprehensive scanning
+          cat > .zap/target-urls.txt << 'EOF'
+          http://localhost:5000/
+          http://localhost:5000/api/auth/user
+          http://localhost:5000/api/login
+          http://localhost:5000/api/transactions
+          http://localhost:5000/api/users
+          http://localhost:5000/api/payments
+          http://localhost:5000/api/pending-requests
+          http://localhost:5000/api/notifications
+          http://localhost:5000/dashboard
+          http://localhost:5000/transfer
+          http://localhost:5000/settings
+          http://localhost:5000/admin
+          EOF
+          
+          echo "✅ Comprehensive ZAP configuration created"
+          echo "📋 Target URLs configured:"
+          cat .zap/target-urls.txt
 
-      - name: OWASP ZAP baseline security scan
+      - name: OWASP ZAP comprehensive active scan
         id: zap
-        uses: zaproxy/action-baseline@v0.12.0
-        with:
-          target: 'http://localhost:5000'
-          rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-a -j -T 30 -l WARN'
-          allow_issue_writing: false
+        run: |
+          echo "🚀 Starting comprehensive OWASP ZAP active security scan..."
+          
+          # Start ZAP daemon in background
+          docker run -d --name zap-daemon \
+            --network host \
+            -v $(pwd)/.zap:/zap/wrk/:rw \
+            zaproxy/zap-stable:latest \
+            zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+          
+          # Wait for ZAP to start
+          echo "⏳ Waiting for ZAP daemon to start..."
+          sleep 30
+          
+          # Test ZAP API connectivity
+          curl -s http://localhost:8080/JSON/core/view/version/ || echo "ZAP API not ready"
+          
+          # Create context for WhoopsPay
+          echo "📝 Creating security testing context..."
+          curl -s "http://localhost:8080/JSON/context/action/newContext/?contextName=WhoopsPay"
+          curl -s "http://localhost:8080/JSON/context/action/includeInContext/?contextName=WhoopsPay&regex=http://localhost:5000.*"
+          
+          # Configure authentication
+          echo "🔐 Setting up authentication..."
+          curl -s "http://localhost:8080/JSON/authentication/action/setAuthenticationMethod/?contextId=0&authMethodName=formBasedAuthentication&authMethodConfigParams=loginUrl%3Dhttp://localhost:5000/api/login%26loginRequestData%3Demail%253D%257Busername%257D%2526password%253D%257Bpassword%257D"
+          
+          # Add test user
+          curl -s "http://localhost:8080/JSON/users/action/newUser/?contextId=0&name=testuser"
+          curl -s "http://localhost:8080/JSON/users/action/setAuthenticationCredentials/?contextId=0&userId=0&authCredentialsConfigParams=username%3Dsarah.wilson%40example.com%26password%3Dpassword123"
+          curl -s "http://localhost:8080/JSON/users/action/setUserEnabled/?contextId=0&userId=0&enabled=true"
+          
+          # Spider scan with authentication
+          echo "🕷️  Starting authenticated spider scan..."
+          SPIDER_ID=$(curl -s "http://localhost:8080/JSON/spider/action/scanAsUser/?contextId=0&userId=0&url=http://localhost:5000&recurse=true&subtreeOnly=false" | jq -r '.scan')
+          
+          # Monitor spider progress
+          while true; do
+            SPIDER_PROGRESS=$(curl -s "http://localhost:8080/JSON/spider/view/status/?scanId=$SPIDER_ID" | jq -r '.status')
+            echo "Spider progress: $SPIDER_PROGRESS%"
+            if [ "$SPIDER_PROGRESS" = "100" ]; then
+              echo "✅ Spider scan completed"
+              break
+            fi
+            sleep 10
+          done
+          
+          # Active security scan with OWASP Top 10 focus
+          echo "⚡ Starting comprehensive active security scan..."
+          ASCAN_ID=$(curl -s "http://localhost:8080/JSON/ascan/action/scanAsUser/?contextId=0&userId=0&url=http://localhost:5000&recurse=true&inScopeOnly=false&scanPolicyName=&method=&postData=" | jq -r '.scan')
+          
+          # Monitor active scan progress
+          while true; do
+            ASCAN_PROGRESS=$(curl -s "http://localhost:8080/JSON/ascan/view/status/?scanId=$ASCAN_ID" | jq -r '.status')
+            echo "Active scan progress: $ASCAN_PROGRESS%"
+            if [ "$ASCAN_PROGRESS" = "100" ]; then
+              echo "✅ Active security scan completed"
+              break
+            fi
+            sleep 15
+          done
+          
+          # Generate comprehensive reports
+          echo "📊 Generating security reports..."
+          curl -s "http://localhost:8080/OTHER/core/other/htmlreport/" > "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html"
+          curl -s "http://localhost:8080/JSON/core/view/alerts/" > "security-reports/v$VERSION/03-owasp-zap/zap-alerts.json"
+          curl -s "http://localhost:8080/OTHER/core/other/jsonreport/" > "security-reports/v$VERSION/03-owasp-zap/zap-full-report.json"
+          
+          # Get vulnerability summary
+          echo "🎯 Security Scan Summary:"
+          curl -s "http://localhost:8080/JSON/core/view/alertsSummary/" | jq '.'
+          
+          # Stop ZAP daemon
+          docker stop zap-daemon && docker rm zap-daemon
+          
+          echo "status=completed" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Process ZAP results
