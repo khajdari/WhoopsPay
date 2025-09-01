@@ -563,9 +563,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🔍 ESLint Security Linting Report';
+            const title = '🛡️ ESLint Security Linting Report';
             const body = `
-            # 🔍 ESLint Security Linting Report
+            # 🛡️ ESLint Security Linting Report
             
             **Status:** Comprehensive ESLint security linting completed
             **Timestamp:** ${new Date().toISOString()}
@@ -600,9 +600,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🔍 Snyk Code SAST Analysis Report';
+            const title = '🔒 Snyk Code SAST Analysis Report';
             const body = `
-            # 🔍 Snyk Code SAST Analysis Report
+            # 🔒 Snyk Code SAST Analysis Report
             
             **Status:** Snyk Code static analysis completed
             **Timestamp:** ${new Date().toISOString()}
@@ -660,9 +660,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🎯 OWASP ZAP Dynamic Security Report';
+            const title = '⚡ OWASP ZAP Dynamic Security Report';
             const body = `
-            # 🎯 OWASP ZAP Dynamic Security Report
+            # ⚡ OWASP ZAP Dynamic Security Report
             
             **Status:** OWASP ZAP dynamic security testing completed
             **Timestamp:** ${new Date().toISOString()}
@@ -686,43 +686,6 @@ jobs:
               labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report']
             });
 
-      - name: Create Summary Security Issue
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const title = '📊 Security Pipeline Summary';
-            const body = `
-            # 📊 Complete Security Pipeline Summary
-            
-            **Status:** Complete security pipeline analysis finished
-            **Timestamp:** ${new Date().toISOString()}
-            **Pipeline Run:** See GitHub Actions tab for details
-            
-            ## 🛡️ Security Phase Results
-            
-            | Phase | Tool | Status | Report |
-            |-------|------|--------|--------|
-            | Linting | ESLint Security | ${{ needs.eslint-security-linting.result }} | ✅ |
-            | SAST | Snyk Code | ${{ needs.sast-snyk-code.result }} | ✅ |
-            | SCA | Snyk | ${{ needs.sca-snyk.result }} | ✅ |
-            | DAST | OWASP ZAP | ${{ needs.dast-owasp-zap.result }} | ✅ |
-            
-            ## 📋 Individual Report Issues
-            Check the repository issues for individual detailed security reports from each phase.
-            
-            ## 📁 All Artifacts
-            - Download All Reports from GitHub Actions artifacts
-            
-            **Pipeline Status:** ${{ (needs.eslint-security-linting.result == 'success' && needs.sast-snyk-code.result == 'success' && needs.sca-snyk.result == 'success' && needs.dast-owasp-zap.result == 'success') && '✅ All Passed' || '⚠️ Some Issues Found' }}
-            `;
-            
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: title,
-              body: body,
-              labels: ['security', 'pipeline-summary', 'automated-report']
-            });
 
   # FINAL STEP: Docker Hub Deployment (After Security Analysis)
   docker-hub-publish:
