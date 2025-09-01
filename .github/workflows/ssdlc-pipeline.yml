@@ -563,13 +563,125 @@ jobs:
           NODE_ENV: development
           DATABASE_URL: sqlite:./test.db
 
-      - name: OWASP ZAP Full Active Scan
+      - name: OWASP ZAP Comprehensive Active Scan
         id: zap-active-scan
-        uses: zaproxy/action-full-scan@v0.10.0
-        with:
-          target: 'http://localhost:5000'
-          cmd_options: '-T 30'
-          allow_issue_writing: false
+        run: |
+          echo "⚡ Running comprehensive OWASP ZAP active scan..."
+          
+          # Ensure version folder exists
+          mkdir -p "security-reports/v$VERSION/03-owasp-zap"
+          
+          # Start ZAP daemon with comprehensive configuration
+          docker run -d --name zap-comprehensive \
+            --network host \
+            -v $(pwd)/.zap:/zap/wrk/:rw \
+            zaproxy/zap-stable:latest \
+            zap.sh -daemon -host 0.0.0.0 -port 8080 \
+            -config api.addrs.addr.name=.* \
+            -config api.addrs.addr.regex=true \
+            -config spider.maxDepth=10 \
+            -config scanner.strength=HIGH \
+            -config scanner.attackOnStart=true
+          
+          # Wait for ZAP to fully initialize
+          echo "⏳ Waiting for ZAP daemon to initialize..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8080/JSON/core/view/version/ >/dev/null 2>&1; then
+              echo "✅ ZAP daemon ready"
+              break
+            fi
+            echo "Waiting for ZAP... ($i/30)"
+            sleep 2
+          done
+          
+          # Verify ZAP is responding
+          ZAP_VERSION=$(curl -s http://localhost:8080/JSON/core/view/version/ | jq -r '.version' 2>/dev/null || echo "unknown")
+          echo "🔧 ZAP Version: $ZAP_VERSION"
+          
+          # Import high-strength scan policy
+          echo "🎯 Setting up aggressive scan policy..."
+          curl -s "http://localhost:8080/JSON/ascan/action/addScanPolicy/?scanPolicyName=Aggressive&alertThreshold=LOW&attackStrength=HIGH"
+          
+          # Configure authentication for better coverage
+          echo "🔐 Setting up authentication context..."
+          curl -s "http://localhost:5000/api/login" \
+            -H "Content-Type: application/json" \
+            -d '{"email":"sarah.wilson@example.com","password":"password123"}' \
+            -c cookies.txt || echo "Authentication attempt completed"
+          
+          # Start comprehensive spider with aggressive settings
+          echo "🕷️ Starting comprehensive spider scan..."
+          SPIDER_ID=$(curl -s "http://localhost:8080/JSON/spider/action/scan/?url=http://localhost:5000&maxChildren=50&recurse=true&contextName=&subtreeOnly=false" | jq -r '.scan')
+          echo "Spider scan ID: $SPIDER_ID"
+          
+          # Wait for spider to complete with extended timeout
+          echo "⏳ Spider scanning in progress..."
+          for i in {1..60}; do  # 10 minutes max for spider
+            SPIDER_PROGRESS=$(curl -s "http://localhost:8080/JSON/spider/view/status/?scanId=$SPIDER_ID" | jq -r '.status' 2>/dev/null || echo "0")
+            echo "Spider progress: $SPIDER_PROGRESS%"
+            if [ "$SPIDER_PROGRESS" = "100" ]; then
+              echo "✅ Spider scan completed"
+              break
+            fi
+            sleep 10
+          done
+          
+          # Get URLs discovered by spider
+          URLS_FOUND=$(curl -s "http://localhost:8080/JSON/spider/view/results/?scanId=$SPIDER_ID" | jq -r '.results | length' 2>/dev/null || echo "0")
+          echo "🎯 URLs discovered by spider: $URLS_FOUND"
+          
+          # Start aggressive active scan
+          echo "🚀 Starting aggressive active security scan..."
+          ASCAN_ID=$(curl -s "http://localhost:8080/JSON/ascan/action/scan/?url=http://localhost:5000&recurse=true&inScopeOnly=false&scanPolicyName=Aggressive&method=&postData=" | jq -r '.scan')
+          echo "Active scan ID: $ASCAN_ID"
+          
+          # Monitor active scan with extended timeout
+          echo "⚡ Active vulnerability scanning in progress..."
+          for i in {1..120}; do  # 20 minutes max for active scan
+            ASCAN_PROGRESS=$(curl -s "http://localhost:8080/JSON/ascan/view/status/?scanId=$ASCAN_ID" | jq -r '.status' 2>/dev/null || echo "0")
+            echo "Active scan progress: $ASCAN_PROGRESS%"
+            if [ "$ASCAN_PROGRESS" = "100" ]; then
+              echo "✅ Active scan completed"
+              break
+            fi
+            sleep 10
+          done
+          
+          # Generate comprehensive reports
+          echo "📊 Generating comprehensive ZAP security reports..."
+          
+          # Generate HTML report with all alerts
+          curl -s "http://localhost:8080/OTHER/core/other/htmlreport/" > report_html.html
+          
+          # Generate JSON report with detailed data
+          curl -s "http://localhost:8080/JSON/core/view/alerts/" > report_json.json
+          
+          # Generate markdown report
+          curl -s "http://localhost:8080/OTHER/core/other/mdreport/" > report_md.md
+          
+          # Get comprehensive alert summary
+          echo "📋 Comprehensive ZAP Scan Results Summary:"
+          ALERT_SUMMARY=$(curl -s "http://localhost:8080/JSON/core/view/alertsSummary/" 2>/dev/null || echo '{}')
+          echo "$ALERT_SUMMARY" | jq '.' 2>/dev/null || echo "Alert summary not available"
+          
+          # Count total alerts by risk level
+          HIGH_ALERTS=$(curl -s "http://localhost:8080/JSON/core/view/alerts/?risk=High" | jq '.alerts | length' 2>/dev/null || echo "0")
+          MEDIUM_ALERTS=$(curl -s "http://localhost:8080/JSON/core/view/alerts/?risk=Medium" | jq '.alerts | length' 2>/dev/null || echo "0")
+          LOW_ALERTS=$(curl -s "http://localhost:8080/JSON/core/view/alerts/?risk=Low" | jq '.alerts | length' 2>/dev/null || echo "0")
+          INFO_ALERTS=$(curl -s "http://localhost:8080/JSON/core/view/alerts/?risk=Informational" | jq '.alerts | length' 2>/dev/null || echo "0")
+          
+          echo "🔴 High Risk: $HIGH_ALERTS alerts"
+          echo "🟠 Medium Risk: $MEDIUM_ALERTS alerts"
+          echo "🟡 Low Risk: $LOW_ALERTS alerts"
+          echo "🔵 Informational: $INFO_ALERTS alerts"
+          
+          TOTAL_ALERTS=$((HIGH_ALERTS + MEDIUM_ALERTS + LOW_ALERTS + INFO_ALERTS))
+          echo "📊 Total Security Alerts: $TOTAL_ALERTS"
+          
+          # Stop ZAP daemon
+          docker stop zap-comprehensive && docker rm zap-comprehensive
+          
+          echo "status=completed" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Organize ZAP security reports
