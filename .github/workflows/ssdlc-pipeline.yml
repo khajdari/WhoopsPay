@@ -75,7 +75,6 @@ jobs:
           cat > eslint-security.config.js << 'EOF'
           import js from '@eslint/js';
           import security from 'eslint-plugin-security';
-          import globals from 'globals';
           
           export default [
             js.configs.recommended,
@@ -87,9 +86,27 @@ jobs:
                 ecmaVersion: 2022,
                 sourceType: 'module',
                 globals: {
-                  ...globals.node,
-                  ...globals.browser,
-                  ...globals.es2021
+                  // Node.js globals
+                  process: 'readonly',
+                  Buffer: 'readonly',
+                  console: 'readonly',
+                  global: 'readonly',
+                  __dirname: 'readonly',
+                  __filename: 'readonly',
+                  module: 'readonly',
+                  require: 'readonly',
+                  exports: 'readonly',
+                  setTimeout: 'readonly',
+                  setInterval: 'readonly',
+                  clearTimeout: 'readonly',
+                  clearInterval: 'readonly',
+                  setImmediate: 'readonly',
+                  clearImmediate: 'readonly',
+                  // Browser globals (minimal set)
+                  window: 'readonly',
+                  document: 'readonly',
+                  navigator: 'readonly',
+                  location: 'readonly'
                 }
               },
               rules: {
