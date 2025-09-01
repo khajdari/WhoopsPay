@@ -121,6 +121,15 @@ jobs:
           fi
           
           echo "✅ ESLint security linting completed for v$VERSION"
+          
+          # Verify files were created and display directory contents
+          echo "📁 Checking ESLint report files:"
+          ls -la "security-reports/v$VERSION/00-eslint-security/" 2>/dev/null || echo "❌ Report directory not found"
+          if [ -d "security-reports/v$VERSION/00-eslint-security/" ]; then
+            echo "✅ Report directory exists"
+            echo "📄 Files in directory:"
+            find "security-reports/v$VERSION/00-eslint-security/" -type f -exec ls -la {} \; 2>/dev/null || echo "No files found"
+          fi
 
       - name: Upload ESLint Security Linting Report
         uses: actions/upload-artifact@v4
