@@ -75,6 +75,7 @@ jobs:
           cat > eslint-security.config.js << 'EOF'
           import js from '@eslint/js';
           import security from 'eslint-plugin-security';
+          import globals from 'globals';
           
           export default [
             js.configs.recommended,
@@ -86,14 +87,9 @@ jobs:
                 ecmaVersion: 2022,
                 sourceType: 'module',
                 globals: {
-                  ...globalThis,
-                  process: 'readonly',
-                  Buffer: 'readonly',
-                  console: 'readonly',
-                  setTimeout: 'readonly',
-                  setInterval: 'readonly',
-                  clearTimeout: 'readonly',
-                  clearInterval: 'readonly'
+                  ...globals.node,
+                  ...globals.browser,
+                  ...globals.es2021
                 }
               },
               rules: {
@@ -623,9 +619,9 @@ jobs:
             
             ## 📁 Report Artifacts  
             📥 **Download Reports:**
-            - [ESLint Security HTML Report](../../actions/runs/${{ github.run_id }}) - Click "00-eslint-security-linting-report-v${{ env.VERSION }}" artifact
-            - [ESLint SARIF Report](../../actions/runs/${{ github.run_id }}) - Contains SARIF format for GitHub Security tab
-            - [ESLint JSON Report](../../actions/runs/${{ github.run_id }}) - Machine-readable security findings
+            - [ESLint Security HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "00-eslint-security-linting-report-v${{ env.VERSION }}" artifact
+            - [ESLint SARIF Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Contains SARIF format for GitHub Security tab
+            - [ESLint JSON Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Machine-readable security findings
             
             This report provides comprehensive code linting analysis focusing on security vulnerabilities, code quality issues, and enterprise security compliance standards.
             `;
@@ -656,9 +652,9 @@ jobs:
             
             ## 📁 Report Artifacts
             📥 **Download Reports:**
-            - [Snyk Code HTML Report](../../actions/runs/${{ github.run_id }}) - Click "01-snyk-code-sast-report-v${{ env.VERSION }}" artifact
-            - [Snyk Code SARIF Report](../../actions/runs/${{ github.run_id }}) - Contains detailed vulnerability analysis
-            - [Snyk Code JSON Report](../../actions/runs/${{ github.run_id }}) - Raw security scan results
+            - [Snyk Code HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "01-snyk-code-sast-report-v${{ env.VERSION }}" artifact
+            - [Snyk Code SARIF Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Contains detailed vulnerability analysis
+            - [Snyk Code JSON Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Raw security scan results
             
             This report provides comprehensive static application security testing including XSS, SQL injection, command injection, and other security vulnerabilities.
             `;
@@ -689,9 +685,9 @@ jobs:
             
             ## 📁 Report Artifacts
             📥 **Download Reports:**
-            - [Snyk SCA HTML Report](../../actions/runs/${{ github.run_id }}) - Click "02-snyk-sca-report-v${{ env.VERSION }}" artifact
-            - [Snyk Dependency JSON Report](../../actions/runs/${{ github.run_id }}) - Vulnerability details and remediation
-            - [NPM Audit Report](../../actions/runs/${{ github.run_id }}) - Fallback dependency scan results
+            - [Snyk SCA HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "02-snyk-sca-report-v${{ env.VERSION }}" artifact
+            - [Snyk Dependency JSON Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Vulnerability details and remediation
+            - [NPM Audit Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Fallback dependency scan results
             
             This report identifies security vulnerabilities in project dependencies and provides remediation guidance.
             `;
@@ -722,9 +718,9 @@ jobs:
             
             ## 📁 Report Artifacts
             📥 **Download Reports:**
-            - [OWASP ZAP HTML Report](../../actions/runs/${{ github.run_id }}) - Click "03-owasp-zap-security-report-v${{ env.VERSION }}" artifact
-            - [OWASP ZAP JSON Report](../../actions/runs/${{ github.run_id }}) - Dynamic security scan findings
-            - [ZAP Baseline Scan](../../actions/runs/${{ github.run_id }}) - Quick security assessment results
+            - [OWASP ZAP HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "03-owasp-zap-security-report-v${{ env.VERSION }}" artifact
+            - [OWASP ZAP JSON Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Dynamic security scan findings
+            - [ZAP Baseline Scan](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Quick security assessment results
             
             This report provides dynamic application security testing results from scanning the running application for vulnerabilities.
             `;
