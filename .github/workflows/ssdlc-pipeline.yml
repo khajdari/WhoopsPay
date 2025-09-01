@@ -391,7 +391,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --dev --detection-depth=5 --severity-threshold=low --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif
+          args: --all-projects --dev --detection-depth=10 --severity-threshold=low --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif
         continue-on-error: true
 
       - name: Generate comprehensive security reports
