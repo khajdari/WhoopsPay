@@ -509,7 +509,7 @@ jobs:
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
     outputs:
-      zap-status: ${{ steps.zap.outputs.status }}
+      zap-status: ${{ steps.zap-active-scan.outputs.status }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -563,252 +563,18 @@ jobs:
           NODE_ENV: development
           DATABASE_URL: sqlite:./test.db
 
-      - name: Create comprehensive OWASP ZAP configuration
-        run: |
-          mkdir -p .zap
-          
-          # Create authentication script for WhoopsPay
-          cat > .zap/auth-script.js << 'EOF'
-          // Authentication script for WhoopsPay
-          function authenticate(helper, paramsValues, credentials) {
-              var loginUrl = "http://localhost:5000/api/login";
-              var loginData = "email=" + credentials.getParam("username") + "&password=" + credentials.getParam("password");
-              
-              var msg = helper.prepareMessage();
-              msg.setRequestHeader("Content-Type: application/x-www-form-urlencoded");
-              msg.setRequestBody(loginData);
-              msg.getRequestHeader().setURI(new org.apache.commons.httpclient.URI(loginUrl, false));
-              msg.getRequestHeader().setMethod("POST");
-              
-              helper.sendAndReceive(msg);
-              return msg;
-          }
-          
-          function getRequiredParamsNames() {
-              return ["username", "password"];
-          }
-          
-          function getOptionalParamsNames() {
-              return [];
-          }
-          
-          function getCredentialsParamsNames() {
-              return ["username", "password"];
-          }
-          EOF
-          
-          # Create comprehensive ZAP configuration
-          cat > .zap/zap-config.conf << 'EOF'
-          # OWASP ZAP Configuration for WhoopsPay Security Testing
-          
-          # Authentication Configuration
-          auth.method=form-based
-          auth.loginurl=http://localhost:5000/api/login
-          auth.username=sarah.wilson@example.com
-          auth.password=password123
-          auth.usernamefield=email
-          auth.passwordfield=password
-          
-          # Session Management
-          session.method=cookie
-          session.name=connect.sid
-          
-          # Spider Configuration
-          spider.maxdepth=10
-          spider.maxchildren=20
-          spider.maxduration=10
-          spider.threads=10
-          
-          # Active Scanner Configuration
-          scanner.strength=high
-          scanner.threshold=low
-          scanner.maxruletime=5
-          scanner.maxscantime=20
-          
-          # Include OWASP Top 10 Tests
-          scanner.policy=high-threshold
-          EOF
-          
-          # Create specific target URLs for comprehensive scanning
-          cat > .zap/target-urls.txt << 'EOF'
-          http://localhost:5000/
-          http://localhost:5000/api/auth/user
-          http://localhost:5000/api/login
-          http://localhost:5000/api/transactions
-          http://localhost:5000/api/users
-          http://localhost:5000/api/payments
-          http://localhost:5000/api/pending-requests
-          http://localhost:5000/api/notifications
-          http://localhost:5000/dashboard
-          http://localhost:5000/transfer
-          http://localhost:5000/settings
-          http://localhost:5000/admin
-          EOF
-          
-          echo "✅ Comprehensive ZAP configuration created"
-          echo "📋 Target URLs configured:"
-          cat .zap/target-urls.txt
-
-      - name: Run comprehensive security tests
-        id: security-tests
-        run: |
-          echo "🎯 Running comprehensive OWASP security tests..."
-          
-          # Create test results directory
-          mkdir -p "security-reports/v$VERSION/03-owasp-zap"
-          
-          # Convert security test files to simple executable scripts
-          cat > test-runner.js << 'EOF'
-          const axios = require('axios');
-          const BASE_URL = process.env.TEST_URL || 'http://localhost:5000';
-          
-          async function runOwaspTop10Tests() {
-            console.log('🔴 OWASP Top 10 Security Tests Starting...');
-            let vulnerabilities = 0;
-            
-            // A01: Broken Access Control - Admin Access Test
-            try {
-              const response = await axios.get(`${BASE_URL}/api/admin/users`, {
-                headers: { 'Cookie': 'user_id=1' },
-                timeout: 5000
-              });
-              if (response.status === 200) {
-                console.log('VULNERABILITY FOUND: A01 - Regular user can access admin endpoints');
-                vulnerabilities++;
-              }
-            } catch (error) {
-              console.log('✓ A01 - Admin access properly restricted');
-            }
-            
-            // A01: Direct Object Reference
-            try {
-              const response = await axios.get(`${BASE_URL}/api/users/@admin_maria/profile`, {
-                headers: { 'Cookie': 'connect.sid=test' },
-                timeout: 5000
-              });
-              if (response.status === 200) {
-                console.log('VULNERABILITY FOUND: A01 - Direct object reference allows unauthorized access');
-                vulnerabilities++;
-              }
-            } catch (error) {
-              console.log('✓ A01 - Direct object access controlled');
-            }
-            
-            // A03: Injection - SQL Injection Test
-            try {
-              const maliciousInput = "'; DROP TABLE users; --";
-              const response = await axios.post(`${BASE_URL}/api/login`, {
-                email: maliciousInput,
-                password: 'test'
-              }, { timeout: 5000 });
-              console.log('VULNERABILITY FOUND: A03 - SQL injection vulnerability detected');
-              vulnerabilities++;
-            } catch (error) {
-              console.log('✓ A03 - SQL injection protection in place');
-            }
-            
-            // A06: Authentication Failure - Weak Session
-            try {
-              const response = await axios.post(`${BASE_URL}/api/login`, {
-                email: 'test@example.com',
-                password: 'weak'
-              }, { timeout: 5000 });
-              const sessionCookie = response.headers['set-cookie'];
-              if (sessionCookie && !sessionCookie.some(cookie => cookie.includes('Secure'))) {
-                console.log('VULNERABILITY FOUND: A06 - Session cookies not secure');
-                vulnerabilities++;
-              }
-            } catch (error) {
-              console.log('✓ A06 - Session security properly configured');
-            }
-            
-            console.log(`🔴 OWASP Top 10 Tests Completed - ${vulnerabilities} vulnerabilities found`);
-            return vulnerabilities;
-          }
-          
-          async function runOwaspApiTests() {
-            console.log('🔌 OWASP API Security Tests Starting...');
-            let apiVulns = 0;
-            
-            // API1: Broken Object Level Authorization
-            try {
-              const response = await axios.get(`${BASE_URL}/api/users/@admin_maria/transactions`, {
-                headers: { 'Cookie': 'user_id=sarah_wilson' },
-                timeout: 5000
-              });
-              if (response.status === 200) {
-                console.log('VULNERABILITY FOUND: API1 - User can access other users\' transactions');
-                apiVulns++;
-              }
-            } catch (error) {
-              console.log('✓ API1 - Object level authorization properly implemented');
-            }
-            
-            // API3: Excessive Data Exposure
-            try {
-              const response = await axios.get(`${BASE_URL}/api/users/@sarah_wilson/profile`, {
-                timeout: 5000
-              });
-              if (response.data && (response.data.ssn || response.data.password)) {
-                console.log('VULNERABILITY FOUND: API3 - Excessive data exposure in API response');
-                apiVulns++;
-              }
-            } catch (error) {
-              console.log('✓ API3 - Data exposure properly controlled');
-            }
-            
-            console.log(`🔌 OWASP API Security Tests Completed - ${apiVulns} vulnerabilities found`);
-            return apiVulns;
-          }
-          
-          async function main() {
-            try {
-              const owaspVulns = await runOwaspTop10Tests();
-              const apiVulns = await runOwaspApiTests();
-              
-              console.log(`\n📊 COMPREHENSIVE SECURITY TEST SUMMARY:`);
-              console.log(`=======================================`);
-              console.log(`🔴 Total OWASP Top 10 Vulnerabilities: ${owaspVulns}`);
-              console.log(`🔴 Total API Security Vulnerabilities: ${apiVulns}`);
-              console.log(`🔴 Total Critical Security Issues: ${owaspVulns + apiVulns}`);
-              
-              process.exit(0);
-            } catch (error) {
-              console.error('Security test execution failed:', error.message);
-              process.exit(1);
-            }
-          }
-          
-          main();
-          EOF
-          
-          # Set test environment variables
-          export TEST_URL=http://localhost:5000
-          export NODE_ENV=test
-          
-          # Run comprehensive security tests
-          echo "🚀 Executing comprehensive security vulnerability tests..."
-          node test-runner.js > "security-reports/v$VERSION/03-owasp-zap/Custom-Security-Tests.txt" 2>&1 || echo "Security tests completed with findings"
-          
-          # Display results
-          echo "📊 Custom Security Test Results:"
-          cat "security-reports/v$VERSION/03-owasp-zap/Custom-Security-Tests.txt"
-          
-          echo "status=completed" >> $GITHUB_OUTPUT
-        continue-on-error: true
-
-      - name: OWASP ZAP baseline scan
-        id: zap
-        uses: zaproxy/action-baseline@v0.12.0
+      - name: OWASP ZAP Full Active Scan
+        id: zap-active-scan
+        uses: zaproxy/action-full-scan@v0.10.0
         with:
           target: 'http://localhost:5000'
-          cmd_options: '-a -j -T 20'
+          cmd_options: '-T 30'
           allow_issue_writing: false
         continue-on-error: true
 
-      - name: Organize security reports
+      - name: Organize ZAP security reports
         run: |
-          echo "📋 Organizing all DAST security reports..."
+          echo "📋 Organizing OWASP ZAP security reports..."
           
           # Ensure version folder exists
           mkdir -p "security-reports/v$VERSION/03-owasp-zap"
@@ -816,87 +582,16 @@ jobs:
           # Move ZAP reports if they exist
           [ -f "report_html.html" ] && mv report_html.html "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html"
           [ -f "report_json.json" ] && mv report_json.json "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.json"
+          [ -f "report_md.md" ] && mv report_md.md "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.md"
           
-          # Create comprehensive summary report
-          cat > "security-reports/v$VERSION/03-owasp-zap/DAST-Summary-Report.html" << EOF
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>WhoopsPay DAST Security Summary</title>
-            <style>
-              body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-              .header { background: #e74c3c; color: white; padding: 20px; border-radius: 8px; text-align: center; }
-              .section { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-              .vuln { background: #ffe6e6; border-left: 4px solid #e74c3c; padding: 15px; margin: 10px 0; }
-              .safe { background: #e6ffe6; border-left: 4px solid #27ae60; padding: 15px; margin: 10px 0; }
-              h1, h2 { color: #2c3e50; }
-              .stats { display: flex; justify-content: space-around; margin: 20px 0; }
-              .stat { text-align: center; padding: 20px; background: #ecf0f1; border-radius: 8px; }
-              .stat-number { font-size: 2em; font-weight: bold; color: #e74c3c; }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <h1>⚡ WhoopsPay DAST Security Report</h1>
-              <p>Dynamic Application Security Testing Results - Version $VERSION</p>
-              <p>Generated: $(date)</p>
-            </div>
-            
-            <div class="section">
-              <h2>📊 Executive Summary</h2>
-              <p>This comprehensive DAST assessment combines targeted OWASP Top 10 vulnerability testing with automated security scanning to evaluate the security posture of WhoopsPay's intentionally vulnerable educational platform.</p>
-              
-              <div class="stats">
-                <div class="stat">
-                  <div class="stat-number">Custom</div>
-                  <div>Security Tests</div>
-                </div>
-                <div class="stat">
-                  <div class="stat-number">ZAP</div>
-                  <div>Automated Scan</div>
-                </div>
-                <div class="stat">
-                  <div class="stat-number">OWASP</div>
-                  <div>Top 10 Coverage</div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="section">
-              <h2>🎯 Custom Security Test Results</h2>
-              <p>Targeted vulnerability assessment using WhoopsPay-specific security tests.</p>
-              <p><a href="Custom-Security-Tests.txt">📄 View Detailed Test Results</a></p>
-            </div>
-            
-            <div class="section">
-              <h2>⚡ OWASP ZAP Automated Scan</h2>
-              <p>Complementary automated vulnerability scanning for comprehensive coverage.</p>
-              <p><a href="OWASP-ZAP-Security-Report.html">📄 View ZAP Security Report</a></p>
-            </div>
-          </body>
-          </html>
-          EOF
-          
-          echo "✅ DAST reports organized successfully"
+          echo "✅ ZAP reports organized successfully"
           ls -la "security-reports/v$VERSION/03-owasp-zap/" || echo "Directory not found"
-
-      - name: Final report summary
-        run: |
-          echo "📋 Final DAST security assessment summary..."
           
-          # Show all generated files
-          echo "📊 All DAST security reports generated:"
-          ls -la "security-reports/v$VERSION/03-owasp-zap/" || echo "No reports directory found"
-          
-          # Count total files generated
-          REPORT_COUNT=$(ls "security-reports/v$VERSION/03-owasp-zap/" 2>/dev/null | wc -l)
-          echo "✅ Total security reports generated: $REPORT_COUNT"
-          
-          # Show custom test results summary if available
-          if [ -f "security-reports/v$VERSION/03-owasp-zap/Custom-Security-Tests.txt" ]; then
-            echo ""
-            echo "🎯 Custom Security Test Summary:"
-            tail -10 "security-reports/v$VERSION/03-owasp-zap/Custom-Security-Tests.txt"
+          # Display report summary
+          if [ -f "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html" ]; then
+            echo "✅ ZAP HTML report generated: $(wc -c < security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html) bytes"
+          else
+            echo "⚠️ ZAP HTML report not found"
           fi
           
           echo "status=completed" >> $GITHUB_OUTPUT
