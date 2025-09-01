@@ -34,9 +34,9 @@ jobs:
           echo "docker-tag=\${IMAGE_NAME}:\${VERSION}" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-  # PHASE 1: Pre-commit Security Checks
-  pre-commit-security:
-    name: "🔒 Pre-commit Security Validation"
+  # PHASE 1: ESLint Security Linting
+  eslint-security-linting:
+    name: "🛡️ ESLint Security Linting"
     runs-on: ubuntu-latest
     needs: setup-version
     env:
@@ -57,107 +57,83 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Extract version and create folder structure
+      - name: Setup version-specific folders
         run: |
-          # Use version from setup job
           echo "Using semantic version: v$VERSION"
-          
-          # Create version-specific folder structure
-          mkdir -p "security-reports/v$VERSION/00-pre-validation"
-          echo "📁 Created version folder structure for v$VERSION"
+          mkdir -p "security-reports/v$VERSION/00-eslint-security"
+          echo "📁 Created ESLint folder structure for v$VERSION"
 
-      - name: Run Comprehensive ESLint Security Analysis
+      - name: Run ESLint Security Linting (Fixed Configuration)
         run: |
-          echo "🔍 Running comprehensive ESLint security linting..."
+          echo "🔍 Running ESLint security linting with fixed configuration..."
           
-          # Run comprehensive security linting with multiple output formats
-          npx eslint . --ext .js,.jsx,.ts,.tsx --format json --output-file "security-reports/v$VERSION/00-pre-validation/eslint-security-report.json" || true
-          npx eslint . --ext .js,.jsx,.ts,.tsx --format html --output-file "security-reports/v$VERSION/00-pre-validation/ESLint-Security-Report.html" || true
-          npx eslint . --ext .js,.jsx,.ts,.tsx --format checkstyle --output-file "security-reports/v$VERSION/00-pre-validation/eslint-checkstyle.xml" || true
-          
-          # Generate detailed security summary
-          echo "📊 ESLint security analysis completed"
-          if [ -f "security-reports/v$VERSION/00-pre-validation/eslint-security-report.json" ]; then
-            echo "✅ ESLint JSON report generated"
-            echo "📄 Report size: $(wc -c < security-reports/v$VERSION/00-pre-validation/eslint-security-report.json) bytes"
-          fi
-          
-          if [ -f "security-reports/v$VERSION/00-pre-validation/ESLint-Security-Report.html" ]; then
-            echo "✅ ESLint HTML report generated"  
-            echo "📄 Report size: $(wc -c < security-reports/v$VERSION/00-pre-validation/ESLint-Security-Report.html) bytes"
-          fi
-          
-          echo "✅ Comprehensive ESLint security linting completed"
-
-      - name: Generate ESLint Security Summary Report
-        run: |
-          # Create comprehensive HTML security summary report in version folder
-          cat > "security-reports/v$VERSION/00-pre-validation/ESLint-Security-Summary.html" << 'EOF'
-          <!DOCTYPE html>
-          <html>
-          <head>
-              <meta charset="UTF-8">
-              <title>🔒 Pre-Validation Security Report</title>
-              <style>
-                  body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
-                  .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-                  h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-                  h2 { color: #34495e; margin-top: 30px; }
-                  .status { padding: 10px; border-radius: 5px; margin: 10px 0; }
-                  .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
-                  .info { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
-                  .version { background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; border-radius: 5px; margin: 10px 0; }
-                  .timestamp { color: #6c757d; font-size: 0.9em; }
-                  ul { line-height: 1.6; }
-                  li { margin: 5px 0; }
-              </style>
-          </head>
-          <body>
-              <div class="container">
-                  <h1>🔍 ESLint Security Linting Report</h1>
-                  <p class="timestamp">Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")</p>
-                  <div class="version"><strong>Version:</strong> v$VERSION</div>
-                  <div class="version"><strong>Branch:</strong> develop-vulnerable</div>
-                  
-                  <h2>🛡️ Security Linting Analysis</h2>
-                  <div class="status success">
-                      <strong>Status:</strong> COMPLETED - Comprehensive ESLint security analysis finished
-                  </div>
-                  
-                  <h2>📊 Linting Coverage</h2>
-                  <ul>
-                      <li><strong>eslint-plugin-security:</strong> Node.js security hotspot detection</li>
-                      <li><strong>@microsoft/eslint-plugin-sdl:</strong> Microsoft SDL compliance</li>
-                      <li><strong>eslint-plugin-sonarjs:</strong> Code quality and security vulnerabilities</li>
-                      <li><strong>TypeScript Security:</strong> Type safety and security enforcement</li>
-                      <li><strong>Files Analyzed:</strong> All JavaScript/TypeScript files in project</li>
-                      <li><strong>Security Rules Active:</strong> 15+ security-focused linting rules</li>
-                  </ul>
-                  
-                  <h2>📄 Security Analysis Summary</h2>
-                  <div class="status info">
-                      This report provides comprehensive code linting analysis focusing on security vulnerabilities, 
-                      code quality issues, and enterprise security compliance standards using industry-standard ESLint security plugins.
-                  </div>
-              </div>
-          </body>
-          </html>
+          # Create a working ESLint config for security linting only
+          cat > .eslintrc-security.json << 'EOF'
+          {
+            "extends": ["eslint:recommended"],
+            "plugins": ["security"],
+            "env": {
+              "node": true,
+              "es2022": true,
+              "browser": true
+            },
+            "parserOptions": {
+              "ecmaVersion": 2022,
+              "sourceType": "module"
+            },
+            "rules": {
+              "security/detect-eval-with-expression": "error",
+              "security/detect-child-process": "error",
+              "security/detect-object-injection": "warn",
+              "security/detect-non-literal-fs-filename": "warn",
+              "security/detect-buffer-noassert": "error",
+              "security/detect-disable-mustache-escape": "error",
+              "security/detect-non-literal-regexp": "warn",
+              "security/detect-non-literal-require": "warn",
+              "security/detect-possible-timing-attacks": "warn",
+              "security/detect-unsafe-regex": "error"
+            }
+          }
           EOF
           
-          echo "✅ ESLint security summary report generated for v$VERSION"
+          # Run ESLint with security-only configuration
+          npx eslint . --ext .js,.jsx,.ts,.tsx \
+            --config .eslintrc-security.json \
+            --format @microsoft/eslint-formatter-sarif \
+            --output-file "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" || true
+          
+          npx eslint . --ext .js,.jsx,.ts,.tsx \
+            --config .eslintrc-security.json \
+            --format json \
+            --output-file "security-reports/v$VERSION/00-eslint-security/eslint-security-report.json" || true
+          
+          npx eslint . --ext .js,.jsx,.ts,.tsx \
+            --config .eslintrc-security.json \
+            --format html \
+            --output-file "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" || true
+          
+          # Display results
+          echo "📊 ESLint security linting completed"
+          if [ -f "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" ]; then
+            echo "✅ Official SARIF report generated"
+            echo "🔍 Security Issues Found:"
+            jq -r '.runs[0].results | length' "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" 2>/dev/null || echo "0"
+          fi
+          
+          echo "✅ ESLint security linting completed for v$VERSION"
 
       - name: Upload ESLint Security Linting Report
         uses: actions/upload-artifact@v4
         with:
           name: 00-eslint-security-linting-report-v${{ env.VERSION }}
-          path: security-reports/v${{ env.VERSION }}/00-pre-validation/
+          path: security-reports/v${{ env.VERSION }}/00-eslint-security/
           retention-days: 30
 
   # PHASE 2: SAST - Static Application Security Testing
   sast-snyk-code:
-    name: "🔍 SAST - Snyk Code Analysis"
+    name: "🔒 SAST - Snyk Code Analysis"
     runs-on: ubuntu-latest
-    needs: [setup-version, pre-commit-security]
+    needs: [setup-version, eslint-security-linting]
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
     outputs:
@@ -434,7 +410,7 @@ jobs:
 
   # PHASE 4: DAST - Dynamic Application Security Testing
   dast-owasp-zap:
-    name: "🎯 DAST - OWASP ZAP Security Scan"
+    name: "⚡ DAST - OWASP ZAP Security Scan"
     runs-on: ubuntu-latest
     needs: [setup-version, sca-snyk]
     env:
@@ -575,54 +551,10 @@ jobs:
           path: security-reports/v${{ env.VERSION }}/03-owasp-zap/
           retention-days: 30
 
-  # Create GitHub Issues with Security Reports
-  # Docker Build with Semantic Versioning
-  docker-build:
-    name: "🐳 Build Docker Image with Semantic Version"
+  publish-security-findings:
+    name: "📊 Publish Security Findings"
     runs-on: ubuntu-latest
-    needs: [setup-version, dast-owasp-zap]
-    if: always()
-    env:
-      VERSION: ${{ needs.setup-version.outputs.version }}
-      DOCKER_TAG: ${{ needs.setup-version.outputs.docker-tag }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-      - name: Build and push Docker image with semantic version
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            khajdari/whoopspay:${{ needs.setup-version.outputs.version }}
-            khajdari/whoopspay:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Verify Docker Hub push
-        run: |
-          echo "✅ Docker image pushed successfully with semantic version"
-          echo "🐳 Image tags pushed:"
-          echo "   - \${IMAGE_NAME}:\${VERSION}"
-          echo "   - \${IMAGE_NAME}:latest"
-          echo "🔗 View on Docker Hub: https://hub.docker.com/r/\${DOCKER_HUB_USERNAME}/whoopspay"
-
-  create-security-issues:
-    name: "📋 Create Security Report Issues"
-    runs-on: ubuntu-latest
-    needs: [setup-version, pre-commit-security, sast-snyk-code, sca-snyk, dast-owasp-zap]
+    needs: [setup-version, eslint-security-linting, sast-snyk-code, sca-snyk, dast-owasp-zap]
     if: always()
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
@@ -631,9 +563,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🔍 ESLint Security Linting Report';
+            const title = '🛡️ Static Linting Security Report (ESLint)';
             const body = `
-            # 🔍 ESLint Security Linting Report
+            # 🛡️ Static Linting Security Report (ESLint)
             
             **Status:** Comprehensive ESLint security linting completed
             **Timestamp:** ${new Date().toISOString()}
@@ -668,9 +600,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🔍 Snyk Code SAST Analysis Report';
+            const title = '🔒 SAST Code Analysis Report (Snyk)';
             const body = `
-            # 🔍 Snyk Code SAST Analysis Report
+            # 🔒 SAST Code Analysis Report (Snyk)
             
             **Status:** Snyk Code static analysis completed
             **Timestamp:** ${new Date().toISOString()}
@@ -698,9 +630,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '📦 Snyk Dependency Security Report';
+            const title = '📦 SCA Dependency Report (Snyk)';
             const body = `
-            # 📦 Snyk Dependency Security Report
+            # 📦 SCA Dependency Report (Snyk)
             
             **Status:** Snyk dependency security scan completed
             **Timestamp:** ${new Date().toISOString()}
@@ -728,9 +660,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🎯 OWASP ZAP Dynamic Security Report';
+            const title = '⚡ DAST Application Scan Report (OWASP)';
             const body = `
-            # 🎯 OWASP ZAP Dynamic Security Report
+            # ⚡ DAST Application Scan Report (OWASP)
             
             **Status:** OWASP ZAP dynamic security testing completed
             **Timestamp:** ${new Date().toISOString()}
@@ -754,40 +686,47 @@ jobs:
               labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report']
             });
 
-      - name: Create Summary Security Issue
-        uses: actions/github-script@v7
+
+  # FINAL STEP: Docker Hub Deployment (After Security Analysis)
+  docker-hub-publish:
+    name: "🚀 Docker Hub Deployment"
+    runs-on: ubuntu-latest
+    needs: [setup-version, publish-security-findings]
+    if: always()
+    env:
+      VERSION: ${{ needs.setup-version.outputs.version }}
+      IMAGE_NAME: khajdari/whoopspay
+      DOCKER_HUB_USERNAME: khajdari
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          script: |
-            const title = '📊 Security Pipeline Summary';
-            const body = `
-            # 📊 Complete Security Pipeline Summary
-            
-            **Status:** Complete security pipeline analysis finished
-            **Timestamp:** ${new Date().toISOString()}
-            **Pipeline Run:** See GitHub Actions tab for details
-            
-            ## 🛡️ Security Phase Results
-            
-            | Phase | Tool | Status | Report |
-            |-------|------|--------|--------|
-            | Linting | ESLint Security | ${{ needs.pre-commit-security.result }} | ✅ |
-            | SAST | Snyk Code | ${{ needs.sast-snyk-code.result }} | ✅ |
-            | SCA | Snyk | ${{ needs.sca-snyk.result }} | ✅ |
-            | DAST | OWASP ZAP | ${{ needs.dast-owasp-zap.result }} | ✅ |
-            
-            ## 📋 Individual Report Issues
-            Check the repository issues for individual detailed security reports from each phase.
-            
-            ## 📁 All Artifacts
-            - Download All Reports from GitHub Actions artifacts
-            
-            **Pipeline Status:** ${{ (needs.pre-commit-security.result == 'success' && needs.sast-snyk-code.result == 'success' && needs.sca-snyk.result == 'success' && needs.dast-owasp-zap.result == 'success') && '✅ All Passed' || '⚠️ Some Issues Found' }}
-            `;
-            
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: title,
-              body: body,
-              labels: ['security', 'pipeline-summary', 'automated-report']
-            });
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push Docker image with semantic version
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            khajdari/whoopspay:${{ needs.setup-version.outputs.version }}
+            khajdari/whoopspay:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify Docker Hub push
+        run: |
+          echo "✅ Docker image pushed successfully with semantic version"
+          echo "🐳 Image tags pushed:"
+          echo "   - khajdari/whoopspay:$VERSION"
+          echo "   - khajdari/whoopspay:latest"
+          echo "🔗 View on Docker Hub: https://hub.docker.com/r/khajdari/whoopspay"

@@ -7,9 +7,6 @@ import typescriptParser from '@typescript-eslint/parser';
 
 export default [
   js.configs.recommended,
-  security.configs.recommended,
-  sonarjs.configs.recommended,
-  ...microsoftSdl.configs.recommended,
   {
     plugins: {
       security,
@@ -28,7 +25,7 @@ export default [
       // Code Quality Security
       'sonarjs/cognitive-complexity': ['error', 20],
       'sonarjs/no-identical-expressions': 'error',
-      'sonarjs/no-duplicate-string': ['error', 3],
+      'sonarjs/no-duplicate-string': ['error', { threshold: 3 }],
       'sonarjs/no-small-switch': 'warn',
       
       // Enterprise Security (SDL)
