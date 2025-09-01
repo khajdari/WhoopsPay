@@ -59,10 +59,6 @@ temp/
 data/*.db
 data/*.db-journal
 
-# Replit specific files
-.replit
-replit.nix
-
 # Docker files
 Dockerfile*
 docker-compose*.yml

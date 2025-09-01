@@ -66,7 +66,6 @@ The application supports multiple deployment scenarios:
 
 - **Local Development**: Direct Node.js execution with Vite development server
 - **Docker Environment**: Containerized deployment with Docker Compose integration
-- **Replit Integration**: Cloud-based development environment with proper asset handling
 - **Production Build**: Optimized static builds with proper routing fallbacks
 
 ## External Dependencies
