@@ -75,6 +75,7 @@ jobs:
           cat > eslint-security.config.js << 'EOF'
           import js from '@eslint/js';
           import security from 'eslint-plugin-security';
+          import globals from 'globals';
           
           export default [
             js.configs.recommended,
@@ -86,14 +87,9 @@ jobs:
                 ecmaVersion: 2022,
                 sourceType: 'module',
                 globals: {
-                  ...globalThis,
-                  process: 'readonly',
-                  Buffer: 'readonly',
-                  console: 'readonly',
-                  setTimeout: 'readonly',
-                  setInterval: 'readonly',
-                  clearTimeout: 'readonly',
-                  clearInterval: 'readonly'
+                  ...globals.node,
+                  ...globals.browser,
+                  ...globals.es2021
                 }
               },
               rules: {

@@ -1,0 +1,423 @@
+2025-09-01T01:27:43.4426317Z Current runner version: '2.328.0'
+2025-09-01T01:27:43.4456615Z ##[group]Runner Image Provisioner
+2025-09-01T01:27:43.4457750Z Hosted Compute Agent
+2025-09-01T01:27:43.4458591Z Version: 20250821.380
+2025-09-01T01:27:43.4459635Z Commit: 438d12cb4fe092871db9867344e3bc0bc5319035
+2025-09-01T01:27:43.4461017Z Build Date: 2025-08-21T20:49:43Z
+2025-09-01T01:27:43.4461952Z ##[endgroup]
+2025-09-01T01:27:43.4462674Z ##[group]Operating System
+2025-09-01T01:27:43.4463727Z Ubuntu
+2025-09-01T01:27:43.4464480Z 24.04.3
+2025-09-01T01:27:43.4465195Z LTS
+2025-09-01T01:27:43.4465972Z ##[endgroup]
+2025-09-01T01:27:43.4466798Z ##[group]Runner Image
+2025-09-01T01:27:43.4467699Z Image: ubuntu-24.04
+2025-09-01T01:27:43.4468514Z Version: 20250824.1.0
+2025-09-01T01:27:43.4470316Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250824.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-09-01T01:27:43.4473102Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250824.1
+2025-09-01T01:27:43.4474714Z ##[endgroup]
+2025-09-01T01:27:43.4478883Z ##[group]GITHUB_TOKEN Permissions
+2025-09-01T01:27:43.4481733Z Actions: write
+2025-09-01T01:27:43.4482716Z Attestations: write
+2025-09-01T01:27:43.4483594Z Checks: write
+2025-09-01T01:27:43.4484329Z Contents: write
+2025-09-01T01:27:43.4485238Z Deployments: write
+2025-09-01T01:27:43.4486042Z Discussions: write
+2025-09-01T01:27:43.4486816Z Issues: write
+2025-09-01T01:27:43.4487783Z Metadata: read
+2025-09-01T01:27:43.4488500Z Models: read
+2025-09-01T01:27:43.4489240Z Packages: write
+2025-09-01T01:27:43.4490402Z Pages: write
+2025-09-01T01:27:43.4491179Z PullRequests: write
+2025-09-01T01:27:43.4492085Z RepositoryProjects: write
+2025-09-01T01:27:43.4493100Z SecurityEvents: write
+2025-09-01T01:27:43.4494084Z Statuses: write
+2025-09-01T01:27:43.4494966Z ##[endgroup]
+2025-09-01T01:27:43.4497785Z Secret source: Actions
+2025-09-01T01:27:43.4498766Z Prepare workflow directory
+2025-09-01T01:27:43.5251056Z Prepare all required actions
+2025-09-01T01:27:43.5305262Z Getting action download info
+2025-09-01T01:27:43.7825572Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-09-01T01:27:43.8527794Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-09-01T01:27:43.9816308Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-09-01T01:27:44.1605963Z Complete job name: 🛡️ ESLint Security Linting
+2025-09-01T01:27:44.2208291Z ##[group]Run actions/checkout@v4
+2025-09-01T01:27:44.2209125Z with:
+2025-09-01T01:27:44.2209517Z   fetch-depth: 0
+2025-09-01T01:27:44.2209972Z   ref: b73f60f329ae2ff0edcfbf85e3c42f39f7556cde
+2025-09-01T01:27:44.2210708Z   repository: khajdari/WhoopsPay
+2025-09-01T01:27:44.2211326Z   token: ***
+2025-09-01T01:27:44.2211710Z   ssh-strict: true
+2025-09-01T01:27:44.2212110Z   ssh-user: git
+2025-09-01T01:27:44.2212502Z   persist-credentials: true
+2025-09-01T01:27:44.2212953Z   clean: true
+2025-09-01T01:27:44.2213391Z   sparse-checkout-cone-mode: true
+2025-09-01T01:27:44.2213867Z   fetch-tags: false
+2025-09-01T01:27:44.2214279Z   show-progress: true
+2025-09-01T01:27:44.2214679Z   lfs: false
+2025-09-01T01:27:44.2215049Z   submodules: false
+2025-09-01T01:27:44.2215449Z   set-safe-directory: true
+2025-09-01T01:27:44.2216110Z env:
+2025-09-01T01:27:44.2216482Z   NODE_VERSION: 20
+2025-09-01T01:27:44.2216884Z   DOCKER_REGISTRY: docker.io
+2025-09-01T01:27:44.2217385Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T01:27:44.2217846Z   VERSION: 1.0.0
+2025-09-01T01:27:44.2218229Z ##[endgroup]
+2025-09-01T01:27:44.3264028Z Syncing repository: khajdari/WhoopsPay
+2025-09-01T01:27:44.3265710Z ##[group]Getting Git version info
+2025-09-01T01:27:44.3266409Z Working directory is '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-01T01:27:44.3267371Z [command]/usr/bin/git version
+2025-09-01T01:27:44.3315316Z git version 2.51.0
+2025-09-01T01:27:44.3341342Z ##[endgroup]
+2025-09-01T01:27:44.3354857Z Temporarily overriding HOME='/home/runner/work/_temp/c25f8182-3386-49b6-aba7-6d155a5cdfd0' before making global git config changes
+2025-09-01T01:27:44.3356475Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-01T01:27:44.3360948Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-01T01:27:44.3394642Z Deleting the contents of '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-01T01:27:44.3398475Z ##[group]Initializing the repository
+2025-09-01T01:27:44.3403612Z [command]/usr/bin/git init /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-01T01:27:44.3472612Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-09-01T01:27:44.3474233Z hint: is subject to change. To configure the initial branch name to use in all
+2025-09-01T01:27:44.3475677Z hint: of your new repositories, which will suppress this warning, call:
+2025-09-01T01:27:44.3476651Z hint:
+2025-09-01T01:27:44.3477134Z hint: 	git config --global init.defaultBranch <name>
+2025-09-01T01:27:44.3477716Z hint:
+2025-09-01T01:27:44.3478257Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-09-01T01:27:44.3479104Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-09-01T01:27:44.3479773Z hint:
+2025-09-01T01:27:44.3480532Z hint: 	git branch -m <name>
+2025-09-01T01:27:44.3481238Z hint:
+2025-09-01T01:27:44.3481856Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-09-01T01:27:44.3482791Z Initialized empty Git repository in /home/runner/work/WhoopsPay/WhoopsPay/.git/
+2025-09-01T01:27:44.3485971Z [command]/usr/bin/git remote add origin https://github.com/khajdari/WhoopsPay
+2025-09-01T01:27:44.3522120Z ##[endgroup]
+2025-09-01T01:27:44.3522833Z ##[group]Disabling automatic garbage collection
+2025-09-01T01:27:44.3526019Z [command]/usr/bin/git config --local gc.auto 0
+2025-09-01T01:27:44.3553582Z ##[endgroup]
+2025-09-01T01:27:44.3554375Z ##[group]Setting up auth
+2025-09-01T01:27:44.3560485Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-01T01:27:44.3589170Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-01T01:27:44.3846084Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-01T01:27:44.3875177Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-01T01:27:44.4102417Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-09-01T01:27:44.4145979Z ##[endgroup]
+2025-09-01T01:27:44.4154002Z ##[group]Fetching the repository
+2025-09-01T01:27:44.4155177Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2025-09-01T01:27:45.1207454Z From https://github.com/khajdari/WhoopsPay
+2025-09-01T01:27:45.1209382Z  * [new branch]      develop-beta2      -> origin/develop-beta2
+2025-09-01T01:27:45.1235450Z  * [new branch]      develop-vulnerable -> origin/develop-vulnerable
+2025-09-01T01:27:45.1245008Z [command]/usr/bin/git rev-parse --verify --quiet b73f60f329ae2ff0edcfbf85e3c42f39f7556cde^{object}
+2025-09-01T01:27:45.1267914Z b73f60f329ae2ff0edcfbf85e3c42f39f7556cde
+2025-09-01T01:27:45.1275565Z ##[endgroup]
+2025-09-01T01:27:45.1277406Z ##[group]Determining the checkout info
+2025-09-01T01:27:45.1279508Z ##[endgroup]
+2025-09-01T01:27:45.1281164Z [command]/usr/bin/git sparse-checkout disable
+2025-09-01T01:27:45.1318654Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-09-01T01:27:45.1346261Z ##[group]Checking out the ref
+2025-09-01T01:27:45.1349616Z [command]/usr/bin/git checkout --progress --force b73f60f329ae2ff0edcfbf85e3c42f39f7556cde
+2025-09-01T01:27:45.1602315Z Note: switching to 'b73f60f329ae2ff0edcfbf85e3c42f39f7556cde'.
+2025-09-01T01:27:45.1603802Z 
+2025-09-01T01:27:45.1604809Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-09-01T01:27:45.1606486Z changes and commit them, and you can discard any commits you make in this
+2025-09-01T01:27:45.1608912Z state without impacting any branches by switching back to a branch.
+2025-09-01T01:27:45.1610885Z 
+2025-09-01T01:27:45.1612014Z If you want to create a new branch to retain commits you create, you may
+2025-09-01T01:27:45.1614545Z do so (now or later) by using -c with the switch command. Example:
+2025-09-01T01:27:45.1616082Z 
+2025-09-01T01:27:45.1616746Z   git switch -c <new-branch-name>
+2025-09-01T01:27:45.1617871Z 
+2025-09-01T01:27:45.1618576Z Or undo this operation with:
+2025-09-01T01:27:45.1619635Z 
+2025-09-01T01:27:45.1620487Z   git switch -
+2025-09-01T01:27:45.1621334Z 
+2025-09-01T01:27:45.1622641Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-09-01T01:27:45.1624095Z 
+2025-09-01T01:27:45.1625540Z HEAD is now at b73f60f Merge branch 'develop-vulnerable' of https://github.com/khajdari/WhoopsPay into develop-beta2
+2025-09-01T01:27:45.1631220Z ##[endgroup]
+2025-09-01T01:27:45.1650457Z [command]/usr/bin/git log -1 --format=%H
+2025-09-01T01:27:45.1672063Z b73f60f329ae2ff0edcfbf85e3c42f39f7556cde
+2025-09-01T01:27:45.1972224Z ##[group]Run actions/setup-node@v4
+2025-09-01T01:27:45.1973420Z with:
+2025-09-01T01:27:45.1974235Z   node-version: 20
+2025-09-01T01:27:45.1975140Z   cache: npm
+2025-09-01T01:27:45.1976014Z   always-auth: false
+2025-09-01T01:27:45.1976969Z   check-latest: false
+2025-09-01T01:27:45.1978188Z   token: ***
+2025-09-01T01:27:45.1978999Z env:
+2025-09-01T01:27:45.1979783Z   NODE_VERSION: 20
+2025-09-01T01:27:45.1981142Z   DOCKER_REGISTRY: docker.io
+2025-09-01T01:27:45.1982309Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T01:27:45.1983337Z   VERSION: 1.0.0
+2025-09-01T01:27:45.1984185Z ##[endgroup]
+2025-09-01T01:27:45.4008557Z Found in cache @ /opt/hostedtoolcache/node/20.19.4/x64
+2025-09-01T01:27:45.4015074Z ##[group]Environment details
+2025-09-01T01:27:47.8091174Z node: v20.19.4
+2025-09-01T01:27:47.8092667Z npm: 10.8.2
+2025-09-01T01:27:47.8093032Z yarn: 1.22.22
+2025-09-01T01:27:47.8094277Z ##[endgroup]
+2025-09-01T01:27:47.8115357Z [command]/opt/hostedtoolcache/node/20.19.4/x64/bin/npm config get cache
+2025-09-01T01:27:48.1197734Z /home/runner/.npm
+2025-09-01T01:27:48.2346524Z Cache hit for: node-cache-Linux-x64-npm-0cff4e10f1fa11b83775b02b67f4a898066ab13058512c37b16bbff72bf89e9a
+2025-09-01T01:27:48.8492919Z Received 101187156 of 101187156 (100.0%), 174.5 MBs/sec
+2025-09-01T01:27:48.8494504Z Cache Size: ~96 MB (101187156 B)
+2025-09-01T01:27:48.8562180Z [command]/usr/bin/tar -xf /home/runner/work/_temp/70df968b-1250-4485-98eb-de97430d7ab9/cache.tzst -P -C /home/runner/work/WhoopsPay/WhoopsPay --use-compress-program unzstd
+2025-09-01T01:27:49.1463857Z Cache restored successfully
+2025-09-01T01:27:49.1661558Z Cache restored from key: node-cache-Linux-x64-npm-0cff4e10f1fa11b83775b02b67f4a898066ab13058512c37b16bbff72bf89e9a
+2025-09-01T01:27:49.1831815Z ##[group]Run npm ci
+2025-09-01T01:27:49.1832140Z [36;1mnpm ci[0m
+2025-09-01T01:27:49.1933406Z shell: /usr/bin/bash -e {0}
+2025-09-01T01:27:49.1933702Z env:
+2025-09-01T01:27:49.1933895Z   NODE_VERSION: 20
+2025-09-01T01:27:49.1934111Z   DOCKER_REGISTRY: docker.io
+2025-09-01T01:27:49.1934464Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T01:27:49.1934691Z   VERSION: 1.0.0
+2025-09-01T01:27:49.1934894Z ##[endgroup]
+2025-09-01T01:27:54.6054040Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-09-01T01:27:54.6523297Z npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+2025-09-01T01:27:54.6756843Z npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+2025-09-01T01:27:54.7305300Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+2025-09-01T01:27:54.7533504Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2025-09-01T01:27:54.7640883Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2025-09-01T01:27:54.8436961Z npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+2025-09-01T01:27:54.8726444Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2025-09-01T01:27:54.8873705Z npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+2025-09-01T01:27:55.3340703Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2025-09-01T01:27:57.1837751Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2025-09-01T01:28:01.4845607Z 
+2025-09-01T01:28:01.4846398Z added 841 packages, and audited 842 packages in 12s
+2025-09-01T01:28:01.4846858Z 
+2025-09-01T01:28:01.4847351Z 196 packages are looking for funding
+2025-09-01T01:28:01.4847865Z   run `npm fund` for details
+2025-09-01T01:28:01.5108517Z 
+2025-09-01T01:28:01.5109408Z 9 vulnerabilities (3 low, 5 moderate, 1 critical)
+2025-09-01T01:28:01.5109923Z 
+2025-09-01T01:28:01.5110694Z To address issues that do not require attention, run:
+2025-09-01T01:28:01.5111402Z   npm audit fix
+2025-09-01T01:28:01.5111666Z 
+2025-09-01T01:28:01.5112149Z To address all issues (including breaking changes), run:
+2025-09-01T01:28:01.5112859Z   npm audit fix --force
+2025-09-01T01:28:01.5113159Z 
+2025-09-01T01:28:01.5113400Z Run `npm audit` for details.
+2025-09-01T01:28:01.5735107Z ##[group]Run echo "Using semantic version: v$VERSION"
+2025-09-01T01:28:01.5735495Z [36;1mecho "Using semantic version: v$VERSION"[0m
+2025-09-01T01:28:01.5735871Z [36;1mmkdir -p "security-reports/v$VERSION/00-eslint-security"[0m
+2025-09-01T01:28:01.5736293Z [36;1mecho "📁 Created ESLint folder structure for v$VERSION"[0m
+2025-09-01T01:28:01.5768792Z shell: /usr/bin/bash -e {0}
+2025-09-01T01:28:01.5769018Z env:
+2025-09-01T01:28:01.5769188Z   NODE_VERSION: 20
+2025-09-01T01:28:01.5769385Z   DOCKER_REGISTRY: docker.io
+2025-09-01T01:28:01.5769709Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T01:28:01.5769926Z   VERSION: 1.0.0
+2025-09-01T01:28:01.5770283Z ##[endgroup]
+2025-09-01T01:28:01.5823795Z Using semantic version: v1.0.0
+2025-09-01T01:28:01.5837789Z 📁 Created ESLint folder structure for v1.0.0
+2025-09-01T01:28:01.5861065Z ##[group]Run echo "🔍 Running ESLint security linting with fixed configuration..."
+2025-09-01T01:28:01.5861684Z [36;1mecho "🔍 Running ESLint security linting with fixed configuration..."[0m
+2025-09-01T01:28:01.5862049Z [36;1m[0m
+2025-09-01T01:28:01.5862283Z [36;1m# Ensure security reports directory exists first[0m
+2025-09-01T01:28:01.5862676Z [36;1mmkdir -p "security-reports/v$VERSION/00-eslint-security"[0m
+2025-09-01T01:28:01.5863152Z [36;1mecho "📁 Created directory: security-reports/v$VERSION/00-eslint-security"[0m
+2025-09-01T01:28:01.5863507Z [36;1m[0m
+2025-09-01T01:28:01.5863738Z [36;1m# Create ESLint v9 flat config for security linting[0m
+2025-09-01T01:28:01.5864067Z [36;1mcat > eslint-security.config.js << 'EOF'[0m
+2025-09-01T01:28:01.5864347Z [36;1mimport js from '@eslint/js';[0m
+2025-09-01T01:28:01.5864641Z [36;1mimport security from 'eslint-plugin-security';[0m
+2025-09-01T01:28:01.5864917Z [36;1m[0m
+2025-09-01T01:28:01.5865133Z [36;1mexport default [[0m
+2025-09-01T01:28:01.5865512Z [36;1m  js.configs.recommended,[0m
+2025-09-01T01:28:01.5865895Z [36;1m  {[0m
+2025-09-01T01:28:01.5866183Z [36;1m    plugins: {[0m
+2025-09-01T01:28:01.5866508Z [36;1m      security[0m
+2025-09-01T01:28:01.5866811Z [36;1m    },[0m
+2025-09-01T01:28:01.5867122Z [36;1m    languageOptions: {[0m
+2025-09-01T01:28:01.5867507Z [36;1m      ecmaVersion: 2022,[0m
+2025-09-01T01:28:01.5868106Z [36;1m      sourceType: 'module',[0m
+2025-09-01T01:28:01.5868491Z [36;1m      globals: {[0m
+2025-09-01T01:28:01.5868837Z [36;1m        ...globalThis,[0m
+2025-09-01T01:28:01.5869217Z [36;1m        process: 'readonly',[0m
+2025-09-01T01:28:01.5869619Z [36;1m        Buffer: 'readonly',[0m
+2025-09-01T01:28:01.5870011Z [36;1m        console: 'readonly',[0m
+2025-09-01T01:28:01.5870589Z [36;1m        setTimeout: 'readonly',[0m
+2025-09-01T01:28:01.5871014Z [36;1m        setInterval: 'readonly',[0m
+2025-09-01T01:28:01.5871450Z [36;1m        clearTimeout: 'readonly',[0m
+2025-09-01T01:28:01.5871895Z [36;1m        clearInterval: 'readonly'[0m
+2025-09-01T01:28:01.5872287Z [36;1m      }[0m
+2025-09-01T01:28:01.5872577Z [36;1m    },[0m
+2025-09-01T01:28:01.5872871Z [36;1m    rules: {[0m
+2025-09-01T01:28:01.5873293Z [36;1m      'security/detect-eval-with-expression': 'error',[0m
+2025-09-01T01:28:01.5873860Z [36;1m      'security/detect-child-process': 'error',[0m
+2025-09-01T01:28:01.5874415Z [36;1m      'security/detect-object-injection': 'warn',[0m
+2025-09-01T01:28:01.5874997Z [36;1m      'security/detect-non-literal-fs-filename': 'warn',[0m
+2025-09-01T01:28:01.5875573Z [36;1m      'security/detect-buffer-noassert': 'error',[0m
+2025-09-01T01:28:01.5876154Z [36;1m      'security/detect-disable-mustache-escape': 'error',[0m
+2025-09-01T01:28:01.5876754Z [36;1m      'security/detect-non-literal-regexp': 'warn',[0m
+2025-09-01T01:28:01.5877317Z [36;1m      'security/detect-non-literal-require': 'warn',[0m
+2025-09-01T01:28:01.5877915Z [36;1m      'security/detect-possible-timing-attacks': 'warn',[0m
+2025-09-01T01:28:01.5878483Z [36;1m      'security/detect-unsafe-regex': 'error'[0m
+2025-09-01T01:28:01.5878939Z [36;1m    }[0m
+2025-09-01T01:28:01.5879264Z [36;1m  }[0m
+2025-09-01T01:28:01.5879538Z [36;1m];[0m
+2025-09-01T01:28:01.5879804Z [36;1mEOF[0m
+2025-09-01T01:28:01.5880073Z [36;1m[0m
+2025-09-01T01:28:01.5880543Z [36;1mecho "📄 ESLint security config created"[0m
+2025-09-01T01:28:01.5880984Z [36;1m[0m
+2025-09-01T01:28:01.5881292Z [36;1m# Test ESLint configuration first[0m
+2025-09-01T01:28:01.5881772Z [36;1mecho "🧪 Testing ESLint configuration..."[0m
+2025-09-01T01:28:01.5882232Z [36;1mnpx eslint --version[0m
+2025-09-01T01:28:01.5882579Z [36;1m[0m
+2025-09-01T01:28:01.5883009Z [36;1m# Run ESLint with security-only configuration using flat config[0m
+2025-09-01T01:28:01.5883626Z [36;1mecho "🛡️ Running ESLint security scan..."[0m
+2025-09-01T01:28:01.5884070Z [36;1mnpx eslint . \[0m
+2025-09-01T01:28:01.5884678Z [36;1m  --config eslint-security.config.js \[0m
+2025-09-01T01:28:01.5885218Z [36;1m  --format @microsoft/eslint-formatter-sarif \[0m
+2025-09-01T01:28:01.5886190Z [36;1m  --output-file "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" || echo "SARIF generation failed"[0m
+2025-09-01T01:28:01.5887062Z [36;1m[0m
+2025-09-01T01:28:01.5887343Z [36;1mnpx eslint . \[0m
+2025-09-01T01:28:01.5887727Z [36;1m  --config eslint-security.config.js \[0m
+2025-09-01T01:28:01.5888179Z [36;1m  --format json \[0m
+2025-09-01T01:28:01.5889064Z [36;1m  --output-file "security-reports/v$VERSION/00-eslint-security/eslint-security-report.json" || echo "JSON generation failed"[0m
+2025-09-01T01:28:01.5889973Z [36;1m[0m
+2025-09-01T01:28:01.5890787Z [36;1mnpx eslint . \[0m
+2025-09-01T01:28:01.5891177Z [36;1m  --config eslint-security.config.js \[0m
+2025-09-01T01:28:01.5891628Z [36;1m  --format html \[0m
+2025-09-01T01:28:01.5892506Z [36;1m  --output-file "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" || echo "HTML generation failed"[0m
+2025-09-01T01:28:01.5893412Z [36;1m[0m
+2025-09-01T01:28:01.5893756Z [36;1m# Create a basic report even if ESLint fails[0m
+2025-09-01T01:28:01.5894526Z [36;1mif [ ! -f "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" ]; then[0m
+2025-09-01T01:28:01.5895354Z [36;1m  echo "⚠️ Creating fallback HTML report..."[0m
+2025-09-01T01:28:01.5897619Z [36;1m  echo '<!DOCTYPE html><html><head><title>ESLint Security Report</title></head><body><h1>ESLint Security Linting Report</h1><p><strong>Status:</strong> ESLint security scan completed</p><p><strong>Note:</strong> This is a basic security linting report. For detailed results, check the JSON and SARIF files.</p></body></html>' > "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html"[0m
+2025-09-01T01:28:01.5899978Z [36;1mfi[0m
+2025-09-01T01:28:01.5900445Z [36;1m[0m
+2025-09-01T01:28:01.5900722Z [36;1m# Display results[0m
+2025-09-01T01:28:01.5901156Z [36;1mecho "📊 ESLint security linting completed"[0m
+2025-09-01T01:28:01.5901896Z [36;1mif [ -f "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" ]; then[0m
+2025-09-01T01:28:01.5902632Z [36;1m  echo "✅ Official SARIF report generated"[0m
+2025-09-01T01:28:01.5903110Z [36;1m  echo "🔍 Security Issues Found:"[0m
+2025-09-01T01:28:01.5904006Z [36;1m  jq -r '.runs[0].results | length' "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" 2>/dev/null || echo "0"[0m
+2025-09-01T01:28:01.5904883Z [36;1mfi[0m
+2025-09-01T01:28:01.5905153Z [36;1m[0m
+2025-09-01T01:28:01.5905566Z [36;1mecho "✅ ESLint security linting completed for v$VERSION"[0m
+2025-09-01T01:28:01.5906077Z [36;1m[0m
+2025-09-01T01:28:01.5906474Z [36;1m# Verify files were created and display directory contents[0m
+2025-09-01T01:28:01.5907055Z [36;1mecho "📁 Checking ESLint report files:"[0m
+2025-09-01T01:28:01.5907883Z [36;1mls -la "security-reports/v$VERSION/00-eslint-security/" 2>/dev/null || echo "❌ Report directory not found"[0m
+2025-09-01T01:28:01.5908834Z [36;1mif [ -d "security-reports/v$VERSION/00-eslint-security/" ]; then[0m
+2025-09-01T01:28:01.5909418Z [36;1m  echo "✅ Report directory exists"[0m
+2025-09-01T01:28:01.5909868Z [36;1m  echo "📄 Files in directory:"[0m
+2025-09-01T01:28:01.5910838Z [36;1m  find "security-reports/v$VERSION/00-eslint-security/" -type f -exec ls -la {} \; 2>/dev/null || echo "No files found"[0m
+2025-09-01T01:28:01.5911659Z [36;1mfi[0m
+2025-09-01T01:28:01.5942777Z shell: /usr/bin/bash -e {0}
+2025-09-01T01:28:01.5943139Z env:
+2025-09-01T01:28:01.5943410Z   NODE_VERSION: 20
+2025-09-01T01:28:01.5943726Z   DOCKER_REGISTRY: docker.io
+2025-09-01T01:28:01.5944179Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T01:28:01.5944525Z   VERSION: 1.0.0
+2025-09-01T01:28:01.5944821Z ##[endgroup]
+2025-09-01T01:28:01.6004422Z 🔍 Running ESLint security linting with fixed configuration...
+2025-09-01T01:28:01.6016722Z 📁 Created directory: security-reports/v1.0.0/00-eslint-security
+2025-09-01T01:28:01.6028205Z 📄 ESLint security config created
+2025-09-01T01:28:01.6028823Z 🧪 Testing ESLint configuration...
+2025-09-01T01:28:02.0896759Z v9.34.0
+2025-09-01T01:28:02.1036762Z 🛡️ Running ESLint security scan...
+2025-09-01T01:28:02.6400463Z 
+2025-09-01T01:28:02.6401343Z Oops! Something went wrong! :(
+2025-09-01T01:28:02.6402638Z 
+2025-09-01T01:28:02.6402812Z ESLint: 9.34.0
+2025-09-01T01:28:02.6403018Z 
+2025-09-01T01:28:02.6403654Z TypeError: Key "languageOptions": Key "globals": Key "global": Expected "readonly", "writable", or "off".
+2025-09-01T01:28:02.6404905Z     at new Config (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/config/config.js:436:10)
+2025-09-01T01:28:02.6406308Z     at [finalizeConfig] (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/config/flat-config-array.js:212:10)
+2025-09-01T01:28:02.6407995Z     at FlatConfigArray.getConfigWithStatus (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/@eslint/config-array/dist/cjs/index.cjs:1404:55)
+2025-09-01T01:28:02.6409755Z     at FlatConfigArray.getConfig (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/@eslint/config-array/dist/cjs/index.cjs:1422:15)
+2025-09-01T01:28:02.6411478Z     at entryFilter (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/eslint/eslint-helpers.js:322:27)
+2025-09-01T01:28:02.6412909Z     at async NodeHfs.<anonymous> (file:///home/runner/work/WhoopsPay/WhoopsPay/node_modules/@humanfs/core/src/hfs.js:574:24)
+2025-09-01T01:28:02.6414603Z     at async NodeHfs.walk (file:///home/runner/work/WhoopsPay/WhoopsPay/node_modules/@humanfs/core/src/hfs.js:614:3)
+2025-09-01T01:28:02.6416159Z     at async globSearch (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/eslint/eslint-helpers.js:363:20)
+2025-09-01T01:28:02.6417127Z     at async Promise.allSettled (index 0)
+2025-09-01T01:28:02.6418187Z     at async globMultiSearch (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/eslint/eslint-helpers.js:454:18)
+2025-09-01T01:28:02.6550079Z SARIF generation failed
+2025-09-01T01:28:03.1570963Z 
+2025-09-01T01:28:03.1571641Z Oops! Something went wrong! :(
+2025-09-01T01:28:03.1572029Z 
+2025-09-01T01:28:03.1572210Z ESLint: 9.34.0
+2025-09-01T01:28:03.1572388Z 
+2025-09-01T01:28:03.1572892Z TypeError: Key "languageOptions": Key "globals": Key "global": Expected "readonly", "writable", or "off".
+2025-09-01T01:28:03.1573793Z     at new Config (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/config/config.js:436:10)
+2025-09-01T01:28:03.1574795Z     at [finalizeConfig] (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/config/flat-config-array.js:212:10)
+2025-09-01T01:28:03.1575975Z     at FlatConfigArray.getConfigWithStatus (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/@eslint/config-array/dist/cjs/index.cjs:1404:55)
+2025-09-01T01:28:03.1577210Z     at FlatConfigArray.getConfig (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/@eslint/config-array/dist/cjs/index.cjs:1422:15)
+2025-09-01T01:28:03.1578280Z     at entryFilter (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/eslint/eslint-helpers.js:322:27)
+2025-09-01T01:28:03.1579284Z     at async NodeHfs.<anonymous> (file:///home/runner/work/WhoopsPay/WhoopsPay/node_modules/@humanfs/core/src/hfs.js:574:24)
+2025-09-01T01:28:03.1580406Z     at async NodeHfs.walk (file:///home/runner/work/WhoopsPay/WhoopsPay/node_modules/@humanfs/core/src/hfs.js:614:3)
+2025-09-01T01:28:03.1581196Z     at async globSearch (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/eslint/eslint-helpers.js:363:20)
+2025-09-01T01:28:03.1581749Z     at async Promise.allSettled (index 0)
+2025-09-01T01:28:03.1582358Z     at async globMultiSearch (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/eslint/eslint-helpers.js:454:18)
+2025-09-01T01:28:03.1714430Z JSON generation failed
+2025-09-01T01:28:03.6627519Z 
+2025-09-01T01:28:03.6628001Z Oops! Something went wrong! :(
+2025-09-01T01:28:03.6628265Z 
+2025-09-01T01:28:03.6628604Z ESLint: 9.34.0
+2025-09-01T01:28:03.6628828Z 
+2025-09-01T01:28:03.6629975Z TypeError: Key "languageOptions": Key "globals": Key "global": Expected "readonly", "writable", or "off".
+2025-09-01T01:28:03.6631389Z     at new Config (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/config/config.js:436:10)
+2025-09-01T01:28:03.6632687Z     at [finalizeConfig] (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/config/flat-config-array.js:212:10)
+2025-09-01T01:28:03.6634446Z     at FlatConfigArray.getConfigWithStatus (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/@eslint/config-array/dist/cjs/index.cjs:1404:55)
+2025-09-01T01:28:03.6636267Z     at FlatConfigArray.getConfig (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/@eslint/config-array/dist/cjs/index.cjs:1422:15)
+2025-09-01T01:28:03.6637868Z     at entryFilter (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/eslint/eslint-helpers.js:322:27)
+2025-09-01T01:28:03.6639390Z     at async NodeHfs.<anonymous> (file:///home/runner/work/WhoopsPay/WhoopsPay/node_modules/@humanfs/core/src/hfs.js:574:24)
+2025-09-01T01:28:03.6641065Z     at async NodeHfs.walk (file:///home/runner/work/WhoopsPay/WhoopsPay/node_modules/@humanfs/core/src/hfs.js:614:3)
+2025-09-01T01:28:03.6642535Z     at async globSearch (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/eslint/eslint-helpers.js:363:20)
+2025-09-01T01:28:03.6643551Z     at async Promise.allSettled (index 0)
+2025-09-01T01:28:03.6644670Z     at async globMultiSearch (/home/runner/work/WhoopsPay/WhoopsPay/node_modules/eslint/lib/eslint/eslint-helpers.js:454:18)
+2025-09-01T01:28:03.6768619Z HTML generation failed
+2025-09-01T01:28:03.6769621Z ⚠️ Creating fallback HTML report...
+2025-09-01T01:28:03.6770520Z 📊 ESLint security linting completed
+2025-09-01T01:28:03.6771603Z ✅ ESLint security linting completed for v1.0.0
+2025-09-01T01:28:03.6772222Z 📁 Checking ESLint report files:
+2025-09-01T01:28:03.6786808Z total 12
+2025-09-01T01:28:03.6787283Z drwxr-xr-x 2 runner docker 4096 Sep  1 01:28 .
+2025-09-01T01:28:03.6787873Z drwxr-xr-x 3 runner docker 4096 Sep  1 01:28 ..
+2025-09-01T01:28:03.6788402Z -rw-r--r-- 1 runner docker  317 Sep  1 01:28 ESLint-Security-Report.html
+2025-09-01T01:28:03.6788992Z ✅ Report directory exists
+2025-09-01T01:28:03.6789416Z 📄 Files in directory:
+2025-09-01T01:28:03.6811455Z -rw-r--r-- 1 runner docker 317 Sep  1 01:28 security-reports/v1.0.0/00-eslint-security/ESLint-Security-Report.html
+2025-09-01T01:28:03.6872728Z ##[group]Run actions/upload-artifact@v4
+2025-09-01T01:28:03.6873012Z with:
+2025-09-01T01:28:03.6873253Z   name: 00-eslint-security-linting-report-v1.0.0
+2025-09-01T01:28:03.6873584Z   path: security-reports/v1.0.0/00-eslint-security/
+2025-09-01T01:28:03.6873868Z   retention-days: 30
+2025-09-01T01:28:03.6874074Z   if-no-files-found: warn
+2025-09-01T01:28:03.6874289Z   compression-level: 6
+2025-09-01T01:28:03.6874488Z   overwrite: false
+2025-09-01T01:28:03.6874685Z   include-hidden-files: false
+2025-09-01T01:28:03.6874901Z env:
+2025-09-01T01:28:03.6875059Z   NODE_VERSION: 20
+2025-09-01T01:28:03.6875247Z   DOCKER_REGISTRY: docker.io
+2025-09-01T01:28:03.6875567Z   IMAGE_NAME: ***/whoopspay
+2025-09-01T01:28:03.6875778Z   VERSION: 1.0.0
+2025-09-01T01:28:03.6875953Z ##[endgroup]
+2025-09-01T01:28:03.8998833Z With the provided path, there will be 1 file uploaded
+2025-09-01T01:28:03.9006432Z Artifact name is valid!
+2025-09-01T01:28:03.9008143Z Root directory input is valid!
+2025-09-01T01:28:04.0002800Z Beginning upload of artifact content to blob storage
+2025-09-01T01:28:04.0512074Z Uploaded bytes 365
+2025-09-01T01:28:04.0696081Z Finished uploading artifact content to blob storage!
+2025-09-01T01:28:04.0699538Z SHA256 digest of uploaded artifact zip is fc64fea8304a34ec69d6585b1134a179a2641caa4335540f6891026f6c95ec36
+2025-09-01T01:28:04.0701642Z Finalizing artifact upload
+2025-09-01T01:28:04.1865241Z Artifact 00-eslint-security-linting-report-v1.0.0.zip successfully finalized. Artifact ID 3894304644
+2025-09-01T01:28:04.1866995Z Artifact 00-eslint-security-linting-report-v1.0.0 has been successfully uploaded! Final size is 365 bytes. Artifact ID is 3894304644
+2025-09-01T01:28:04.1873349Z Artifact download URL: https://github.com/khajdari/WhoopsPay/actions/runs/17365118129/artifacts/3894304644
+2025-09-01T01:28:04.1984111Z Post job cleanup.
+2025-09-01T01:28:04.3484720Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-0cff4e10f1fa11b83775b02b67f4a898066ab13058512c37b16bbff72bf89e9a, not saving cache.
+2025-09-01T01:28:04.3603382Z Post job cleanup.
+2025-09-01T01:28:04.4539718Z [command]/usr/bin/git version
+2025-09-01T01:28:04.4579410Z git version 2.51.0
+2025-09-01T01:28:04.4631775Z Temporarily overriding HOME='/home/runner/work/_temp/158f6ab8-078b-4ee0-9671-23b6b44e250a' before making global git config changes
+2025-09-01T01:28:04.4634247Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-01T01:28:04.4638352Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-01T01:28:04.4673913Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-01T01:28:04.4707493Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-01T01:28:04.4948340Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-01T01:28:04.4971507Z http.https://github.com/.extraheader
+2025-09-01T01:28:04.4984375Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-09-01T01:28:04.5016202Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-01T01:28:04.5332021Z Cleaning up orphan processes
