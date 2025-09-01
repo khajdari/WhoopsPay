@@ -667,7 +667,7 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'linting', 'eslint', 'code-quality', 'automated-report']
+              labels: ['security', 'linting', 'eslint', 'code-quality', 'automated-report', 'v${{ env.VERSION }}']
             });
 
       - name: Create Snyk Code SAST Security Issue
@@ -719,7 +719,7 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sast', 'snyk-code', 'automated-report']
+              labels: ['security', 'sast', 'snyk-code', 'automated-report', 'v${{ env.VERSION }}']
             });
 
       - name: Create Snyk Security Issue
@@ -771,7 +771,7 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report']
+              labels: ['security', 'sca', 'snyk', 'dependencies', 'automated-report', 'v${{ env.VERSION }}']
             });
 
       - name: Create OWASP ZAP Security Issue
@@ -823,7 +823,7 @@ jobs:
               repo: context.repo.repo,
               title: title,
               body: body,
-              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report']
+              labels: ['security', 'dast', 'owasp-zap', 'dynamic-testing', 'automated-report', 'v${{ env.VERSION }}']
             });
 
 
