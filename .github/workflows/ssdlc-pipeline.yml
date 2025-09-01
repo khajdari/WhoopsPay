@@ -199,23 +199,13 @@ jobs:
 
       - name: Snyk Code SAST analysis
         id: snyk-code
-        run: |
-          if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "🔍 Running Snyk Code SAST analysis..."
-            # Install Snyk CLI
-            npm install -g snyk
-            # Authenticate
-            snyk auth ${{ secrets.SNYK_TOKEN }}
-            # Run code test with proper output
-            snyk code test --json > snyk-code.json || echo "Snyk Code completed"
-            snyk code test --sarif > snyk-code.sarif || echo "Snyk Code SARIF completed"
-            echo "✅ Snyk Code analysis completed"
-          else
-            echo "⚠️ SNYK_TOKEN not set - skipping Snyk Code analysis"
-          fi
-        continue-on-error: true
+        uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: code test
+          args: --all-projects --detection-depth=10 --severity-threshold=low --sarif-file-output=snyk-code.sarif --json-file-output=snyk-code.json
+        continue-on-error: true
 
       - name: Check Snyk Code results and organize
         run: |
@@ -234,65 +224,9 @@ jobs:
             jq -r '.runs[0].results | length' snyk-code.sarif 2>/dev/null || echo "SARIF parsing failed"
             jq -r '.runs[0].results[].level' snyk-code.sarif 2>/dev/null | sort | uniq -c || echo "Cannot parse vulnerability levels"
           else
-            echo "❌ No Snyk Code results found - creating ESLint-based fallback report"
-            
-            # Create comprehensive fallback report with ESLint security data
-            echo "🔄 Generating ESLint-based security analysis as SAST fallback..."
-            
-            # Run ESLint security analysis for SAST fallback
-            npx eslint . --ext .js,.jsx,.ts,.tsx --format json > "security-reports/v$VERSION/01-snyk-code/eslint-security-fallback.json" || true
-            
-            # Create a detailed fallback report
-            cat > "security-reports/v$VERSION/01-snyk-code/sast-fallback-report.html" << 'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-    <title>SAST Security Analysis - ESLint Fallback Report</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .header { background: #f8f9fa; padding: 20px; border-radius: 8px; }
-        .warning { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        .security-section { background: #e7f3ff; padding: 15px; margin: 15px 0; border-radius: 5px; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>🔒 SAST Code Analysis Report (ESLint Fallback)</h1>
-        <p><strong>Status:</strong> Snyk Code analysis unavailable - ESLint security analysis performed</p>
-        <p><strong>Analysis Date:</strong> $(date)</p>
-    </div>
-    
-    <div class="warning">
-        <h3>⚠️ Configuration Notice</h3>
-        <p>Snyk Code SAST analysis was not available. This report shows ESLint security findings as a fallback.</p>
-        <p>To enable full Snyk Code analysis, configure SNYK_TOKEN in repository secrets.</p>
-    </div>
-    
-    <div class="security-section">
-        <h3>🛡️ Security Analysis Performed</h3>
-        <ul>
-            <li>✅ ESLint security plugin analysis</li>
-            <li>✅ Microsoft SDL compliance checks</li>
-            <li>✅ SonarJS security rules</li>
-            <li>✅ TypeScript security validation</li>
-        </ul>
-    </div>
-    
-    <div class="security-section">
-        <h3>📊 Security Coverage</h3>
-        <p>Static analysis performed on all JavaScript/TypeScript files with 15+ security rules including:</p>
-        <ul>
-            <li>Injection vulnerability detection</li>
-            <li>XSS prevention checks</li>
-            <li>Unsafe function usage detection</li>
-            <li>Security misconfiguration identification</li>
-        </ul>
-    </div>
-</body>
-</html>
-EOF
-            
-            echo "✅ SAST fallback report created with ESLint security data"
+            echo "❌ No Snyk Code results found - analysis may have failed or been skipped"
+            # Create placeholder in version folder
+            echo "Snyk Code analysis failed or skipped" > "security-reports/v$VERSION/01-snyk-code/analysis-failed.txt"
           fi
 
       - name: Generate Snyk Code HTML Report
@@ -319,58 +253,17 @@ EOF
                 -a \
                 || echo "⚠️ HTML report generation failed - continuing without HTML"
             else
-              echo "⚠️ No JSON results found - creating empty state HTML report"
-              
-              # Create a "no results" HTML report
-              cat > "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" << 'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Snyk Code SAST Analysis - No Results</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
-        .header { text-align: center; color: #2196F3; margin-bottom: 30px; }
-        .info-box { background: #e3f2fd; padding: 20px; border-radius: 5px; margin: 20px 0; }
-        .success { background: #e8f5e8; color: #2e7d32; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🔒 Snyk Code SAST Analysis Report</h1>
-            <p>Static Application Security Testing Results</p>
-        </div>
-        
-        <div class="info-box success">
-            <h3>✅ Analysis Completed</h3>
-            <p>Snyk Code analysis ran successfully but found no critical security issues in the codebase.</p>
-        </div>
-        
-        <div class="info-box">
-            <h3>📊 Scan Summary</h3>
-            <ul>
-                <li>Status: Completed Successfully</li>
-                <li>Critical Issues: 0</li>
-                <li>High Issues: 0</li>
-                <li>Medium Issues: 0</li>
-                <li>Low Issues: 0</li>
-            </ul>
-        </div>
-    </div>
-</body>
-</html>
-EOF
+              echo "⚠️ No JSON results found for HTML conversion"
             fi
             
             if [ -f "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" ]; then
-              echo "✅ Snyk Code HTML report generated successfully"
+              echo "✅ Official Snyk Code HTML report generated successfully"
               echo "📄 Report size: $(wc -c < security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html) bytes"
             else
-              echo "❌ HTML report generation failed"
+              echo "❌ Official HTML report not generated"
             fi
           else
-            echo "⚠️ Skipping Snyk HTML report - using fallback reports"
+            echo "⚠️ Skipping HTML report generation (no Snyk token or results)"
           fi
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -429,8 +322,6 @@ EOF
             echo ""
             echo "Using npm audit as fallback..."
             npm audit --audit-level=low --json > "security-reports/v$VERSION/02-snyk/npm-audit.json" || true
-            # Also create the expected Snyk filenames for consistency
-            cp "security-reports/v$VERSION/02-snyk/npm-audit.json" "security-reports/v$VERSION/02-snyk/snyk-test.json" 2>/dev/null || true
             echo "✅ NPM audit completed as security fallback for v$VERSION"
           else
             echo "✅ Snyk token configured - proceeding with scan"
@@ -445,96 +336,33 @@ EOF
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Snyk dependency vulnerability scan
-        run: |
-          if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "🔍 Running Snyk dependency scan..."
-            # Install Snyk CLI
-            npm install -g snyk
-            # Authenticate
-            snyk auth ${{ secrets.SNYK_TOKEN }}
-            # Run dependency test with proper output
-            snyk test --json > snyk-results.json || echo "Snyk test completed"
-            snyk test --sarif > snyk-results.sarif || echo "Snyk SARIF completed"
-            echo "✅ Snyk dependency scan completed"
-          else
-            echo "⚠️ SNYK_TOKEN not set - using npm audit fallback"
-            npm audit --audit-level=low --json > npm-audit.json || echo "NPM audit completed"
-          fi
-        continue-on-error: true
+        uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --all-projects --dev --detection-depth=10 --severity-threshold=low --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif
+        continue-on-error: true
 
-      - name: Process security scan results
+      - name: Generate comprehensive security reports
         id: snyk
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "📁 Processing Snyk security reports for v$VERSION..."
+            echo "Generating comprehensive Snyk security reports for v$VERSION..."
+            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || true
+            npx snyk test --all-projects --dev --detection-depth=10 --severity-threshold=low --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || true
+            npx snyk monitor || true
             
-            # Copy Snyk results to version folder
-            [ -f "snyk-results.json" ] && cp snyk-results.json "security-reports/v$VERSION/02-snyk/snyk-test.json" || echo "No Snyk JSON found"
-            [ -f "snyk-results.sarif" ] && cp snyk-results.sarif "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || echo "No Snyk SARIF found"
+            # Copy any additional results to version folder
+            [ -f "snyk-results.json" ] && cp snyk-results.json "security-reports/v$VERSION/02-snyk/" || true
+            [ -f "snyk-results.sarif" ] && cp snyk-results.sarif "security-reports/v$VERSION/02-snyk/" || true
             
             echo "✅ Snyk security scan completed for v$VERSION"
-            ls -la "security-reports/v$VERSION/02-snyk/" 2>/dev/null || echo "Snyk reports processed"
+            ls -la "security-reports/v$VERSION/02-snyk/" 2>/dev/null || echo "Snyk reports generated"
           else
             echo "✅ NPM audit security scan completed (Snyk fallback)"
-            
-            # Copy npm audit results if they exist in the current directory
-            [ -f "npm-audit.json" ] && cp npm-audit.json "security-reports/v$VERSION/02-snyk/snyk-test.json" || echo "No npm audit file to copy"
-            
-            # Generate comprehensive HTML report from npm audit
-            if [ -f "security-reports/v$VERSION/02-snyk/npm-audit.json" ] || [ -f "security-reports/v$VERSION/02-snyk/snyk-test.json" ]; then
-              echo "📊 Creating comprehensive SCA fallback report..."
-              
-              # Create detailed HTML report from npm audit data
-              cat > "security-reports/v$VERSION/02-snyk/SCA-Dependency-Security-Report.html" << 'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-    <title>SCA Dependency Security Report - NPM Audit Fallback</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .header { background: #f8f9fa; padding: 20px; border-radius: 8px; }
-        .warning { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        .security-section { background: #e7f3ff; padding: 15px; margin: 15px 0; border-radius: 5px; }
-        .stats { background: #d4edda; padding: 15px; border-radius: 5px; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>📦 SCA Dependency Security Report (NPM Audit)</h1>
-        <p><strong>Status:</strong> Dependency security scan completed with npm audit</p>
-        <p><strong>Scan Date:</strong> $(date)</p>
-    </div>
-    
-    <div class="warning">
-        <h3>⚠️ Configuration Notice</h3>
-        <p>Snyk SCA analysis was not available. This report shows npm audit findings as a fallback.</p>
-        <p>To enable full Snyk dependency scanning, configure SNYK_TOKEN in repository secrets.</p>
-    </div>
-    
-    <div class="security-section">
-        <h3>🔍 Dependencies Analyzed</h3>
-        <p>Comprehensive security audit performed on:</p>
-        <ul>
-            <li>✅ All production dependencies</li>
-            <li>✅ Development dependencies</li>
-            <li>✅ Transitive dependencies</li>
-            <li>✅ Known vulnerability database check</li>
-        </ul>
-    </div>
-    
-    <div class="stats">
-        <h3>📈 Audit Results Summary</h3>
-        <p>NPM audit has been performed on all package dependencies.</p>
-        <p>Detailed vulnerability data is available in the JSON report.</p>
-        <p>Check npm-audit.json for specific vulnerability details and remediation steps.</p>
-    </div>
-</body>
-</html>
-EOF
-              
-              echo "✅ SCA HTML report generated from npm audit data"
+            if [ -f "security-reports/v$VERSION/02-snyk/npm-audit.json" ]; then
+              echo "Security audit results available for v$VERSION"
+              cat "security-reports/v$VERSION/02-snyk/npm-audit.json" | head -20
             fi
           fi
           echo "status=completed" >> $GITHUB_OUTPUT
