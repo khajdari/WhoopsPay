@@ -563,9 +563,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🛡️ ESLint Security Linting Report';
+            const title = '🛡️ Static Linting Security Report (ESLint)';
             const body = `
-            # 🛡️ ESLint Security Linting Report
+            # 🛡️ Static Linting Security Report (ESLint)
             
             **Status:** Comprehensive ESLint security linting completed
             **Timestamp:** ${new Date().toISOString()}
@@ -600,9 +600,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '🔒 Snyk Code SAST Analysis Report';
+            const title = '🔒 SAST Code Analysis Report (Snyk)';
             const body = `
-            # 🔒 Snyk Code SAST Analysis Report
+            # 🔒 SAST Code Analysis Report (Snyk)
             
             **Status:** Snyk Code static analysis completed
             **Timestamp:** ${new Date().toISOString()}
@@ -630,9 +630,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '📦 Snyk Dependency Security Report';
+            const title = '📦 SCA Dependency Report (Snyk)';
             const body = `
-            # 📦 Snyk Dependency Security Report
+            # 📦 SCA Dependency Report (Snyk)
             
             **Status:** Snyk dependency security scan completed
             **Timestamp:** ${new Date().toISOString()}
@@ -660,9 +660,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = '⚡ OWASP ZAP Dynamic Security Report';
+            const title = '⚡ DAST Application Scan Report (OWASP)';
             const body = `
-            # ⚡ OWASP ZAP Dynamic Security Report
+            # ⚡ DAST Application Scan Report (OWASP)
             
             **Status:** OWASP ZAP dynamic security testing completed
             **Timestamp:** ${new Date().toISOString()}
