@@ -34,11 +34,15 @@ jobs:
           echo "docker-tag=\${IMAGE_NAME}:\${VERSION}" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-  # PHASE 1: ESLint Security Linting
-  eslint-security-linting:
-    name: "🔍 ESLint Security Linting"
+  # PHASE 1: CodeQL Security Analysis
+  codeql-security-analysis:
+    name: "🔍 CodeQL Security Analysis"
     runs-on: ubuntu-latest
     needs: setup-version
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
     steps:
@@ -48,116 +52,67 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Setup version-specific folders
+        run: |
+          echo "Using semantic version: v$VERSION"
+          mkdir -p "security-reports/v$VERSION/00-codeql-security"
+          echo "📁 Created CodeQL folder structure for v$VERSION"
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended,security-and-quality
+          config: |
+            name: "CodeQL Security Analysis"
+            disable-default-queries: false
+            queries:
+              - uses: security-extended
+              - uses: security-and-quality
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install dependencies 
         run: npm ci
 
-      - name: Extract version and create folder structure
-        run: |
-          # Use version from setup job
-          echo "Using semantic version: v$VERSION"
-          
-          # Create version-specific folder structure
-          mkdir -p "security-reports/v$VERSION/00-eslint-security"
-          echo "📁 Created version folder structure for v$VERSION"
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"
+          output: security-reports/v${{ env.VERSION }}/00-codeql-security/
+          upload: false
 
-      - name: Run Comprehensive ESLint Security Analysis
+      - name: Process CodeQL Results
         run: |
-          echo "🔍 Running comprehensive ESLint security linting..."
+          echo "📊 Processing CodeQL security analysis results..."
           
-          # Run comprehensive security linting with multiple output formats
-          npx eslint . --ext .js,.jsx,.ts,.tsx --format json --output-file "security-reports/v$VERSION/00-eslint-security/eslint-security-report.json" || true
-          npx eslint . --ext .js,.jsx,.ts,.tsx --format html --output-file "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" || true
-          npx eslint . --ext .js,.jsx,.ts,.tsx --format checkstyle --output-file "security-reports/v$VERSION/00-eslint-security/eslint-checkstyle.xml" || true
+          # Find CodeQL SARIF results
+          find . -name "*.sarif" -type f | head -5
           
-          # Generate detailed security summary
-          echo "📊 ESLint security analysis completed"
-          if [ -f "security-reports/v$VERSION/00-eslint-security/eslint-security-report.json" ]; then
-            echo "✅ ESLint JSON report generated"
-            echo "📄 Report size: $(wc -c < security-reports/v$VERSION/00-eslint-security/eslint-security-report.json) bytes"
+          # Copy CodeQL results to version folder
+          if [ -d "security-reports/v$VERSION/00-codeql-security" ]; then
+            echo "✅ CodeQL results folder created"
+            ls -la security-reports/v$VERSION/00-codeql-security/ || echo "No results yet"
           fi
           
-          if [ -f "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" ]; then
-            echo "✅ ESLint HTML report generated"  
-            echo "📄 Report size: $(wc -c < security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html) bytes"
-          fi
-          
-          echo "✅ Comprehensive ESLint security linting completed"
+          echo "✅ CodeQL security analysis completed for v$VERSION"
 
-      - name: Generate ESLint Security Summary Report
-        run: |
-          # Create comprehensive HTML security summary report in version folder
-          cat > "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Summary.html" << 'EOF'
-          <!DOCTYPE html>
-          <html>
-          <head>
-              <meta charset="UTF-8">
-              <title>🔒 Pre-Validation Security Report</title>
-              <style>
-                  body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
-                  .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-                  h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-                  h2 { color: #34495e; margin-top: 30px; }
-                  .status { padding: 10px; border-radius: 5px; margin: 10px 0; }
-                  .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
-                  .info { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
-                  .version { background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; border-radius: 5px; margin: 10px 0; }
-                  .timestamp { color: #6c757d; font-size: 0.9em; }
-                  ul { line-height: 1.6; }
-                  li { margin: 5px 0; }
-              </style>
-          </head>
-          <body>
-              <div class="container">
-                  <h1>🔍 ESLint Security Linting Report</h1>
-                  <p class="timestamp">Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")</p>
-                  <div class="version"><strong>Version:</strong> v$VERSION</div>
-                  <div class="version"><strong>Branch:</strong> develop-vulnerable</div>
-                  
-                  <h2>🛡️ Security Linting Analysis</h2>
-                  <div class="status success">
-                      <strong>Status:</strong> COMPLETED - Comprehensive ESLint security analysis finished
-                  </div>
-                  
-                  <h2>📊 Linting Coverage</h2>
-                  <ul>
-                      <li><strong>eslint-plugin-security:</strong> Node.js security hotspot detection</li>
-                      <li><strong>@microsoft/eslint-plugin-sdl:</strong> Microsoft SDL compliance</li>
-                      <li><strong>eslint-plugin-sonarjs:</strong> Code quality and security vulnerabilities</li>
-                      <li><strong>TypeScript Security:</strong> Type safety and security enforcement</li>
-                      <li><strong>Files Analyzed:</strong> All JavaScript/TypeScript files in project</li>
-                      <li><strong>Security Rules Active:</strong> 15+ security-focused linting rules</li>
-                  </ul>
-                  
-                  <h2>📄 Security Analysis Summary</h2>
-                  <div class="status info">
-                      This report provides comprehensive code linting analysis focusing on security vulnerabilities, 
-                      code quality issues, and enterprise security compliance standards using industry-standard ESLint security plugins.
-                  </div>
-              </div>
-          </body>
-          </html>
-          EOF
-          
-          echo "✅ ESLint security summary report generated for v$VERSION"
-
-      - name: Upload ESLint Security Linting Report
+      - name: Upload CodeQL Security Analysis Report
         uses: actions/upload-artifact@v4
         with:
-          name: 00-eslint-security-linting-report-v${{ env.VERSION }}
-          path: security-reports/v${{ env.VERSION }}/00-eslint-security/
+          name: 00-codeql-security-analysis-report-v${{ env.VERSION }}
+          path: security-reports/v${{ env.VERSION }}/00-codeql-security/
           retention-days: 30
 
   # PHASE 2: SAST - Static Application Security Testing
   sast-snyk-code:
     name: "🔍 SAST - Snyk Code Analysis"
     runs-on: ubuntu-latest
-    needs: [setup-version, eslint-security-linting]
+    needs: [setup-version, codeql-security-analysis]
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
     outputs:
