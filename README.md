@@ -197,7 +197,7 @@ WhoopsPay includes a comprehensive Secure SDLC pipeline that runs on pull reques
 - `PROJECT_STRUCTURE.md` - Detailed MVC architecture, project organization, and SSDLC pipeline configuration
 - `SECURITY_TRAINING.md` - Comprehensive vulnerability documentation, learning guide, and automated security analysis phases
 - `README-Docker.md` - Docker setup and containerization guide with security validation
-- `replit.md` - Project architecture, development guidelines, and security tool integration
+- `WHOOPSPAY_ARCHITECTURE.md` - Project architecture, development guidelines, and security tool integration
 - `eslint.config.js` - Comprehensive ESLint security configuration with enterprise plugins
 - `.github/workflows/ssdlc-pipeline.yml` - Complete Secure SDLC automation pipeline
 - Inline code comments - Detailed OWASP vulnerability explanations throughout codebase

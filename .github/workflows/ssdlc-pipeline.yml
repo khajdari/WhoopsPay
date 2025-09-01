@@ -635,10 +635,8 @@ jobs:
             - **Enterprise Rules:** SDL compliance and secure coding standards
             
             ## 📁 Report Artifacts  
-            📥 **Download Reports:**
-            - [ESLint Security HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "00-eslint-security-linting-report-v${{ env.VERSION }}" artifact
-            - [ESLint SARIF Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Contains SARIF format for GitHub Security tab
-            - [ESLint JSON Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Machine-readable security findings
+            📥 **Download Report:**
+            - [🛡️ Download ESLint Security Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "00-eslint-security-linting-report-v${{ env.VERSION }}" artifact
             
             This report provides comprehensive code linting analysis focusing on security vulnerabilities, code quality issues, and enterprise security compliance standards.
             `;
@@ -668,10 +666,8 @@ jobs:
             - **OWASP Top 10:** Comprehensive coverage of web application vulnerabilities
             
             ## 📁 Report Artifacts
-            📥 **Download Reports:**
-            - [Snyk Code HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "01-snyk-code-sast-report-v${{ env.VERSION }}" artifact
-            - [Snyk Code SARIF Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Contains detailed vulnerability analysis
-            - [Snyk Code JSON Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Raw security scan results
+            📥 **Download Report:**
+            - [🔒 Download Snyk Code SAST Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "01-snyk-code-sast-report-v${{ env.VERSION }}" artifact
             
             This report provides comprehensive static application security testing including XSS, SQL injection, command injection, and other security vulnerabilities.
             `;
@@ -701,10 +697,8 @@ jobs:
             - **License Compliance:** Checked for license conflicts
             
             ## 📁 Report Artifacts
-            📥 **Download Reports:**
-            - [Snyk SCA HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "02-snyk-sca-report-v${{ env.VERSION }}" artifact
-            - [Snyk Dependency JSON Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Vulnerability details and remediation
-            - [NPM Audit Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Fallback dependency scan results
+            📥 **Download Report:**
+            - [📦 Download Snyk SCA Dependency Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "02-snyk-sca-report-v${{ env.VERSION }}" artifact
             
             This report identifies security vulnerabilities in project dependencies and provides remediation guidance.
             `;
@@ -734,10 +728,8 @@ jobs:
             - **Penetration Testing:** Automated security assessment
             
             ## 📁 Report Artifacts
-            📥 **Download Reports:**
-            - [OWASP ZAP HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "03-owasp-zap-security-report-v${{ env.VERSION }}" artifact
-            - [OWASP ZAP JSON Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Dynamic security scan findings
-            - [ZAP Baseline Scan](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Quick security assessment results
+            📥 **Download Report:**
+            - [⚡ Download OWASP ZAP DAST Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "03-owasp-zap-security-report-v${{ env.VERSION }}" artifact
             
             This report provides dynamic application security testing results from scanning the running application for vulnerabilities.
             `;
