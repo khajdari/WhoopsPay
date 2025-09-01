@@ -615,6 +615,22 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            // Get artifacts for this workflow run
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            });
+            
+            // Find the ESLint artifact
+            const eslintArtifact = artifacts.data.artifacts.find(artifact => 
+              artifact.name.includes('00-eslint-security-linting-report')
+            );
+            
+            const artifactUrl = eslintArtifact ? 
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}` :
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            
             const title = '🛡️ Static Linting Security Report (ESLint)';
             const body = `
             # 🛡️ Static Linting Security Report (ESLint)
@@ -636,7 +652,12 @@ jobs:
             
             ## 📁 Report Artifacts  
             📥 **Download Report:**
-            - [🛡️ Download ESLint Security Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "00-eslint-security-linting-report-v${{ env.VERSION }}" artifact
+            - [🛡️ Download ESLint Security Report](${artifactUrl}) - Find and download "00-eslint-security-linting-report-v${{ env.VERSION }}" artifact
+            
+            **💡 How to Download:**
+            1. Click the link above to go to the workflow run
+            2. Scroll down to the "Artifacts" section
+            3. Click on "00-eslint-security-linting-report-v${{ env.VERSION }}" to download
             
             This report provides comprehensive code linting analysis focusing on security vulnerabilities, code quality issues, and enterprise security compliance standards.
             `;
@@ -653,6 +674,22 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            // Get artifacts for this workflow run
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            });
+            
+            // Find the Snyk Code artifact
+            const snykCodeArtifact = artifacts.data.artifacts.find(artifact => 
+              artifact.name.includes('01-snyk-code-sast-report')
+            );
+            
+            const artifactUrl = snykCodeArtifact ? 
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}` :
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            
             const title = '🔒 SAST Code Analysis Report (Snyk)';
             const body = `
             # 🔒 SAST Code Analysis Report (Snyk)
@@ -667,7 +704,12 @@ jobs:
             
             ## 📁 Report Artifacts
             📥 **Download Report:**
-            - [🔒 Download Snyk Code SAST Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "01-snyk-code-sast-report-v${{ env.VERSION }}" artifact
+            - [🔒 Download Snyk Code SAST Report](${artifactUrl}) - Find and download "01-snyk-code-sast-report-v${{ env.VERSION }}" artifact
+            
+            **💡 How to Download:**
+            1. Click the link above to go to the workflow run
+            2. Scroll down to the "Artifacts" section
+            3. Click on "01-snyk-code-sast-report-v${{ env.VERSION }}" to download
             
             This report provides comprehensive static application security testing including XSS, SQL injection, command injection, and other security vulnerabilities.
             `;
@@ -684,6 +726,22 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            // Get artifacts for this workflow run
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            });
+            
+            // Find the Snyk SCA artifact
+            const snykScaArtifact = artifacts.data.artifacts.find(artifact => 
+              artifact.name.includes('02-snyk-sca-report')
+            );
+            
+            const artifactUrl = snykScaArtifact ? 
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}` :
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            
             const title = '📦 SCA Dependency Report (Snyk)';
             const body = `
             # 📦 SCA Dependency Report (Snyk)
@@ -698,7 +756,12 @@ jobs:
             
             ## 📁 Report Artifacts
             📥 **Download Report:**
-            - [📦 Download Snyk SCA Dependency Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "02-snyk-sca-report-v${{ env.VERSION }}" artifact
+            - [📦 Download Snyk SCA Dependency Report](${artifactUrl}) - Find and download "02-snyk-sca-report-v${{ env.VERSION }}" artifact
+            
+            **💡 How to Download:**
+            1. Click the link above to go to the workflow run
+            2. Scroll down to the "Artifacts" section
+            3. Click on "02-snyk-sca-report-v${{ env.VERSION }}" to download
             
             This report identifies security vulnerabilities in project dependencies and provides remediation guidance.
             `;
@@ -715,6 +778,22 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            // Get artifacts for this workflow run
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            });
+            
+            // Find the OWASP ZAP artifact
+            const zapArtifact = artifacts.data.artifacts.find(artifact => 
+              artifact.name.includes('03-owasp-zap-security-report')
+            );
+            
+            const artifactUrl = zapArtifact ? 
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}` :
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            
             const title = '⚡ DAST Application Scan Report (OWASP)';
             const body = `
             # ⚡ DAST Application Scan Report (OWASP)
@@ -729,7 +808,12 @@ jobs:
             
             ## 📁 Report Artifacts
             📥 **Download Report:**
-            - [⚡ Download OWASP ZAP DAST Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts) - Click "03-owasp-zap-security-report-v${{ env.VERSION }}" artifact
+            - [⚡ Download OWASP ZAP DAST Report](${artifactUrl}) - Find and download "03-owasp-zap-security-report-v${{ env.VERSION }}" artifact
+            
+            **💡 How to Download:**
+            1. Click the link above to go to the workflow run
+            2. Scroll down to the "Artifacts" section
+            3. Click on "03-owasp-zap-security-report-v${{ env.VERSION }}" to download
             
             This report provides dynamic application security testing results from scanning the running application for vulnerabilities.
             `;
