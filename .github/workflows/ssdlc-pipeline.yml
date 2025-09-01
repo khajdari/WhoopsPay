@@ -116,8 +116,17 @@ jobs:
           echo "📊 ESLint security linting completed"
           if [ -f "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" ]; then
             echo "✅ Official SARIF report generated"
-            echo "🔍 Security Issues Found:"
-            jq -r '.runs[0].results | length' "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" 2>/dev/null || echo "0"
+            echo "📄 SARIF size: $(wc -c < security-reports/v$VERSION/00-eslint-security/eslint-security.sarif) bytes"
+          fi
+          
+          if [ -f "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" ]; then
+            echo "✅ HTML report generated"
+            echo "📄 HTML size: $(wc -c < security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html) bytes"
+          fi
+          
+          if [ -f "security-reports/v$VERSION/00-eslint-security/eslint-security-report.json" ]; then
+            echo "✅ JSON report generated"
+            echo "📄 JSON size: $(wc -c < security-reports/v$VERSION/00-eslint-security/eslint-security-report.json) bytes"
           fi
           
           echo "✅ ESLint security linting completed for v$VERSION"
