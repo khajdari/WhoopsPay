@@ -1020,3 +1020,36 @@ jobs:
           echo "   - ghaidaris/whoopspay:$VERSION"
           echo "   - ghaidaris/whoopspay:latest"
           echo "🔗 View on Docker Hub: https://hub.docker.com/r/ghaidaris/whoopspay"
+
+
+  # FINAL STEP: Render Deployment (Deploy Latest Docker Image to Production)
+  render-deploy:
+    name: "🌐 Render Production Deployment"
+    runs-on: ubuntu-latest
+    needs: [setup-version, docker-hub-publish]
+    if: always() && needs.docker-hub-publish.result == 'success'
+    env:
+      VERSION: ${{ needs.setup-version.outputs.version }}
+      IMAGE_NAME: ghaidaris/whoopspay:latest
+    permissions:
+      deployments: write
+    steps:
+      - name: Deploy to Render
+        uses: JorgeLNJunior/render-deploy@v1.4.5
+        with:
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_TOKEN }}
+          wait_deploy: true
+          clear_cache: false
+          github_deployment: true
+          deployment_environment: 'production'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify Render deployment
+        run: |
+          echo "🌐 ✅ WhoopsPay deployed to Render successfully!"
+          echo "📦 Docker Image: $IMAGE_NAME"
+          echo "🏷️ Version: $VERSION"
+          echo "🚀 Deployment completed - Application is live on Render!"
+          echo ""
+          echo "🔗 Access your deployed application on your Render service URL"
