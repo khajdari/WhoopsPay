@@ -164,7 +164,7 @@ WhoopsPay intentionally implements real-world security vulnerabilities for hands
 
 ## 🛡️ **Automated Security Testing**
 
-WhoopsPay includes a comprehensive **Secure SDLC Pipeline** with 4 security phases:
+WhoopsPay includes a comprehensive **Secure SDLC Pipeline** with 6 phases (4 security phases + Docker deployment + Render cloud deployment):
 
 ### **Security Training Features**
 - **Vulnerability Implementation**: Intentional OWASP Top 10 and API Security Top 10 vulnerabilities
@@ -195,6 +195,46 @@ WhoopsPay includes a comprehensive **Secure SDLC Pipeline** with 4 security phas
 - **Automated vulnerability discovery** with active scanning
 - **Real exploit verification** and evidence collection
 - **Output**: Detailed vulnerability reports with proof-of-concept
+
+### **Phase 5: 🐳 Docker Hub Deployment**
+- **Multi-platform Docker builds** with semantic versioning
+- **Automated registry publishing** to Docker Hub
+- **Image tagging strategy** with version and latest tags
+- **Output**: Production-ready container images
+
+### **Phase 6: 🌐 Render Production Deployment**
+- **Automated cloud deployment** using latest Docker image
+- **Zero-downtime deployments** with health checks
+- **Production environment provisioning** 
+- **Output**: Live application accessible via Render URL
+
+---
+
+## 🚀 **GitHub Actions Deployment Pipeline**
+
+### **Required GitHub Secrets**
+For complete CI/CD automation, configure these secrets in your repository:
+
+```bash
+# Docker Hub Integration
+DOCKER_HUB_USERNAME=ghaidaris
+DOCKER_HUB_ACCESS_TOKEN_V2=dckr_pat_[your_token]
+
+# Render Cloud Deployment
+RENDER_API=rnd_[your_render_api_key]
+RENDER_SERVICE_ID=srv-[your_service_id]
+```
+
+### **Pipeline Execution Flow**
+1. **Code Push** → Triggers complete security analysis
+2. **Security Reports** → Generated as GitHub Issues with downloadable artifacts
+3. **Docker Build** → Multi-platform image with semantic versioning
+4. **Registry Push** → Published to `ghaidaris/whoopspay:latest`
+5. **Live Deployment** → Automatic deployment to Render cloud platform
+
+### **Production Access**
+- **Docker Hub**: [https://hub.docker.com/r/ghaidaris/whoopspay](https://hub.docker.com/r/ghaidaris/whoopspay)
+- **Live Application**: Available on your Render service URL after deployment
 
 ---
 
