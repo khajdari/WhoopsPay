@@ -1,4 +1,0 @@
-Fix Snyk Code report generation by specifying the correct template path
-
-Updates the CI/CD pipeline to include the correct template path for generating Snyk Code HTML reports, resolving issues with SAST report generation.
-
