@@ -148,7 +148,7 @@ The application includes automated Docker builds in the SSDLC pipeline:
 1. **Security Testing** → Complete 4-phase security analysis
 2. **Docker Build** → Multi-platform image creation
 3. **Registry Push** → Docker Hub publication
-4. **Deployment** → Automatic deployment to production
+4. **Render Deployment** → Automatic cloud deployment to production
 
 ## 🎯 Deployment Options
 
@@ -172,11 +172,14 @@ docker run -p 5000:5000 \
 
 #### **Platform-Specific Examples**
 
-**Render:**
+**Render (Automated via CI/CD):**
 - Service Type: Web Service  
 - Image: `docker.io/ghaidaris/whoopspay:latest`
 - Port: 5000
 - Add persistent disk for `/app/data` to preserve SQLite database
+- **Auto-deployment**: Triggered automatically after successful Docker Hub push
+- **Integration**: Uses GitHub Actions with `RENDER_API` and `RENDER_SERVICE_ID` secrets
+- **Zero-downtime**: Seamless deployments with health checks
 
 **Railway:**
 - Deploy using Docker image from Docker Hub
