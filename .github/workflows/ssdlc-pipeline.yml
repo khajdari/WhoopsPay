@@ -2,7 +2,7 @@ name: Secure SDLC Pipeline
 
 on:
   pull_request:
-    branches: [ develop-vulnerable ]
+    branches: [ main-vulnerable ]
     types: [opened, synchronize, reopened]
   workflow_dispatch:
 
