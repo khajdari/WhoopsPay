@@ -6,39 +6,80 @@ WhoopsPay includes comprehensive Docker support for consistent development, test
 
 ## 📦 Docker Configuration
 
+WhoopsPay includes a production-ready Dockerfile for containerized deployment with SQLite database persistence.
+
 ### Dockerfile Structure
 
-```dockerfile
-FROM node:20-alpine
+The current Dockerfile creates an optimized container for WhoopsPay:
 
-# Set working directory
+```dockerfile
+# Multi-stage build for optimal production image size
+
+# Build stage
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Copy package files
+# Copy package files and config
 COPY package*.json ./
+COPY tsconfig.json ./
+COPY vite.config.ts ./
+COPY tailwind.config.ts ./
+COPY postcss.config.js ./
+COPY components.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including devDependencies for build)
+RUN npm ci
 
-# Copy application code
-COPY . .
+# Copy source code and database
+COPY client/ ./client/
+COPY server/ ./server/
+COPY shared/ ./shared/
+COPY data/ ./data/
 
 # Build the application
 RUN npm run build
 
+# Production stage
+FROM node:18-alpine AS production
+WORKDIR /app
+
+# Install production dependencies
+COPY package*.json ./
+RUN npm ci && npm cache clean --force
+
+# Copy built application from builder stage
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/data ./data
+COPY --from=builder /app/server/modules ./server/modules
+COPY --from=builder /app/dist/public ./dist/client
+
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S whoopspay -u 1001
+
+# Set ownership and switch to non-root user
+RUN chown -R whoopspay:nodejs /app
+USER whoopspay
+
 # Expose port
 EXPOSE 5000
 
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:5000/api/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1))"
+
 # Start the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
 ```
 
 ### Key Features
-- **Multi-stage builds** for optimized image size
-- **Alpine Linux** base for security and minimal footprint
-- **Production dependencies only** in final image
-- **Non-root user** for enhanced security
-- **Health checks** for container monitoring
+- **Multi-stage build** for optimized production image size
+- **Node.js 18 Alpine** base for minimal footprint and security
+- **Non-root user** (whoopspay) for enhanced container security
+- **Built-in health checks** for container monitoring
+- **SQLite database** with persistent data directory
+- **Production build** with Vite-optimized assets
+- **Single port deployment** (5000) serving both frontend and backend
 
 ## 🚀 Running with Docker
 
@@ -60,6 +101,8 @@ docker-compose up -d
 
 ### Docker Compose Configuration
 
+For local development and testing with Docker:
+
 ```yaml
 version: '3.8'
 
@@ -69,25 +112,17 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/whoopspay
       - NODE_ENV=production
-    depends_on:
-      - db
-    restart: unless-stopped
-
-  db:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=whoopspay
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - WHOOPSPAY_URL=http://localhost:5000
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./data:/app/data  # Persist SQLite database
     restart: unless-stopped
 
-volumes:
-  postgres_data:
+# Note: No separate database service needed - SQLite runs in-process
 ```
+
+### SQLite Database Persistence
+The SQLite database (`data/whoopspay.db`) is persisted using volume mounts to ensure data survives container restarts.
 
 ## 🏗️ CI/CD Integration
 
@@ -115,99 +150,87 @@ The application includes automated Docker builds in the SSDLC pipeline:
 3. **Registry Push** → Docker Hub publication
 4. **Deployment** → Automatic deployment to production
 
-## 🎯 Deployment Platforms
+## 🎯 Deployment Options
 
 ### Docker Hub Registry
 - **Repository**: `khajdari/whoopspay`
-- **Tags**: Semantic versioning + build timestamps
-- **Auto-build**: Triggered on every push to main branch
+- **Tags**: Semantic versioning with build timestamps (e.g., `1.0.0_20250913_132216`)
+- **Latest Tag**: Always points to the most recent build
+- **Auto-build**: Triggered by CI/CD pipeline on every push to main branch
 
-### Platform Support
+### Supported Deployment Platforms
 
-#### Render
+#### **Container-based Platforms**
+Most container platforms can run WhoopsPay using the Docker Hub image:
+
 ```bash
-# Deploy to Render using Docker image
-Service Type: Web Service
-Image: docker.io/khajdari/whoopspay:latest
-Port: 5000
+# Basic Docker run command
+docker run -p 5000:5000 \
+  -v $(pwd)/data:/app/data \
+  khajdari/whoopspay:latest
 ```
 
-#### Railway
-```bash
-# Deploy using Docker image
-railway up --detach
-```
+#### **Platform-Specific Examples**
 
-#### DigitalOcean App Platform
-```yaml
-name: whoopspay
-services:
-- name: web
-  source_dir: /
-  image:
-    registry_type: DOCKER_HUB
-    registry: khajdari
-    repository: whoopspay
-    tag: latest
-  http_port: 5000
-```
+**Render:**
+- Service Type: Web Service  
+- Image: `docker.io/khajdari/whoopspay:latest`
+- Port: 5000
+- Add persistent disk for `/app/data` to preserve SQLite database
 
-#### AWS ECS/Fargate
-```json
-{
-  "family": "whoopspay",
-  "containerDefinitions": [
-    {
-      "name": "whoopspay",
-      "image": "khajdari/whoopspay:latest",
-      "portMappings": [
-        {
-          "containerPort": 5000,
-          "protocol": "tcp"
-        }
-      ]
-    }
-  ]
-}
-```
+**Railway:**
+- Deploy using Docker image from Docker Hub
+- Automatically detects port 5000
+- Add volume mount for database persistence
+
+**Local Docker:**
+- Use docker-compose for development
+- Volume mount for database persistence
+- Easy local testing environment
 
 ## 🔧 Configuration
 
 ### Environment Variables
 
 ```bash
-# Database Configuration
-DATABASE_URL=postgresql://user:pass@host:5432/db
-
 # Application Settings  
 NODE_ENV=production
 PORT=5000
 
-# External Services
+# External Services (optional)
 WHOOPSPAY_URL=https://your-domain.com
 JUICE_SHOP_URL=https://your-juice-shop.com
 
 # Security Settings (Educational)
 SESSION_SECRET=your-session-secret
+
+# Note: No DATABASE_URL needed - SQLite runs in-process
+# Database file: /app/data/whoopspay.db
 ```
 
 ### Volume Mounts
 
 ```bash
-# Development with live reload
+# Production with persistent SQLite database
+docker run -v $(pwd)/data:/app/data -p 5000:5000 khajdari/whoopspay:latest
+
+# Development with full source mount
 docker run -v $(pwd):/app -p 5000:5000 whoopspay:dev
 
-# Production with persistent data
-docker run -v /data/uploads:/app/uploads whoopspay:latest
+# Backup database
+docker run --rm -v whoopspay_data:/data -v $(pwd):/backup \
+  alpine cp /data/whoopspay.db /backup/
 ```
 
 ## 🔍 Monitoring and Debugging
 
 ### Health Checks
 
+The Dockerfile includes built-in health checks:
+
 ```dockerfile
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:5000/health || exit 1
+    CMD node -e "require('http').get('http://localhost:5000/api/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1))"
 ```
 
 ### Container Logs
@@ -266,23 +289,12 @@ snyk container test whoopspay:latest
 ## 📊 Performance Optimization
 
 ### Multi-stage Builds
-```dockerfile
-# Build stage
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
 
-# Production stage
-FROM node:20-alpine AS production
-WORKDIR /app
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package*.json ./
-RUN npm ci --only=production
-CMD ["npm", "start"]
-```
+The Dockerfile uses an optimized multi-stage build process:
+- **Builder stage**: Installs all dependencies and builds the application
+- **Production stage**: Creates minimal runtime image with only production dependencies
+- **Security**: Runs as non-root user with proper ownership
+- **Health monitoring**: Built-in health checks for container orchestration
 
 ### Image Optimization
 - **Layer caching**: Optimized instruction order
@@ -315,4 +327,4 @@ docker push khajdari/whoopspay:1.0.0
 docker pull khajdari/whoopspay:latest
 ```
 
-This Docker setup provides a complete containerization solution for WhoopsPay, supporting development, testing, and production deployments across multiple platforms.
+This Docker setup provides a complete containerization solution for WhoopsPay with SQLite database support, security hardening, and efficient multi-stage builds for local development and production deployment.
