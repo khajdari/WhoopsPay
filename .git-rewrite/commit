@@ -1,9 +1,0 @@
-tree 9fbdfaacc4f8fa14e959d7028000e4a4ac3e7baa
-parent edf82850cb77db139a01fa277eac4b381dca7ed6
-author khajdari <43412562-khajdari@users.noreply.replit.com> 1754539477 +0000
-committer khajdari <43412562-khajdari@users.noreply.replit.com> 1754539477 +0000
-
-Update notifications to only show clear all and add Greek language support
-
-Removes the "Mark all as read" functionality from notifications and introduces Greek translations for notification elements and messages.
-
