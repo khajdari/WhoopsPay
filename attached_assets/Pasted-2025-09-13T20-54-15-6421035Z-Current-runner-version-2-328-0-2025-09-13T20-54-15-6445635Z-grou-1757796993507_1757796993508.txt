@@ -1,0 +1,45 @@
+2025-09-13T20:54:15.6421035Z Current runner version: '2.328.0'
+2025-09-13T20:54:15.6445635Z ##[group]Runner Image Provisioner
+2025-09-13T20:54:15.6446468Z Hosted Compute Agent
+2025-09-13T20:54:15.6447347Z Version: 20250829.383
+2025-09-13T20:54:15.6447985Z Commit: 27cb235aab5b0e52e153a26cd86b4742e89dac5d
+2025-09-13T20:54:15.6448780Z Build Date: 2025-08-29T13:48:48Z
+2025-09-13T20:54:15.6449379Z ##[endgroup]
+2025-09-13T20:54:15.6449946Z ##[group]Operating System
+2025-09-13T20:54:15.6450545Z Ubuntu
+2025-09-13T20:54:15.6451002Z 24.04.3
+2025-09-13T20:54:15.6451505Z LTS
+2025-09-13T20:54:15.6452046Z ##[endgroup]
+2025-09-13T20:54:15.6452614Z ##[group]Runner Image
+2025-09-13T20:54:15.6453346Z Image: ubuntu-24.04
+2025-09-13T20:54:15.6454316Z Version: 20250907.24.1
+2025-09-13T20:54:15.6456230Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250907.24/images/ubuntu/Ubuntu2404-Readme.md
+2025-09-13T20:54:15.6459173Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250907.24
+2025-09-13T20:54:15.6460947Z ##[endgroup]
+2025-09-13T20:54:15.6462846Z ##[group]GITHUB_TOKEN Permissions
+2025-09-13T20:54:15.6465634Z Deployments: write
+2025-09-13T20:54:15.6466611Z Metadata: read
+2025-09-13T20:54:15.6467937Z ##[endgroup]
+2025-09-13T20:54:15.6471213Z Secret source: Actions
+2025-09-13T20:54:15.6472549Z Prepare workflow directory
+2025-09-13T20:54:15.7230920Z Prepare all required actions
+2025-09-13T20:54:15.7285315Z Getting action download info
+2025-09-13T20:54:15.9980739Z Download action repository 'JorgeLNJunior/render-deploy@v1.4.5' (SHA:9978fcd7ae237039fc3337c47ac2e1018d693df3)
+2025-09-13T20:54:16.5277573Z Complete job name: 🌐 Render Production Deployment
+2025-09-13T20:54:16.5930864Z ##[group]Run JorgeLNJunior/render-deploy@v1.4.5
+2025-09-13T20:54:16.5931797Z with:
+2025-09-13T20:54:16.5932332Z   service_id: ***
+2025-09-13T20:54:16.5932809Z   api_key: ***
+2025-09-13T20:54:16.5933206Z   wait_deploy: true
+2025-09-13T20:54:16.5933615Z   clear_cache: false
+2025-09-13T20:54:16.5934030Z   github_deployment: true
+2025-09-13T20:54:16.5934522Z   deployment_environment: production
+2025-09-13T20:54:16.5935178Z   github_token: ***
+2025-09-13T20:54:16.5935769Z env:
+2025-09-13T20:54:16.5936136Z   NODE_VERSION: 20
+2025-09-13T20:54:16.5936548Z   DOCKER_REGISTRY: docker.io
+2025-09-13T20:54:16.5937695Z   IMAGE_NAME: ***/whoopspay:latest
+2025-09-13T20:54:16.5938219Z   VERSION: 1.0.0_20250913_205003
+2025-09-13T20:54:16.5938680Z ##[endgroup]
+2025-09-13T20:54:34.2725863Z ##[error]Conflict merging develop-vulnerable into refs/heads/main-vulnerable. - https://docs.github.com/rest/deployments/deployments#create-a-deployment
+2025-09-13T20:54:34.2889020Z Cleaning up orphan processes
