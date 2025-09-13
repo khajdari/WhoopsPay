@@ -1,0 +1,45 @@
+2025-09-13T15:58:39.9719096Z Current runner version: '2.328.0'
+2025-09-13T15:58:39.9754481Z ##[group]Runner Image Provisioner
+2025-09-13T15:58:39.9756376Z Hosted Compute Agent
+2025-09-13T15:58:39.9757538Z Version: 20250829.383
+2025-09-13T15:58:39.9758669Z Commit: 27cb235aab5b0e52e153a26cd86b4742e89dac5d
+2025-09-13T15:58:39.9759863Z Build Date: 2025-08-29T13:48:48Z
+2025-09-13T15:58:39.9761014Z ##[endgroup]
+2025-09-13T15:58:39.9761949Z ##[group]Operating System
+2025-09-13T15:58:39.9763033Z Ubuntu
+2025-09-13T15:58:39.9764093Z 24.04.3
+2025-09-13T15:58:39.9764931Z LTS
+2025-09-13T15:58:39.9765864Z ##[endgroup]
+2025-09-13T15:58:39.9766844Z ##[group]Runner Image
+2025-09-13T15:58:39.9767751Z Image: ubuntu-24.04
+2025-09-13T15:58:39.9768833Z Version: 20250907.24.1
+2025-09-13T15:58:39.9770723Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250907.24/images/ubuntu/Ubuntu2404-Readme.md
+2025-09-13T15:58:39.9773960Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250907.24
+2025-09-13T15:58:39.9775769Z ##[endgroup]
+2025-09-13T15:58:39.9777688Z ##[group]GITHUB_TOKEN Permissions
+2025-09-13T15:58:39.9780608Z Deployments: write
+2025-09-13T15:58:39.9781743Z Metadata: read
+2025-09-13T15:58:39.9782623Z ##[endgroup]
+2025-09-13T15:58:39.9785943Z Secret source: Actions
+2025-09-13T15:58:39.9787108Z Prepare workflow directory
+2025-09-13T15:58:40.0591453Z Prepare all required actions
+2025-09-13T15:58:40.0649614Z Getting action download info
+2025-09-13T15:58:40.3326922Z Download action repository 'JorgeLNJunior/render-deploy@v1.4.5' (SHA:9978fcd7ae237039fc3337c47ac2e1018d693df3)
+2025-09-13T15:58:40.9751783Z Complete job name: 🌐 Render Production Deployment
+2025-09-13T15:58:41.0314076Z ##[group]Run JorgeLNJunior/render-deploy@v1.4.5
+2025-09-13T15:58:41.0315168Z with:
+2025-09-13T15:58:41.0315830Z   service_id: ***
+2025-09-13T15:58:41.0316345Z   api_key: ***
+2025-09-13T15:58:41.0316777Z   wait_deploy: true
+2025-09-13T15:58:41.0317223Z   clear_cache: false
+2025-09-13T15:58:41.0317683Z   github_deployment: true
+2025-09-13T15:58:41.0318223Z   deployment_environment: production
+2025-09-13T15:58:41.0318942Z   github_token: ***
+2025-09-13T15:58:41.0319599Z env:
+2025-09-13T15:58:41.0320017Z   NODE_VERSION: 20
+2025-09-13T15:58:41.0320489Z   DOCKER_REGISTRY: docker.io
+2025-09-13T15:58:41.0321070Z   IMAGE_NAME: ***/whoopspay:latest
+2025-09-13T15:58:41.0321623Z   VERSION: 1.0.0_20250913_155158
+2025-09-13T15:58:41.0322139Z ##[endgroup]
+2025-09-13T15:58:41.3943631Z ##[error]Authorization information is missing or invalid.
+2025-09-13T15:58:41.4096276Z Cleaning up orphan processes
