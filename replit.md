@@ -1,82 +1,96 @@
-# Overview
+# WhoopsPay - Educational Security Training Platform
 
-WhoopsPay is an intentionally vulnerable financial application designed for cybersecurity education and training. It simulates a realistic online payment system while deliberately implementing security vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10. The application serves as a comprehensive hands-on training platform for security professionals, developers, and students to learn about application security in a controlled environment.
+## Overview
 
-The platform includes core financial features like user authentication, digital wallet management, money transfers, transaction history, payment method management, and external payment processing. It also provides administrative features and integrates with OWASP Juice Shop for cross-platform payment processing scenarios.
+WhoopsPay is an intentionally vulnerable financial application designed for cybersecurity education and training. It simulates a realistic online payment system while deliberately implementing security vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10, serving as a comprehensive hands-on learning platform for security professionals, developers, and students.
 
-# User Preferences
+The application provides core financial features including user authentication, digital wallet management, money transfers, transaction history, payment methods, and cross-platform integration with OWASP Juice Shop. It includes administrative features for user management, transaction monitoring, and security reporting, all implemented with intentional security flaws for educational purposes.
+
+**CRITICAL WARNING: This application contains intentional security vulnerabilities and should NEVER be deployed in production environments or used with real financial data.**
+
+## User Preferences
 
 Preferred communication style: Simple, everyday language.
 
-# System Architecture
+## System Architecture
 
-## Frontend Architecture
-- **Framework**: React 18 with TypeScript for type safety and modern component patterns
-- **Routing**: Wouter for client-side routing with authentication-based route protection
-- **State Management**: React Query for server state management combined with React hooks for local state
-- **UI Components**: shadcn/ui component library built on Radix UI with Tailwind CSS for styling
-- **Internationalization**: Custom i18n system supporting English (UK) and Greek locales
-- **Build Tool**: Vite for fast development and optimized production builds
+### Frontend Architecture
+- **Framework**: React 18 with TypeScript for type safety and modern development patterns
+- **Routing**: Wouter for lightweight client-side routing with authentication-based route protection
+- **Styling**: Tailwind CSS with shadcn/ui components for consistent design system
+- **State Management**: React Query for server state management with React hooks for local state
+- **Internationalization**: Custom i18n system supporting English (UK) and Greek (Greece) locales
+- **Build System**: Vite for fast development and optimized production builds
 
-## Backend Architecture
-- **Framework**: Express.js with TypeScript for API server implementation
-- **Authentication**: Custom session-based authentication with intentionally vulnerable patterns
-- **Middleware**: Custom security middleware demonstrating common vulnerabilities
-- **Controllers**: MVC pattern with dedicated controllers for different functional areas
-- **Routing**: RESTful API design with comprehensive endpoint coverage
-- **Documentation**: Swagger/OpenAPI integration for API documentation
+### Backend Architecture
+- **Runtime**: Node.js 20+ with Express.js web framework
+- **Language**: TypeScript for type safety across the full stack
+- **Database**: SQLite for local development with Drizzle ORM for type-safe database operations
+- **Authentication**: Express sessions with bcrypt for password hashing (intentionally mixed with plain text for vulnerabilities)
+- **Middleware**: Custom security middleware with intentional gaps for educational purposes
+- **API Design**: RESTful API with comprehensive vulnerability demonstrations
 
-## Data Storage Architecture
-- **Development Database**: SQLite with Drizzle ORM for local development
-- **Production Database**: PostgreSQL configured via Drizzle for production deployments
-- **Schema Management**: Shared schema definitions using Drizzle with TypeScript types
-- **Session Storage**: Database-backed session management with configurable TTL
+### Database Design
+- **ORM**: Drizzle ORM with SQLite dialect for reliable local development
+- **Schema**: Comprehensive financial application schema including users, transactions, payment methods, notifications, and issue reports
+- **Vulnerabilities**: Intentional plain text storage of sensitive data, missing constraints, and excessive data exposure for educational purposes
+- **Sessions**: Database-stored sessions with intentional security weaknesses
 
-## Authentication and Authorization
-- **Session Management**: Express-session with database storage and intentionally weak security
-- **Password Handling**: Mixed plain text and bcrypt implementation for educational vulnerability demonstration
-- **Admin Authorization**: Simple role-based access control with intentional privilege escalation vulnerabilities
-- **API Security**: Minimal authentication checks demonstrating broken access control patterns
+### Security Training Features
+- **4-Phase Security Pipeline**: ESLint security linting, SAST with Snyk Code, SCA with dependency scanning, and DAST with OWASP ZAP
+- **OWASP Top 10 Vulnerabilities**: Comprehensive implementation of all major vulnerability categories including broken access control, cryptographic failures, injection, and insecure design
+- **API Security Vulnerabilities**: Complete coverage of OWASP API Security Top 10 including broken object level authorization and unrestricted resource consumption
 
-## Security Training Features
-- **Vulnerability Implementation**: Intentional OWASP Top 10 and API Security Top 10 vulnerabilities
-- **Security Pipeline**: 4-phase automated security testing (ESLint, SAST, SCA, DAST)
-- **Educational Documentation**: Comprehensive vulnerability explanations and exploitation examples
-- **Safe Environment**: Isolated training platform with clear educational disclaimers
+### Development Environment
+- **Monorepo Structure**: Integrated frontend and backend in single repository with shared types
+- **Hot Reload**: Vite development server with automatic refresh and integrated debugging
+- **Database Management**: SQLite file-based storage with schema migrations and mock data seeding
+- **Build Process**: Multi-stage Docker builds for production deployment with optimized images
 
-# External Dependencies
+## External Dependencies
 
-## Core Framework Dependencies
-- **React Ecosystem**: React 18, React Query v5 for state management, React Hook Form for form handling
-- **Express.js**: Node.js web framework with TypeScript support and comprehensive middleware stack
-- **Database**: Drizzle ORM for type-safe database operations, better-sqlite3 for development, PostgreSQL for production
+### Core Runtime Dependencies
+- **Node.js 20+**: Primary runtime environment with ES modules support
+- **Express.js**: Web application framework for API server
+- **React 18**: Frontend framework with TypeScript integration
+- **Vite**: Build tool and development server for fast iteration
 
-## UI and Styling
-- **Component Library**: Radix UI primitives with shadcn/ui components for consistent design system
-- **Styling**: Tailwind CSS for utility-first styling with custom theme configuration
-- **Icons**: Lucide React for comprehensive icon library with consistent styling
+### Database and ORM
+- **better-sqlite3**: SQLite database driver for Node.js
+- **Drizzle ORM**: Type-safe ORM with SQLite dialect for database operations
+- **drizzle-kit**: Migration tools and database management utilities
 
-## Authentication and Security
-- **Session Management**: express-session for server-side session handling
-- **Password Hashing**: bcrypt for secure password storage (mixed with plain text for vulnerability demonstration)
-- **CORS**: cors middleware for cross-origin request handling
+### Authentication and Security
+- **express-session**: Session management with database storage
+- **bcrypt**: Password hashing library (mixed with plain text for vulnerabilities)
+- **express-session sqlite store**: Session persistence in SQLite database
 
-## Payment Integration
-- **PayPal SDK**: Official PayPal Server SDK for external payment processing
-- **Juice Shop Integration**: Custom integration for cross-platform payment scenarios
+### UI and Styling
+- **@radix-ui**: Comprehensive component library for accessible UI primitives
+- **shadcn/ui**: Pre-built component system built on Radix UI
+- **Tailwind CSS**: Utility-first CSS framework for rapid styling
+- **Lucide React**: Icon library for consistent iconography
 
-## Development and Security Tools
-- **ESLint Security**: eslint-plugin-security, @microsoft/eslint-plugin-sdl, eslint-plugin-sonarjs
-- **API Documentation**: swagger-jsdoc and swagger-ui-express for interactive API documentation
-- **Build Tools**: Vite for frontend bundling, esbuild for backend compilation
+### State Management and Data Fetching
+- **@tanstack/react-query**: Server state management with caching and synchronization
+- **React Hook Form**: Form handling with validation and performance optimization
+- **@hookform/resolvers**: Validation resolvers for form schemas
 
-## External Services
-- **Payment Processing**: PayPal API for external payment gateway functionality
-- **Juice Shop Integration**: Cross-platform payment processing with OWASP Juice Shop
-- **Domain Configuration**: Dynamic URL adaptation for different deployment environments (development, production, Docker)
+### External Payment Integration
+- **@paypal/paypal-server-sdk**: PayPal payment processing integration
+- **OWASP Juice Shop**: Cross-platform payment integration for educational scenarios
 
-## Security Testing Pipeline
-- **SAST**: Snyk Code for static application security testing
-- **SCA**: Snyk Open Source for dependency vulnerability scanning  
-- **DAST**: OWASP ZAP for dynamic application security testing
-- **CI/CD**: GitHub Actions for automated security pipeline execution
+### Security Testing Tools
+- **ESLint Security Plugins**: Static analysis for security hotspot detection
+- **Snyk**: SAST and SCA scanning for vulnerability assessment
+- **OWASP ZAP**: Dynamic application security testing for runtime vulnerability detection
+
+### Development and Build Tools
+- **TypeScript**: Type system for JavaScript with strict configuration
+- **tsx**: TypeScript execution environment for development
+- **esbuild**: Fast JavaScript bundler for production builds
+- **Docker**: Containerization for consistent deployment environments
+
+### Documentation and API Tools
+- **swagger-jsdoc**: API documentation generation from JSDoc comments
+- **swagger-ui-express**: Interactive API documentation interface
