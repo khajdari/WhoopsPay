@@ -1043,9 +1043,8 @@ jobs:
           api_key: ${{ secrets.RENDER_API }}
           wait_deploy: true
           clear_cache: false
-          github_deployment: true
+          github_deployment: false
           deployment_environment: 'production'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify Render deployment
         run: |
