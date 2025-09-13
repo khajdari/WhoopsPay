@@ -316,6 +316,8 @@ interface Translations {
   trustedCommunity: TranslationKey;
   trustedCommunityDesc: TranslationKey;
   footerText: TranslationKey;
+  footerLicense: TranslationKey;
+  requestRejectedNotification: TranslationKey;
   
   // Additional landing page features
   featuresTitle: TranslationKey;
@@ -1380,6 +1382,10 @@ const translations: Translations = {
   footerText: {
     'en-GB': '© 2025 WhoopsPay. An educational project developed as part of a postgraduate thesis on web application vulnerabilities.',
     'el-GR': '© 2025 WhoopsPay. Ένα εκπαιδευτικό έργο που αναπτύχθηκε στο πλαίσιο μεταπτυχιακής διπλωματικής για τρωτότητες εφαρμογών ιστού.'
+  },
+  footerLicense: {
+    'en-GB': 'MIT License | Build Version',
+    'el-GR': 'Άδεια MIT | Έκδοση Κατασκευής'
   },
   
   // Login page translations
