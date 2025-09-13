@@ -22,7 +22,7 @@ WhoopsPay implements a comprehensive 4-phase security testing pipeline:
   - `eslint-plugin-security` - Node.js security hotspot detection
   - `@microsoft/eslint-plugin-sdl` - Microsoft Security Development Lifecycle
   - `eslint-plugin-sonarjs` - Code quality and vulnerability detection
-- **Coverage**: All JavaScript/TypeScript files with 15+ security rules
+- **Coverage**: All JavaScript/TypeScript files with 15 security rules
 - **Output**: JSON, HTML, and Checkstyle XML reports
 
 ### Phase 2: SAST - Static Application Security Testing 🔒
