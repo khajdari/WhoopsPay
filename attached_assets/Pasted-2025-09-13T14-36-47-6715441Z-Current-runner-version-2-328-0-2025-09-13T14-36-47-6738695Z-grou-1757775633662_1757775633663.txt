@@ -1,0 +1,857 @@
+2025-09-13T14:36:47.6715441Z Current runner version: '2.328.0'
+2025-09-13T14:36:47.6738695Z ##[group]Runner Image Provisioner
+2025-09-13T14:36:47.6739693Z Hosted Compute Agent
+2025-09-13T14:36:47.6740284Z Version: 20250829.383
+2025-09-13T14:36:47.6740853Z Commit: 27cb235aab5b0e52e153a26cd86b4742e89dac5d
+2025-09-13T14:36:47.6741681Z Build Date: 2025-08-29T13:48:48Z
+2025-09-13T14:36:47.6742295Z ##[endgroup]
+2025-09-13T14:36:47.6742779Z ##[group]Operating System
+2025-09-13T14:36:47.6743399Z Ubuntu
+2025-09-13T14:36:47.6743887Z 24.04.3
+2025-09-13T14:36:47.6744307Z LTS
+2025-09-13T14:36:47.6744918Z ##[endgroup]
+2025-09-13T14:36:47.6745432Z ##[group]Runner Image
+2025-09-13T14:36:47.6746239Z Image: ubuntu-24.04
+2025-09-13T14:36:47.6746897Z Version: 20250907.24.1
+2025-09-13T14:36:47.6747925Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250907.24/images/ubuntu/Ubuntu2404-Readme.md
+2025-09-13T14:36:47.6749536Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250907.24
+2025-09-13T14:36:47.6750536Z ##[endgroup]
+2025-09-13T14:36:47.6752992Z ##[group]GITHUB_TOKEN Permissions
+2025-09-13T14:36:47.6754899Z Actions: write
+2025-09-13T14:36:47.6755576Z Attestations: write
+2025-09-13T14:36:47.6756494Z Checks: write
+2025-09-13T14:36:47.6757024Z Contents: write
+2025-09-13T14:36:47.6757616Z Deployments: write
+2025-09-13T14:36:47.6758149Z Discussions: write
+2025-09-13T14:36:47.6758683Z Issues: write
+2025-09-13T14:36:47.6759262Z Metadata: read
+2025-09-13T14:36:47.6759758Z Models: read
+2025-09-13T14:36:47.6760271Z Packages: write
+2025-09-13T14:36:47.6760836Z Pages: write
+2025-09-13T14:36:47.6761335Z PullRequests: write
+2025-09-13T14:36:47.6761892Z RepositoryProjects: write
+2025-09-13T14:36:47.6762611Z SecurityEvents: write
+2025-09-13T14:36:47.6763273Z Statuses: write
+2025-09-13T14:36:47.6763756Z ##[endgroup]
+2025-09-13T14:36:47.6766412Z Secret source: Actions
+2025-09-13T14:36:47.6767189Z Prepare workflow directory
+2025-09-13T14:36:47.7370557Z Prepare all required actions
+2025-09-13T14:36:47.7407326Z Getting action download info
+2025-09-13T14:36:48.1182701Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-09-13T14:36:48.3010931Z Download action repository 'docker/setup-buildx-action@v3' (SHA:e468171a9de216ec08956ac3ada2f0791b6bd435)
+2025-09-13T14:36:49.0806628Z Download action repository 'docker/login-action@v3' (SHA:184bdaa0721073962dff0199f1fb9940f07167d1)
+2025-09-13T14:36:49.8421008Z Download action repository 'docker/build-push-action@v5' (SHA:ca052bb54ab0790a636c9b5f226502c73d547a25)
+2025-09-13T14:36:50.6013863Z Complete job name: 🚀 Docker Hub Deployment
+2025-09-13T14:36:50.6706755Z ##[group]Run actions/checkout@v4
+2025-09-13T14:36:50.6708226Z with:
+2025-09-13T14:36:50.6708940Z   ref: 23a9be09a3daeb94f125a4246997ebf56f5b6b53
+2025-09-13T14:36:50.6709739Z   repository: khajdari/WhoopsPay
+2025-09-13T14:36:50.6710638Z   token: ***
+2025-09-13T14:36:50.6711285Z   ssh-strict: true
+2025-09-13T14:36:50.6711943Z   ssh-user: git
+2025-09-13T14:36:50.6712607Z   persist-credentials: true
+2025-09-13T14:36:50.6713326Z   clean: true
+2025-09-13T14:36:50.6714000Z   sparse-checkout-cone-mode: true
+2025-09-13T14:36:50.6714735Z   fetch-depth: 1
+2025-09-13T14:36:50.6715388Z   fetch-tags: false
+2025-09-13T14:36:50.6716333Z   show-progress: true
+2025-09-13T14:36:50.6717007Z   lfs: false
+2025-09-13T14:36:50.6717650Z   submodules: false
+2025-09-13T14:36:50.6718337Z   set-safe-directory: true
+2025-09-13T14:36:50.6719370Z env:
+2025-09-13T14:36:50.6720007Z   NODE_VERSION: 20
+2025-09-13T14:36:50.6720678Z   DOCKER_REGISTRY: docker.io
+2025-09-13T14:36:50.6721446Z   IMAGE_NAME: khajdari/whoopspay
+2025-09-13T14:36:50.6722166Z   VERSION: 1.0.0_20250913_142810
+2025-09-13T14:36:50.6722873Z   DOCKER_HUB_USERNAME: khajdari
+2025-09-13T14:36:50.6723574Z ##[endgroup]
+2025-09-13T14:36:50.7834025Z Syncing repository: khajdari/WhoopsPay
+2025-09-13T14:36:50.7836536Z ##[group]Getting Git version info
+2025-09-13T14:36:50.7838007Z Working directory is '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-13T14:36:50.7840876Z [command]/usr/bin/git version
+2025-09-13T14:36:50.7903299Z git version 2.51.0
+2025-09-13T14:36:50.7929815Z ##[endgroup]
+2025-09-13T14:36:50.7944763Z Temporarily overriding HOME='/home/runner/work/_temp/12ff088f-c5f0-40d6-8698-30e0ec9c371a' before making global git config changes
+2025-09-13T14:36:50.7947417Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-13T14:36:50.7951606Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-13T14:36:50.7986939Z Deleting the contents of '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-13T14:36:50.7990963Z ##[group]Initializing the repository
+2025-09-13T14:36:50.7995425Z [command]/usr/bin/git init /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-13T14:36:50.8092910Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-09-13T14:36:50.8094680Z hint: is subject to change. To configure the initial branch name to use in all
+2025-09-13T14:36:50.8096519Z hint: of your new repositories, which will suppress this warning, call:
+2025-09-13T14:36:50.8097885Z hint:
+2025-09-13T14:36:50.8099024Z hint: 	git config --global init.defaultBranch <name>
+2025-09-13T14:36:50.8100254Z hint:
+2025-09-13T14:36:50.8101193Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-09-13T14:36:50.8102249Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-09-13T14:36:50.8103567Z hint:
+2025-09-13T14:36:50.8104267Z hint: 	git branch -m <name>
+2025-09-13T14:36:50.8104984Z hint:
+2025-09-13T14:36:50.8106134Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-09-13T14:36:50.8107330Z Initialized empty Git repository in /home/runner/work/WhoopsPay/WhoopsPay/.git/
+2025-09-13T14:36:50.8109750Z [command]/usr/bin/git remote add origin https://github.com/khajdari/WhoopsPay
+2025-09-13T14:36:50.8144326Z ##[endgroup]
+2025-09-13T14:36:50.8145780Z ##[group]Disabling automatic garbage collection
+2025-09-13T14:36:50.8147611Z [command]/usr/bin/git config --local gc.auto 0
+2025-09-13T14:36:50.8176117Z ##[endgroup]
+2025-09-13T14:36:50.8177478Z ##[group]Setting up auth
+2025-09-13T14:36:50.8181952Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-13T14:36:50.8210617Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-13T14:36:50.8521324Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-13T14:36:50.8549356Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-13T14:36:50.8769467Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-09-13T14:36:50.8805410Z ##[endgroup]
+2025-09-13T14:36:50.8807264Z ##[group]Fetching the repository
+2025-09-13T14:36:50.8813806Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 23a9be09a3daeb94f125a4246997ebf56f5b6b53
+2025-09-13T14:36:51.5249517Z From https://github.com/khajdari/WhoopsPay
+2025-09-13T14:36:51.5250302Z  * branch            23a9be09a3daeb94f125a4246997ebf56f5b6b53 -> FETCH_HEAD
+2025-09-13T14:36:51.5323408Z ##[endgroup]
+2025-09-13T14:36:51.5324032Z ##[group]Determining the checkout info
+2025-09-13T14:36:51.5325667Z ##[endgroup]
+2025-09-13T14:36:51.5331931Z [command]/usr/bin/git sparse-checkout disable
+2025-09-13T14:36:51.5379386Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-09-13T14:36:51.5408044Z ##[group]Checking out the ref
+2025-09-13T14:36:51.5413077Z [command]/usr/bin/git checkout --progress --force 23a9be09a3daeb94f125a4246997ebf56f5b6b53
+2025-09-13T14:36:51.5638064Z Note: switching to '23a9be09a3daeb94f125a4246997ebf56f5b6b53'.
+2025-09-13T14:36:51.5639312Z 
+2025-09-13T14:36:51.5640119Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-09-13T14:36:51.5641300Z changes and commit them, and you can discard any commits you make in this
+2025-09-13T14:36:51.5643363Z state without impacting any branches by switching back to a branch.
+2025-09-13T14:36:51.5644019Z 
+2025-09-13T14:36:51.5644533Z If you want to create a new branch to retain commits you create, you may
+2025-09-13T14:36:51.5645274Z do so (now or later) by using -c with the switch command. Example:
+2025-09-13T14:36:51.5645710Z 
+2025-09-13T14:36:51.5646170Z   git switch -c <new-branch-name>
+2025-09-13T14:36:51.5646473Z 
+2025-09-13T14:36:51.5646644Z Or undo this operation with:
+2025-09-13T14:36:51.5647106Z 
+2025-09-13T14:36:51.5647263Z   git switch -
+2025-09-13T14:36:51.5647565Z 
+2025-09-13T14:36:51.5647939Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-09-13T14:36:51.5648475Z 
+2025-09-13T14:36:51.5648678Z HEAD is now at 23a9be0 test
+2025-09-13T14:36:51.5651240Z ##[endgroup]
+2025-09-13T14:36:51.5685691Z [command]/usr/bin/git log -1 --format=%H
+2025-09-13T14:36:51.5708381Z 23a9be09a3daeb94f125a4246997ebf56f5b6b53
+2025-09-13T14:36:51.5987585Z ##[group]Run docker/setup-buildx-action@v3
+2025-09-13T14:36:51.5987903Z with:
+2025-09-13T14:36:51.5988126Z   driver: docker-container
+2025-09-13T14:36:51.5988364Z   install: false
+2025-09-13T14:36:51.5988556Z   use: true
+2025-09-13T14:36:51.5988751Z   keep-state: false
+2025-09-13T14:36:51.5988969Z   cache-binary: true
+2025-09-13T14:36:51.5989170Z   cleanup: true
+2025-09-13T14:36:51.5989356Z env:
+2025-09-13T14:36:51.5989529Z   NODE_VERSION: 20
+2025-09-13T14:36:51.5989729Z   DOCKER_REGISTRY: docker.io
+2025-09-13T14:36:51.5989982Z   IMAGE_NAME: khajdari/whoopspay
+2025-09-13T14:36:51.5990232Z   VERSION: 1.0.0_20250913_142810
+2025-09-13T14:36:51.5990474Z   DOCKER_HUB_USERNAME: khajdari
+2025-09-13T14:36:51.5990712Z ##[endgroup]
+2025-09-13T14:36:51.8860326Z ##[group]Docker info
+2025-09-13T14:36:51.8885529Z [command]/usr/bin/docker version
+2025-09-13T14:36:52.8761771Z Client: Docker Engine - Community
+2025-09-13T14:36:52.8764325Z  Version:           28.0.4
+2025-09-13T14:36:52.8765149Z  API version:       1.48
+2025-09-13T14:36:52.8766642Z  Go version:        go1.23.7
+2025-09-13T14:36:52.8767198Z  Git commit:        b8034c0
+2025-09-13T14:36:52.8768747Z  Built:             Tue Mar 25 15:07:16 2025
+2025-09-13T14:36:52.8769932Z  OS/Arch:           linux/amd64
+2025-09-13T14:36:52.8770474Z  Context:           default
+2025-09-13T14:36:52.8771024Z 
+2025-09-13T14:36:52.8771260Z Server: Docker Engine - Community
+2025-09-13T14:36:52.8771671Z  Engine:
+2025-09-13T14:36:52.8771959Z   Version:          28.0.4
+2025-09-13T14:36:52.8772362Z   API version:      1.48 (minimum version 1.24)
+2025-09-13T14:36:52.8772813Z   Go version:       go1.23.7
+2025-09-13T14:36:52.8773196Z   Git commit:       6430e49
+2025-09-13T14:36:52.8773587Z   Built:            Tue Mar 25 15:07:16 2025
+2025-09-13T14:36:52.8773990Z   OS/Arch:          linux/amd64
+2025-09-13T14:36:52.8774393Z   Experimental:     false
+2025-09-13T14:36:52.8774759Z  containerd:
+2025-09-13T14:36:52.8775168Z   Version:          1.7.27
+2025-09-13T14:36:52.8775661Z   GitCommit:        05044ec0a9a75232cad458027ca83437aae3f4da
+2025-09-13T14:36:52.8777198Z  runc:
+2025-09-13T14:36:52.8777516Z   Version:          1.2.5
+2025-09-13T14:36:52.8777915Z   GitCommit:        v1.2.5-0-g59923ef
+2025-09-13T14:36:52.8778351Z  docker-init:
+2025-09-13T14:36:52.8778678Z   Version:          0.19.0
+2025-09-13T14:36:52.8779101Z   GitCommit:        de40ad0
+2025-09-13T14:36:52.8819975Z [command]/usr/bin/docker info
+2025-09-13T14:36:54.9349027Z Client: Docker Engine - Community
+2025-09-13T14:36:54.9356585Z  Version:    28.0.4
+2025-09-13T14:36:54.9357479Z  Context:    default
+2025-09-13T14:36:54.9357891Z  Debug Mode: false
+2025-09-13T14:36:54.9358245Z  Plugins:
+2025-09-13T14:36:54.9358667Z   buildx: Docker Buildx (Docker Inc.)
+2025-09-13T14:36:54.9359116Z     Version:  v0.28.0
+2025-09-13T14:36:54.9359936Z     Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+2025-09-13T14:36:54.9360337Z   compose: Docker Compose (Docker Inc.)
+2025-09-13T14:36:54.9360632Z     Version:  v2.38.2
+2025-09-13T14:36:54.9360950Z     Path:     /usr/libexec/docker/cli-plugins/docker-compose
+2025-09-13T14:36:54.9361227Z 
+2025-09-13T14:36:54.9361315Z Server:
+2025-09-13T14:36:54.9361509Z  Containers: 0
+2025-09-13T14:36:54.9361721Z   Running: 0
+2025-09-13T14:36:54.9361921Z   Paused: 0
+2025-09-13T14:36:54.9362113Z   Stopped: 0
+2025-09-13T14:36:54.9362311Z  Images: 0
+2025-09-13T14:36:54.9362517Z  Server Version: 28.0.4
+2025-09-13T14:36:54.9362757Z  Storage Driver: overlay2
+2025-09-13T14:36:54.9363104Z   Backing Filesystem: extfs
+2025-09-13T14:36:54.9363464Z   Supports d_type: true
+2025-09-13T14:36:54.9363811Z   Using metacopy: false
+2025-09-13T14:36:54.9364215Z   Native Overlay Diff: false
+2025-09-13T14:36:54.9364633Z   userxattr: false
+2025-09-13T14:36:54.9364997Z  Logging Driver: json-file
+2025-09-13T14:36:54.9365425Z  Cgroup Driver: systemd
+2025-09-13T14:36:54.9366136Z  Cgroup Version: 2
+2025-09-13T14:36:54.9366571Z  Plugins:
+2025-09-13T14:36:54.9366896Z   Volume: local
+2025-09-13T14:36:54.9367634Z   Network: bridge host ipvlan macvlan null overlay
+2025-09-13T14:36:54.9368384Z   Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
+2025-09-13T14:36:54.9368925Z  Swarm: inactive
+2025-09-13T14:36:54.9369260Z  Runtimes: runc io.containerd.runc.v2
+2025-09-13T14:36:54.9369679Z  Default Runtime: runc
+2025-09-13T14:36:54.9370043Z  Init Binary: docker-init
+2025-09-13T14:36:54.9370499Z  containerd version: 05044ec0a9a75232cad458027ca83437aae3f4da
+2025-09-13T14:36:54.9371036Z  runc version: v1.2.5-0-g59923ef
+2025-09-13T14:36:54.9371427Z  init version: de40ad0
+2025-09-13T14:36:54.9371767Z  Security Options:
+2025-09-13T14:36:54.9372077Z   apparmor
+2025-09-13T14:36:54.9372341Z   seccomp
+2025-09-13T14:36:54.9372618Z    Profile: builtin
+2025-09-13T14:36:54.9372917Z   cgroupns
+2025-09-13T14:36:54.9373281Z  Kernel Version: 6.11.0-1018-azure
+2025-09-13T14:36:54.9373772Z  Operating System: Ubuntu 24.04.3 LTS
+2025-09-13T14:36:54.9374255Z  OSType: linux
+2025-09-13T14:36:54.9374584Z  Architecture: x86_64
+2025-09-13T14:36:54.9374932Z  CPUs: 4
+2025-09-13T14:36:54.9375224Z  Total Memory: 15.62GiB
+2025-09-13T14:36:54.9375554Z  Name: runnervmf4ws1
+2025-09-13T14:36:54.9376163Z  ID: 80b0c887-f378-498c-94b8-5e260688697c
+2025-09-13T14:36:54.9376637Z  Docker Root Dir: /var/lib/docker
+2025-09-13T14:36:54.9377035Z  Debug Mode: false
+2025-09-13T14:36:54.9377402Z  Username: githubactions
+2025-09-13T14:36:54.9377877Z  Experimental: false
+2025-09-13T14:36:54.9378348Z  Insecure Registries:
+2025-09-13T14:36:54.9384387Z   ::1/128
+2025-09-13T14:36:54.9384733Z   127.0.0.0/8
+2025-09-13T14:36:54.9385105Z  Live Restore Enabled: false
+2025-09-13T14:36:54.9385397Z 
+2025-09-13T14:36:54.9386298Z ##[endgroup]
+2025-09-13T14:36:55.0485037Z ##[group]Buildx version
+2025-09-13T14:36:55.0513697Z [command]/usr/bin/docker buildx version
+2025-09-13T14:36:55.1553778Z github.com/docker/buildx v0.28.0 b1281b81bba797b21d9eaf256e6a13eb14419836
+2025-09-13T14:36:55.1588324Z ##[endgroup]
+2025-09-13T14:36:55.1744898Z ##[group]Inspecting default docker context
+2025-09-13T14:36:55.1890203Z [
+2025-09-13T14:36:55.1890550Z   {
+2025-09-13T14:36:55.1890840Z     "Name": "default",
+2025-09-13T14:36:55.1891219Z     "Metadata": {},
+2025-09-13T14:36:55.1891546Z     "Endpoints": {
+2025-09-13T14:36:55.1891880Z       "docker": {
+2025-09-13T14:36:55.1892238Z         "Host": "unix:///var/run/docker.sock",
+2025-09-13T14:36:55.1892705Z         "SkipTLSVerify": false
+2025-09-13T14:36:55.1893075Z       }
+2025-09-13T14:36:55.1893350Z     },
+2025-09-13T14:36:55.1893644Z     "TLSMaterial": {},
+2025-09-13T14:36:55.1894007Z     "Storage": {
+2025-09-13T14:36:55.1894334Z       "MetadataPath": "<IN MEMORY>",
+2025-09-13T14:36:55.1894765Z       "TLSPath": "<IN MEMORY>"
+2025-09-13T14:36:55.1895148Z     }
+2025-09-13T14:36:55.1895417Z   }
+2025-09-13T14:36:55.1895690Z ]
+2025-09-13T14:36:55.1896727Z ##[endgroup]
+2025-09-13T14:36:55.1897899Z ##[group]Creating a new builder instance
+2025-09-13T14:36:55.3498527Z [command]/usr/bin/docker buildx create --name builder-ec992f52-2130-4707-a880-99277dd3c3b4 --driver docker-container --buildkitd-flags --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host --use
+2025-09-13T14:36:55.4229321Z builder-ec992f52-2130-4707-a880-99277dd3c3b4
+2025-09-13T14:36:55.4263613Z ##[endgroup]
+2025-09-13T14:36:55.4264452Z ##[group]Booting builder
+2025-09-13T14:36:55.4300651Z [command]/usr/bin/docker buildx inspect --bootstrap --builder builder-ec992f52-2130-4707-a880-99277dd3c3b4
+2025-09-13T14:36:55.4778157Z #1 [internal] booting buildkit
+2025-09-13T14:36:55.6289843Z #1 pulling image moby/buildkit:buildx-stable-1
+2025-09-13T14:36:59.4225710Z #1 pulling image moby/buildkit:buildx-stable-1 3.9s done
+2025-09-13T14:36:59.5731414Z #1 creating container buildx_buildkit_builder-ec992f52-2130-4707-a880-99277dd3c3b40
+2025-09-13T14:37:00.3679625Z #1 creating container buildx_buildkit_builder-ec992f52-2130-4707-a880-99277dd3c3b40 0.9s done
+2025-09-13T14:37:00.3773395Z #1 DONE 4.9s
+2025-09-13T14:37:00.4125987Z Name:          builder-ec992f52-2130-4707-a880-99277dd3c3b4
+2025-09-13T14:37:00.4127017Z Driver:        docker-container
+2025-09-13T14:37:00.4127495Z Last Activity: 2025-09-13 14:36:55 +0000 UTC
+2025-09-13T14:37:00.4127791Z 
+2025-09-13T14:37:00.4127904Z Nodes:
+2025-09-13T14:37:00.4130081Z Name:                  builder-ec992f52-2130-4707-a880-99277dd3c3b40
+2025-09-13T14:37:00.4130635Z Endpoint:              unix:///var/run/docker.sock
+2025-09-13T14:37:00.4131095Z Status:                running
+2025-09-13T14:37:00.4131901Z BuildKit daemon flags: --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host
+2025-09-13T14:37:00.4132749Z BuildKit version:      v0.24.0
+2025-09-13T14:37:00.4133260Z Platforms:             linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/386
+2025-09-13T14:37:00.4133660Z Labels:
+2025-09-13T14:37:00.4133908Z  org.mobyproject.buildkit.worker.executor:         oci
+2025-09-13T14:37:00.4134315Z  org.mobyproject.buildkit.worker.hostname:         7cb4945443d3
+2025-09-13T14:37:00.4134696Z  org.mobyproject.buildkit.worker.network:          host
+2025-09-13T14:37:00.4135065Z  org.mobyproject.buildkit.worker.oci.process-mode: sandbox
+2025-09-13T14:37:00.4135452Z  org.mobyproject.buildkit.worker.selinux.enabled:  false
+2025-09-13T14:37:00.4136059Z  org.mobyproject.buildkit.worker.snapshotter:      overlayfs
+2025-09-13T14:37:00.4136469Z GC Policy rule#0:
+2025-09-13T14:37:00.4136664Z  All:            false
+2025-09-13T14:37:00.4136982Z  Filters:        type==source.local,type==exec.cachemount,type==source.git.checkout
+2025-09-13T14:37:00.4137359Z  Keep Duration:  48h0m0s
+2025-09-13T14:37:00.4137572Z  Max Used Space: 488.3MiB
+2025-09-13T14:37:00.4137772Z GC Policy rule#1:
+2025-09-13T14:37:00.4137948Z  All:            false
+2025-09-13T14:37:00.4138148Z  Keep Duration:  1440h0m0s
+2025-09-13T14:37:00.4138347Z  Reserved Space: 7.451GiB
+2025-09-13T14:37:00.4138554Z  Max Used Space: 54.02GiB
+2025-09-13T14:37:00.4138752Z  Min Free Space: 13.97GiB
+2025-09-13T14:37:00.4138936Z GC Policy rule#2:
+2025-09-13T14:37:00.4139110Z  All:            false
+2025-09-13T14:37:00.4139304Z  Reserved Space: 7.451GiB
+2025-09-13T14:37:00.4139496Z  Max Used Space: 54.02GiB
+2025-09-13T14:37:00.4139688Z  Min Free Space: 13.97GiB
+2025-09-13T14:37:00.4139879Z GC Policy rule#3:
+2025-09-13T14:37:00.4140047Z  All:            true
+2025-09-13T14:37:00.4140234Z  Reserved Space: 7.451GiB
+2025-09-13T14:37:00.4140430Z  Max Used Space: 54.02GiB
+2025-09-13T14:37:00.4140619Z  Min Free Space: 13.97GiB
+2025-09-13T14:37:00.4175256Z ##[endgroup]
+2025-09-13T14:37:00.5071335Z ##[group]Inspect builder
+2025-09-13T14:37:00.5075245Z {
+2025-09-13T14:37:00.5075588Z   "nodes": [
+2025-09-13T14:37:00.5076161Z     {
+2025-09-13T14:37:00.5076569Z       "name": "builder-ec992f52-2130-4707-a880-99277dd3c3b40",
+2025-09-13T14:37:00.5077166Z       "endpoint": "unix:///var/run/docker.sock",
+2025-09-13T14:37:00.5078033Z       "status": "running",
+2025-09-13T14:37:00.5078909Z       "buildkitd-flags": "--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host",
+2025-09-13T14:37:00.5079862Z       "buildkit": "v0.24.0",
+2025-09-13T14:37:00.5080441Z       "platforms": "linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/386",
+2025-09-13T14:37:00.5081035Z       "features": {
+2025-09-13T14:37:00.5081562Z         "Automatically load images to the Docker Engine image store": true,
+2025-09-13T14:37:00.5082274Z         "Cache export": true,
+2025-09-13T14:37:00.5082696Z         "Direct push": true,
+2025-09-13T14:37:00.5083098Z         "Docker exporter": true,
+2025-09-13T14:37:00.5083538Z         "Multi-platform build": true,
+2025-09-13T14:37:00.5083977Z         "OCI exporter": true
+2025-09-13T14:37:00.5084340Z       },
+2025-09-13T14:37:00.5084636Z       "labels": {
+2025-09-13T14:37:00.5085030Z         "org.mobyproject.buildkit.worker.executor": "oci",
+2025-09-13T14:37:00.5085629Z         "org.mobyproject.buildkit.worker.hostname": "7cb4945443d3",
+2025-09-13T14:37:00.5086441Z         "org.mobyproject.buildkit.worker.network": "host",
+2025-09-13T14:37:00.5087299Z         "org.mobyproject.buildkit.worker.oci.process-mode": "sandbox",
+2025-09-13T14:37:00.5088034Z         "org.mobyproject.buildkit.worker.selinux.enabled": "false",
+2025-09-13T14:37:00.5088684Z         "org.mobyproject.buildkit.worker.snapshotter": "overlayfs"
+2025-09-13T14:37:00.5089205Z       },
+2025-09-13T14:37:00.5089467Z       "gcPolicy": [
+2025-09-13T14:37:00.5089760Z         {
+2025-09-13T14:37:00.5090032Z           "all": false,
+2025-09-13T14:37:00.5090326Z           "filter": [
+2025-09-13T14:37:00.5090659Z             "type==source.local",
+2025-09-13T14:37:00.5091049Z             "type==exec.cachemount",
+2025-09-13T14:37:00.5091459Z             "type==source.git.checkout"
+2025-09-13T14:37:00.5091848Z           ],
+2025-09-13T14:37:00.5092148Z           "keepDuration": "48h0m0s",
+2025-09-13T14:37:00.5092540Z           "maxUsedSpace": "488.3MiB"
+2025-09-13T14:37:00.5092919Z         },
+2025-09-13T14:37:00.5093196Z         {
+2025-09-13T14:37:00.5093462Z           "all": false,
+2025-09-13T14:37:00.5093807Z           "keepDuration": "1440h0m0s",
+2025-09-13T14:37:00.5094218Z           "reservedSpace": "7.451GiB",
+2025-09-13T14:37:00.5094621Z           "maxUsedSpace": "54.02GiB",
+2025-09-13T14:37:00.5095017Z           "minFreeSpace": "13.97GiB"
+2025-09-13T14:37:00.5095380Z         },
+2025-09-13T14:37:00.5095637Z         {
+2025-09-13T14:37:00.5096741Z           "all": false,
+2025-09-13T14:37:00.5097105Z           "reservedSpace": "7.451GiB",
+2025-09-13T14:37:00.5097524Z           "maxUsedSpace": "54.02GiB",
+2025-09-13T14:37:00.5097930Z           "minFreeSpace": "13.97GiB"
+2025-09-13T14:37:00.5098297Z         },
+2025-09-13T14:37:00.5098558Z         {
+2025-09-13T14:37:00.5098831Z           "all": true,
+2025-09-13T14:37:00.5099173Z           "reservedSpace": "7.451GiB",
+2025-09-13T14:37:00.5099577Z           "maxUsedSpace": "54.02GiB",
+2025-09-13T14:37:00.5099982Z           "minFreeSpace": "13.97GiB"
+2025-09-13T14:37:00.5100344Z         }
+2025-09-13T14:37:00.5100599Z       ]
+2025-09-13T14:37:00.5100873Z     }
+2025-09-13T14:37:00.5101136Z   ],
+2025-09-13T14:37:00.5101501Z   "name": "builder-ec992f52-2130-4707-a880-99277dd3c3b4",
+2025-09-13T14:37:00.5101994Z   "driver": "docker-container",
+2025-09-13T14:37:00.5102394Z   "lastActivity": "2025-09-13T14:36:55.000Z"
+2025-09-13T14:37:00.5102786Z }
+2025-09-13T14:37:00.5104200Z ##[endgroup]
+2025-09-13T14:37:00.5104747Z ##[group]BuildKit version
+2025-09-13T14:37:00.5105221Z builder-ec992f52-2130-4707-a880-99277dd3c3b40: v0.24.0
+2025-09-13T14:37:00.5106172Z ##[endgroup]
+2025-09-13T14:37:00.5217302Z ##[group]Run docker/login-action@v3
+2025-09-13T14:37:00.5217567Z with:
+2025-09-13T14:37:00.5217868Z   username: ***
+2025-09-13T14:37:00.5218110Z   password: ***
+2025-09-13T14:37:00.5218281Z   ecr: auto
+2025-09-13T14:37:00.5218449Z   logout: true
+2025-09-13T14:37:00.5218616Z env:
+2025-09-13T14:37:00.5218775Z   NODE_VERSION: 20
+2025-09-13T14:37:00.5219128Z   DOCKER_REGISTRY: docker.io
+2025-09-13T14:37:00.5219357Z   IMAGE_NAME: khajdari/whoopspay
+2025-09-13T14:37:00.5219578Z   VERSION: 1.0.0_20250913_142810
+2025-09-13T14:37:00.5219798Z   DOCKER_HUB_USERNAME: khajdari
+2025-09-13T14:37:00.5220012Z ##[endgroup]
+2025-09-13T14:37:00.8481574Z Logging into Docker Hub...
+2025-09-13T14:37:01.3980901Z Login Succeeded!
+2025-09-13T14:37:01.4123432Z ##[group]Run docker/build-push-action@v5
+2025-09-13T14:37:01.4123729Z with:
+2025-09-13T14:37:01.4123915Z   context: .
+2025-09-13T14:37:01.4124097Z   push: true
+2025-09-13T14:37:01.4124404Z   tags: khajdari/whoopspay:1.0.0_20250913_142810
+khajdari/whoopspay:latest
+
+2025-09-13T14:37:01.4124775Z   cache-from: type=gha
+2025-09-13T14:37:01.4125005Z   cache-to: type=gha,mode=max
+2025-09-13T14:37:01.4125250Z   load: false
+2025-09-13T14:37:01.4125440Z   no-cache: false
+2025-09-13T14:37:01.4125631Z   pull: false
+2025-09-13T14:37:01.4126284Z   github-token: ***
+2025-09-13T14:37:01.4126492Z env:
+2025-09-13T14:37:01.4126677Z   NODE_VERSION: 20
+2025-09-13T14:37:01.4126895Z   DOCKER_REGISTRY: docker.io
+2025-09-13T14:37:01.4127132Z   IMAGE_NAME: khajdari/whoopspay
+2025-09-13T14:37:01.4127361Z   VERSION: 1.0.0_20250913_142810
+2025-09-13T14:37:01.4127597Z   DOCKER_HUB_USERNAME: khajdari
+2025-09-13T14:37:01.4127824Z ##[endgroup]
+2025-09-13T14:37:01.6334736Z ##[group]GitHub Actions runtime token ACs
+2025-09-13T14:37:01.6345292Z refs/pull/218/merge: read/write
+2025-09-13T14:37:01.6345755Z refs/heads/develop-vulnerable: read
+2025-09-13T14:37:01.6347036Z ##[endgroup]
+2025-09-13T14:37:01.6347557Z ##[group]Docker info
+2025-09-13T14:37:01.6386008Z [command]/usr/bin/docker version
+2025-09-13T14:37:01.6561891Z Client: Docker Engine - Community
+2025-09-13T14:37:01.6564994Z  Version:           28.0.4
+2025-09-13T14:37:01.6565382Z  API version:       1.48
+2025-09-13T14:37:01.6565733Z  Go version:        go1.23.7
+2025-09-13T14:37:01.6566251Z  Git commit:        b8034c0
+2025-09-13T14:37:01.6566620Z  Built:             Tue Mar 25 15:07:16 2025
+2025-09-13T14:37:01.6567052Z  OS/Arch:           linux/amd64
+2025-09-13T14:37:01.6567382Z  Context:           default
+2025-09-13T14:37:01.6567605Z 
+2025-09-13T14:37:01.6567752Z Server: Docker Engine - Community
+2025-09-13T14:37:01.6568124Z  Engine:
+2025-09-13T14:37:01.6568393Z   Version:          28.0.4
+2025-09-13T14:37:01.6568798Z   API version:      1.48 (minimum version 1.24)
+2025-09-13T14:37:01.6569245Z   Go version:       go1.23.7
+2025-09-13T14:37:01.6569594Z   Git commit:       6430e49
+2025-09-13T14:37:01.6569950Z   Built:            Tue Mar 25 15:07:16 2025
+2025-09-13T14:37:01.6570364Z   OS/Arch:          linux/amd64
+2025-09-13T14:37:01.6570721Z   Experimental:     false
+2025-09-13T14:37:01.6571057Z  containerd:
+2025-09-13T14:37:01.6571345Z   Version:          1.7.27
+2025-09-13T14:37:01.6571775Z   GitCommit:        05044ec0a9a75232cad458027ca83437aae3f4da
+2025-09-13T14:37:01.6572260Z  runc:
+2025-09-13T14:37:01.6572531Z   Version:          1.2.5
+2025-09-13T14:37:01.6572877Z   GitCommit:        v1.2.5-0-g59923ef
+2025-09-13T14:37:01.6573282Z  docker-init:
+2025-09-13T14:37:01.6573576Z   Version:          0.19.0
+2025-09-13T14:37:01.6573913Z   GitCommit:        de40ad0
+2025-09-13T14:37:01.6612104Z [command]/usr/bin/docker info
+2025-09-13T14:37:01.7121117Z Client: Docker Engine - Community
+2025-09-13T14:37:01.7121666Z  Version:    28.0.4
+2025-09-13T14:37:01.7122341Z  Context:    default
+2025-09-13T14:37:01.7122827Z  Debug Mode: false
+2025-09-13T14:37:01.7123217Z  Plugins:
+2025-09-13T14:37:01.7123559Z   buildx: Docker Buildx (Docker Inc.)
+2025-09-13T14:37:01.7124064Z     Version:  v0.28.0
+2025-09-13T14:37:01.7124537Z     Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+2025-09-13T14:37:01.7125139Z   compose: Docker Compose (Docker Inc.)
+2025-09-13T14:37:01.7125571Z     Version:  v2.38.2
+2025-09-13T14:37:01.7126221Z     Path:     /usr/libexec/docker/cli-plugins/docker-compose
+2025-09-13T14:37:01.7126609Z 
+2025-09-13T14:37:01.7126729Z Server:
+2025-09-13T14:37:01.7127004Z  Containers: 1
+2025-09-13T14:37:01.7127718Z   Running: 1
+2025-09-13T14:37:01.7128009Z   Paused: 0
+2025-09-13T14:37:01.7128290Z   Stopped: 0
+2025-09-13T14:37:01.7128582Z  Images: 1
+2025-09-13T14:37:01.7128879Z  Server Version: 28.0.4
+2025-09-13T14:37:01.7129236Z  Storage Driver: overlay2
+2025-09-13T14:37:01.7129642Z   Backing Filesystem: extfs
+2025-09-13T14:37:01.7130036Z   Supports d_type: true
+2025-09-13T14:37:01.7130716Z   Using metacopy: false
+2025-09-13T14:37:01.7131107Z   Native Overlay Diff: false
+2025-09-13T14:37:01.7131489Z   userxattr: false
+2025-09-13T14:37:01.7131817Z  Logging Driver: json-file
+2025-09-13T14:37:01.7132197Z  Cgroup Driver: systemd
+2025-09-13T14:37:01.7132561Z  Cgroup Version: 2
+2025-09-13T14:37:01.7132884Z  Plugins:
+2025-09-13T14:37:01.7133190Z   Volume: local
+2025-09-13T14:37:01.7133583Z   Network: bridge host ipvlan macvlan null overlay
+2025-09-13T14:37:01.7134248Z   Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
+2025-09-13T14:37:01.7134869Z  Swarm: inactive
+2025-09-13T14:37:01.7135233Z  Runtimes: io.containerd.runc.v2 runc
+2025-09-13T14:37:01.7135685Z  Default Runtime: runc
+2025-09-13T14:37:01.7136768Z  Init Binary: docker-init
+2025-09-13T14:37:01.7137274Z  containerd version: 05044ec0a9a75232cad458027ca83437aae3f4da
+2025-09-13T14:37:01.7137845Z  runc version: v1.2.5-0-g59923ef
+2025-09-13T14:37:01.7138262Z  init version: de40ad0
+2025-09-13T14:37:01.7138675Z  Security Options:
+2025-09-13T14:37:01.7139015Z   apparmor
+2025-09-13T14:37:01.7139300Z   seccomp
+2025-09-13T14:37:01.7139602Z    Profile: builtin
+2025-09-13T14:37:01.7139917Z   cgroupns
+2025-09-13T14:37:01.7140235Z  Kernel Version: 6.11.0-1018-azure
+2025-09-13T14:37:01.7140685Z  Operating System: Ubuntu 24.04.3 LTS
+2025-09-13T14:37:01.7141112Z  OSType: linux
+2025-09-13T14:37:01.7141454Z  Architecture: x86_64
+2025-09-13T14:37:01.7141804Z  CPUs: 4
+2025-09-13T14:37:01.7142090Z  Total Memory: 15.62GiB
+2025-09-13T14:37:01.7142440Z  Name: runnervmf4ws1
+2025-09-13T14:37:01.7142804Z  ID: 80b0c887-f378-498c-94b8-5e260688697c
+2025-09-13T14:37:01.7143247Z  Docker Root Dir: /var/lib/docker
+2025-09-13T14:37:01.7143647Z  Debug Mode: false
+2025-09-13T14:37:01.7144169Z  Username: ***
+2025-09-13T14:37:01.7144504Z  Experimental: false
+2025-09-13T14:37:01.7144842Z  Insecure Registries:
+2025-09-13T14:37:01.7145189Z   ::1/128
+2025-09-13T14:37:01.7145458Z   127.0.0.0/8
+2025-09-13T14:37:01.7146031Z  Live Restore Enabled: false
+2025-09-13T14:37:01.7146306Z 
+2025-09-13T14:37:01.7146737Z ##[endgroup]
+2025-09-13T14:37:01.7147280Z ##[group]Proxy configuration
+2025-09-13T14:37:01.7147695Z No proxy configuration found
+2025-09-13T14:37:01.7148280Z ##[endgroup]
+2025-09-13T14:37:01.7819767Z ##[group]Buildx version
+2025-09-13T14:37:01.7849973Z [command]/usr/bin/docker buildx version
+2025-09-13T14:37:01.8377407Z github.com/docker/buildx v0.28.0 b1281b81bba797b21d9eaf256e6a13eb14419836
+2025-09-13T14:37:01.8415288Z ##[endgroup]
+2025-09-13T14:37:01.8416064Z ##[group]Builder info
+2025-09-13T14:37:01.9338605Z {
+2025-09-13T14:37:01.9356666Z   "nodes": [
+2025-09-13T14:37:01.9356965Z     {
+2025-09-13T14:37:01.9357344Z       "name": "builder-ec992f52-2130-4707-a880-99277dd3c3b40",
+2025-09-13T14:37:01.9357859Z       "endpoint": "unix:///var/run/docker.sock",
+2025-09-13T14:37:01.9358267Z       "status": "running",
+2025-09-13T14:37:01.9359000Z       "buildkitd-flags": "--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host",
+2025-09-13T14:37:01.9359784Z       "buildkit": "v0.24.0",
+2025-09-13T14:37:01.9360282Z       "platforms": "linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/386",
+2025-09-13T14:37:01.9360827Z       "features": {
+2025-09-13T14:37:01.9361292Z         "Automatically load images to the Docker Engine image store": true,
+2025-09-13T14:37:01.9361828Z         "Cache export": true,
+2025-09-13T14:37:01.9362176Z         "Direct push": true,
+2025-09-13T14:37:01.9362559Z         "Docker exporter": true,
+2025-09-13T14:37:01.9362991Z         "Multi-platform build": true,
+2025-09-13T14:37:01.9363408Z         "OCI exporter": true
+2025-09-13T14:37:01.9364184Z       },
+2025-09-13T14:37:01.9364364Z       "labels": {
+2025-09-13T14:37:01.9364619Z         "org.mobyproject.buildkit.worker.executor": "oci",
+2025-09-13T14:37:01.9365017Z         "org.mobyproject.buildkit.worker.hostname": "7cb4945443d3",
+2025-09-13T14:37:01.9365399Z         "org.mobyproject.buildkit.worker.network": "host",
+2025-09-13T14:37:01.9366763Z         "org.mobyproject.buildkit.worker.oci.process-mode": "sandbox",
+2025-09-13T14:37:01.9367242Z         "org.mobyproject.buildkit.worker.selinux.enabled": "false",
+2025-09-13T14:37:01.9367653Z         "org.mobyproject.buildkit.worker.snapshotter": "overlayfs"
+2025-09-13T14:37:01.9367968Z       },
+2025-09-13T14:37:01.9368130Z       "gcPolicy": [
+2025-09-13T14:37:01.9368307Z         {
+2025-09-13T14:37:01.9368472Z           "all": false,
+2025-09-13T14:37:01.9368657Z           "filter": [
+2025-09-13T14:37:01.9368858Z             "type==source.local",
+2025-09-13T14:37:01.9369100Z             "type==exec.cachemount",
+2025-09-13T14:37:01.9369346Z             "type==source.git.checkout"
+2025-09-13T14:37:01.9369586Z           ],
+2025-09-13T14:37:01.9369767Z           "keepDuration": "48h0m0s"
+2025-09-13T14:37:01.9369991Z         },
+2025-09-13T14:37:01.9370145Z         {
+2025-09-13T14:37:01.9370305Z           "all": false,
+2025-09-13T14:37:01.9370501Z           "keepDuration": "1440h0m0s"
+2025-09-13T14:37:01.9370719Z         },
+2025-09-13T14:37:01.9370871Z         {
+2025-09-13T14:37:01.9371031Z           "all": false
+2025-09-13T14:37:01.9371209Z         },
+2025-09-13T14:37:01.9371353Z         {
+2025-09-13T14:37:01.9371507Z           "all": true
+2025-09-13T14:37:01.9371682Z         }
+2025-09-13T14:37:01.9371827Z       ]
+2025-09-13T14:37:01.9371977Z     }
+2025-09-13T14:37:01.9372127Z   ],
+2025-09-13T14:37:01.9372334Z   "name": "builder-ec992f52-2130-4707-a880-99277dd3c3b4",
+2025-09-13T14:37:01.9372625Z   "driver": "docker-container",
+2025-09-13T14:37:01.9372872Z   "lastActivity": "2025-09-13T14:36:55.000Z"
+2025-09-13T14:37:01.9373103Z }
+2025-09-13T14:37:01.9373646Z ##[endgroup]
+2025-09-13T14:37:02.0871238Z [command]/usr/bin/docker buildx build --cache-from type=gha --cache-to type=gha,mode=max --iidfile /home/runner/work/_temp/docker-actions-toolkit-2luds2/build-iidfile-53f5ac20e3.txt --attest type=provenance,mode=max,builder-id=https://github.com/khajdari/WhoopsPay/actions/runs/17697875130 --tag khajdari/whoopspay:1.0.0_20250913_142810 --tag khajdari/whoopspay:latest --metadata-file /home/runner/work/_temp/docker-actions-toolkit-2luds2/build-metadata-bdaabb73af.json --push .
+2025-09-13T14:37:02.3711683Z #0 building with "builder-ec992f52-2130-4707-a880-99277dd3c3b4" instance using docker-container driver
+2025-09-13T14:37:02.3712238Z 
+2025-09-13T14:37:02.3712409Z #1 [internal] load build definition from Dockerfile
+2025-09-13T14:37:02.3712802Z #1 transferring dockerfile: 1.57kB done
+2025-09-13T14:37:02.3713122Z #1 DONE 0.0s
+2025-09-13T14:37:02.3713271Z 
+2025-09-13T14:37:02.3713492Z #2 [internal] load metadata for docker.io/library/node:18-alpine
+2025-09-13T14:37:02.5680712Z #2 ...
+2025-09-13T14:37:02.5680913Z 
+2025-09-13T14:37:02.5681142Z #3 [auth] library/node:pull token for registry-1.docker.io
+2025-09-13T14:37:02.5681539Z #3 DONE 0.0s
+2025-09-13T14:37:02.7184571Z 
+2025-09-13T14:37:02.7185127Z #2 [internal] load metadata for docker.io/library/node:18-alpine
+2025-09-13T14:37:03.1774598Z #2 DONE 1.0s
+2025-09-13T14:37:03.3498662Z 
+2025-09-13T14:37:03.3499160Z #4 [internal] load .dockerignore
+2025-09-13T14:37:03.3500861Z #4 transferring context: 925B done
+2025-09-13T14:37:03.3501285Z #4 DONE 0.0s
+2025-09-13T14:37:03.3501422Z 
+2025-09-13T14:37:03.3501545Z #5 [internal] load build context
+2025-09-13T14:37:03.3501836Z #5 DONE 0.0s
+2025-09-13T14:37:03.3501978Z 
+2025-09-13T14:37:03.3502463Z #6 [builder  1/14] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+2025-09-13T14:37:03.3503556Z #6 resolve docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e done
+2025-09-13T14:37:03.3504598Z #6 DONE 0.0s
+2025-09-13T14:37:03.3504732Z 
+2025-09-13T14:37:03.3504906Z #7 importing cache manifest from gha:17804086016640965055
+2025-09-13T14:37:03.3838039Z #7 DONE 0.2s
+2025-09-13T14:37:03.5688602Z 
+2025-09-13T14:37:03.5689142Z #5 [internal] load build context
+2025-09-13T14:37:03.5689807Z #5 transferring context: 2.49MB 0.1s done
+2025-09-13T14:37:03.5690749Z #5 DONE 0.1s
+2025-09-13T14:37:03.5690963Z 
+2025-09-13T14:37:03.5691499Z #6 [builder  1/14] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+2025-09-13T14:37:03.5692603Z #6 sha256:25ff2da83641908f65c3a74d80409d6b1b62ccfaab220b9ea70b80df5a2e0549 0B / 446B 0.2s
+2025-09-13T14:37:03.7228730Z #6 sha256:25ff2da83641908f65c3a74d80409d6b1b62ccfaab220b9ea70b80df5a2e0549 446B / 446B 0.2s done
+2025-09-13T14:37:03.7229765Z #6 sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e 0B / 40.01MB 0.3s
+2025-09-13T14:37:03.7230543Z #6 sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 0B / 3.64MB 0.2s
+2025-09-13T14:37:03.7231323Z #6 sha256:1e5a4c89cee5c0826c540ab06d4b6b491c96eda01837f430bd47f0d26702d6e3 0B / 1.26MB 0.2s
+2025-09-13T14:37:03.8729803Z #6 sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 3.64MB / 3.64MB 0.4s done
+2025-09-13T14:37:03.8731048Z #6 sha256:1e5a4c89cee5c0826c540ab06d4b6b491c96eda01837f430bd47f0d26702d6e3 1.26MB / 1.26MB 0.4s done
+2025-09-13T14:37:04.0232226Z #6 sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e 15.73MB / 40.01MB 0.6s
+2025-09-13T14:37:04.0235381Z #6 extracting sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 0.1s done
+2025-09-13T14:37:04.1723694Z #6 sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e 24.12MB / 40.01MB 0.8s
+2025-09-13T14:37:04.3221458Z #6 sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e 34.60MB / 40.01MB 0.9s
+2025-09-13T14:37:04.5721653Z #6 sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e 40.01MB / 40.01MB 1.0s done
+2025-09-13T14:37:04.5722805Z #6 extracting sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e
+2025-09-13T14:37:05.2620011Z #6 extracting sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e 0.8s done
+2025-09-13T14:37:05.2620832Z #6 DONE 1.9s
+2025-09-13T14:37:05.3628023Z 
+2025-09-13T14:37:05.3631303Z #6 [builder  1/14] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+2025-09-13T14:37:05.3632734Z #6 extracting sha256:1e5a4c89cee5c0826c540ab06d4b6b491c96eda01837f430bd47f0d26702d6e3 0.0s done
+2025-09-13T14:37:05.3633901Z #6 extracting sha256:25ff2da83641908f65c3a74d80409d6b1b62ccfaab220b9ea70b80df5a2e0549 done
+2025-09-13T14:37:05.3634738Z #6 DONE 1.9s
+2025-09-13T14:37:05.3634880Z 
+2025-09-13T14:37:05.3634985Z #8 [builder  2/14] WORKDIR /app
+2025-09-13T14:37:05.3635329Z #8 DONE 0.1s
+2025-09-13T14:37:05.5881902Z 
+2025-09-13T14:37:05.5882456Z #9 [builder  3/14] COPY package*.json ./
+2025-09-13T14:37:05.5882992Z #9 DONE 0.0s
+2025-09-13T14:37:05.5883172Z 
+2025-09-13T14:37:05.5883327Z #10 [builder  4/14] COPY tsconfig.json ./
+2025-09-13T14:37:05.5883736Z #10 DONE 0.0s
+2025-09-13T14:37:05.5883908Z 
+2025-09-13T14:37:05.5884066Z #11 [builder  5/14] COPY vite.config.ts ./
+2025-09-13T14:37:05.5884507Z #11 DONE 0.0s
+2025-09-13T14:37:05.5884688Z 
+2025-09-13T14:37:05.5884898Z #12 [builder  6/14] COPY tailwind.config.ts ./
+2025-09-13T14:37:05.5885343Z #12 DONE 0.0s
+2025-09-13T14:37:05.5885521Z 
+2025-09-13T14:37:05.5885690Z #13 [builder  7/14] COPY postcss.config.js ./
+2025-09-13T14:37:05.5886474Z #13 DONE 0.0s
+2025-09-13T14:37:05.5886658Z 
+2025-09-13T14:37:05.5886826Z #14 [builder  8/14] COPY components.json ./
+2025-09-13T14:37:05.5887283Z #14 DONE 0.0s
+2025-09-13T14:37:05.5887472Z 
+2025-09-13T14:37:05.5887622Z #15 [builder  9/14] RUN npm ci
+2025-09-13T14:37:10.0533173Z #15 4.465 npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2025-09-13T14:37:10.6022596Z #15 5.164 npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+2025-09-13T14:37:10.8253217Z #15 5.164 npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+2025-09-13T14:37:11.0457194Z #15 5.606 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-09-13T14:37:11.2077700Z #15 5.766 npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+2025-09-13T14:37:11.3416877Z #15 5.791 npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2025-09-13T14:37:13.3778520Z #15 7.843 npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2025-09-13T14:37:13.3780248Z #15 7.940 npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2025-09-13T14:37:13.5959037Z #15 7.954 npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+2025-09-13T14:37:13.5963540Z #15 8.008 npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+2025-09-13T14:37:15.3958185Z #15 ...
+2025-09-13T14:37:15.3958430Z 
+2025-09-13T14:37:15.3958709Z #16 [production  4/10] RUN npm ci && npm cache clean --force
+2025-09-13T14:37:15.3959425Z #16 4.451 npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2025-09-13T14:37:15.3960372Z #16 5.297 npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+2025-09-13T14:37:15.3961494Z #16 5.298 npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+2025-09-13T14:37:15.3963137Z #16 5.712 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-09-13T14:37:15.3964420Z #16 5.965 npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+2025-09-13T14:37:15.3965088Z #16 6.151 npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2025-09-13T14:37:15.3965994Z #16 7.900 npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2025-09-13T14:37:15.3966718Z #16 7.945 npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2025-09-13T14:37:15.3967415Z #16 8.020 npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+2025-09-13T14:37:15.3968073Z #16 8.063 npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+2025-09-13T14:37:17.8674728Z #16 ...
+2025-09-13T14:37:17.8675069Z 
+2025-09-13T14:37:17.8675237Z #15 [builder  9/14] RUN npm ci
+2025-09-13T14:37:17.8676443Z #15 12.43 npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2025-09-13T14:37:26.2520868Z #15 20.81 
+2025-09-13T14:37:26.2522515Z #15 20.81 added 841 packages, and audited 842 packages in 21s
+2025-09-13T14:37:26.5009304Z #15 20.81 
+2025-09-13T14:37:26.5010200Z #15 20.81 196 packages are looking for funding
+2025-09-13T14:37:26.5012709Z #15 20.81   run `npm fund` for details
+2025-09-13T14:37:26.5013229Z #15 20.86 
+2025-09-13T14:37:26.5013677Z #15 20.86 10 vulnerabilities (3 low, 5 moderate, 1 high, 1 critical)
+2025-09-13T14:37:26.5014227Z #15 20.86 
+2025-09-13T14:37:26.5014620Z #15 20.86 To address issues that do not require attention, run:
+2025-09-13T14:37:26.5015126Z #15 20.86   npm audit fix
+2025-09-13T14:37:26.5015461Z #15 20.86 
+2025-09-13T14:37:26.5016144Z #15 20.86 To address all issues (including breaking changes), run:
+2025-09-13T14:37:26.5016712Z #15 20.86   npm audit fix --force
+2025-09-13T14:37:26.5017546Z #15 20.86 
+2025-09-13T14:37:26.5017878Z #15 20.86 Run `npm audit` for details.
+2025-09-13T14:37:26.5018305Z #15 20.87 npm notice
+2025-09-13T14:37:26.5018816Z #15 20.87 npm notice New major version of npm available! 10.8.2 -> 11.6.0
+2025-09-13T14:37:26.5019640Z #15 20.87 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.0
+2025-09-13T14:37:26.5020640Z #15 20.87 npm notice To update run: npm install -g npm@11.6.0
+2025-09-13T14:37:26.5021178Z #15 20.87 npm notice
+2025-09-13T14:37:27.1459335Z #15 ...
+2025-09-13T14:37:27.1459740Z 
+2025-09-13T14:37:27.1460153Z #16 [production  4/10] RUN npm ci && npm cache clean --force
+2025-09-13T14:37:27.1461290Z #16 12.55 npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2025-09-13T14:37:27.1462131Z #16 20.93 
+2025-09-13T14:37:27.1462487Z #16 20.93 added 841 packages, and audited 842 packages in 21s
+2025-09-13T14:37:27.1462918Z #16 20.93 
+2025-09-13T14:37:27.1463238Z #16 20.93 196 packages are looking for funding
+2025-09-13T14:37:27.1463653Z #16 20.93   run `npm fund` for details
+2025-09-13T14:37:27.1463998Z #16 20.97 
+2025-09-13T14:37:27.1464377Z #16 20.97 10 vulnerabilities (3 low, 5 moderate, 1 high, 1 critical)
+2025-09-13T14:37:27.1464845Z #16 20.97 
+2025-09-13T14:37:27.1465202Z #16 20.97 To address issues that do not require attention, run:
+2025-09-13T14:37:27.1465666Z #16 20.97   npm audit fix
+2025-09-13T14:37:27.1466153Z #16 20.97 
+2025-09-13T14:37:27.1466445Z #16 20.97 To address all issues (including breaking changes), run:
+2025-09-13T14:37:27.1466835Z #16 20.97   npm audit fix --force
+2025-09-13T14:37:27.1467104Z #16 20.97 
+2025-09-13T14:37:27.1467319Z #16 20.97 Run `npm audit` for details.
+2025-09-13T14:37:27.1467612Z #16 20.97 npm notice
+2025-09-13T14:37:27.1467947Z #16 20.97 npm notice New major version of npm available! 10.8.2 -> 11.6.0
+2025-09-13T14:37:27.1468475Z #16 20.97 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.0
+2025-09-13T14:37:27.1468970Z #16 20.97 npm notice To update run: npm install -g npm@11.6.0
+2025-09-13T14:37:27.1469318Z #16 20.97 npm notice
+2025-09-13T14:37:27.1469640Z #16 21.17 npm warn using --force Recommended protections disabled.
+2025-09-13T14:37:28.9138451Z #16 DONE 23.5s
+2025-09-13T14:37:28.9138713Z 
+2025-09-13T14:37:28.9138862Z #15 [builder  9/14] RUN npm ci
+2025-09-13T14:37:29.0662914Z #15 DONE 23.5s
+2025-09-13T14:37:29.0663159Z 
+2025-09-13T14:37:29.0663351Z #17 [builder 10/14] COPY client/ ./client/
+2025-09-13T14:37:29.2699193Z #17 DONE 0.4s
+2025-09-13T14:37:29.4863450Z 
+2025-09-13T14:37:29.4863943Z #18 [builder 11/14] COPY server/ ./server/
+2025-09-13T14:37:29.4864350Z #18 DONE 0.0s
+2025-09-13T14:37:29.4864498Z 
+2025-09-13T14:37:29.4864630Z #19 [builder 12/14] COPY shared/ ./shared/
+2025-09-13T14:37:29.4864960Z #19 DONE 0.0s
+2025-09-13T14:37:29.4865101Z 
+2025-09-13T14:37:29.4865216Z #20 [builder 13/14] COPY data/ ./data/
+2025-09-13T14:37:29.4865528Z #20 DONE 0.0s
+2025-09-13T14:37:29.4865661Z 
+2025-09-13T14:37:29.4865939Z #21 [builder 14/14] RUN npm run build
+2025-09-13T14:37:29.5363812Z #21 0.201 
+2025-09-13T14:37:29.5364445Z #21 0.201 > rest-express@1.0.0 build
+2025-09-13T14:37:29.5365560Z #21 0.201 > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+2025-09-13T14:37:29.5366657Z #21 0.201 
+2025-09-13T14:37:29.7611245Z #21 0.425 vite v5.4.19 building for production...
+2025-09-13T14:37:29.9713911Z #21 0.485 transforming...
+2025-09-13T14:37:35.5544731Z #21 6.219 ✓ 2608 modules transformed.
+2025-09-13T14:37:35.9185469Z #21 6.583 rendering chunks...
+2025-09-13T14:37:36.0189637Z #21 6.596 computing gzip size...
+2025-09-13T14:37:36.0190559Z #21 6.616 ../dist/public/index.html                   0.41 kB │ gzip:   0.28 kB
+2025-09-13T14:37:36.0191171Z #21 6.617 ../dist/public/assets/gr-DrdVOXV-.jpg      21.01 kB
+2025-09-13T14:37:36.0191655Z #21 6.617 ../dist/public/assets/uk-DhtJoVCH.png     217.76 kB
+2025-09-13T14:37:36.0192257Z #21 6.617 ../dist/public/assets/index-Bh7HpFO4.css   93.32 kB │ gzip:  15.58 kB
+2025-09-13T14:37:36.0193227Z #21 6.617 ../dist/public/assets/index-BvHoho7H.js   689.26 kB │ gzip: 196.17 kB
+2025-09-13T14:37:36.0193649Z #21 6.617 
+2025-09-13T14:37:36.0193924Z #21 6.617 (!) Some chunks are larger than 500 kB after minification. Consider:
+2025-09-13T14:37:36.0194592Z #21 6.617 - Using dynamic import() to code-split the application
+2025-09-13T14:37:36.0195385Z #21 6.617 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2025-09-13T14:37:36.0196344Z #21 6.617 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2025-09-13T14:37:36.0196823Z #21 6.617 ✓ built in 6.17s
+2025-09-13T14:37:36.0197057Z #21 6.683 
+2025-09-13T14:37:36.0197237Z #21 6.683   dist/index.js  130.2kb
+2025-09-13T14:37:36.0197463Z #21 6.683 
+2025-09-13T14:37:36.0197753Z #21 6.683 ⚡ Done in 8ms
+2025-09-13T14:37:36.1909611Z #21 DONE 6.7s
+2025-09-13T14:37:36.7522487Z 
+2025-09-13T14:37:36.7524895Z #22 [production  5/10] COPY --from=builder /app/dist ./dist
+2025-09-13T14:37:37.0667973Z #22 DONE 0.3s
+2025-09-13T14:37:37.1878072Z 
+2025-09-13T14:37:37.1878805Z #23 [production  6/10] COPY --from=builder /app/data ./data
+2025-09-13T14:37:37.1879396Z #23 DONE 0.0s
+2025-09-13T14:37:37.1879581Z 
+2025-09-13T14:37:37.1879962Z #24 [production  7/10] COPY --from=builder /app/server/modules ./server/modules
+2025-09-13T14:37:37.1880572Z #24 DONE 0.0s
+2025-09-13T14:37:37.1880762Z 
+2025-09-13T14:37:37.1881060Z #25 [production  8/10] COPY --from=builder /app/dist/public ./dist/client
+2025-09-13T14:37:37.1881636Z #25 DONE 0.0s
+2025-09-13T14:37:37.1881807Z 
+2025-09-13T14:37:37.1882173Z #26 [production  9/10] RUN addgroup -g 1001 -S nodejs &&     adduser -S whoopspay -u 1001
+2025-09-13T14:37:37.1882801Z #26 DONE 0.1s
+2025-09-13T14:37:37.3389489Z 
+2025-09-13T14:37:37.3389918Z #27 [production 10/10] RUN chown -R whoopspay:nodejs /app
+2025-09-13T14:37:59.6520349Z #27 DONE 22.5s
+2025-09-13T14:37:59.8038530Z 
+2025-09-13T14:37:59.8038994Z #28 exporting to image
+2025-09-13T14:37:59.8039401Z #28 exporting layers
+2025-09-13T14:38:16.4297804Z #28 exporting layers 16.8s done
+2025-09-13T14:38:16.6025311Z #28 exporting manifest sha256:b3ca48879d6b481b7638bbf543c689db2e9e3a0184e7c66386831adc5b5ae49b done
+2025-09-13T14:38:16.6026336Z #28 exporting config sha256:8b88257347bbe49169592b8c0ae705b02ec9a5462f2f4b38499d49e262a0231e done
+2025-09-13T14:38:16.6027124Z #28 exporting attestation manifest sha256:0dc60ce28e5550fcd5d5962cbf18eeb1272524f7602209e20748aa97ba63b83b done
+2025-09-13T14:38:16.6027928Z #28 exporting manifest list sha256:b1400a0ab30efe4c12ddba34a4280c576f47857537d77ae799de398c72905088 done
+2025-09-13T14:38:16.6028443Z #28 pushing layers
+2025-09-13T14:38:16.6328809Z #28 ...
+2025-09-13T14:38:16.6329420Z 
+2025-09-13T14:38:16.6331870Z #29 [auth] khajdari/whoopspay:pull,push token for registry-1.docker.io
+2025-09-13T14:38:16.7831172Z #29 DONE 0.0s
+2025-09-13T14:38:16.7831399Z 
+2025-09-13T14:38:16.7831496Z #28 exporting to image
+2025-09-13T14:38:16.9053099Z #28 ...
+2025-09-13T14:38:16.9053315Z 
+2025-09-13T14:38:16.9053768Z #30 [auth] khajdari/whoopspay:pull,push token for registry-1.docker.io
+2025-09-13T14:38:17.1067215Z #30 DONE 0.0s
+2025-09-13T14:38:17.1067467Z 
+2025-09-13T14:38:17.1067827Z #31 [auth] khajdari/whoopspay:pull,push token for registry-1.docker.io
+2025-09-13T14:38:17.1068427Z #31 DONE 0.0s
+2025-09-13T14:38:17.1068608Z 
+2025-09-13T14:38:17.1068915Z #32 [auth] khajdari/whoopspay:pull,push token for registry-1.docker.io
+2025-09-13T14:38:17.2315161Z #32 DONE 0.0s
+2025-09-13T14:38:17.2315500Z 
+2025-09-13T14:38:17.2315690Z #28 exporting to image
+2025-09-13T14:38:17.2316448Z #28 pushing layers 0.7s done
+2025-09-13T14:38:17.2318385Z #28 ERROR: failed to push khajdari/whoopspay:1.0.0_20250913_142810: push access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+2025-09-13T14:38:17.2320285Z ------
+2025-09-13T14:38:17.2320732Z  > exporting to image:
+2025-09-13T14:38:17.2321668Z ------
+2025-09-13T14:38:17.2329765Z ERROR: failed to build: failed to solve: failed to push khajdari/whoopspay:1.0.0_20250913_142810: push access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+2025-09-13T14:38:17.2429009Z ##[error]buildx failed with: ERROR: failed to build: failed to solve: failed to push khajdari/whoopspay:1.0.0_20250913_142810: push access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+2025-09-13T14:38:17.2540620Z Post job cleanup.
+2025-09-13T14:38:17.4711022Z ##[group]Removing temp folder /home/runner/work/_temp/docker-actions-toolkit-2luds2
+2025-09-13T14:38:17.4721052Z ##[endgroup]
+2025-09-13T14:38:17.4721648Z ##[group]Post cache
+2025-09-13T14:38:17.4722878Z State not set
+2025-09-13T14:38:17.4724654Z ##[endgroup]
+2025-09-13T14:38:17.4852293Z Post job cleanup.
+2025-09-13T14:38:17.8227141Z [command]/usr/bin/docker logout 
+2025-09-13T14:38:17.8352022Z Removing login credentials for https://index.docker.io/v1/
+2025-09-13T14:38:17.8384571Z ##[group]Post cache
+2025-09-13T14:38:17.8386384Z State not set
+2025-09-13T14:38:17.8387859Z ##[endgroup]
+2025-09-13T14:38:17.8509416Z Post job cleanup.
+2025-09-13T14:38:18.1240591Z ##[group]Removing builder
+2025-09-13T14:38:18.2371230Z [command]/usr/bin/docker buildx rm builder-ec992f52-2130-4707-a880-99277dd3c3b4
+2025-09-13T14:38:22.8381923Z builder-ec992f52-2130-4707-a880-99277dd3c3b4 removed
+2025-09-13T14:38:22.8431966Z ##[endgroup]
+2025-09-13T14:38:22.8433805Z ##[group]Cleaning up certificates
+2025-09-13T14:38:22.8441669Z ##[endgroup]
+2025-09-13T14:38:22.8442369Z ##[group]Post cache
+2025-09-13T14:38:22.8444830Z State not set
+2025-09-13T14:38:22.8445518Z ##[endgroup]
+2025-09-13T14:38:22.8613257Z Post job cleanup.
+2025-09-13T14:38:22.9674049Z [command]/usr/bin/git version
+2025-09-13T14:38:22.9715421Z git version 2.51.0
+2025-09-13T14:38:22.9773353Z Temporarily overriding HOME='/home/runner/work/_temp/4bd1af65-1519-4297-bbac-b3b58f145cf3' before making global git config changes
+2025-09-13T14:38:22.9774927Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-13T14:38:22.9779717Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-13T14:38:22.9817408Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-13T14:38:22.9853315Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-13T14:38:23.0118388Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-13T14:38:23.0140592Z http.https://github.com/.extraheader
+2025-09-13T14:38:23.0154678Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-09-13T14:38:23.0190234Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-13T14:38:23.0581920Z Cleaning up orphan processes
