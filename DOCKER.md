@@ -13,7 +13,7 @@ WhoopsPay includes a production-ready Dockerfile for containerized deployment wi
 The current Dockerfile creates an optimized container for WhoopsPay:
 
 ```dockerfile
-# Multi-stage build for optimal production image size
+# Multistage build for optimal production image size
 
 # Build stage
 FROM node:18-alpine AS builder
