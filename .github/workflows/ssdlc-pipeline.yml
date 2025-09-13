@@ -5,7 +5,7 @@ on:
     branches: [ main-vulnerable ]
     types: [opened, synchronize, reopened]
   push:
-    branches: [ develop-vulnerable, main ]
+    branches: [ main-vulnerable, main ]
   workflow_dispatch:
 
 env:
