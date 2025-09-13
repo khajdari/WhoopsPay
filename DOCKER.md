@@ -138,8 +138,8 @@ The application includes automated Docker builds in the SSDLC pipeline:
     context: .
     push: true
     tags: |
-      khajdari/whoopspay:${{ needs.setup-version.outputs.version }}
-      khajdari/whoopspay:latest
+      ghajdaris/whoopspay:${{ needs.setup-version.outputs.version }}
+      ghajdaris/whoopspay:latest
     cache-from: type=gha
     cache-to: type=gha,mode=max
 ```
@@ -153,7 +153,7 @@ The application includes automated Docker builds in the SSDLC pipeline:
 ## 🎯 Deployment Options
 
 ### Docker Hub Registry
-- **Repository**: `khajdari/whoopspay`
+- **Repository**: `ghajdaris/whoopspay`
 - **Tags**: Semantic versioning with build timestamps (e.g., `1.0.0_20250913_132216`)
 - **Latest Tag**: Always points to the most recent build
 - **Auto-build**: Triggered by CI/CD pipeline on every push to main branch
@@ -167,14 +167,14 @@ Most container platforms can run WhoopsPay using the Docker Hub image:
 # Basic Docker run command
 docker run -p 5000:5000 \
   -v $(pwd)/data:/app/data \
-  khajdari/whoopspay:latest
+  ghajdaris/whoopspay:latest
 ```
 
 #### **Platform-Specific Examples**
 
 **Render:**
 - Service Type: Web Service  
-- Image: `docker.io/khajdari/whoopspay:latest`
+- Image: `docker.io/ghajdaris/whoopspay:latest`
 - Port: 5000
 - Add persistent disk for `/app/data` to preserve SQLite database
 
@@ -212,7 +212,7 @@ SESSION_SECRET=your-session-secret
 
 ```bash
 # Production with persistent SQLite database
-docker run -v $(pwd)/data:/app/data -p 5000:5000 khajdari/whoopspay:latest
+docker run -v $(pwd)/data:/app/data -p 5000:5000 ghajdaris/whoopspay:latest
 
 # Development with full source mount
 docker run -v $(pwd):/app -p 5000:5000 whoopspay:dev
@@ -318,13 +318,13 @@ docker run --rm whoopspay:latest npm run db:push
 ### Container Registry Management
 ```bash
 # Build and tag
-docker build -t khajdari/whoopspay:1.0.0 .
+docker build -t ghajdaris/whoopspay:1.0.0 .
 
 # Push to registry
-docker push khajdari/whoopspay:1.0.0
+docker push ghajdaris/whoopspay:1.0.0
 
 # Pull latest
-docker pull khajdari/whoopspay:latest
+docker pull ghajdaris/whoopspay:latest
 ```
 
 This Docker setup provides a complete containerization solution for WhoopsPay with SQLite database support, security hardening, and efficient multi-stage builds for local development and production deployment.
