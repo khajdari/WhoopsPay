@@ -17,7 +17,6 @@ export interface DomainConfig {
 export interface AppConfig {
   development: DomainConfig;
   production: DomainConfig;
-  replit: DomainConfig;
   docker: DomainConfig;
 }
 
@@ -34,22 +33,12 @@ const config: AppConfig = {
   },
   production: {
     whoopspay: {
-      domain: "https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev",
-      name: "WhoopsPay Replit"
+      domain: "https://your-domain.com",
+      name: "WhoopsPay Production"
     },
     juiceShop: {
-      domain: "https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/juice-shop",
-      name: "Juice Shop Replit"
-    }
-  },
-  replit: {
-    whoopspay: {
-      domain: "https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev",
-      name: "WhoopsPay Replit"
-    },
-    juiceShop: {
-      domain: "https://ff6ab99f-32cd-42a2-b4fe-059bb419c67c-00-zkb9coc4v3mb.riker.replit.dev/juice-shop",
-      name: "Juice Shop Replit"
+      domain: "https://your-domain.com/juice-shop",
+      name: "Juice Shop Production"
     }
   },
   docker: {
@@ -69,14 +58,11 @@ const config: AppConfig = {
  */
 export function getCurrentConfig(): DomainConfig {
   const env = process.env.NODE_ENV || 'development';
-  const isReplit = process.env.REPLIT_DOMAINS || process.env.REPL_ID;
   const isDocker = process.env.WHOOPSPAY_URL || process.env.JUICE_SHOP_URL;
   
   // Determine environment
-  if (isDocker && !isReplit) {
+  if (isDocker) {
     return config.docker;
-  } else if (isReplit) {
-    return config.replit;
   } else if (env === 'production') {
     return config.production;
   } else {
