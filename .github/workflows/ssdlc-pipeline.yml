@@ -31,11 +31,21 @@ jobs:
         id: version
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          BUILD_DATE=$(date +"%Y%m%d_%H%M%S")
-          FULL_VERSION="${VERSION}_${BUILD_DATE}"
+          
+          if [ "${{ github.event_name }}" == "push" ]; then
+            # Clean version for merged PRs (no date/time)
+            FULL_VERSION="$VERSION"
+            echo "🚀 Using clean version for merged PR: v$FULL_VERSION"
+          else
+            # Version with timestamp for PR testing
+            BUILD_DATE=$(date +"%Y%m%d_%H%M%S")
+            FULL_VERSION="${VERSION}_${BUILD_DATE}"
+            echo "🧪 Using timestamped version for PR testing: v$FULL_VERSION"
+            echo "Build date: $BUILD_DATE"
+          fi
+          
           echo "Extracted base version: v$VERSION"
-          echo "Build date: $BUILD_DATE"
-          echo "Full version with date: v$FULL_VERSION"
+          echo "Final version: v$FULL_VERSION"
           echo "version=$FULL_VERSION" >> $GITHUB_OUTPUT
           echo "docker-tag=\${IMAGE_NAME}:\${FULL_VERSION}" >> $GITHUB_OUTPUT
           echo "VERSION=$FULL_VERSION" >> $GITHUB_ENV
