@@ -4,7 +4,7 @@ import { resetSeedingFlag } from './mockData';
 export function clearAndReinitializeDatabase() {
   const db = new Database('./data/whoopspay.db');
   
-  console.log('Starting database cleanup and reinitialization...');
+  console.log('Starting database cleanup and reinitialization... ');
   
   // Drop all tables to ensure clean state
   const tables = [
