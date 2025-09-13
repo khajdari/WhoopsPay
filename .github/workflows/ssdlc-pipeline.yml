@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [ main-vulnerable ]
     types: [opened, synchronize, reopened]
+  push:
+    branches: [ develop-vulnerable, main ]
   workflow_dispatch:
 
 env:
@@ -1027,7 +1029,7 @@ jobs:
     name: "🌐 Render Production Deployment"
     runs-on: ubuntu-latest
     needs: [setup-version, docker-hub-publish]
-    if: always() && needs.docker-hub-publish.result == 'success'
+    if: always() && needs.docker-hub-publish.result == 'success' && github.event_name == 'push'
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
       IMAGE_NAME: ghaidaris/whoopspay:latest
