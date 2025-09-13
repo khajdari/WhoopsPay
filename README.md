@@ -105,6 +105,41 @@ The application runs on a single port (5000) with both frontend and backend inte
 
 ---
 
+## 🏛️ **System Architecture**
+
+WhoopsPay follows a modern monorepo architecture with integrated frontend and backend:
+
+### **Frontend Architecture**
+- **Framework**: React 18 with TypeScript for type safety and modern component patterns
+- **Routing**: Wouter for client-side routing with authentication-based route protection  
+- **State Management**: TanStack Query for server state management combined with React hooks for local state
+- **UI Components**: shadcn/ui component library built on Radix UI with Tailwind CSS for styling
+- **Internationalization**: Custom i18n system supporting English (UK) and Greek locales
+- **Build Tool**: Vite for fast development and optimized production builds
+
+### **Backend Architecture** 
+- **Framework**: Express.js with TypeScript for API server implementation
+- **Authentication**: Custom session-based authentication with intentionally vulnerable patterns
+- **Middleware**: Custom security middleware demonstrating common vulnerabilities
+- **Controllers**: MVC pattern with dedicated controllers for different functional areas
+- **Routing**: RESTful API design with comprehensive endpoint coverage
+- **Documentation**: Swagger/OpenAPI integration for interactive API documentation
+
+### **Data Storage Architecture**
+- **Database**: SQLite with better-sqlite3 driver for all environments
+- **ORM**: Drizzle ORM for type-safe database operations
+- **Schema Management**: Shared schema definitions using Drizzle with TypeScript types
+- **Session Storage**: Database-backed session management with configurable TTL
+- **File Location**: `data/whoopspay.db` (committed to repository for easy setup)
+
+### **Authentication and Authorization**
+- **Session Management**: Express-session with SQLite storage and intentionally weak security
+- **Password Handling**: Mixed plain text and bcrypt implementation for educational vulnerability demonstration
+- **Admin Authorization**: Simple role-based access control with intentional privilege escalation vulnerabilities  
+- **API Security**: Minimal authentication checks demonstrating broken access control patterns
+
+---
+
 ## 🔐 **Educational Vulnerabilities**
 
 WhoopsPay intentionally implements real-world security vulnerabilities for hands-on learning:
@@ -130,6 +165,12 @@ WhoopsPay intentionally implements real-world security vulnerabilities for hands
 ## 🛡️ **Automated Security Testing**
 
 WhoopsPay includes a comprehensive **Secure SDLC Pipeline** with 4 security phases:
+
+### **Security Training Features**
+- **Vulnerability Implementation**: Intentional OWASP Top 10 and API Security Top 10 vulnerabilities
+- **Security Pipeline**: 4-phase automated security testing (ESLint, SAST, SCA, DAST)
+- **Educational Documentation**: Comprehensive vulnerability explanations and exploitation examples
+- **Safe Environment**: Isolated training platform with clear educational disclaimers
 
 ### **Phase 1: 🛡️ ESLint Security Linting**
 - **Static code analysis** with security-focused rules
