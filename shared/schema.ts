@@ -32,7 +32,7 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 /**
- * Session storage table for Replit Auth
+ * Session storage table
  * VULNERABILITY: Sessions stored in database without proper encryption
  */
 export const sessions = sqliteTable(
