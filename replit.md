@@ -1,10 +1,10 @@
-# WhoopsPay - Educational Security Training Platform
+# WhoopsPay - OWASP Security Training Platform
 
 ## Overview
 
-WhoopsPay is an educational cybersecurity training platform that simulates a comprehensive financial payment system while intentionally implementing security vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10. The platform is designed for security professionals, developers, students, and penetration testers to learn about web application vulnerabilities, secure coding practices, and vulnerability assessment in a controlled environment.
+WhoopsPay is an educational cybersecurity training platform designed to demonstrate OWASP Top 10 vulnerabilities and API security weaknesses in a realistic payment application environment. The platform simulates a comprehensive payment system with intentional security flaws for educational purposes, including integration with OWASP Juice Shop for cross-platform payment scenarios.
 
-The application provides a realistic financial management interface with features including user authentication, money transfers, transaction history, payment methods management, and administrative controls - all while demonstrating common security flaws for educational purposes.
+The application serves as a hands-on learning environment where security professionals can explore common vulnerabilities in payment systems, practice penetration testing techniques, and understand secure coding practices through practical examples.
 
 ## User Preferences
 
@@ -12,89 +12,80 @@ Preferred communication style: Simple, everyday language.
 
 ## System Architecture
 
-### Backend Architecture (MVC Pattern)
-The backend follows a Model-View-Controller pattern with clear separation of concerns:
+### Frontend Architecture
+The client-side application is built with React 18 and TypeScript, using Vite for development tooling and build optimization. The frontend employs a modern component-based architecture with:
 
-- **Controllers**: Handle request processing and business logic coordination for authentication, user management, transactions, money requests, notifications, and administration
-- **Models**: Data layer abstraction using Drizzle ORM with SQLite for development and PostgreSQL support for production
-- **Routes**: RESTful API endpoints with comprehensive routing configuration organized under `/api` prefix
-- **Middleware**: Express middleware for authentication, authorization, and admin access control
-- **Services**: Business logic layer prepared for expansion and external integrations
-
-### Frontend Architecture (React + TypeScript)
-The frontend uses modern React patterns with comprehensive component architecture:
-
-- **Component-based UI**: Reusable components using shadcn/ui design system with Tailwind CSS
-- **State Management**: React Query for server state management and React hooks for local state
+- **Component Library**: shadcn/ui components built on Radix UI primitives for accessible, customizable interface elements
+- **Styling**: Tailwind CSS for utility-first styling with a custom design system based on PayPal's visual identity
+- **State Management**: React Query (TanStack Query) for server state management and caching, with React hooks for local component state
 - **Routing**: Wouter for lightweight client-side routing with authentication-based route protection
-- **Internationalization**: Custom i18n system supporting English and Greek locales
-- **Authentication**: Session-based authentication with persistent state management
+- **Internationalization**: Custom i18n system supporting English and Greek locales with dynamic language switching
 
-### Database Design
-SQLite-based development database with intentionally vulnerable schema design:
+### Backend Architecture
+The server-side application uses Express.js with TypeScript in an ESM module environment. The architecture follows a controller-based pattern with:
 
-- **Users Table**: Contains deliberately exposed sensitive data (SSN, plain text passwords for some users)
-- **Transactions Table**: Financial transaction records with minimal validation
-- **Payment Methods**: Credit card and bank account storage with weak encryption
-- **Sessions**: Express session storage with vulnerable configuration
-- **Notifications**: Real-time notification system for transaction updates
-- **Money Requests**: Cross-user payment request system with approval workflows
+- **API Structure**: RESTful endpoints organized by domain (auth, users, transactions, admin) with intentionally vulnerable implementations
+- **Authentication**: Session-based authentication using express-session with SQLite storage and bcrypt for password hashing (with intentional security weaknesses)
+- **Middleware**: Custom middleware for authentication, admin authorization, and request logging with security vulnerabilities for educational purposes
+- **Database Layer**: Drizzle ORM with SQLite for development and PostgreSQL configuration for production environments
 
-### Security Pipeline Integration
-Comprehensive Secure SDLC pipeline with 4-phase security analysis:
+### Data Storage Solutions
+The application uses a dual database approach:
 
-- **Phase 1**: ESLint Security Linting with enterprise-grade security plugins
-- **Phase 2**: Snyk Code SAST with maximum depth static analysis
-- **Phase 3**: Snyk SCA with comprehensive dependency vulnerability scanning
-- **Phase 4**: OWASP ZAP DAST with dynamic penetration testing
-- **Integration**: Automated GitHub Issues, semantic versioning, and Docker Hub deployment
+- **Development**: SQLite with better-sqlite3 for local development and testing, stored in a local `data/whoopspay.db` file
+- **Production**: PostgreSQL configuration via Drizzle ORM with connection string support
+- **Session Storage**: Database-backed session storage using express-session with SQLite tables
+- **Schema Management**: Drizzle Kit for database migrations and schema versioning
 
-### Educational Vulnerability Framework
-Intentionally implements security vulnerabilities for training purposes:
+### Authentication and Authorization
+The authentication system implements session-based security with intentional vulnerabilities:
 
-- **OWASP Top 10 2021**: Broken Access Control, Cryptographic Failures, Injection, Insecure Design, Security Misconfiguration, Authentication Failures, Security Logging Failures
-- **OWASP API Security Top 10**: Broken Object Level Authorization, Broken User Authentication, Excessive Data Exposure, Unrestricted Resource Consumption, Broken Function Level Authorization
+- **Session Management**: Express-session with database storage and configurable session secrets (with weak default values for training)
+- **Password Storage**: Mixed implementation using bcrypt hashing alongside plain text storage for educational vulnerability demonstration
+- **Authorization**: Role-based access control with admin flags and middleware-based route protection (with bypass opportunities)
+- **Cross-Origin Integration**: Session sharing capabilities for Juice Shop payment integration
+
+### Security Architecture (Educational Vulnerabilities)
+The platform intentionally implements security anti-patterns for training purposes:
+
+- **OWASP Top 10 Demonstrations**: Broken access control, cryptographic failures, injection vulnerabilities, insecure design patterns
+- **API Security Issues**: Broken object-level authorization, excessive data exposure, lack of rate limiting
+- **Financial Security Flaws**: Insufficient transaction validation, missing business logic controls, inadequate audit logging
 
 ## External Dependencies
 
 ### Core Framework Dependencies
-- **Express.js**: Backend web application framework with session management
-- **React 18**: Frontend UI library with TypeScript support
-- **Drizzle ORM**: Type-safe database ORM with SQLite/PostgreSQL support
-- **Better SQLite3**: High-performance SQLite database driver for development
+- **Express.js**: Web application framework for Node.js providing HTTP server capabilities and middleware support
+- **React 18**: Frontend framework with TypeScript support for building interactive user interfaces
+- **Vite**: Build tool and development server with hot module replacement and optimized production builds
 
-### UI and Styling Dependencies
-- **shadcn/ui**: Modern component library built on Radix UI primitives
-- **Tailwind CSS**: Utility-first CSS framework for responsive design
-- **Radix UI**: Low-level UI primitives for accessibility and customization
-- **Lucide React**: Icon library with comprehensive financial and UI icons
+### Database and ORM
+- **Drizzle ORM**: Type-safe database toolkit with SQLite and PostgreSQL support, providing schema management and query building
+- **better-sqlite3**: SQLite database driver for Node.js with synchronous API for development environments
+- **Database Migrations**: Drizzle Kit for schema versioning and database migration management
 
-### State Management and Data Fetching
-- **TanStack React Query**: Server state management with caching and synchronization
-- **Wouter**: Lightweight client-side routing library
-- **React Hook Form**: Form state management with validation
+### UI and Styling
+- **shadcn/ui**: Component library built on Radix UI primitives providing accessible, customizable React components
+- **Radix UI**: Unstyled, accessible component primitives for building design systems
+- **Tailwind CSS**: Utility-first CSS framework for rapid UI development with custom design tokens
+- **Lucide React**: Icon library providing consistent iconography throughout the application
 
-### Authentication and Security
-- **Express Session**: Session-based authentication with SQLite storage
-- **bcrypt**: Password hashing library for user authentication
-- **CORS**: Cross-origin resource sharing middleware
+### Payment Integration
+- **PayPal Server SDK**: Integration with PayPal payment services for external payment processing capabilities
+- **Cross-Platform Integration**: Custom URL adapter system for seamless integration with OWASP Juice Shop
 
-### Security Testing and Analysis
-- **ESLint**: Code quality and security linting with security-focused plugins
-- **Snyk**: Static application security testing and dependency scanning
-- **OWASP ZAP**: Dynamic application security testing and penetration testing
-- **Security Plugins**: eslint-plugin-security, @microsoft/eslint-plugin-sdl, eslint-plugin-sonarjs
+### Development and Security Tools
+- **TypeScript**: Static type checking for enhanced code quality and developer experience
+- **ESLint**: Code linting with security-focused plugins including Microsoft SDL and SonarJS rules
+- **OWASP ZAP Integration**: Automated security scanning capabilities for vulnerability assessment
+- **Snyk Security Scanning**: Dependency vulnerability scanning and monitoring
 
-### Build and Development Tools
-- **Vite**: Modern build tool with hot module replacement
-- **TypeScript**: Type-safe JavaScript with enhanced developer experience
-- **esbuild**: Fast JavaScript bundler for production builds
+### Session and Authentication
+- **express-session**: Session middleware for Express.js with database storage backend
+- **bcrypt**: Password hashing library for secure credential storage (with educational weaknesses)
+- **Custom Authentication**: Session-based authentication system with intentional security vulnerabilities
 
-### External Service Integrations
-- **OWASP Juice Shop**: Integrated vulnerable web application for cross-platform payment simulation
-- **PayPal SDK**: Payment processing integration for external payment flows
-- **Docker**: Containerization for consistent deployment environments
-
-### Documentation and API Tools
-- **Swagger**: API documentation generation and interactive testing interface
-- **GitHub Actions**: CI/CD pipeline for automated security testing and deployment
+### Internationalization and Utilities
+- **date-fns**: Date manipulation and formatting library with locale support
+- **nanoid**: Unique ID generation for session management and transaction tracking
+- **Custom i18n System**: Internationalization framework supporting multiple locales with dynamic language switching
