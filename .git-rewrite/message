@@ -1,0 +1,4 @@
+Improve notification translations and display for payments
+
+Add i18n keys for payment notifications and display "On-Us" labels by including payment type in notification titles.
+
