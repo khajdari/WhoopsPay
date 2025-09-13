@@ -24,8 +24,14 @@ import { useI18n } from "@/lib/i18n";
 export function Footer() {
   const { t } = useI18n();
   
-  // Generate build version with current date/time like Docker format
-  const buildVersion = `1.0.0_${new Date().toISOString().slice(0, 10).replace(/-/g, '')}_${new Date().toTimeString().slice(0, 8).replace(/:/g, '')}`;
+  // Get version and detect environment
+  const packageVersion = "1.0.0"; // Will be set by build process in production
+  const isProduction = import.meta.env.PROD;
+  
+  // Use clean version in production, timestamped version in development  
+  const buildVersion = isProduction 
+    ? packageVersion 
+    : `${packageVersion}_${new Date().toISOString().slice(0, 10).replace(/-/g, '')}_${new Date().toTimeString().slice(0, 8).replace(/:/g, '')}`;
 
   return (
     <footer className="bg-gray-800 text-gray-400 py-4 flex items-center">
