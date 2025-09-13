@@ -985,8 +985,8 @@ jobs:
     if: always()
     env:
       VERSION: ${{ needs.setup-version.outputs.version }}
-      IMAGE_NAME: ghajdaris/whoopspay
-      DOCKER_HUB_USERNAME: ghajdaris
+      IMAGE_NAME: ghaidaris/whoopspay
+      DOCKER_HUB_USERNAME: ghaidaris
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -1008,8 +1008,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghajdaris/whoopspay:${{ needs.setup-version.outputs.version }}
-            ghajdaris/whoopspay:latest
+            ghaidaris/whoopspay:${{ needs.setup-version.outputs.version }}
+            ghaidaris/whoopspay:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -1017,6 +1017,6 @@ jobs:
         run: |
           echo "✅ Docker image pushed successfully with semantic version"
           echo "🐳 Image tags pushed:"
-          echo "   - ghajdaris/whoopspay:$VERSION"
-          echo "   - ghajdaris/whoopspay:latest"
-          echo "🔗 View on Docker Hub: https://hub.docker.com/r/ghajdaris/whoopspay"
+          echo "   - ghaidaris/whoopspay:$VERSION"
+          echo "   - ghaidaris/whoopspay:latest"
+          echo "🔗 View on Docker Hub: https://hub.docker.com/r/ghaidaris/whoopspay"
