@@ -2,7 +2,7 @@
 
 ## System Overview
 
-WhoopsPay follows a modern full-stack architecture with clear separation of concerns, implementing both secure practices and intentional vulnerabilities for educational purposes.
+WhoopsPay follows a modern fullstack architecture with clear separation of concerns, implementing both secure practices and intentional vulnerabilities for educational purposes.
 
 ## 🏗️ High-Level Architecture
 
