@@ -640,6 +640,7 @@ jobs:
           EOF
           
           # Run comprehensive ZAP scan using Docker directly
+          echo "🎯 Running ZAP baseline scan on public endpoints..."
           docker run --rm \
             --network host \
             -v $(pwd):/zap/wrk/:rw \
@@ -650,20 +651,40 @@ jobs:
             -J OWASP-ZAP-Security-Report.json \
             -a \
             -j \
+            -I \
+            -l WARN \
             -T 5 \
             -c .zap/rules.tsv || echo "ZAP scan completed with findings"
           
           # Generate additional comprehensive scan using API scan mode
           echo "🔌 Running additional API-focused security scan..."
-          docker run --rm \
-            --network host \
-            -v $(pwd):/zap/wrk/:rw \
-            zaproxy/zap-stable:latest \
-            zap-api-scan.py \
-            -t http://localhost:5000/api \
-            -r API-Security-Report.html \
-            -J API-Security-Report.json \
-            -T 3 || echo "API scan completed"
+          # Check if OpenAPI/Swagger endpoint exists
+          if curl -s http://localhost:5000/api/swagger 2>/dev/null | grep -q "openapi\|swagger"; then
+            echo "📋 Found OpenAPI/Swagger documentation"
+            docker run --rm \
+              --network host \
+              -v $(pwd):/zap/wrk/:rw \
+              zaproxy/zap-stable:latest \
+              zap-api-scan.py \
+              -t http://localhost:5000/api/swagger \
+              -f openapi \
+              -r API-Security-Report.html \
+              -J API-Security-Report.json \
+              -T 3 || echo "API scan completed"
+          else
+            echo "📋 No OpenAPI documentation found, running basic API scan"
+            # Run a basic baseline scan on API endpoints instead
+            docker run --rm \
+              --network host \
+              -v $(pwd):/zap/wrk/:rw \
+              zaproxy/zap-stable:latest \
+              zap-baseline.py \
+              -t http://localhost:5000/api \
+              -r API-Security-Report.html \
+              -J API-Security-Report.json \
+              -I \
+              -T 3 || echo "API scan completed"
+          fi
           
           # Verify files were created
           echo "📋 Verifying report files..."
