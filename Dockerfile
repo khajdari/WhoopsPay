@@ -4,6 +4,9 @@
 # Build stage
 FROM node:18-alpine AS builder
 
+# Accept version from build arguments
+ARG APP_VERSION=1.0.0
+
 WORKDIR /app
 
 # Copy package files for dependency installation
@@ -23,7 +26,10 @@ COPY server/ ./server/
 COPY shared/ ./shared/
 COPY data/ ./data/
 
-# Build the application normally
+# Set version environment variable for frontend build
+ENV VITE_APP_VERSION=$APP_VERSION
+
+# Build the application with version
 RUN npm run build
 
 # Production stage

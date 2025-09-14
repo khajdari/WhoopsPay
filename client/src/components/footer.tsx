@@ -24,11 +24,11 @@ import { useI18n } from "@/lib/i18n";
 export function Footer() {
   const { t } = useI18n();
   
-  // Get version and detect environment
-  const packageVersion = "1.0.0"; // Will be set by build process in production
+  // Get version from build process or use fallback
+  const packageVersion = import.meta.env.VITE_APP_VERSION || "1.0.0";
   const isProduction = import.meta.env.PROD;
   
-  // Use clean version in production, timestamped version in development  
+  // Use actual version from build in production, add timestamp in development  
   const buildVersion = isProduction 
     ? packageVersion 
     : `${packageVersion}_${new Date().toISOString().slice(0, 10).replace(/-/g, '')}_${new Date().toTimeString().slice(0, 8).replace(/:/g, '')}`;

@@ -1019,6 +1019,8 @@ jobs:
         with:
           context: .
           push: true
+          build-args: |
+            APP_VERSION=${{ needs.setup-version.outputs.version }}
           tags: |
             ghaidaris/whoopspay:${{ needs.setup-version.outputs.version }}
             ghaidaris/whoopspay:latest
