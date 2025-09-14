@@ -1,0 +1,177 @@
+2025-09-14T10:22:51.9174397Z Current runner version: '2.328.0'
+2025-09-14T10:22:51.9196001Z ##[group]Runner Image Provisioner
+2025-09-14T10:22:51.9196799Z Hosted Compute Agent
+2025-09-14T10:22:51.9197421Z Version: 20250829.383
+2025-09-14T10:22:51.9198223Z Commit: 27cb235aab5b0e52e153a26cd86b4742e89dac5d
+2025-09-14T10:22:51.9198927Z Build Date: 2025-08-29T13:48:48Z
+2025-09-14T10:22:51.9199631Z ##[endgroup]
+2025-09-14T10:22:51.9200160Z ##[group]Operating System
+2025-09-14T10:22:51.9200690Z Ubuntu
+2025-09-14T10:22:51.9201200Z 24.04.3
+2025-09-14T10:22:51.9201623Z LTS
+2025-09-14T10:22:51.9202113Z ##[endgroup]
+2025-09-14T10:22:51.9202663Z ##[group]Runner Image
+2025-09-14T10:22:51.9203185Z Image: ubuntu-24.04
+2025-09-14T10:22:51.9203698Z Version: 20250907.24.1
+2025-09-14T10:22:51.9204751Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250907.24/images/ubuntu/Ubuntu2404-Readme.md
+2025-09-14T10:22:51.9206273Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250907.24
+2025-09-14T10:22:51.9207258Z ##[endgroup]
+2025-09-14T10:22:51.9209807Z ##[group]GITHUB_TOKEN Permissions
+2025-09-14T10:22:51.9211778Z Actions: write
+2025-09-14T10:22:51.9212309Z Attestations: write
+2025-09-14T10:22:51.9212871Z Checks: write
+2025-09-14T10:22:51.9213371Z Contents: write
+2025-09-14T10:22:51.9213906Z Deployments: write
+2025-09-14T10:22:51.9214421Z Discussions: write
+2025-09-14T10:22:51.9214930Z Issues: write
+2025-09-14T10:22:51.9215473Z Metadata: read
+2025-09-14T10:22:51.9215938Z Models: read
+2025-09-14T10:22:51.9216556Z Packages: write
+2025-09-14T10:22:51.9217083Z Pages: write
+2025-09-14T10:22:51.9217552Z PullRequests: write
+2025-09-14T10:22:51.9218308Z RepositoryProjects: write
+2025-09-14T10:22:51.9218928Z SecurityEvents: write
+2025-09-14T10:22:51.9219516Z Statuses: write
+2025-09-14T10:22:51.9220077Z ##[endgroup]
+2025-09-14T10:22:51.9222367Z Secret source: Actions
+2025-09-14T10:22:51.9223027Z Prepare workflow directory
+2025-09-14T10:22:51.9796334Z Prepare all required actions
+2025-09-14T10:22:51.9834255Z Getting action download info
+2025-09-14T10:22:52.3598480Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-09-14T10:22:52.6027137Z Complete job name: 📋 Extract Semantic Version
+2025-09-14T10:22:52.6614711Z ##[group]Run actions/checkout@v4
+2025-09-14T10:22:52.6615511Z with:
+2025-09-14T10:22:52.6615930Z   ref: 8a2cdbe1978c843cf6dd29603d85a6474db741df
+2025-09-14T10:22:52.6616485Z   repository: khajdari/WhoopsPay
+2025-09-14T10:22:52.6617106Z   token: ***
+2025-09-14T10:22:52.6617478Z   ssh-strict: true
+2025-09-14T10:22:52.6618097Z   ssh-user: git
+2025-09-14T10:22:52.6618491Z   persist-credentials: true
+2025-09-14T10:22:52.6618934Z   clean: true
+2025-09-14T10:22:52.6619329Z   sparse-checkout-cone-mode: true
+2025-09-14T10:22:52.6619796Z   fetch-depth: 1
+2025-09-14T10:22:52.6620172Z   fetch-tags: false
+2025-09-14T10:22:52.6620561Z   show-progress: true
+2025-09-14T10:22:52.6620956Z   lfs: false
+2025-09-14T10:22:52.6621317Z   submodules: false
+2025-09-14T10:22:52.6621716Z   set-safe-directory: true
+2025-09-14T10:22:52.6622390Z env:
+2025-09-14T10:22:52.6622746Z   NODE_VERSION: 20
+2025-09-14T10:22:52.6623144Z   DOCKER_REGISTRY: docker.io
+2025-09-14T10:22:52.6623646Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T10:22:52.6624105Z ##[endgroup]
+2025-09-14T10:22:52.7674021Z Syncing repository: khajdari/WhoopsPay
+2025-09-14T10:22:52.7676082Z ##[group]Getting Git version info
+2025-09-14T10:22:52.7676827Z Working directory is '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-14T10:22:52.7678171Z [command]/usr/bin/git version
+2025-09-14T10:22:52.7766315Z git version 2.51.0
+2025-09-14T10:22:52.7791891Z ##[endgroup]
+2025-09-14T10:22:52.7805278Z Temporarily overriding HOME='/home/runner/work/_temp/b71d393d-3346-4e14-9bb3-231968ecfb4c' before making global git config changes
+2025-09-14T10:22:52.7806741Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-14T10:22:52.7810415Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-14T10:22:52.7844945Z Deleting the contents of '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-14T10:22:52.7848494Z ##[group]Initializing the repository
+2025-09-14T10:22:52.7852233Z [command]/usr/bin/git init /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-14T10:22:52.7949795Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-09-14T10:22:52.7951163Z hint: is subject to change. To configure the initial branch name to use in all
+2025-09-14T10:22:52.7952041Z hint: of your new repositories, which will suppress this warning, call:
+2025-09-14T10:22:52.7952686Z hint:
+2025-09-14T10:22:52.7953168Z hint: 	git config --global init.defaultBranch <name>
+2025-09-14T10:22:52.7953935Z hint:
+2025-09-14T10:22:52.7954824Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-09-14T10:22:52.7956288Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-09-14T10:22:52.7957345Z hint:
+2025-09-14T10:22:52.7957862Z hint: 	git branch -m <name>
+2025-09-14T10:22:52.7958332Z hint:
+2025-09-14T10:22:52.7958914Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-09-14T10:22:52.7960246Z Initialized empty Git repository in /home/runner/work/WhoopsPay/WhoopsPay/.git/
+2025-09-14T10:22:52.7965001Z [command]/usr/bin/git remote add origin https://github.com/khajdari/WhoopsPay
+2025-09-14T10:22:52.8004598Z ##[endgroup]
+2025-09-14T10:22:52.8005320Z ##[group]Disabling automatic garbage collection
+2025-09-14T10:22:52.8008380Z [command]/usr/bin/git config --local gc.auto 0
+2025-09-14T10:22:52.8037370Z ##[endgroup]
+2025-09-14T10:22:52.8038889Z ##[group]Setting up auth
+2025-09-14T10:22:52.8044838Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-14T10:22:52.8075064Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-14T10:22:52.8392931Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-14T10:22:52.8422957Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-14T10:22:52.8639321Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-09-14T10:22:52.8680618Z ##[endgroup]
+2025-09-14T10:22:52.8681472Z ##[group]Fetching the repository
+2025-09-14T10:22:52.8688703Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 8a2cdbe1978c843cf6dd29603d85a6474db741df
+2025-09-14T10:22:53.3687217Z From https://github.com/khajdari/WhoopsPay
+2025-09-14T10:22:53.3689938Z  * branch            8a2cdbe1978c843cf6dd29603d85a6474db741df -> FETCH_HEAD
+2025-09-14T10:22:53.3716366Z ##[endgroup]
+2025-09-14T10:22:53.3717795Z ##[group]Determining the checkout info
+2025-09-14T10:22:53.3719389Z ##[endgroup]
+2025-09-14T10:22:53.3724173Z [command]/usr/bin/git sparse-checkout disable
+2025-09-14T10:22:53.3765108Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-09-14T10:22:53.3793248Z ##[group]Checking out the ref
+2025-09-14T10:22:53.3797811Z [command]/usr/bin/git checkout --progress --force 8a2cdbe1978c843cf6dd29603d85a6474db741df
+2025-09-14T10:22:53.4021716Z Note: switching to '8a2cdbe1978c843cf6dd29603d85a6474db741df'.
+2025-09-14T10:22:53.4022497Z 
+2025-09-14T10:22:53.4022971Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-09-14T10:22:53.4023848Z changes and commit them, and you can discard any commits you make in this
+2025-09-14T10:22:53.4024705Z state without impacting any branches by switching back to a branch.
+2025-09-14T10:22:53.4025201Z 
+2025-09-14T10:22:53.4025591Z If you want to create a new branch to retain commits you create, you may
+2025-09-14T10:22:53.4027034Z do so (now or later) by using -c with the switch command. Example:
+2025-09-14T10:22:53.4028467Z 
+2025-09-14T10:22:53.4028856Z   git switch -c <new-branch-name>
+2025-09-14T10:22:53.4029463Z 
+2025-09-14T10:22:53.4029826Z Or undo this operation with:
+2025-09-14T10:22:53.4030394Z 
+2025-09-14T10:22:53.4030708Z   git switch -
+2025-09-14T10:22:53.4031110Z 
+2025-09-14T10:22:53.4031758Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-09-14T10:22:53.4032733Z 
+2025-09-14T10:22:53.4033065Z HEAD is now at 8a2cdbe test commit a
+2025-09-14T10:22:53.4035479Z ##[endgroup]
+2025-09-14T10:22:53.4065670Z [command]/usr/bin/git log -1 --format=%H
+2025-09-14T10:22:53.4086755Z 8a2cdbe1978c843cf6dd29603d85a6474db741df
+2025-09-14T10:22:53.4260611Z ##[group]Run VERSION=$(node -p "require('./package.json').version")
+2025-09-14T10:22:53.4261502Z [36;1mVERSION=$(node -p "require('./package.json').version")[0m
+2025-09-14T10:22:53.4262122Z [36;1m[0m
+2025-09-14T10:22:53.4262520Z [36;1mif [ "pull_request" == "push" ]; then[0m
+2025-09-14T10:22:53.4263132Z [36;1m  # Clean version for merged PRs (no date/time)[0m
+2025-09-14T10:22:53.4263694Z [36;1m  FULL_VERSION="$VERSION"[0m
+2025-09-14T10:22:53.4264366Z [36;1m  echo "🚀 Using clean version for merged PR: v$FULL_VERSION"[0m
+2025-09-14T10:22:53.4264981Z [36;1melse[0m
+2025-09-14T10:22:53.4265399Z [36;1m  # Version with timestamp for PR testing[0m
+2025-09-14T10:22:53.4265972Z [36;1m  BUILD_DATE=$(date +"%Y%m%d_%H%M%S")[0m
+2025-09-14T10:22:53.4266530Z [36;1m  FULL_VERSION="${VERSION}_${BUILD_DATE}"[0m
+2025-09-14T10:22:53.4267237Z [36;1m  echo "🧪 Using timestamped version for PR testing: v$FULL_VERSION"[0m
+2025-09-14T10:22:53.4268095Z [36;1m  echo "Build date: $BUILD_DATE"[0m
+2025-09-14T10:22:53.4268575Z [36;1mfi[0m
+2025-09-14T10:22:53.4268920Z [36;1m[0m
+2025-09-14T10:22:53.4269323Z [36;1mecho "Extracted base version: v$VERSION"[0m
+2025-09-14T10:22:53.4269894Z [36;1mecho "Final version: v$FULL_VERSION"[0m
+2025-09-14T10:22:53.4270490Z [36;1mecho "version=$FULL_VERSION" >> $GITHUB_OUTPUT[0m
+2025-09-14T10:22:53.4271212Z [36;1mecho "docker-tag=\${IMAGE_NAME}:\${FULL_VERSION}" >> $GITHUB_OUTPUT[0m
+2025-09-14T10:22:53.4271925Z [36;1mecho "VERSION=$FULL_VERSION" >> $GITHUB_ENV[0m
+2025-09-14T10:22:53.4326134Z shell: /usr/bin/bash -e {0}
+2025-09-14T10:22:53.4326603Z env:
+2025-09-14T10:22:53.4326947Z   NODE_VERSION: 20
+2025-09-14T10:22:53.4327357Z   DOCKER_REGISTRY: docker.io
+2025-09-14T10:22:53.4328084Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T10:22:53.4328524Z ##[endgroup]
+2025-09-14T10:22:54.6743075Z 🧪 Using timestamped version for PR testing: v1.0.0_20250914_102254
+2025-09-14T10:22:54.6743957Z Build date: 20250914_102254
+2025-09-14T10:22:54.6744526Z Extracted base version: v1.0.0
+2025-09-14T10:22:54.6745053Z Final version: v1.0.0_20250914_102254
+2025-09-14T10:22:54.6857504Z Post job cleanup.
+2025-09-14T10:22:54.7763959Z [command]/usr/bin/git version
+2025-09-14T10:22:54.7798522Z git version 2.51.0
+2025-09-14T10:22:54.7845467Z Temporarily overriding HOME='/home/runner/work/_temp/3b903e8f-31bb-4950-8f45-66a29fb50490' before making global git config changes
+2025-09-14T10:22:54.7850649Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-14T10:22:54.7851480Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-14T10:22:54.7883420Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-14T10:22:54.7914213Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-14T10:22:54.8138778Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-14T10:22:54.8159819Z http.https://github.com/.extraheader
+2025-09-14T10:22:54.8171586Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-09-14T10:22:54.8200982Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-14T10:22:54.8516598Z Evaluate and set job outputs
+2025-09-14T10:22:54.8523450Z Set output 'version'
+2025-09-14T10:22:54.8525255Z Set output 'docker-tag'
+2025-09-14T10:22:54.8526153Z Cleaning up orphan processes
