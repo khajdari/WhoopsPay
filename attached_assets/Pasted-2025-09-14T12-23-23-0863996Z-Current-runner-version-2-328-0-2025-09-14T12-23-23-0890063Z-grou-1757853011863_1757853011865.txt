@@ -1,0 +1,693 @@
+2025-09-14T12:23:23.0863996Z Current runner version: '2.328.0'
+2025-09-14T12:23:23.0890063Z ##[group]Runner Image Provisioner
+2025-09-14T12:23:23.0891011Z Hosted Compute Agent
+2025-09-14T12:23:23.0891600Z Version: 20250829.383
+2025-09-14T12:23:23.0892185Z Commit: 27cb235aab5b0e52e153a26cd86b4742e89dac5d
+2025-09-14T12:23:23.0892973Z Build Date: 2025-08-29T13:48:48Z
+2025-09-14T12:23:23.0893612Z ##[endgroup]
+2025-09-14T12:23:23.0894157Z ##[group]Operating System
+2025-09-14T12:23:23.0894784Z Ubuntu
+2025-09-14T12:23:23.0895270Z 24.04.3
+2025-09-14T12:23:23.0895701Z LTS
+2025-09-14T12:23:23.0896217Z ##[endgroup]
+2025-09-14T12:23:23.0897005Z ##[group]Runner Image
+2025-09-14T12:23:23.0897638Z Image: ubuntu-24.04
+2025-09-14T12:23:23.0898229Z Version: 20250907.24.1
+2025-09-14T12:23:23.0899211Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250907.24/images/ubuntu/Ubuntu2404-Readme.md
+2025-09-14T12:23:23.0901226Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250907.24
+2025-09-14T12:23:23.0902344Z ##[endgroup]
+2025-09-14T12:23:23.0904859Z ##[group]GITHUB_TOKEN Permissions
+2025-09-14T12:23:23.0907547Z Actions: write
+2025-09-14T12:23:23.0908134Z Attestations: write
+2025-09-14T12:23:23.0908771Z Checks: write
+2025-09-14T12:23:23.0909249Z Contents: write
+2025-09-14T12:23:23.0909781Z Deployments: write
+2025-09-14T12:23:23.0910386Z Discussions: write
+2025-09-14T12:23:23.0910872Z Issues: write
+2025-09-14T12:23:23.0911366Z Metadata: read
+2025-09-14T12:23:23.0911873Z Models: read
+2025-09-14T12:23:23.0912394Z Packages: write
+2025-09-14T12:23:23.0912906Z Pages: write
+2025-09-14T12:23:23.0913403Z PullRequests: write
+2025-09-14T12:23:23.0913997Z RepositoryProjects: write
+2025-09-14T12:23:23.0914543Z SecurityEvents: write
+2025-09-14T12:23:23.0915236Z Statuses: write
+2025-09-14T12:23:23.0915801Z ##[endgroup]
+2025-09-14T12:23:23.0918398Z Secret source: Actions
+2025-09-14T12:23:23.0919463Z Prepare workflow directory
+2025-09-14T12:23:23.1525013Z Prepare all required actions
+2025-09-14T12:23:23.1563255Z Getting action download info
+2025-09-14T12:23:23.6102804Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-09-14T12:23:23.8141605Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-09-14T12:23:23.9368344Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-09-14T12:23:24.1187031Z Complete job name: ⚡ DAST - OWASP ZAP Security Scan
+2025-09-14T12:23:24.1800035Z ##[group]Run actions/checkout@v4
+2025-09-14T12:23:24.1800889Z with:
+2025-09-14T12:23:24.1801301Z   repository: khajdari/WhoopsPay
+2025-09-14T12:23:24.1801971Z   token: ***
+2025-09-14T12:23:24.1802364Z   ssh-strict: true
+2025-09-14T12:23:24.1802759Z   ssh-user: git
+2025-09-14T12:23:24.1803178Z   persist-credentials: true
+2025-09-14T12:23:24.1803646Z   clean: true
+2025-09-14T12:23:24.1804052Z   sparse-checkout-cone-mode: true
+2025-09-14T12:23:24.1804556Z   fetch-depth: 1
+2025-09-14T12:23:24.1804952Z   fetch-tags: false
+2025-09-14T12:23:24.1805391Z   show-progress: true
+2025-09-14T12:23:24.1805800Z   lfs: false
+2025-09-14T12:23:24.1806174Z   submodules: false
+2025-09-14T12:23:24.1806766Z   set-safe-directory: true
+2025-09-14T12:23:24.1807599Z env:
+2025-09-14T12:23:24.1807989Z   NODE_VERSION: 20
+2025-09-14T12:23:24.1808404Z   DOCKER_REGISTRY: docker.io
+2025-09-14T12:23:24.1808926Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T12:23:24.1809389Z   VERSION: 1.0.0
+2025-09-14T12:23:24.1809816Z ##[endgroup]
+2025-09-14T12:23:24.2873695Z Syncing repository: khajdari/WhoopsPay
+2025-09-14T12:23:24.2875501Z ##[group]Getting Git version info
+2025-09-14T12:23:24.2876245Z Working directory is '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-14T12:23:24.2877585Z [command]/usr/bin/git version
+2025-09-14T12:23:24.2951772Z git version 2.51.0
+2025-09-14T12:23:24.2978287Z ##[endgroup]
+2025-09-14T12:23:24.2992011Z Temporarily overriding HOME='/home/runner/work/_temp/4f4db120-b7f0-4d1b-bbf2-281fa9b2838a' before making global git config changes
+2025-09-14T12:23:24.2993689Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-14T12:23:24.3005236Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-14T12:23:24.3042381Z Deleting the contents of '/home/runner/work/WhoopsPay/WhoopsPay'
+2025-09-14T12:23:24.3045833Z ##[group]Initializing the repository
+2025-09-14T12:23:24.3050487Z [command]/usr/bin/git init /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-14T12:23:24.3159874Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-09-14T12:23:24.3161092Z hint: is subject to change. To configure the initial branch name to use in all
+2025-09-14T12:23:24.3162160Z hint: of your new repositories, which will suppress this warning, call:
+2025-09-14T12:23:24.3162953Z hint:
+2025-09-14T12:23:24.3163498Z hint: 	git config --global init.defaultBranch <name>
+2025-09-14T12:23:24.3164177Z hint:
+2025-09-14T12:23:24.3164814Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-09-14T12:23:24.3165917Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-09-14T12:23:24.3167011Z hint:
+2025-09-14T12:23:24.3167494Z hint: 	git branch -m <name>
+2025-09-14T12:23:24.3168059Z hint:
+2025-09-14T12:23:24.3168821Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-09-14T12:23:24.3178792Z Initialized empty Git repository in /home/runner/work/WhoopsPay/WhoopsPay/.git/
+2025-09-14T12:23:24.3190103Z [command]/usr/bin/git remote add origin https://github.com/khajdari/WhoopsPay
+2025-09-14T12:23:24.3226598Z ##[endgroup]
+2025-09-14T12:23:24.3227455Z ##[group]Disabling automatic garbage collection
+2025-09-14T12:23:24.3230605Z [command]/usr/bin/git config --local gc.auto 0
+2025-09-14T12:23:24.3259816Z ##[endgroup]
+2025-09-14T12:23:24.3261011Z ##[group]Setting up auth
+2025-09-14T12:23:24.3267677Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-14T12:23:24.3299466Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-14T12:23:24.3642697Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-14T12:23:24.3675178Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-14T12:23:24.3899642Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-09-14T12:23:24.3944254Z ##[endgroup]
+2025-09-14T12:23:24.3952803Z ##[group]Fetching the repository
+2025-09-14T12:23:24.3954252Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f318600a151b71717089eaec4b3e0b8b94adf9db:refs/remotes/origin/main-vulnerable
+2025-09-14T12:23:24.9291409Z From https://github.com/khajdari/WhoopsPay
+2025-09-14T12:23:24.9293318Z  * [new ref]         f318600a151b71717089eaec4b3e0b8b94adf9db -> origin/main-vulnerable
+2025-09-14T12:23:24.9358748Z ##[endgroup]
+2025-09-14T12:23:24.9360121Z ##[group]Determining the checkout info
+2025-09-14T12:23:24.9361645Z ##[endgroup]
+2025-09-14T12:23:24.9367198Z [command]/usr/bin/git sparse-checkout disable
+2025-09-14T12:23:24.9413489Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-09-14T12:23:24.9444174Z ##[group]Checking out the ref
+2025-09-14T12:23:24.9448838Z [command]/usr/bin/git checkout --progress --force -B main-vulnerable refs/remotes/origin/main-vulnerable
+2025-09-14T12:23:24.9698367Z Switched to a new branch 'main-vulnerable'
+2025-09-14T12:23:24.9703842Z branch 'main-vulnerable' set up to track 'origin/main-vulnerable'.
+2025-09-14T12:23:24.9708025Z ##[endgroup]
+2025-09-14T12:23:24.9745783Z [command]/usr/bin/git log -1 --format=%H
+2025-09-14T12:23:24.9768801Z f318600a151b71717089eaec4b3e0b8b94adf9db
+2025-09-14T12:23:25.0045925Z ##[group]Run actions/setup-node@v4
+2025-09-14T12:23:25.0047305Z with:
+2025-09-14T12:23:25.0048142Z   node-version: 20
+2025-09-14T12:23:25.0049008Z   cache: npm
+2025-09-14T12:23:25.0049842Z   always-auth: false
+2025-09-14T12:23:25.0050744Z   check-latest: false
+2025-09-14T12:23:25.0051908Z   token: ***
+2025-09-14T12:23:25.0052733Z env:
+2025-09-14T12:23:25.0053498Z   NODE_VERSION: 20
+2025-09-14T12:23:25.0054389Z   DOCKER_REGISTRY: docker.io
+2025-09-14T12:23:25.0055443Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T12:23:25.0056625Z   VERSION: 1.0.0
+2025-09-14T12:23:25.0057487Z ##[endgroup]
+2025-09-14T12:23:25.2072234Z Found in cache @ /opt/hostedtoolcache/node/20.19.5/x64
+2025-09-14T12:23:25.2078764Z ##[group]Environment details
+2025-09-14T12:23:27.5091864Z node: v20.19.5
+2025-09-14T12:23:27.5092412Z npm: 10.8.2
+2025-09-14T12:23:27.5092795Z yarn: 1.22.22
+2025-09-14T12:23:27.5094635Z ##[endgroup]
+2025-09-14T12:23:27.5117936Z [command]/opt/hostedtoolcache/node/20.19.5/x64/bin/npm config get cache
+2025-09-14T12:23:27.7764437Z /home/runner/.npm
+2025-09-14T12:23:28.0956709Z Cache hit for: node-cache-Linux-x64-npm-0cff4e10f1fa11b83775b02b67f4a898066ab13058512c37b16bbff72bf89e9a
+2025-09-14T12:23:29.4382534Z Received 0 of 101191320 (0.0%), 0.0 MBs/sec
+2025-09-14T12:23:30.4610642Z Received 101191320 of 101191320 (100.0%), 47.7 MBs/sec
+2025-09-14T12:23:30.4612580Z Cache Size: ~97 MB (101191320 B)
+2025-09-14T12:23:30.4652567Z [command]/usr/bin/tar -xf /home/runner/work/_temp/aaaf8afa-0ff1-40ab-be38-e57f46e9caf7/cache.tzst -P -C /home/runner/work/WhoopsPay/WhoopsPay --use-compress-program unzstd
+2025-09-14T12:23:30.7425973Z Cache restored successfully
+2025-09-14T12:23:30.7627361Z Cache restored from key: node-cache-Linux-x64-npm-0cff4e10f1fa11b83775b02b67f4a898066ab13058512c37b16bbff72bf89e9a
+2025-09-14T12:23:30.7800665Z ##[group]Run npm ci
+2025-09-14T12:23:30.7800992Z [36;1mnpm ci[0m
+2025-09-14T12:23:30.7918014Z shell: /usr/bin/bash -e {0}
+2025-09-14T12:23:30.7918343Z env:
+2025-09-14T12:23:30.7918548Z   NODE_VERSION: 20
+2025-09-14T12:23:30.7918778Z   DOCKER_REGISTRY: docker.io
+2025-09-14T12:23:30.7919190Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T12:23:30.7919451Z   VERSION: 1.0.0
+2025-09-14T12:23:30.7919664Z ##[endgroup]
+2025-09-14T12:23:37.1031751Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-09-14T12:23:37.1447131Z npm warn deprecated lodash.get@4.4.2: This package is deprecated. Use the optional chaining (?.) operator instead.
+2025-09-14T12:23:37.1727808Z npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+2025-09-14T12:23:37.2402712Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+2025-09-14T12:23:37.2571151Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2025-09-14T12:23:37.2700640Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2025-09-14T12:23:37.3680673Z npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+2025-09-14T12:23:37.4016752Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2025-09-14T12:23:37.4215559Z npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+2025-09-14T12:23:37.9913602Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2025-09-14T12:23:39.8731198Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2025-09-14T12:23:44.0896060Z 
+2025-09-14T12:23:44.0897249Z added 841 packages, and audited 842 packages in 13s
+2025-09-14T12:23:44.0897765Z 
+2025-09-14T12:23:44.0898059Z 196 packages are looking for funding
+2025-09-14T12:23:44.0898609Z   run `npm fund` for details
+2025-09-14T12:23:44.1194483Z 
+2025-09-14T12:23:44.1195318Z 10 vulnerabilities (3 low, 5 moderate, 1 high, 1 critical)
+2025-09-14T12:23:44.1195830Z 
+2025-09-14T12:23:44.1196242Z To address issues that do not require attention, run:
+2025-09-14T12:23:44.1197115Z   npm audit fix
+2025-09-14T12:23:44.1197346Z 
+2025-09-14T12:23:44.1197751Z To address all issues (including breaking changes), run:
+2025-09-14T12:23:44.1198332Z   npm audit fix --force
+2025-09-14T12:23:44.1198596Z 
+2025-09-14T12:23:44.1198806Z Run `npm audit` for details.
+2025-09-14T12:23:44.1837248Z ##[group]Run # Use version from setup job
+2025-09-14T12:23:44.1837625Z [36;1m# Use version from setup job[0m
+2025-09-14T12:23:44.1838024Z [36;1mecho "Using semantic version: v$VERSION"[0m
+2025-09-14T12:23:44.1838383Z [36;1mmkdir -p "security-reports/v$VERSION/03-owasp-zap"[0m
+2025-09-14T12:23:44.1838804Z [36;1mecho "📁 Created OWASP ZAP folder for v$VERSION"[0m
+2025-09-14T12:23:44.1870380Z shell: /usr/bin/bash -e {0}
+2025-09-14T12:23:44.1870629Z env:
+2025-09-14T12:23:44.1870804Z   NODE_VERSION: 20
+2025-09-14T12:23:44.1871005Z   DOCKER_REGISTRY: docker.io
+2025-09-14T12:23:44.1871348Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T12:23:44.1871566Z   VERSION: 1.0.0
+2025-09-14T12:23:44.1871757Z ##[endgroup]
+2025-09-14T12:23:44.1924955Z Using semantic version: v1.0.0
+2025-09-14T12:23:44.1939827Z 📁 Created OWASP ZAP folder for v1.0.0
+2025-09-14T12:23:44.1963992Z ##[group]Run echo "Starting application for DAST security testing..."
+2025-09-14T12:23:44.1964478Z [36;1mecho "Starting application for DAST security testing..."[0m
+2025-09-14T12:23:44.1964789Z [36;1m[0m
+2025-09-14T12:23:44.1965026Z [36;1m# Start application in background for DAST testing[0m
+2025-09-14T12:23:44.1965323Z [36;1mnpm run dev &[0m
+2025-09-14T12:23:44.1965536Z [36;1mAPP_PID=$![0m
+2025-09-14T12:23:44.1965749Z [36;1mecho "Application PID: $APP_PID"[0m
+2025-09-14T12:23:44.1966030Z [36;1mecho "APP_PID=$APP_PID" >> $GITHUB_ENV[0m
+2025-09-14T12:23:44.1966281Z [36;1m[0m
+2025-09-14T12:23:44.1966700Z [36;1m# Wait for application to be ready[0m
+2025-09-14T12:23:44.1966990Z [36;1mecho "Waiting for application to start..."[0m
+2025-09-14T12:23:44.1967266Z [36;1mfor i in {1..60}; do[0m
+2025-09-14T12:23:44.1967577Z [36;1m  if curl -s http://localhost:5000/health >/dev/null 2>&1; then[0m
+2025-09-14T12:23:44.1967980Z [36;1m    echo "✅ Application is ready for DAST testing"[0m
+2025-09-14T12:23:44.1968260Z [36;1m    break[0m
+2025-09-14T12:23:44.1968444Z [36;1m  fi[0m
+2025-09-14T12:23:44.1968631Z [36;1m  if [ $i -eq 60 ]; then[0m
+2025-09-14T12:23:44.1968934Z [36;1m    echo "❌ Application failed to start within timeout"[0m
+2025-09-14T12:23:44.1969216Z [36;1m    exit 1[0m
+2025-09-14T12:23:44.1969400Z [36;1m  fi[0m
+2025-09-14T12:23:44.1969595Z [36;1m  echo "Waiting for app... ($i/60)"[0m
+2025-09-14T12:23:44.1969836Z [36;1m  sleep 3[0m
+2025-09-14T12:23:44.1970013Z [36;1mdone[0m
+2025-09-14T12:23:44.1970178Z [36;1m[0m
+2025-09-14T12:23:44.1970389Z [36;1m# Verify application is responding[0m
+2025-09-14T12:23:44.1970819Z [36;1mcurl -s http://localhost:5000/ | grep -q "WhoopsPay" && echo "✅ Application verified"[0m
+2025-09-14T12:23:44.1999642Z shell: /usr/bin/bash -e {0}
+2025-09-14T12:23:44.1999880Z env:
+2025-09-14T12:23:44.2000049Z   NODE_VERSION: 20
+2025-09-14T12:23:44.2000243Z   DOCKER_REGISTRY: docker.io
+2025-09-14T12:23:44.2000598Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T12:23:44.2000822Z   VERSION: 1.0.0
+2025-09-14T12:23:44.2001020Z   NODE_ENV: development
+2025-09-14T12:23:44.2001235Z   DATABASE_URL: sqlite:./test.db
+2025-09-14T12:23:44.2001452Z ##[endgroup]
+2025-09-14T12:23:44.2050583Z Starting application for DAST security testing...
+2025-09-14T12:23:44.2052327Z Application PID: 2320
+2025-09-14T12:23:44.2053341Z Waiting for application to start...
+2025-09-14T12:23:44.2131384Z Waiting for app... (1/60)
+2025-09-14T12:23:44.3134223Z 
+2025-09-14T12:23:44.3134988Z > rest-express@1.0.0 dev
+2025-09-14T12:23:44.3135744Z > NODE_ENV=development tsx server/index.ts
+2025-09-14T12:23:44.3136779Z 
+2025-09-14T12:23:45.2981763Z Starting database cleanup and reinitialization... 
+2025-09-14T12:23:45.3287182Z Dropped table: sessions
+2025-09-14T12:23:45.3297866Z Dropped table: users
+2025-09-14T12:23:45.3309499Z Dropped table: transactions
+2025-09-14T12:23:45.3320855Z Dropped table: payment_methods
+2025-09-14T12:23:45.3330829Z Dropped table: user_sessions
+2025-09-14T12:23:45.3344307Z Dropped table: notifications
+2025-09-14T12:23:45.3356948Z Dropped table: issue_reports
+2025-09-14T12:23:45.3366627Z Dropped table: money_requests
+2025-09-14T12:23:45.3367157Z All tables cleared. Creating fresh database structure...
+2025-09-14T12:23:45.3368308Z Seeding flag reset - ready for fresh data
+2025-09-14T12:23:45.3482450Z Database tables initialized successfully
+2025-09-14T12:23:45.3502987Z 🔧 Domain Configuration Loaded:
+2025-09-14T12:23:45.3503701Z    WhoopsPay: http://localhost:5000 (WhoopsPay Local)
+2025-09-14T12:23:45.3504373Z    Juice Shop: http://localhost:3000 (Juice Shop Local)
+2025-09-14T12:23:45.3893289Z Starting mock data seeding...
+2025-09-14T12:23:45.4152518Z Mock ONUS and OFFUS transactions created for new users
+2025-09-14T12:23:45.4345797Z Mock data seeded successfully with new users, @ prefix IDs, external money requests, and internal money requests
+2025-09-14T12:23:46.0254942Z 12:23:46 PM [express] Development mode: Vite middleware enabled
+2025-09-14T12:23:46.0268350Z 12:23:46 PM [express] serving on port 5000
+2025-09-14T12:23:47.2517992Z ✅ Application is ready for DAST testing
+2025-09-14T12:23:47.5272427Z ✅ Application verified
+2025-09-14T12:23:52.5317208Z ##[group]Run echo "⚡ Running comprehensive OWASP ZAP active scan..."
+2025-09-14T12:23:52.5317997Z [36;1mecho "⚡ Running comprehensive OWASP ZAP active scan..."[0m
+2025-09-14T12:23:52.5318312Z [36;1m[0m
+2025-09-14T12:23:52.5318498Z [36;1m# Ensure version folder exists[0m
+2025-09-14T12:23:52.5318812Z [36;1mmkdir -p "security-reports/v$VERSION/03-owasp-zap"[0m
+2025-09-14T12:23:52.5319102Z [36;1m[0m
+2025-09-14T12:23:52.5319339Z [36;1m# Verify application is running before scanning[0m
+2025-09-14T12:23:52.5319686Z [36;1mecho "🔍 Checking if application is accessible..."[0m
+2025-09-14T12:23:52.5319972Z [36;1mfor i in {1..10}; do[0m
+2025-09-14T12:23:52.5320267Z [36;1m  if curl -s http://localhost:5000 >/dev/null 2>&1; then[0m
+2025-09-14T12:23:52.5320637Z [36;1m    echo "✅ Application is accessible at localhost:5000"[0m
+2025-09-14T12:23:52.5320922Z [36;1m    break[0m
+2025-09-14T12:23:52.5321104Z [36;1m  fi[0m
+2025-09-14T12:23:52.5321353Z [36;1m  echo "Waiting for application... ($i/10)"[0m
+2025-09-14T12:23:52.5321617Z [36;1m  sleep 2[0m
+2025-09-14T12:23:52.5321792Z [36;1mdone[0m
+2025-09-14T12:23:52.5321956Z [36;1m[0m
+2025-09-14T12:23:52.5322135Z [36;1m# Test application endpoints[0m
+2025-09-14T12:23:52.5322416Z [36;1mecho "🧪 Testing application endpoints..."[0m
+2025-09-14T12:23:52.5322797Z [36;1mcurl -s http://localhost:5000 | head -10 || echo "Failed to get homepage"[0m
+2025-09-14T12:23:52.5323299Z [36;1mcurl -s http://localhost:5000/api/auth/user || echo "API endpoint test completed"[0m
+2025-09-14T12:23:52.5323680Z [36;1m[0m
+2025-09-14T12:23:52.5323903Z [36;1m# Use simpler ZAP baseline scan that actually works[0m
+2025-09-14T12:23:52.5324310Z [36;1mecho "🕷️ Running OWASP ZAP comprehensive baseline scan with active rules..."[0m
+2025-09-14T12:23:52.5324662Z [36;1m[0m
+2025-09-14T12:23:52.5324891Z [36;1m# Create proper permissions and directories for ZAP[0m
+2025-09-14T12:23:52.5325242Z [36;1mmkdir -p ./zap-reports && chmod 777 ./zap-reports[0m
+2025-09-14T12:23:52.5325514Z [36;1m[0m
+2025-09-14T12:23:52.5325742Z [36;1m# Create ZAP rules file with proper tab-separated format[0m
+2025-09-14T12:23:52.5326046Z [36;1mmkdir -p .zap[0m
+2025-09-14T12:23:52.5326257Z [36;1mcat > .zap/rules.tsv << 'EOF'[0m
+2025-09-14T12:23:52.5326940Z [36;1m# Enable all security rules for comprehensive scanning (TAB separated!)[0m
+2025-09-14T12:23:52.5327361Z [36;1m10015 WARN    Incomplete or No Cache-control Header Set[0m
+2025-09-14T12:23:52.5327896Z [36;1m10020 WARN    Missing Anti-clickjacking Header[0m
+2025-09-14T12:23:52.5328233Z [36;1m10021 WARN    X-Content-Type-Options Header Missing[0m
+2025-09-14T12:23:52.5328596Z [36;1m10038 WARN    Content Security Policy (CSP) Header Not Set[0m
+2025-09-14T12:23:52.5328946Z [36;1m10054 WARN    Cookie with SameSite Attribute None[0m
+2025-09-14T12:23:52.5329248Z [36;1m10096 WARN    Timestamp Disclosure - Unix[0m
+2025-09-14T12:23:52.5329517Z [36;1m40018 WARN    SQL Injection[0m
+2025-09-14T12:23:52.5329772Z [36;1m40019 WARN    SQL Injection - MySQL[0m
+2025-09-14T12:23:52.5330050Z [36;1m40020 WARN    SQL Injection - PostgreSQL[0m
+2025-09-14T12:23:52.5330323Z [36;1m40021 WARN    SQL Injection - SQLite[0m
+2025-09-14T12:23:52.5330587Z [36;1m40022 WARN    SQL Injection - Oracle[0m
+2025-09-14T12:23:52.5330849Z [36;1m40024 WARN    SQL Injection - MsSQL[0m
+2025-09-14T12:23:52.5331118Z [36;1m40025 WARN    Cross Site Scripting (XSS)[0m
+2025-09-14T12:23:52.5331425Z [36;1m40026 WARN    Cross Site Scripting (XSS) - Stored[0m
+2025-09-14T12:23:52.5331754Z [36;1m40027 WARN    Cross Site Scripting (XSS) - Reflected[0m
+2025-09-14T12:23:52.5332060Z [36;1m90001 WARN    Insecure JSF ViewState[0m
+2025-09-14T12:23:52.5332320Z [36;1m90019 WARN    Server Side Include[0m
+2025-09-14T12:23:52.5332593Z [36;1m90020 WARN    Remote OS Command Injection[0m
+2025-09-14T12:23:52.5332855Z [36;1m90021 WARN    XPath Injection[0m
+2025-09-14T12:23:52.5333126Z [36;1m90022 WARN    Application Error Disclosure[0m
+2025-09-14T12:23:52.5333575Z [36;1m90023 WARN    XML External Entity Attack[0m
+2025-09-14T12:23:52.5333852Z [36;1m90024 WARN    Generic Padding Oracle[0m
+2025-09-14T12:23:52.5334130Z [36;1m90025 WARN    Expression Language Injection[0m
+2025-09-14T12:23:52.5334421Z [36;1m90026 WARN    SOAP Action Spoofing[0m
+2025-09-14T12:23:52.5334675Z [36;1m90027 WARN    Cookie Slack Detector[0m
+2025-09-14T12:23:52.5334939Z [36;1m90028 WARN    Insecure Authentication[0m
+2025-09-14T12:23:52.5335206Z [36;1m90029 WARN    LDAP Injection[0m
+2025-09-14T12:23:52.5335432Z [36;1mEOF[0m
+2025-09-14T12:23:52.5335600Z [36;1m[0m
+2025-09-14T12:23:52.5335818Z [36;1m# Run comprehensive ZAP scan using Docker directly[0m
+2025-09-14T12:23:52.5336188Z [36;1mecho "🎯 Running ZAP baseline scan on public endpoints..."[0m
+2025-09-14T12:23:52.5336633Z [36;1mdocker run --rm \[0m
+2025-09-14T12:23:52.5336856Z [36;1m  --network host \[0m
+2025-09-14T12:23:52.5337101Z [36;1m  --user $(id -u):$(id -g) \[0m
+2025-09-14T12:23:52.5337415Z [36;1m  -v $(pwd)/zap-reports:/zap/wrk/:rw \[0m
+2025-09-14T12:23:52.5337683Z [36;1m  zaproxy/zap-stable:latest \[0m
+2025-09-14T12:23:52.5337934Z [36;1m  zap-baseline.py \[0m
+2025-09-14T12:23:52.5338168Z [36;1m  -t http://localhost:5000 \[0m
+2025-09-14T12:23:52.5338447Z [36;1m  -r OWASP-ZAP-Security-Report.html \[0m
+2025-09-14T12:23:52.5338735Z [36;1m  -J OWASP-ZAP-Security-Report.json \[0m
+2025-09-14T12:23:52.5338985Z [36;1m  -a \[0m
+2025-09-14T12:23:52.5339160Z [36;1m  -j \[0m
+2025-09-14T12:23:52.5339326Z [36;1m  -I \[0m
+2025-09-14T12:23:52.5339492Z [36;1m  -l WARN \[0m
+2025-09-14T12:23:52.5339725Z [36;1m  -T 5 || echo "ZAP scan completed with findings"[0m
+2025-09-14T12:23:52.5339988Z [36;1m[0m
+2025-09-14T12:23:52.5340239Z [36;1m# Generate additional comprehensive scan using API scan mode[0m
+2025-09-14T12:23:52.5340635Z [36;1mecho "🔌 Running additional API-focused security scan..."[0m
+2025-09-14T12:23:52.5340985Z [36;1m# Check if OpenAPI/Swagger endpoint exists[0m
+2025-09-14T12:23:52.5341431Z [36;1mif curl -s http://localhost:5000/api/swagger 2>/dev/null | grep -q "openapi\|swagger"; then[0m
+2025-09-14T12:23:52.5341881Z [36;1m  echo "📋 Found OpenAPI/Swagger documentation"[0m
+2025-09-14T12:23:52.5342155Z [36;1m  docker run --rm \[0m
+2025-09-14T12:23:52.5342374Z [36;1m    --network host \[0m
+2025-09-14T12:23:52.5342602Z [36;1m    --user $(id -u):$(id -g) \[0m
+2025-09-14T12:23:52.5342868Z [36;1m    -v $(pwd)/zap-reports:/zap/wrk/:rw \[0m
+2025-09-14T12:23:52.5343276Z [36;1m    zaproxy/zap-stable:latest \[0m
+2025-09-14T12:23:52.5343524Z [36;1m    zap-api-scan.py \[0m
+2025-09-14T12:23:52.5343781Z [36;1m    -t http://localhost:5000/api/swagger \[0m
+2025-09-14T12:23:52.5344047Z [36;1m    -f openapi \[0m
+2025-09-14T12:23:52.5344278Z [36;1m    -r API-Security-Report.html \[0m
+2025-09-14T12:23:52.5344554Z [36;1m    -J API-Security-Report.json \[0m
+2025-09-14T12:23:52.5344819Z [36;1m    -T 3 || echo "API scan completed"[0m
+2025-09-14T12:23:52.5345058Z [36;1melse[0m
+2025-09-14T12:23:52.5345333Z [36;1m  echo "📋 No OpenAPI documentation found, running basic API scan"[0m
+2025-09-14T12:23:52.5345714Z [36;1m  # Run a basic baseline scan on API endpoints instead[0m
+2025-09-14T12:23:52.5346005Z [36;1m  docker run --rm \[0m
+2025-09-14T12:23:52.5346224Z [36;1m    --network host \[0m
+2025-09-14T12:23:52.5346697Z [36;1m    --user $(id -u):$(id -g) \[0m
+2025-09-14T12:23:52.5346964Z [36;1m    -v $(pwd)/zap-reports:/zap/wrk/:rw \[0m
+2025-09-14T12:23:52.5347238Z [36;1m    zaproxy/zap-stable:latest \[0m
+2025-09-14T12:23:52.5347486Z [36;1m    zap-baseline.py \[0m
+2025-09-14T12:23:52.5347734Z [36;1m    -t http://localhost:5000/api \[0m
+2025-09-14T12:23:52.5348007Z [36;1m    -r API-Security-Report.html \[0m
+2025-09-14T12:23:52.5348273Z [36;1m    -J API-Security-Report.json \[0m
+2025-09-14T12:23:52.5348504Z [36;1m    -I \[0m
+2025-09-14T12:23:52.5348706Z [36;1m    -T 3 || echo "API scan completed"[0m
+2025-09-14T12:23:52.5348949Z [36;1mfi[0m
+2025-09-14T12:23:52.5349246Z [36;1m[0m
+2025-09-14T12:23:52.5349484Z [36;1m# Verify files were created in the zap-reports directory[0m
+2025-09-14T12:23:52.5349809Z [36;1mecho "📋 Verifying report files..."[0m
+2025-09-14T12:23:52.5350290Z [36;1mls -la ./zap-reports/*.html ./zap-reports/*.json 2>/dev/null || echo "No report files found in zap-reports directory"[0m
+2025-09-14T12:23:52.5350730Z [36;1m[0m
+2025-09-14T12:23:52.5350984Z [36;1m# Copy reports to current directory for legacy script compatibility[0m
+2025-09-14T12:23:52.5351409Z [36;1mif [ -f "./zap-reports/OWASP-ZAP-Security-Report.html" ]; then[0m
+2025-09-14T12:23:52.5351791Z [36;1m  cp ./zap-reports/OWASP-ZAP-Security-Report.html ./[0m
+2025-09-14T12:23:52.5352149Z [36;1m  echo "✅ Main ZAP HTML report copied from zap-reports"[0m
+2025-09-14T12:23:52.5352435Z [36;1mfi[0m
+2025-09-14T12:23:52.5352680Z [36;1mif [ -f "./zap-reports/OWASP-ZAP-Security-Report.json" ]; then[0m
+2025-09-14T12:23:52.5353055Z [36;1m  cp ./zap-reports/OWASP-ZAP-Security-Report.json ./[0m
+2025-09-14T12:23:52.5353408Z [36;1m  echo "✅ Main ZAP JSON report copied from zap-reports"[0m
+2025-09-14T12:23:52.5353683Z [36;1mfi[0m
+2025-09-14T12:23:52.5353908Z [36;1mif [ -f "./zap-reports/API-Security-Report.html" ]; then[0m
+2025-09-14T12:23:52.5354252Z [36;1m  cp ./zap-reports/API-Security-Report.html ./[0m
+2025-09-14T12:23:52.5354577Z [36;1m  echo "✅ API HTML report copied from zap-reports"[0m
+2025-09-14T12:23:52.5354849Z [36;1mfi[0m
+2025-09-14T12:23:52.5355102Z [36;1mif [ -f "./zap-reports/API-Security-Report.json" ]; then[0m
+2025-09-14T12:23:52.5355429Z [36;1m  cp ./zap-reports/API-Security-Report.json ./[0m
+2025-09-14T12:23:52.5355740Z [36;1m  echo "✅ API JSON report copied from zap-reports"[0m
+2025-09-14T12:23:52.5356006Z [36;1mfi[0m
+2025-09-14T12:23:52.5356167Z [36;1m[0m
+2025-09-14T12:23:52.5356453Z [36;1m# Display file sizes and content summary[0m
+2025-09-14T12:23:52.5356726Z [36;1mfor file in *.html *.json; do[0m
+2025-09-14T12:23:52.5356969Z [36;1m  if [ -f "$file" ]; then[0m
+2025-09-14T12:23:52.5357207Z [36;1m    SIZE=$(wc -c < "$file")[0m
+2025-09-14T12:23:52.5357448Z [36;1m    echo "✅ $file created: $SIZE bytes"[0m
+2025-09-14T12:23:52.5357715Z [36;1m    if [ "$SIZE" -gt 1000 ]; then[0m
+2025-09-14T12:23:52.5357986Z [36;1m      echo "📊 $file appears to contain real data"[0m
+2025-09-14T12:23:52.5358246Z [36;1m    else[0m
+2025-09-14T12:23:52.5358457Z [36;1m      echo "⚠️ $file may be empty or minimal"[0m
+2025-09-14T12:23:52.5358826Z [36;1m    fi[0m
+2025-09-14T12:23:52.5358997Z [36;1m  fi[0m
+2025-09-14T12:23:52.5359163Z [36;1mdone[0m
+2025-09-14T12:23:52.5359328Z [36;1m[0m
+2025-09-14T12:23:52.5359527Z [36;1mecho "status=completed" >> $GITHUB_OUTPUT[0m
+2025-09-14T12:23:52.5389781Z shell: /usr/bin/bash -e {0}
+2025-09-14T12:23:52.5390004Z env:
+2025-09-14T12:23:52.5390186Z   NODE_VERSION: 20
+2025-09-14T12:23:52.5390387Z   DOCKER_REGISTRY: docker.io
+2025-09-14T12:23:52.5390717Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T12:23:52.5390925Z   VERSION: 1.0.0
+2025-09-14T12:23:52.5391120Z   APP_PID: 2320
+2025-09-14T12:23:52.5391305Z ##[endgroup]
+2025-09-14T12:23:52.5443929Z ⚡ Running comprehensive OWASP ZAP active scan...
+2025-09-14T12:23:52.5457274Z 🔍 Checking if application is accessible...
+2025-09-14T12:23:52.5559210Z ✅ Application is accessible at localhost:5000
+2025-09-14T12:23:52.5563606Z 🧪 Testing application endpoints...
+2025-09-14T12:23:52.5648284Z <!DOCTYPE html>
+2025-09-14T12:23:52.5649526Z <html lang="en">
+2025-09-14T12:23:52.5650171Z   <head>
+2025-09-14T12:23:52.5650565Z     <script type="module">
+2025-09-14T12:23:52.5651135Z import { createHotContext } from "/@vite/client";
+2025-09-14T12:23:52.5651878Z const hot = createHotContext("/__dummy__runtime-error-plugin");
+2025-09-14T12:23:52.5652296Z 
+2025-09-14T12:23:52.5652487Z function sendError(error) {
+2025-09-14T12:23:52.5652926Z   if (!(error instanceof Error)) {
+2025-09-14T12:23:52.5653421Z     error = new Error("(unknown runtime error)");
+2025-09-14T12:23:52.5746704Z {"message":"Unauthorized - Please log in"}🕷️ Running OWASP ZAP comprehensive baseline scan with active rules...
+2025-09-14T12:23:52.5794761Z 🎯 Running ZAP baseline scan on public endpoints...
+2025-09-14T12:23:53.5127587Z Unable to find image 'zaproxy/zap-stable:latest' locally
+2025-09-14T12:23:54.6257766Z latest: Pulling from zaproxy/zap-stable
+2025-09-14T12:23:54.8860087Z b1badc6e5066: Pulling fs layer
+2025-09-14T12:23:54.8860891Z bb475c270cbf: Pulling fs layer
+2025-09-14T12:23:54.8861430Z 33e6e6c02db4: Pulling fs layer
+2025-09-14T12:23:54.8861989Z 5871f562777e: Pulling fs layer
+2025-09-14T12:23:54.8862491Z 1d476b7eea97: Pulling fs layer
+2025-09-14T12:23:54.8862975Z 6f9bed2d931b: Pulling fs layer
+2025-09-14T12:23:54.8863488Z 4f4fb700ef54: Pulling fs layer
+2025-09-14T12:23:54.8863999Z 82b6ef035e3a: Pulling fs layer
+2025-09-14T12:23:54.8864471Z caf093162ffa: Pulling fs layer
+2025-09-14T12:23:54.8864974Z 0fd8d0b1c1f7: Pulling fs layer
+2025-09-14T12:23:54.8865440Z bb567f50acd3: Pulling fs layer
+2025-09-14T12:23:54.8865769Z a82d696cb9e7: Pulling fs layer
+2025-09-14T12:23:54.8866178Z 96a9cca1896d: Pulling fs layer
+2025-09-14T12:23:54.8866772Z f506ebaa131e: Pulling fs layer
+2025-09-14T12:23:54.8867103Z 331a02235b77: Pulling fs layer
+2025-09-14T12:23:54.8867417Z 8551e6de8d8c: Pulling fs layer
+2025-09-14T12:23:54.8867717Z f2749b8c3134: Pulling fs layer
+2025-09-14T12:23:54.8868022Z 8d693743bcfe: Pulling fs layer
+2025-09-14T12:23:54.8868326Z f709aaf2315e: Pulling fs layer
+2025-09-14T12:23:54.8868630Z 87e2dfe23d3c: Pulling fs layer
+2025-09-14T12:23:54.8868920Z 5871f562777e: Waiting
+2025-09-14T12:23:54.8869166Z 1d476b7eea97: Waiting
+2025-09-14T12:23:54.8869408Z 6f9bed2d931b: Waiting
+2025-09-14T12:23:54.8869648Z 4f4fb700ef54: Waiting
+2025-09-14T12:23:54.8869890Z 82b6ef035e3a: Waiting
+2025-09-14T12:23:54.8870120Z 8551e6de8d8c: Waiting
+2025-09-14T12:23:54.8870363Z caf093162ffa: Waiting
+2025-09-14T12:23:54.8870605Z 0fd8d0b1c1f7: Waiting
+2025-09-14T12:23:54.8870924Z bb567f50acd3: Waiting
+2025-09-14T12:23:54.8871300Z a82d696cb9e7: Waiting
+2025-09-14T12:23:54.8871669Z f2749b8c3134: Waiting
+2025-09-14T12:23:54.8872008Z 8d693743bcfe: Waiting
+2025-09-14T12:23:54.8872249Z 96a9cca1896d: Waiting
+2025-09-14T12:23:54.8872486Z f709aaf2315e: Waiting
+2025-09-14T12:23:54.8872726Z f506ebaa131e: Waiting
+2025-09-14T12:23:54.8872957Z 87e2dfe23d3c: Waiting
+2025-09-14T12:23:54.8873192Z 331a02235b77: Waiting
+2025-09-14T12:23:55.3307316Z b1badc6e5066: Verifying Checksum
+2025-09-14T12:23:55.3307933Z b1badc6e5066: Download complete
+2025-09-14T12:23:55.5828372Z 5871f562777e: Verifying Checksum
+2025-09-14T12:23:55.5828994Z 5871f562777e: Download complete
+2025-09-14T12:23:55.6148822Z 33e6e6c02db4: Verifying Checksum
+2025-09-14T12:23:55.6149485Z 33e6e6c02db4: Download complete
+2025-09-14T12:23:55.8720978Z 1d476b7eea97: Verifying Checksum
+2025-09-14T12:23:55.8721636Z 1d476b7eea97: Download complete
+2025-09-14T12:23:55.8880868Z 6f9bed2d931b: Download complete
+2025-09-14T12:23:56.1355658Z 4f4fb700ef54: Download complete
+2025-09-14T12:23:56.1629791Z 82b6ef035e3a: Download complete
+2025-09-14T12:23:56.5558982Z b1badc6e5066: Pull complete
+2025-09-14T12:23:56.8222960Z 0fd8d0b1c1f7: Verifying Checksum
+2025-09-14T12:23:56.8223554Z 0fd8d0b1c1f7: Download complete
+2025-09-14T12:23:57.0862304Z bb567f50acd3: Verifying Checksum
+2025-09-14T12:23:57.0862960Z bb567f50acd3: Download complete
+2025-09-14T12:23:57.3429299Z a82d696cb9e7: Download complete
+2025-09-14T12:23:57.5974646Z 96a9cca1896d: Verifying Checksum
+2025-09-14T12:23:57.5975332Z 96a9cca1896d: Download complete
+2025-09-14T12:23:57.8655154Z f506ebaa131e: Verifying Checksum
+2025-09-14T12:23:57.8657822Z f506ebaa131e: Download complete
+2025-09-14T12:23:58.1231541Z 331a02235b77: Verifying Checksum
+2025-09-14T12:23:58.1232540Z 331a02235b77: Download complete
+2025-09-14T12:23:58.4229825Z 8551e6de8d8c: Verifying Checksum
+2025-09-14T12:23:58.4232724Z 8551e6de8d8c: Download complete
+2025-09-14T12:23:58.6898969Z f2749b8c3134: Download complete
+2025-09-14T12:23:58.9675190Z 8d693743bcfe: Download complete
+2025-09-14T12:23:58.9921069Z bb475c270cbf: Verifying Checksum
+2025-09-14T12:23:58.9922303Z bb475c270cbf: Download complete
+2025-09-14T12:23:59.1247229Z caf093162ffa: Verifying Checksum
+2025-09-14T12:23:59.1248108Z caf093162ffa: Download complete
+2025-09-14T12:23:59.2340488Z 87e2dfe23d3c: Verifying Checksum
+2025-09-14T12:23:59.2341640Z 87e2dfe23d3c: Download complete
+2025-09-14T12:23:59.2582752Z f709aaf2315e: Verifying Checksum
+2025-09-14T12:23:59.2583524Z f709aaf2315e: Download complete
+2025-09-14T12:24:13.6182925Z bb475c270cbf: Pull complete
+2025-09-14T12:24:16.5080744Z 33e6e6c02db4: Pull complete
+2025-09-14T12:24:16.5223683Z 5871f562777e: Pull complete
+2025-09-14T12:24:16.5309604Z 1d476b7eea97: Pull complete
+2025-09-14T12:24:16.5392692Z 6f9bed2d931b: Pull complete
+2025-09-14T12:24:16.5482948Z 4f4fb700ef54: Pull complete
+2025-09-14T12:24:16.5586119Z 82b6ef035e3a: Pull complete
+2025-09-14T12:24:19.2241348Z caf093162ffa: Pull complete
+2025-09-14T12:24:19.4218653Z 0fd8d0b1c1f7: Pull complete
+2025-09-14T12:24:19.4368565Z bb567f50acd3: Pull complete
+2025-09-14T12:24:19.4483578Z a82d696cb9e7: Pull complete
+2025-09-14T12:24:19.4578784Z 96a9cca1896d: Pull complete
+2025-09-14T12:24:19.4716780Z f506ebaa131e: Pull complete
+2025-09-14T12:24:19.4853793Z 331a02235b77: Pull complete
+2025-09-14T12:24:19.5086816Z 8551e6de8d8c: Pull complete
+2025-09-14T12:24:19.5190514Z f2749b8c3134: Pull complete
+2025-09-14T12:24:19.5303285Z 8d693743bcfe: Pull complete
+2025-09-14T12:24:19.5411351Z f709aaf2315e: Pull complete
+2025-09-14T12:24:19.5492600Z 87e2dfe23d3c: Pull complete
+2025-09-14T12:24:19.5536588Z Digest: sha256:9f79caa06087691a90ebfdf0ee9dbf05df2238a8ad783e1892a439cfc0a9b63a
+2025-09-14T12:24:19.5550123Z Status: Downloaded newer image for zaproxy/zap-stable:latest
+2025-09-14T12:24:20.3550883Z 2025-09-14 12:24:20,354 Failed to start ZAP :(
+2025-09-14T12:24:20.4262671Z ZAP scan completed with findings
+2025-09-14T12:24:20.4264645Z 🔌 Running additional API-focused security scan...
+2025-09-14T12:24:20.4375610Z 📋 No OpenAPI documentation found, running basic API scan
+2025-09-14T12:24:20.7143185Z Traceback (most recent call last):
+2025-09-14T12:24:20.7143789Z Using the Automation Framework
+2025-09-14T12:24:20.7145058Z   File "/zap/zap-baseline.py", line 662, in <module>
+2025-09-14T12:24:20.7146866Z     main(sys.argv[1:])
+2025-09-14T12:24:20.7149344Z   File "/zap/zap-baseline.py", line 352, in main
+2025-09-14T12:24:20.7150275Z     with open(yaml_file, 'w') as yf:
+2025-09-14T12:24:20.7151028Z          ^^^^^^^^^^^^^^^^^^^^
+2025-09-14T12:24:20.7152388Z PermissionError: [Errno 13] Permission denied: '/home/zap/zap.yaml'
+2025-09-14T12:24:20.7730820Z API scan completed
+2025-09-14T12:24:20.7731653Z 📋 Verifying report files...
+2025-09-14T12:24:20.7746690Z No report files found in zap-reports directory
+2025-09-14T12:24:20.7833340Z ✅ components.json created: 459 bytes
+2025-09-14T12:24:20.7834233Z ⚠️ components.json may be empty or minimal
+2025-09-14T12:24:20.7848442Z ✅ package-lock.json created: 475668 bytes
+2025-09-14T12:24:20.7849348Z 📊 package-lock.json appears to contain real data
+2025-09-14T12:24:20.7864224Z ✅ package.json created: 4350 bytes
+2025-09-14T12:24:20.7865156Z 📊 package.json appears to contain real data
+2025-09-14T12:24:20.7879760Z ✅ tsconfig.json created: 657 bytes
+2025-09-14T12:24:20.7880535Z ⚠️ tsconfig.json may be empty or minimal
+2025-09-14T12:24:20.7926042Z ##[group]Run echo "📋 Organizing OWASP ZAP security reports..."
+2025-09-14T12:24:20.7926832Z [36;1mecho "📋 Organizing OWASP ZAP security reports..."[0m
+2025-09-14T12:24:20.7927130Z [36;1m[0m
+2025-09-14T12:24:20.7927332Z [36;1m# Ensure version folder exists[0m
+2025-09-14T12:24:20.7927648Z [36;1mmkdir -p "security-reports/v$VERSION/03-owasp-zap"[0m
+2025-09-14T12:24:20.7927937Z [36;1m[0m
+2025-09-14T12:24:20.7928128Z [36;1m# Check what files exist before moving[0m
+2025-09-14T12:24:20.7928404Z [36;1mecho "📂 Files in current directory:"[0m
+2025-09-14T12:24:20.7928752Z [36;1mls -la report*.* || echo "No report files found in current directory"[0m
+2025-09-14T12:24:20.7929065Z [36;1m[0m
+2025-09-14T12:24:20.7929319Z [36;1m# Move ZAP reports if they exist (check both naming conventions)[0m
+2025-09-14T12:24:20.7929692Z [36;1mif [ -f "OWASP-ZAP-Security-Report.html" ]; then[0m
+2025-09-14T12:24:20.7930269Z [36;1m  mv OWASP-ZAP-Security-Report.html "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html"[0m
+2025-09-14T12:24:20.7930791Z [36;1m  echo "✅ Main HTML report moved successfully"[0m
+2025-09-14T12:24:20.7931083Z [36;1melif [ -f "report_html.html" ]; then[0m
+2025-09-14T12:24:20.7931526Z [36;1m  mv report_html.html "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html"[0m
+2025-09-14T12:24:20.7931977Z [36;1m  echo "✅ HTML report moved successfully"[0m
+2025-09-14T12:24:20.7932231Z [36;1melse[0m
+2025-09-14T12:24:20.7932415Z [36;1m  echo "⚠️ HTML report not found"[0m
+2025-09-14T12:24:20.7932675Z [36;1m  # Create a basic fallback report[0m
+2025-09-14T12:24:20.7933079Z [36;1m  cat > "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html" << EOF[0m
+2025-09-14T12:24:20.7933480Z [36;1m<!DOCTYPE html>[0m
+2025-09-14T12:24:20.7933678Z [36;1m<html>[0m
+2025-09-14T12:24:20.7933930Z [36;1m<head><title>ZAP Security Report - v$VERSION</title></head>[0m
+2025-09-14T12:24:20.7934241Z [36;1m<body>[0m
+2025-09-14T12:24:20.7934447Z [36;1m  <h1>OWASP ZAP Security Report</h1>[0m
+2025-09-14T12:24:20.7934842Z [36;1m  <p>Report generation failed or scan completed without generating report files.</p>[0m
+2025-09-14T12:24:20.7935309Z [36;1m  <p>Please check the scan logs for more information.</p>[0m
+2025-09-14T12:24:20.7956343Z [36;1m  <p>Generated: $(date)</p>[0m
+2025-09-14T12:24:20.7956942Z [36;1m</body>[0m
+2025-09-14T12:24:20.7957250Z [36;1m</html>[0m
+2025-09-14T12:24:20.7957542Z [36;1mEOF[0m
+2025-09-14T12:24:20.7957785Z [36;1m  echo "📄 Created fallback HTML report"[0m
+2025-09-14T12:24:20.7958064Z [36;1mfi[0m
+2025-09-14T12:24:20.7958234Z [36;1m[0m
+2025-09-14T12:24:20.7958471Z [36;1mif [ -f "OWASP-ZAP-Security-Report.json" ]; then[0m
+2025-09-14T12:24:20.7959033Z [36;1m  mv OWASP-ZAP-Security-Report.json "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.json"[0m
+2025-09-14T12:24:20.7959574Z [36;1m  echo "✅ Main JSON report moved successfully"[0m
+2025-09-14T12:24:20.7959893Z [36;1melif [ -f "report_json.json" ]; then[0m
+2025-09-14T12:24:20.7960359Z [36;1m  mv report_json.json "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.json"[0m
+2025-09-14T12:24:20.7960835Z [36;1m  echo "✅ JSON report moved successfully"[0m
+2025-09-14T12:24:20.7961294Z [36;1melse[0m
+2025-09-14T12:24:20.7961497Z [36;1m  echo "⚠️ JSON report not found"[0m
+2025-09-14T12:24:20.7961757Z [36;1m  # Create basic fallback JSON[0m
+2025-09-14T12:24:20.7962413Z [36;1m  echo '{"alerts":[],"version":"'$VERSION'","timestamp":"'$(date -Iseconds)'","status":"scan_completed_no_data"}' > "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.json"[0m
+2025-09-14T12:24:20.7963079Z [36;1m  echo "📄 Created fallback JSON report"[0m
+2025-09-14T12:24:20.7963329Z [36;1mfi[0m
+2025-09-14T12:24:20.7963491Z [36;1m[0m
+2025-09-14T12:24:20.7963684Z [36;1m# Move API scan reports if they exist[0m
+2025-09-14T12:24:20.7963979Z [36;1mif [ -f "API-Security-Report.html" ]; then[0m
+2025-09-14T12:24:20.7964620Z [36;1m  mv API-Security-Report.html "security-reports/v$VERSION/03-owasp-zap/API-Security-Report.html"[0m
+2025-09-14T12:24:20.7965114Z [36;1m  echo "✅ API HTML report moved successfully"[0m
+2025-09-14T12:24:20.7965388Z [36;1mfi[0m
+2025-09-14T12:24:20.7965549Z [36;1m[0m
+2025-09-14T12:24:20.7965744Z [36;1mif [ -f "API-Security-Report.json" ]; then[0m
+2025-09-14T12:24:20.7966204Z [36;1m  mv API-Security-Report.json "security-reports/v$VERSION/03-owasp-zap/API-Security-Report.json"[0m
+2025-09-14T12:24:20.7967083Z [36;1m  echo "✅ API JSON report moved successfully"[0m
+2025-09-14T12:24:20.7967348Z [36;1mfi[0m
+2025-09-14T12:24:20.7967512Z [36;1m[0m
+2025-09-14T12:24:20.7967723Z [36;1mecho "✅ ZAP reports organized successfully"[0m
+2025-09-14T12:24:20.7968037Z [36;1mecho "📂 Final report directory contents:"[0m
+2025-09-14T12:24:20.7968367Z [36;1mls -la "security-reports/v$VERSION/03-owasp-zap/"[0m
+2025-09-14T12:24:20.7968653Z [36;1m[0m
+2025-09-14T12:24:20.7968847Z [36;1m# Display report summary[0m
+2025-09-14T12:24:20.7969259Z [36;1mif [ -f "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html" ]; then[0m
+2025-09-14T12:24:20.7969866Z [36;1m  HTML_SIZE=$(wc -c < "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html")[0m
+2025-09-14T12:24:20.7970366Z [36;1m  echo "✅ ZAP HTML report final size: $HTML_SIZE bytes"[0m
+2025-09-14T12:24:20.7970656Z [36;1mfi[0m
+2025-09-14T12:24:20.7970821Z [36;1m[0m
+2025-09-14T12:24:20.7971026Z [36;1mecho "status=completed" >> $GITHUB_OUTPUT[0m
+2025-09-14T12:24:20.8001674Z shell: /usr/bin/bash -e {0}
+2025-09-14T12:24:20.8001911Z env:
+2025-09-14T12:24:20.8002075Z   NODE_VERSION: 20
+2025-09-14T12:24:20.8002272Z   DOCKER_REGISTRY: docker.io
+2025-09-14T12:24:20.8002607Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T12:24:20.8002816Z   VERSION: 1.0.0
+2025-09-14T12:24:20.8002990Z   APP_PID: 2320
+2025-09-14T12:24:20.8003167Z ##[endgroup]
+2025-09-14T12:24:20.8053167Z 📋 Organizing OWASP ZAP security reports...
+2025-09-14T12:24:20.8065852Z 📂 Files in current directory:
+2025-09-14T12:24:20.8077341Z ls: cannot access 'report*.*': No such file or directory
+2025-09-14T12:24:20.8079486Z No report files found in current directory
+2025-09-14T12:24:20.8080130Z ⚠️ HTML report not found
+2025-09-14T12:24:20.8104454Z 📄 Created fallback HTML report
+2025-09-14T12:24:20.8105058Z ⚠️ JSON report not found
+2025-09-14T12:24:20.8118161Z 📄 Created fallback JSON report
+2025-09-14T12:24:20.8118852Z ✅ ZAP reports organized successfully
+2025-09-14T12:24:20.8119535Z 📂 Final report directory contents:
+2025-09-14T12:24:20.8131026Z total 16
+2025-09-14T12:24:20.8131487Z drwxr-xr-x 2 runner runner 4096 Sep 14 12:24 .
+2025-09-14T12:24:20.8131977Z drwxr-xr-x 3 runner runner 4096 Sep 14 12:23 ..
+2025-09-14T12:24:20.8132803Z -rw-r--r-- 1 runner runner  332 Sep 14 12:24 OWASP-ZAP-Security-Report.html
+2025-09-14T12:24:20.8134003Z -rw-r--r-- 1 runner runner  106 Sep 14 12:24 OWASP-ZAP-Security-Report.json
+2025-09-14T12:24:20.8149480Z ✅ ZAP HTML report final size: 332 bytes
+2025-09-14T12:24:20.8203548Z ##[group]Run actions/upload-artifact@v4
+2025-09-14T12:24:20.8203820Z with:
+2025-09-14T12:24:20.8204028Z   name: 03-owasp-zap-security-report-v1.0.0
+2025-09-14T12:24:20.8204326Z   path: security-reports/v1.0.0/03-owasp-zap/
+2025-09-14T12:24:20.8204764Z   retention-days: 30
+2025-09-14T12:24:20.8204966Z   if-no-files-found: warn
+2025-09-14T12:24:20.8205174Z   compression-level: 6
+2025-09-14T12:24:20.8205367Z   overwrite: false
+2025-09-14T12:24:20.8205554Z   include-hidden-files: false
+2025-09-14T12:24:20.8205762Z env:
+2025-09-14T12:24:20.8205920Z   NODE_VERSION: 20
+2025-09-14T12:24:20.8206104Z   DOCKER_REGISTRY: docker.io
+2025-09-14T12:24:20.8206748Z   IMAGE_NAME: ***/whoopspay
+2025-09-14T12:24:20.8206976Z   VERSION: 1.0.0
+2025-09-14T12:24:20.8207155Z   APP_PID: 2320
+2025-09-14T12:24:20.8207327Z ##[endgroup]
+2025-09-14T12:24:21.0368726Z With the provided path, there will be 2 files uploaded
+2025-09-14T12:24:21.0375670Z Artifact name is valid!
+2025-09-14T12:24:21.0376642Z Root directory input is valid!
+2025-09-14T12:24:21.3613298Z Beginning upload of artifact content to blob storage
+2025-09-14T12:24:21.7137496Z Uploaded bytes 642
+2025-09-14T12:24:21.8065498Z Finished uploading artifact content to blob storage!
+2025-09-14T12:24:21.8068902Z SHA256 digest of uploaded artifact zip is fc4671045170f8e4f9dd3d1ccea97a4d4c6b5df2948cddfb07a5cdbbc31cbdd7
+2025-09-14T12:24:21.8071490Z Finalizing artifact upload
+2025-09-14T12:24:21.9667187Z Artifact 03-owasp-zap-security-report-v1.0.0.zip successfully finalized. Artifact ID 4006273511
+2025-09-14T12:24:21.9668541Z Artifact 03-owasp-zap-security-report-v1.0.0 has been successfully uploaded! Final size is 642 bytes. Artifact ID is 4006273511
+2025-09-14T12:24:21.9676783Z Artifact download URL: https://github.com/khajdari/WhoopsPay/actions/runs/17711070802/artifacts/4006273511
+2025-09-14T12:24:21.9822459Z Post job cleanup.
+2025-09-14T12:24:22.1348398Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-0cff4e10f1fa11b83775b02b67f4a898066ab13058512c37b16bbff72bf89e9a, not saving cache.
+2025-09-14T12:24:22.1449446Z Post job cleanup.
+2025-09-14T12:24:22.2386145Z [command]/usr/bin/git version
+2025-09-14T12:24:22.2422451Z git version 2.51.0
+2025-09-14T12:24:22.2479473Z Temporarily overriding HOME='/home/runner/work/_temp/04e63977-8604-4574-b20a-fe37f3b50074' before making global git config changes
+2025-09-14T12:24:22.2481830Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-14T12:24:22.2487436Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/WhoopsPay/WhoopsPay
+2025-09-14T12:24:22.2532850Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-14T12:24:22.2568055Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-14T12:24:22.2816744Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-14T12:24:22.2840349Z http.https://github.com/.extraheader
+2025-09-14T12:24:22.2853291Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-09-14T12:24:22.2887291Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-14T12:24:22.3219981Z Evaluate and set job outputs
+2025-09-14T12:24:22.3225432Z Set output 'zap-status'
+2025-09-14T12:24:22.3227718Z Cleaning up orphan processes
+2025-09-14T12:24:22.3536592Z Terminate orphan process: pid (2320) (npm run dev)
+2025-09-14T12:24:22.3582732Z Terminate orphan process: pid (2333) (sh)
+2025-09-14T12:24:22.3605443Z Terminate orphan process: pid (2334) (node)
+2025-09-14T12:24:22.3637685Z Terminate orphan process: pid (2345) (node)
+2025-09-14T12:24:22.3672691Z Terminate orphan process: pid (2358) (esbuild)
+2025-09-14T12:24:22.3707471Z Terminate orphan process: pid (2366) (esbuild)
+2025-09-14T12:24:22.3741536Z Terminate orphan process: pid (2373) (esbuild)
+2025-09-14T12:24:22.3775546Z Terminate orphan process: pid (2380) (esbuild)
