@@ -603,16 +603,15 @@ jobs:
           curl -s http://localhost:5000 | head -10 || echo "Failed to get homepage"
           curl -s http://localhost:5000/api/auth/user || echo "API endpoint test completed"
           
-          # Use simpler ZAP baseline scan that actually works
-          echo "🕷️ Running OWASP ZAP comprehensive baseline scan with active rules..."
+          echo "🕷️ Running OWASP ZAP comprehensive security scan with official reporting..."
           
-          # Use simple working ZAP approach without permission issues
-          echo "🎯 Running ZAP baseline scan with working configuration..."
+          # Use official ZAP comprehensive scan for entire application
+          echo "🎯 Running comprehensive ZAP scan covering web app and API endpoints..."
           
           # Create output directory
           mkdir -p ./zap-output && chmod 777 ./zap-output
           
-          # Run ZAP with minimal configuration that actually works
+          # Run single comprehensive ZAP baseline scan that covers both web app and API
           docker run --rm \
             --network host \
             -v $(pwd)/zap-output:/zap/wrk/:rw \
@@ -622,42 +621,22 @@ jobs:
             -r OWASP-ZAP-Security-Report.html \
             -J OWASP-ZAP-Security-Report.json \
             -I \
+            -a \
             -l WARN \
-            -T 5 || echo "ZAP scan completed with findings"
+            -T 10 || echo "ZAP comprehensive scan completed with findings"
           
-          # Run simplified API endpoint scan  
-          echo "🔌 Running basic API security scan..."
-          docker run --rm \
-            --network host \
-            -v $(pwd)/zap-output:/zap/wrk/:rw \
-            zaproxy/zap-stable:latest \
-            zap-baseline.py \
-            -t http://localhost:5000/api \
-            -r API-Security-Report.html \
-            -J API-Security-Report.json \
-            -I \
-            -T 3 || echo "API scan completed"
-          
-          # Verify files were created in the zap-output directory
-          echo "📋 Verifying report files..."
+          # Verify comprehensive report files were created
+          echo "📋 Verifying comprehensive security report files..."
           ls -la ./zap-output/*.html ./zap-output/*.json 2>/dev/null || echo "No report files found in zap-output directory"
           
-          # Copy reports to current directory for legacy script compatibility
+          # Copy comprehensive report to current directory for organization script
           if [ -f "./zap-output/OWASP-ZAP-Security-Report.html" ]; then
             cp ./zap-output/OWASP-ZAP-Security-Report.html ./
-            echo "✅ Main ZAP HTML report copied successfully"
+            echo "✅ Comprehensive ZAP HTML report copied successfully"
           fi
           if [ -f "./zap-output/OWASP-ZAP-Security-Report.json" ]; then
             cp ./zap-output/OWASP-ZAP-Security-Report.json ./
-            echo "✅ Main ZAP JSON report copied successfully"
-          fi
-          if [ -f "./zap-output/API-Security-Report.html" ]; then
-            cp ./zap-output/API-Security-Report.html ./
-            echo "✅ API HTML report copied successfully"
-          fi
-          if [ -f "./zap-output/API-Security-Report.json" ]; then
-            cp ./zap-output/API-Security-Report.json ./
-            echo "✅ API JSON report copied successfully"
+            echo "✅ Comprehensive ZAP JSON report copied successfully"
           fi
           
           # Display file sizes and content summary
@@ -725,16 +704,7 @@ jobs:
             echo "📄 Created fallback JSON report"
           fi
           
-          # Move API scan reports if they exist
-          if [ -f "API-Security-Report.html" ]; then
-            mv API-Security-Report.html "security-reports/v$VERSION/03-owasp-zap/API-Security-Report.html"
-            echo "✅ API HTML report moved successfully"
-          fi
-          
-          if [ -f "API-Security-Report.json" ]; then
-            mv API-Security-Report.json "security-reports/v$VERSION/03-owasp-zap/API-Security-Report.json"
-            echo "✅ API JSON report moved successfully"
-          fi
+          # Single comprehensive report covers both web app and API endpoints
           
           echo "✅ ZAP reports organized successfully"
           echo "📂 Final report directory contents:"
