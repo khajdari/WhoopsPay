@@ -1,0 +1,9 @@
+# Exclude third-party juice-shop module from security linting
+# This module contains intentionally vulnerable code for educational purposes
+server/modules/juice-shop/**
+
+# Standard exclusions
+node_modules/
+dist/
+build/
+*.min.js

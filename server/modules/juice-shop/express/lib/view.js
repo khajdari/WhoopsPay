@@ -177,6 +177,8 @@ function tryStat(path) {
   try {
     return fs.statSync(path);
   } catch (e) {
+    // Intentionally ignoring stat error
+    void e;
     return undefined;
   }
 }

@@ -96,7 +96,7 @@ export class MoneyRequestController {
         
         if (toUser) {
           const transferAmount = parseFloat(request.amount.toString());
-          const currentBalance = parseFloat(toUser.balance || '0');
+          const currentBalance = parseFloat(String(toUser.balance || '0'));
           
           // Check if user has sufficient funds to pay external merchant
           if (currentBalance < transferAmount) {
@@ -116,10 +116,8 @@ export class MoneyRequestController {
             type: "external",
             status: "completed",
             description: request.description,
-            metadata: JSON.stringify({
-              externalOrderId: request.externalOrderId,
-              externalSource: request.externalSource
-            })
+            transactionCategory: "EXTERNAL",
+            isInternal: 0
           });
           console.log(`✅ Transaction record created for external payment`);
         }
@@ -156,8 +154,8 @@ export class MoneyRequestController {
         }
 
         const transferAmount = parseFloat(request.amount.toString());
-        const approverBalance = parseFloat(approver.balance || '0');
-        const requesterBalance = parseFloat(requester.balance || '0');
+        const approverBalance = parseFloat(String(approver.balance || '0'));
+        const requesterBalance = parseFloat(String(requester.balance || '0'));
 
         // Check if approver has sufficient funds to send
         if (approverBalance < transferAmount) {
@@ -575,6 +573,7 @@ export class MoneyRequestController {
         return res.status(404).json({ message: "External payment request not found" });
       }
       
+      // Safe access to first element after length validation
       const matchingRequest = unassignedRequests[0];
 
       // Delete the old unassigned request

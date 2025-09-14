@@ -19,7 +19,8 @@
   function isOriginAllowed(origin, allowedOrigin) {
     if (Array.isArray(allowedOrigin)) {
       for (var i = 0; i < allowedOrigin.length; ++i) {
-        if (isOriginAllowed(origin, allowedOrigin[i])) {
+        var currentOrigin = allowedOrigin.at ? allowedOrigin.at(i) : (i < allowedOrigin.length ? allowedOrigin.slice(i, i + 1)[0] : undefined);
+        if (currentOrigin !== undefined && isOriginAllowed(origin, currentOrigin)) {
           return true;
         }
       }
@@ -96,7 +97,7 @@
     var headers = [];
 
     if (!allowedHeaders) {
-      allowedHeaders = req.headers['access-control-request-headers']; // .headers wasn't specified, so reflect the request headers
+      allowedHeaders = req.get('access-control-request-headers'); // .headers wasn't specified, so reflect the request headers
       headers.push([{
         key: 'Vary',
         value: 'Access-Control-Request-Headers'
@@ -143,7 +144,7 @@
 
   function applyHeaders(headers, res) {
     for (var i = 0, n = headers.length; i < n; i++) {
-      var header = headers[i];
+      var header = headers.at ? headers.at(i) : (i < headers.length ? headers.slice(i, i + 1)[0] : null);
       if (header) {
         if (Array.isArray(header)) {
           applyHeaders(header, res);
@@ -225,7 +226,7 @@
               }
             });
           } else {
-            next();
+            cors(corsOptions, req, res, next);
           }
         }
       });

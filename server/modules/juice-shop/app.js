@@ -17,6 +17,28 @@ const products = [
 // Mock basket data (in-memory for demo)
 let baskets = {};
 
+// Security helper functions for safe object access
+function safeBasketGet(basketId) {
+  if (typeof basketId !== 'string') return [];
+  return Object.prototype.hasOwnProperty.call(baskets, basketId) ? 
+    Object.getOwnPropertyDescriptor(baskets, basketId)?.value : [];
+}
+
+function safeBasketSet(basketId, value) {
+  if (typeof basketId !== 'string') return;
+  Object.defineProperty(baskets, basketId, {
+    value: value,
+    writable: true,
+    enumerable: true,
+    configurable: true
+  });
+}
+
+function safeBasketHas(basketId) {
+  if (typeof basketId !== 'string') return false;
+  return Object.prototype.hasOwnProperty.call(baskets, basketId);
+}
+
 // Helper function to parse JSON body
 function parseBody(req) {
   return new Promise((resolve, reject) => {
@@ -45,8 +67,24 @@ function sendJSON(res, data, status = 200) {
   res.end(JSON.stringify(data));
 }
 
-// Helper function to serve static files
+// Helper function to serve static files with security validation
 function serveStatic(res, filePath) {
+  // Whitelist of allowed file paths for security
+  const allowedPaths = [
+    path.join(__dirname, 'public', 'index.html'),
+    path.join(__dirname, 'public', 'main.js'),
+    path.join(__dirname, 'public', 'style.css')
+  ];
+  
+  // Check if the requested file is in the whitelist
+  const normalizedPath = path.normalize(filePath);
+  if (!allowedPaths.includes(normalizedPath)) {
+    res.writeHead(403);
+    res.end('Access denied');
+    return;
+  }
+  
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- Safe: validated against whitelist
   fs.readFile(filePath, (err, data) => {
     if (err) {
       res.writeHead(404);
@@ -91,15 +129,15 @@ const server = http.createServer(async (req, res) => {
     }
     else if (pathname === '/api/BasketItems' && method === 'GET') {
       const basketId = parsedUrl.query.basketId || 'default';
-      const basketItems = baskets[basketId] || [];
+      const basketItems = safeBasketGet(basketId);
       sendJSON(res, { status: 'success', data: basketItems });
     }
     else if (pathname === '/api/BasketItems' && method === 'POST') {
       const body = await parseBody(req);
       const { ProductId, quantity = 1, basketId = 'default' } = body;
       
-      if (!baskets[basketId]) {
-        baskets[basketId] = [];
+      if (!safeBasketHas(basketId)) {
+        safeBasketSet(basketId, []);
       }
       
       const product = products.find(p => p.id === ProductId);
@@ -108,16 +146,19 @@ const server = http.createServer(async (req, res) => {
         return;
       }
       
-      const existingItem = baskets[basketId].find(item => item.ProductId === ProductId);
+      const currentBasket = safeBasketGet(basketId);
+      const existingItem = currentBasket.find(item => item.ProductId === ProductId);
       if (existingItem) {
         existingItem.quantity += quantity;
+        safeBasketSet(basketId, currentBasket);
       } else {
-        baskets[basketId].push({
+        currentBasket.push({
           id: Date.now(),
           ProductId,
           quantity,
           product
         });
+        safeBasketSet(basketId, currentBasket);
       }
       
       sendJSON(res, { status: 'success', data: { ProductId, quantity } });
@@ -126,8 +167,10 @@ const server = http.createServer(async (req, res) => {
       const itemId = parseInt(pathname.split('/')[3]);
       const basketId = parsedUrl.query.basketId || 'default';
       
-      if (baskets[basketId]) {
-        baskets[basketId] = baskets[basketId].filter(item => item.id !== itemId);
+      if (safeBasketHas(basketId)) {
+        const currentBasket = safeBasketGet(basketId);
+        const filteredBasket = currentBasket.filter(item => item.id !== itemId);
+        safeBasketSet(basketId, filteredBasket);
       }
       
       sendJSON(res, { status: 'success' });
@@ -135,7 +178,7 @@ const server = http.createServer(async (req, res) => {
     else if (pathname === '/api/checkout' && method === 'POST') {
       const body = await parseBody(req);
       const { basketId = 'default', paymentMethod } = body;
-      const basketItems = baskets[basketId] || [];
+      const basketItems = safeBasketGet(basketId);
       
       if (basketItems.length === 0) {
         sendJSON(res, { error: 'Empty basket' }, 400);
@@ -159,7 +202,6 @@ const server = http.createServer(async (req, res) => {
             cancelUrl: `${process.env.WHOOPSPAY_URL || 'http://localhost:5000'}/dashboard`
           };
           
-          const https = require('https');
           const postData = JSON.stringify(paymentData);
           
           const options = {
@@ -186,7 +228,7 @@ const server = http.createServer(async (req, res) => {
                 
                 if (whoopsPayRes.statusCode === 200) {
                   // Clear basket after successful payment request
-                  baskets[basketId] = [];
+                  safeBasketSet(basketId, []);
                   sendJSON(res, { 
                     status: 'success', 
                     message: 'Payment request sent to WhoopsPay',
@@ -197,7 +239,7 @@ const server = http.createServer(async (req, res) => {
                 } else {
                   sendJSON(res, { error: result.message || 'Payment failed' }, 400);
                 }
-              } catch (error) {
+              } catch {
                 sendJSON(res, { error: 'Payment service error' }, 500);
               }
             });
@@ -217,7 +259,7 @@ const server = http.createServer(async (req, res) => {
         }
       } else {
         // Simulate other payment methods
-        baskets[basketId] = [];
+        safeBasketSet(basketId, []);
         sendJSON(res, { 
           status: 'success', 
           message: 'Order completed successfully',
@@ -228,7 +270,7 @@ const server = http.createServer(async (req, res) => {
     }
     else if (pathname === '/webhook/payment-status' && method === 'POST') {
       const body = await parseBody(req);
-      const { orderId, status, transactionId } = body;
+      const { orderId, status } = body;
       console.log(`Payment webhook received: Order ${orderId} - Status: ${status}`);
       
       sendJSON(res, { status: 'received' });
