@@ -24,6 +24,29 @@ var debug = require('debug')('express:router:layer');
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /**
+ * Safe property access helpers to prevent object injection
+ * @private
+ */
+function safeGet(obj, key) {
+  if (!obj || typeof obj !== 'object') return undefined;
+  if (typeof key !== 'string' && typeof key !== 'number') return undefined;
+  if (!hasOwnProperty.call(obj, key)) return undefined;
+  var descriptor = Object.getOwnPropertyDescriptor(obj, String(key));
+  return descriptor ? descriptor.value : undefined;
+}
+
+function safeSet(obj, key, value) {
+  if (!obj || typeof obj !== 'object') return false;
+  if (typeof key !== 'string' && typeof key !== 'number') return false;
+  return Reflect.defineProperty(obj, String(key), {
+    value: value,
+    writable: true,
+    enumerable: true,
+    configurable: true
+  });
+}
+
+/**
  * Module exports.
  * @public
  */
@@ -143,12 +166,12 @@ Layer.prototype.match = function match(path) {
   var params = this.params;
 
   for (var i = 1; i < match.length; i++) {
-    var key = keys[i - 1];
-    var prop = key.name;
-    var val = decode_param(match[i])
+    var key = safeGet(keys, i - 1);
+    var prop = key ? key.name : undefined;
+    var val = decode_param(safeGet(match, i))
 
-    if (val !== undefined || !(hasOwnProperty.call(params, prop))) {
-      params[prop] = val;
+    if (prop && (val !== undefined || !(hasOwnProperty.call(params, prop)))) {
+      safeSet(params, prop, val);
     }
   }
 

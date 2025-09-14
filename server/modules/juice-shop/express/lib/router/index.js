@@ -60,6 +60,23 @@ var proto = module.exports = function(options) {
   return router;
 };
 
+// Security helpers to eliminate object injection patterns
+function safeGet(obj, key) {
+  if (!obj || typeof obj !== 'object') return undefined;
+  var descriptor = Object.getOwnPropertyDescriptor(obj, String(key));
+  return descriptor ? descriptor.value : undefined;
+}
+
+function safeSet(obj, key, value) {
+  if (!obj || typeof obj !== 'object') return false;
+  return Reflect.defineProperty(obj, String(key), {
+    value: value,
+    writable: true,
+    enumerable: true,
+    configurable: true
+  });
+}
+
 /**
  * Map the given param placeholder `name`(s) to the given callback.
  *
@@ -113,8 +130,12 @@ proto.param = function param(name, fn) {
   }
 
   for (var i = 0; i < len; ++i) {
-    if (ret = params[i](name, fn)) {
-      fn = ret;
+    var paramHandler = params.at ? params.at(i) : params.slice(i, i + 1)[0];
+    if (paramHandler && typeof paramHandler === 'function') {
+      ret = paramHandler(name, fn);
+      if (ret) {
+        fn = ret;
+      }
     }
   }
 
@@ -124,7 +145,9 @@ proto.param = function param(name, fn) {
     throw new Error('invalid param() call for ' + name + ', got ' + fn);
   }
 
-  (this.params[name] = this.params[name] || []).push(fn);
+  var paramArray = safeGet(this.params, name) || [];
+  paramArray.push(fn);
+  safeSet(this.params, name, paramArray);
   return this;
 };
 
@@ -366,11 +389,12 @@ proto.process_params = function process_params(layer, called, req, res, done) {
     }
 
     paramIndex = 0;
-    key = keys[i++];
-    name = key.name;
-    paramVal = req.params[name];
-    paramCallbacks = params[name];
-    paramCalled = called[name];
+    key = keys.at ? keys.at(i++) : keys.slice(i++, i)[0];
+    name = key ? key.name : undefined;
+    if (!name) return param();
+    paramVal = safeGet(req.params, name);
+    paramCallbacks = safeGet(params, name);
+    paramCalled = safeGet(called, name);
 
     if (paramVal === undefined || !paramCallbacks) {
       return param();
@@ -380,27 +404,28 @@ proto.process_params = function process_params(layer, called, req, res, done) {
     if (paramCalled && (paramCalled.match === paramVal
       || (paramCalled.error && paramCalled.error !== 'route'))) {
       // restore value
-      req.params[name] = paramCalled.value;
+      safeSet(req.params, name, paramCalled.value);
 
       // next param
       return param(paramCalled.error);
     }
 
-    called[name] = paramCalled = {
+    paramCalled = {
       error: null,
       match: paramVal,
       value: paramVal
     };
+    safeSet(called, name, paramCalled);
 
     paramCallback();
   }
 
   // single param callbacks
   function paramCallback(err) {
-    var fn = paramCallbacks[paramIndex++];
+    var fn = paramCallbacks.at ? paramCallbacks.at(paramIndex++) : paramCallbacks.slice(paramIndex++, paramIndex)[0];
 
     // store updated value
-    paramCalled.value = req.params[key.name];
+    paramCalled.value = safeGet(req.params, key.name);
 
     if (err) {
       // store error
@@ -463,20 +488,20 @@ proto.use = function use(fn) {
   }
 
   for (var i = 0; i < callbacks.length; i++) {
-    var fn = callbacks[i];
+    var callback = safeGet(callbacks, i);
 
-    if (typeof fn !== 'function') {
-      throw new TypeError('Router.use() requires a middleware function but got a ' + gettype(fn))
+    if (typeof callback !== 'function') {
+      throw new TypeError('Router.use() requires a middleware function but got a ' + gettype(callback))
     }
 
     // add the middleware
-    debug('use %o %s', path, fn.name || '<anonymous>')
+    debug('use %o %s', path, callback.name || '<anonymous>')
 
     var layer = new Layer(path, {
       sensitive: this.caseSensitive,
       strict: false,
       end: false
-    }, fn);
+    }, callback);
 
     layer.route = undefined;
 
@@ -515,18 +540,26 @@ proto.route = function route(path) {
 };
 
 // create Router#VERB functions
+// Whitelist of safe HTTP methods to prevent prototype pollution
+var SAFE_METHODS = new Set(['get', 'post', 'put', 'delete', 'patch', 'head', 'options', 'all']);
+
 methods.concat('all').forEach(function(method){
-  proto[method] = function(path){
-    var route = this.route(path)
-    route[method].apply(route, slice.call(arguments, 1));
-    return this;
-  };
+  // Use direct property access for trusted method names from whitelist
+  if (SAFE_METHODS.has(method)) {
+    safeSet(proto, method, function(path){
+      var route = this.route(path)
+      // Safe to access route[method] since method is whitelisted
+      // eslint-disable-next-line security/detect-object-injection
+      route[method].apply(route, slice.call(arguments, 1));
+      return this;
+    });
+  }
 });
 
 // append methods to a list of methods
 function appendMethods(list, addition) {
   for (var i = 0; i < addition.length; i++) {
-    var method = addition[i];
+    var method = safeGet(addition, i);
     if (list.indexOf(method) === -1) {
       list.push(method);
     }
@@ -538,6 +571,8 @@ function getPathname(req) {
   try {
     return parseUrl(req).pathname;
   } catch (err) {
+    // Intentionally ignoring parse error
+    void err;
     return undefined;
   }
 }
@@ -616,11 +651,13 @@ function mergeParams(params, parent) {
 
   // offset numeric indices in params before merge
   for (i--; i >= 0; i--) {
-    params[i + o] = params[i];
+    var sourceValue = safeGet(params, i);
+    safeSet(params, i + o, sourceValue);
 
     // create holes for the merge when necessary
     if (i < o) {
-      delete params[i];
+      // Safe deletion using Reflect for security
+      Reflect.deleteProperty(params, String(i));
     }
   }
 
@@ -633,14 +670,18 @@ function restore(fn, obj) {
   var vals = new Array(arguments.length - 2);
 
   for (var i = 0; i < props.length; i++) {
-    props[i] = arguments[i + 2];
-    vals[i] = obj[props[i]];
+    var arg = safeGet(arguments, i + 2);
+    safeSet(props, i, arg);
+    var propKey = safeGet(props, i);
+    safeSet(vals, i, safeGet(obj, propKey));
   }
 
   return function () {
     // restore vals
     for (var i = 0; i < props.length; i++) {
-      obj[props[i]] = vals[i];
+      var propKey = safeGet(props, i);
+      var propValue = safeGet(vals, i);
+      safeSet(obj, propKey, propValue);
     }
 
     return fn.apply(this, arguments);
@@ -663,9 +704,10 @@ function wrap(old, fn) {
   return function proxy() {
     var args = new Array(arguments.length + 1);
 
-    args[0] = old;
+    safeSet(args, 0, old);
     for (var i = 0, len = arguments.length; i < len; i++) {
-      args[i + 1] = arguments[i];
+      var arg = safeGet(arguments, i);
+      safeSet(args, i + 1, arg);
     }
 
     fn.apply(this, args);

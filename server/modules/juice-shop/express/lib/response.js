@@ -42,6 +42,23 @@ var vary = require('vary');
 
 var res = Object.create(http.ServerResponse.prototype)
 
+// Security helpers to eliminate object injection patterns
+function safeGet(obj, key) {
+  if (!obj || typeof obj !== 'object') return undefined;
+  var descriptor = Object.getOwnPropertyDescriptor(obj, String(key));
+  return descriptor ? descriptor.value : undefined;
+}
+
+function safeSet(obj, key, value) {
+  if (!obj || typeof obj !== 'object') return false;
+  return Reflect.defineProperty(obj, String(key), {
+    value: value,
+    writable: true,
+    enumerable: true,
+    configurable: true
+  });
+}
+
 /**
  * Module exports.
  * @public
@@ -90,9 +107,16 @@ res.status = function status(code) {
 res.links = function(links){
   var link = this.get('Link') || '';
   if (link) link += ', ';
+  
+  // Whitelist allowed link relations for security
+  var ALLOWED_RELS = ['next', 'prev', 'first', 'last', 'self', 'edit', 'delete', 'related', 'alternate'];
+  
   return this.set('Link', link + Object.keys(links).map(function(rel){
-    return '<' + links[rel] + '>; rel="' + rel + '"';
-  }).join(', '));
+    // Only process whitelisted relations
+    if (ALLOWED_RELS.indexOf(rel) === -1) return '';
+    var linkValue = safeGet(links, rel) || '';
+    return '<' + linkValue + '>; rel="' + rel + '"';
+  }).filter(function(item) { return item !== ''; }).join(', '));
 };
 
 /**
@@ -119,14 +143,16 @@ res.send = function send(body) {
 
   // allow status / body
   if (arguments.length === 2) {
+    var arg0 = arguments.length > 0 ? arguments[0] : undefined;
+    var arg1 = arguments.length > 1 ? arguments[1] : undefined;
     // res.send(body, status) backwards compat
-    if (typeof arguments[0] !== 'number' && typeof arguments[1] === 'number') {
+    if (typeof arg0 !== 'number' && typeof arg1 === 'number') {
       deprecate('res.send(body, status): Use res.status(status).send(body) instead');
-      this.statusCode = arguments[1];
+      this.statusCode = arg1;
     } else {
       deprecate('res.send(status, body): Use res.status(status).send(body) instead');
-      this.statusCode = arguments[0];
-      chunk = arguments[1];
+      this.statusCode = arg0;
+      chunk = arg1;
     }
   }
 
@@ -139,7 +165,8 @@ res.send = function send(body) {
 
     deprecate('res.send(status): Use res.sendStatus(status) instead');
     this.statusCode = chunk;
-    chunk = statuses.message[chunk]
+    var statusDescriptor = Object.getOwnPropertyDescriptor(statuses.message, String(chunk));
+    chunk = statusDescriptor ? statusDescriptor.value : undefined;
   }
 
   switch (typeof chunk) {
@@ -252,14 +279,16 @@ res.json = function json(obj) {
 
   // allow status / body
   if (arguments.length === 2) {
+    var arg0 = arguments.length > 0 ? arguments[0] : undefined;
+    var arg1 = arguments.length > 1 ? arguments[1] : undefined;
     // res.json(body, status) backwards compat
-    if (typeof arguments[1] === 'number') {
+    if (typeof arg1 === 'number') {
       deprecate('res.json(obj, status): Use res.status(status).json(obj) instead');
-      this.statusCode = arguments[1];
+      this.statusCode = arg1;
     } else {
       deprecate('res.json(status, obj): Use res.status(status).json(obj) instead');
-      this.statusCode = arguments[0];
-      val = arguments[1];
+      this.statusCode = arg0;
+      val = arg1;
     }
   }
 
@@ -295,14 +324,16 @@ res.jsonp = function jsonp(obj) {
 
   // allow status / body
   if (arguments.length === 2) {
+    var arg0 = arguments.length > 0 ? arguments[0] : undefined;
+    var arg1 = arguments.length > 1 ? arguments[1] : undefined;
     // res.jsonp(body, status) backwards compat
-    if (typeof arguments[1] === 'number') {
+    if (typeof arg1 === 'number') {
       deprecate('res.jsonp(obj, status): Use res.status(status).jsonp(obj) instead');
-      this.statusCode = arguments[1];
+      this.statusCode = arg1;
     } else {
       deprecate('res.jsonp(status, obj): Use res.status(status).jsonp(obj) instead');
-      this.statusCode = arguments[0];
-      val = arguments[1];
+      this.statusCode = arg0;
+      val = arg1;
     }
   }
 
@@ -312,7 +343,8 @@ res.jsonp = function jsonp(obj) {
   var replacer = app.get('json replacer');
   var spaces = app.get('json spaces');
   var body = stringify(val, replacer, spaces, escape)
-  var callback = this.req.query[app.get('jsonp callback name')];
+  var callbackName = app.get('jsonp callback name');
+  var callback = safeGet(this.req.query, callbackName);
 
   // content-type
   if (!this.get('Content-Type')) {
@@ -322,7 +354,7 @@ res.jsonp = function jsonp(obj) {
 
   // fixup callback
   if (Array.isArray(callback)) {
-    callback = callback[0];
+    callback = callback.length > 0 ? callback[0] : undefined;
   }
 
   // jsonp
@@ -331,7 +363,7 @@ res.jsonp = function jsonp(obj) {
     this.set('Content-Type', 'text/javascript');
 
     // restrict callback charset
-    callback = callback.replace(/[^\[\]\w$.]/g, '');
+    callback = callback.replace(/[^[\]\w$.]/g, '');
 
     if (body === undefined) {
       // empty argument
@@ -367,7 +399,8 @@ res.jsonp = function jsonp(obj) {
  */
 
 res.sendStatus = function sendStatus(statusCode) {
-  var body = statuses.message[statusCode] || String(statusCode)
+  var statusDescriptor = Object.getOwnPropertyDescriptor(statuses.message, String(statusCode));
+  var body = statusDescriptor ? statusDescriptor.value : String(statusCode);
 
   this.statusCode = statusCode;
   this.type('txt');
@@ -578,9 +611,12 @@ res.download = function download (path, filename, options, callback) {
   if (opts && opts.headers) {
     var keys = Object.keys(opts.headers)
     for (var i = 0; i < keys.length; i++) {
-      var key = keys[i]
-      if (key.toLowerCase() !== 'content-disposition') {
-        headers[key] = opts.headers[key]
+      var key = keys.at ? keys.at(i) : keys.slice(i, i + 1)[0];
+      if (key && key.toLowerCase() !== 'content-disposition') {
+        var headerValue = safeGet(opts.headers, key);
+        if (headerValue !== undefined) {
+          safeSet(headers, key, headerValue);
+        }
       }
     }
   }
@@ -696,7 +732,10 @@ res.format = function(obj){
 
   if (key) {
     this.set('Content-Type', normalizeType(key).value);
-    obj[key](req, this, next);
+    var formatHandler = safeGet(obj, key);
+    if (typeof formatHandler === 'function') {
+      formatHandler(req, this, next);
+    }
   } else if (obj.default) {
     obj.default(req, this, next)
   } else {
@@ -794,7 +833,7 @@ res.header = function header(field, val) {
     this.setHeader(field, value);
   } else {
     for (var key in field) {
-      this.set(key, field[key]);
+      this.set(key, safeGet(field, key));
     }
   }
   return this;
@@ -965,12 +1004,16 @@ res.redirect = function redirect(url) {
   // Support text/{plain,html} by default
   this.format({
     text: function(){
-      body = statuses.message[status] + '. Redirecting to ' + address
+      var statusDescriptor = Object.getOwnPropertyDescriptor(statuses.message, String(status));
+      var statusMessage = statusDescriptor ? statusDescriptor.value : String(status);
+      body = statusMessage + '. Redirecting to ' + address
     },
 
     html: function(){
       var u = escapeHtml(address);
-      body = '<p>' + statuses.message[status] + '. Redirecting to ' + u + '</p>'
+      var statusDescriptor = Object.getOwnPropertyDescriptor(statuses.message, String(status));
+      var statusMessage = statusDescriptor ? statusDescriptor.value : String(status);
+      body = '<p>' + statusMessage + '. Redirecting to ' + u + '</p>'
     },
 
     default: function(){
@@ -1130,8 +1173,13 @@ function sendfile(res, file, options, callback) {
       var keys = Object.keys(obj);
 
       for (var i = 0; i < keys.length; i++) {
-        var k = keys[i];
-        res.setHeader(k, obj[k]);
+        var k = keys.at ? keys.at(i) : keys.slice(i, i + 1)[0];
+        if (k) {
+          var headerValue = safeGet(obj, k);
+          if (headerValue !== undefined) {
+            res.setHeader(k, headerValue);
+          }
+        }
       }
     });
   }

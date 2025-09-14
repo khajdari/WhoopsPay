@@ -57,7 +57,7 @@ export class IssueReportController {
         category,
         priority,
         status: 'open',
-        userAgent: req.headers['user-agent'] || 'Unknown',
+        userAgent: req.get('user-agent') || 'Unknown',
         ipAddress: req.ip || req.connection.remoteAddress || 'Unknown',
         createdAt: Date.now(),
         updatedAt: Date.now()
