@@ -14,7 +14,7 @@ env:
   IMAGE_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}/whoopspay
 
 jobs:
-  # Setup shared version for Docker and Security Reports
+  # Setup shared version for Docker and Security Reportsssss
   setup-version:
     name: "📋 Extract Semantic Version"
     runs-on: ubuntu-latest
