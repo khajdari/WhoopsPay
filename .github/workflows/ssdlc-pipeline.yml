@@ -606,10 +606,13 @@ jobs:
           # Use simpler ZAP baseline scan that actually works
           echo "🕷️ Running OWASP ZAP comprehensive baseline scan with active rules..."
           
-          # Create ZAP rules file for comprehensive scanning
+          # Create proper permissions and directories for ZAP
+          mkdir -p ./zap-reports && chmod 777 ./zap-reports
+          
+          # Create ZAP rules file with proper tab-separated format
           mkdir -p .zap
           cat > .zap/rules.tsv << 'EOF'
-          # Enable all security rules for comprehensive scanning
+          # Enable all security rules for comprehensive scanning (TAB separated!)
           10015 WARN    Incomplete or No Cache-control Header Set
           10020 WARN    Missing Anti-clickjacking Header
           10021 WARN    X-Content-Type-Options Header Missing
@@ -643,7 +646,8 @@ jobs:
           echo "🎯 Running ZAP baseline scan on public endpoints..."
           docker run --rm \
             --network host \
-            -v $(pwd):/zap/wrk/:rw \
+            --user $(id -u):$(id -g) \
+            -v $(pwd)/zap-reports:/zap/wrk/:rw \
             zaproxy/zap-stable:latest \
             zap-baseline.py \
             -t http://localhost:5000 \
@@ -653,8 +657,7 @@ jobs:
             -j \
             -I \
             -l WARN \
-            -T 5 \
-            -c .zap/rules.tsv || echo "ZAP scan completed with findings"
+            -T 5 || echo "ZAP scan completed with findings"
           
           # Generate additional comprehensive scan using API scan mode
           echo "🔌 Running additional API-focused security scan..."
@@ -663,7 +666,8 @@ jobs:
             echo "📋 Found OpenAPI/Swagger documentation"
             docker run --rm \
               --network host \
-              -v $(pwd):/zap/wrk/:rw \
+              --user $(id -u):$(id -g) \
+              -v $(pwd)/zap-reports:/zap/wrk/:rw \
               zaproxy/zap-stable:latest \
               zap-api-scan.py \
               -t http://localhost:5000/api/swagger \
@@ -676,7 +680,8 @@ jobs:
             # Run a basic baseline scan on API endpoints instead
             docker run --rm \
               --network host \
-              -v $(pwd):/zap/wrk/:rw \
+              --user $(id -u):$(id -g) \
+              -v $(pwd)/zap-reports:/zap/wrk/:rw \
               zaproxy/zap-stable:latest \
               zap-baseline.py \
               -t http://localhost:5000/api \
@@ -686,9 +691,27 @@ jobs:
               -T 3 || echo "API scan completed"
           fi
           
-          # Verify files were created
+          # Verify files were created in the zap-reports directory
           echo "📋 Verifying report files..."
-          ls -la *.html *.json || echo "No report files found"
+          ls -la ./zap-reports/*.html ./zap-reports/*.json 2>/dev/null || echo "No report files found in zap-reports directory"
+          
+          # Copy reports to current directory for legacy script compatibility
+          if [ -f "./zap-reports/OWASP-ZAP-Security-Report.html" ]; then
+            cp ./zap-reports/OWASP-ZAP-Security-Report.html ./
+            echo "✅ Main ZAP HTML report copied from zap-reports"
+          fi
+          if [ -f "./zap-reports/OWASP-ZAP-Security-Report.json" ]; then
+            cp ./zap-reports/OWASP-ZAP-Security-Report.json ./
+            echo "✅ Main ZAP JSON report copied from zap-reports"
+          fi
+          if [ -f "./zap-reports/API-Security-Report.html" ]; then
+            cp ./zap-reports/API-Security-Report.html ./
+            echo "✅ API HTML report copied from zap-reports"
+          fi
+          if [ -f "./zap-reports/API-Security-Report.json" ]; then
+            cp ./zap-reports/API-Security-Report.json ./
+            echo "✅ API JSON report copied from zap-reports"
+          fi
           
           # Display file sizes and content summary
           for file in *.html *.json; do
