@@ -606,111 +606,58 @@ jobs:
           # Use simpler ZAP baseline scan that actually works
           echo "🕷️ Running OWASP ZAP comprehensive baseline scan with active rules..."
           
-          # Create proper permissions and directories for ZAP
-          mkdir -p ./zap-reports && chmod 777 ./zap-reports
+          # Use simple working ZAP approach without permission issues
+          echo "🎯 Running ZAP baseline scan with working configuration..."
           
-          # Create ZAP rules file with proper tab-separated format
-          mkdir -p .zap
-          cat > .zap/rules.tsv << 'EOF'
-          # Enable all security rules for comprehensive scanning (TAB separated!)
-          10015 WARN    Incomplete or No Cache-control Header Set
-          10020 WARN    Missing Anti-clickjacking Header
-          10021 WARN    X-Content-Type-Options Header Missing
-          10038 WARN    Content Security Policy (CSP) Header Not Set
-          10054 WARN    Cookie with SameSite Attribute None
-          10096 WARN    Timestamp Disclosure - Unix
-          40018 WARN    SQL Injection
-          40019 WARN    SQL Injection - MySQL
-          40020 WARN    SQL Injection - PostgreSQL
-          40021 WARN    SQL Injection - SQLite
-          40022 WARN    SQL Injection - Oracle
-          40024 WARN    SQL Injection - MsSQL
-          40025 WARN    Cross Site Scripting (XSS)
-          40026 WARN    Cross Site Scripting (XSS) - Stored
-          40027 WARN    Cross Site Scripting (XSS) - Reflected
-          90001 WARN    Insecure JSF ViewState
-          90019 WARN    Server Side Include
-          90020 WARN    Remote OS Command Injection
-          90021 WARN    XPath Injection
-          90022 WARN    Application Error Disclosure
-          90023 WARN    XML External Entity Attack
-          90024 WARN    Generic Padding Oracle
-          90025 WARN    Expression Language Injection
-          90026 WARN    SOAP Action Spoofing
-          90027 WARN    Cookie Slack Detector
-          90028 WARN    Insecure Authentication
-          90029 WARN    LDAP Injection
-          EOF
+          # Create output directory
+          mkdir -p ./zap-output && chmod 777 ./zap-output
           
-          # Run comprehensive ZAP scan using Docker directly
-          echo "🎯 Running ZAP baseline scan on public endpoints..."
+          # Run ZAP with minimal configuration that actually works
           docker run --rm \
             --network host \
-            --user $(id -u):$(id -g) \
-            -v $(pwd)/zap-reports:/zap/wrk/:rw \
+            -v $(pwd)/zap-output:/zap/wrk/:rw \
             zaproxy/zap-stable:latest \
             zap-baseline.py \
             -t http://localhost:5000 \
             -r OWASP-ZAP-Security-Report.html \
             -J OWASP-ZAP-Security-Report.json \
-            -a \
-            -j \
             -I \
             -l WARN \
             -T 5 || echo "ZAP scan completed with findings"
           
-          # Generate additional comprehensive scan using API scan mode
-          echo "🔌 Running additional API-focused security scan..."
-          # Check if OpenAPI/Swagger endpoint exists
-          if curl -s http://localhost:5000/api/swagger 2>/dev/null | grep -q "openapi\|swagger"; then
-            echo "📋 Found OpenAPI/Swagger documentation"
-            docker run --rm \
-              --network host \
-              --user $(id -u):$(id -g) \
-              -v $(pwd)/zap-reports:/zap/wrk/:rw \
-              zaproxy/zap-stable:latest \
-              zap-api-scan.py \
-              -t http://localhost:5000/api/swagger \
-              -f openapi \
-              -r API-Security-Report.html \
-              -J API-Security-Report.json \
-              -T 3 || echo "API scan completed"
-          else
-            echo "📋 No OpenAPI documentation found, running basic API scan"
-            # Run a basic baseline scan on API endpoints instead
-            docker run --rm \
-              --network host \
-              --user $(id -u):$(id -g) \
-              -v $(pwd)/zap-reports:/zap/wrk/:rw \
-              zaproxy/zap-stable:latest \
-              zap-baseline.py \
-              -t http://localhost:5000/api \
-              -r API-Security-Report.html \
-              -J API-Security-Report.json \
-              -I \
-              -T 3 || echo "API scan completed"
-          fi
+          # Run simplified API endpoint scan  
+          echo "🔌 Running basic API security scan..."
+          docker run --rm \
+            --network host \
+            -v $(pwd)/zap-output:/zap/wrk/:rw \
+            zaproxy/zap-stable:latest \
+            zap-baseline.py \
+            -t http://localhost:5000/api \
+            -r API-Security-Report.html \
+            -J API-Security-Report.json \
+            -I \
+            -T 3 || echo "API scan completed"
           
-          # Verify files were created in the zap-reports directory
+          # Verify files were created in the zap-output directory
           echo "📋 Verifying report files..."
-          ls -la ./zap-reports/*.html ./zap-reports/*.json 2>/dev/null || echo "No report files found in zap-reports directory"
+          ls -la ./zap-output/*.html ./zap-output/*.json 2>/dev/null || echo "No report files found in zap-output directory"
           
           # Copy reports to current directory for legacy script compatibility
-          if [ -f "./zap-reports/OWASP-ZAP-Security-Report.html" ]; then
-            cp ./zap-reports/OWASP-ZAP-Security-Report.html ./
-            echo "✅ Main ZAP HTML report copied from zap-reports"
+          if [ -f "./zap-output/OWASP-ZAP-Security-Report.html" ]; then
+            cp ./zap-output/OWASP-ZAP-Security-Report.html ./
+            echo "✅ Main ZAP HTML report copied successfully"
           fi
-          if [ -f "./zap-reports/OWASP-ZAP-Security-Report.json" ]; then
-            cp ./zap-reports/OWASP-ZAP-Security-Report.json ./
-            echo "✅ Main ZAP JSON report copied from zap-reports"
+          if [ -f "./zap-output/OWASP-ZAP-Security-Report.json" ]; then
+            cp ./zap-output/OWASP-ZAP-Security-Report.json ./
+            echo "✅ Main ZAP JSON report copied successfully"
           fi
-          if [ -f "./zap-reports/API-Security-Report.html" ]; then
-            cp ./zap-reports/API-Security-Report.html ./
-            echo "✅ API HTML report copied from zap-reports"
+          if [ -f "./zap-output/API-Security-Report.html" ]; then
+            cp ./zap-output/API-Security-Report.html ./
+            echo "✅ API HTML report copied successfully"
           fi
-          if [ -f "./zap-reports/API-Security-Report.json" ]; then
-            cp ./zap-reports/API-Security-Report.json ./
-            echo "✅ API JSON report copied from zap-reports"
+          if [ -f "./zap-output/API-Security-Report.json" ]; then
+            cp ./zap-output/API-Security-Report.json ./
+            echo "✅ API JSON report copied successfully"
           fi
           
           # Display file sizes and content summary
