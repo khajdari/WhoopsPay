@@ -1,10 +1,10 @@
 # Docker Guide for WhoopsPay
 
-## 🐳 Overview
+## Overview
 
 WhoopsPay includes comprehensive Docker support for consistent development, testing, and deployment environments. The application is containerized with all dependencies and can be deployed to any Docker-compatible platform.
 
-## 📦 Docker Configuration
+## Docker Configuration
 
 WhoopsPay includes a production-ready Dockerfile for containerized deployment with SQLite database persistence.
 
@@ -150,7 +150,7 @@ The application includes automated Docker builds in the SSDLC pipeline:
 3. **Registry Push** → Docker Hub publication
 4. **Render Deployment** → Automatic cloud deployment to production
 
-## 🎯 Deployment Options
+## Deployment Options
 
 ### Docker Hub Registry
 - **Repository**: `ghaidaris/whoopspay`
@@ -191,7 +191,7 @@ docker run -p 5000:5000 \
 - Volume mount for database persistence
 - Easy local testing environment
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -225,7 +225,7 @@ docker run --rm -v whoopspay_data:/data -v $(pwd):/backup \
   alpine cp /data/whoopspay.db /backup/
 ```
 
-## 🔍 Monitoring and Debugging
+## Monitoring and Debugging
 
 ### Health Checks
 
@@ -259,7 +259,7 @@ docker run -it --rm \
   whoopspay:latest
 ```
 
-## 🔒 Security Considerations
+## Security Considerations
 
 ### Container Security
 - **Non-root user**: Application runs as unprivileged user
@@ -289,7 +289,7 @@ docker scout cves whoopspay:latest
 snyk container test whoopspay:latest
 ```
 
-## 📊 Performance Optimization
+## Performance Optimization
 
 ### Multi-stage Builds
 
@@ -304,7 +304,7 @@ The Dockerfile uses an optimized multi-stage build process:
 - **.dockerignore**: Exclude unnecessary files
 - **Minimal dependencies**: Production-only packages
 
-## 🛠️ Development Workflow
+## Development Workflow
 
 ### Local Development
 ```bash

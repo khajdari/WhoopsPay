@@ -1,10 +1,10 @@
 # Security Guide for WhoopsPay
 
-## ⚠️ Important Notice
+## Important Notice
 
 **WhoopsPay is an intentionally vulnerable educational security training platform. It contains deliberately implemented security vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10. This application should NEVER be deployed in a production environment or used with real financial data.**
 
-## 🎯 Educational Purpose
+## Educational Purpose
 
 This application serves as a comprehensive cybersecurity training platform for:
 - Security professionals learning vulnerability assessment
@@ -12,7 +12,7 @@ This application serves as a comprehensive cybersecurity training platform for:
 - Students studying application security
 - Penetration testers practicing in a controlled environment
 
-## 🛡️ Secure SDLC Pipeline
+## Secure SDLC Pipeline
 
 WhoopsPay implements a comprehensive 4-phase security testing pipeline:
 
@@ -43,7 +43,7 @@ WhoopsPay implements a comprehensive 4-phase security testing pipeline:
 - **Coverage**: OWASP Top 10 and API Security vulnerabilities
 - **Output**: HTML reports with exploitation evidence
 
-## 🔴 Intentional Vulnerabilities
+## Intentional Vulnerabilities
 
 ### OWASP Top 10 2021 Vulnerabilities
 
@@ -149,7 +149,7 @@ WhoopsPay implements a comprehensive 4-phase security testing pipeline:
 - Function-level privilege escalation opportunities
 - Missing role-based access controls
 
-## 🧪 Vulnerability Testing
+## Vulnerability Testing
 
 ### Automated Security Testing
 The SSDLC pipeline automatically tests for vulnerabilities using:
@@ -165,7 +165,7 @@ Security professionals can manually test:
 - Session management weaknesses
 - Data exposure scenarios
 
-## 🔒 Security Features (Demonstrative)
+## Security Features (Demonstrative)
 
 ### Authentication System
 - Session-based authentication with express-session
@@ -184,7 +184,7 @@ Security professionals can manually test:
 - Security headers implementation
 - Content Security Policy (where configured)
 
-## 🚨 Security Warnings
+## Security Warnings
 
 ### Development Environment
 - Contains intentional vulnerabilities - use only for training
@@ -207,7 +207,7 @@ If adapting code for production use:
 9. Use proper encryption for sensitive data
 10. Add comprehensive security testing
 
-## 📚 Learning Resources
+## Learning Resources
 
 ### Recommended Study Areas
 1. **OWASP Top 10 2021**: Core web application security risks
@@ -223,7 +223,7 @@ If adapting code for production use:
 - Conduct security code reviews
 - Perform penetration testing assessments
 
-## 🛡️ Remediation Guidelines
+## Remediation Guidelines
 
 For each vulnerability category, the application provides examples of:
 - **Vulnerable Implementation**: How NOT to implement security
@@ -231,7 +231,7 @@ For each vulnerability category, the application provides examples of:
 - **Remediation Techniques**: How to properly fix security issues
 - **Best Practices**: Industry-standard security approaches
 
-## ⚖️ Legal and Ethical Use
+## Legal and Ethical Use
 
 ### Authorized Use Only
 - Use only in controlled educational environments
@@ -242,7 +242,7 @@ For each vulnerability category, the application provides examples of:
 ### Disclaimer
 This application is provided for educational purposes only. The developers are not responsible for any misuse of this application or any damages resulting from its use. Users are responsible for ensuring their activities comply with applicable laws and regulations.
 
-## 🤝 Contributing to Security Education
+## Contributing to Security Education
 
 Contributions that enhance the educational value while maintaining realistic vulnerability examples are welcome. Please ensure:
 - Vulnerabilities remain realistic and educational
