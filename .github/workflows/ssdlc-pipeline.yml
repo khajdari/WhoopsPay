@@ -612,47 +612,47 @@ jobs:
           mkdir -p ./zap-output && chmod 777 ./zap-output
           
           # Create ZAP automation config for authenticated deep scanning
-          cat > ./zap-output/automation.yaml << 'EOF'
-env:
-  contexts:
-    - name: "WhoopsPay Context"
-      urls:
-        - "http://localhost:5000"
-      includePaths:
-        - "http://localhost:5000/.*"
-      authentication:
-        method: "json"
-        loginUrl: "http://localhost:5000/api/auth/login"
-        loginRequestData: '{"email":"test@whoopspay.com","password":"test123"}'
-        loggedInRegex: '\Q{"success":true\E'
-        loggedOutRegex: '\Q{"message":"Unauthorized"\E'
-      users:
-        - name: "testuser"
-          credentials:
-            email: "test@whoopspay.com"
-            password: "test123"
-  parameters:
-    failOnError: true
-    progressToStdout: true
-jobs:
-  - parameters:
-      context: "WhoopsPay Context"
-      url: "http://localhost:5000"
-      maxDuration: 15
-      maxChildren: 20
-      recurse: 5
-      user: "testuser"
-    type: "spiderAjax"
-  - parameters:
-      context: "WhoopsPay Context"
-      user: "testuser"
-    type: "activeScan"
-  - parameters:
-      template: "traditional-html"
-      reportDir: "/zap/wrk"
-      reportFile: "OWASP-ZAP-Security-Report"
-    type: "report"
-EOF
+          cat > ./zap-output/automation.yaml << 'ZAPEOF'
+          env:
+            contexts:
+              - name: "WhoopsPay Context"
+                urls:
+                  - "http://localhost:5000"
+                includePaths:
+                  - "http://localhost:5000/.*"
+                authentication:
+                  method: "json"
+                  loginUrl: "http://localhost:5000/api/auth/login"
+                  loginRequestData: "{\"email\":\"test@whoopspay.com\",\"password\":\"test123\"}"
+                  loggedInRegex: "\\Q{\"success\":true\\E"
+                  loggedOutRegex: "\\Q{\"message\":\"Unauthorized\"\\E"
+                users:
+                  - name: "testuser"
+                    credentials:
+                      email: "test@whoopspay.com"
+                      password: "test123"
+            parameters:
+              failOnError: true
+              progressToStdout: true
+          jobs:
+            - parameters:
+                context: "WhoopsPay Context"
+                url: "http://localhost:5000"
+                maxDuration: 15
+                maxChildren: 20
+                recurse: 5
+                user: "testuser"
+              type: "spiderAjax"
+            - parameters:
+                context: "WhoopsPay Context"
+                user: "testuser"
+              type: "activeScan"
+            - parameters:
+                template: "traditional-html"
+                reportDir: "/zap/wrk"
+                reportFile: "OWASP-ZAP-Security-Report"
+              type: "report"
+          ZAPEOF
           
           # Run ZAP automation framework for deep authenticated scanning
           docker run --rm \
