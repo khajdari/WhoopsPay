@@ -4,12 +4,12 @@
 
 WhoopsPay simulates a realistic online payment system while deliberately implementing security vulnerabilities from the OWASP Top 10 and OWASP API Security Top 10. It serves as a comprehensive hands-on learning environment for security professionals, developers, penetration testers, and students.
 
-## ⚠️ **CRITICAL WARNING**
+## **CRITICAL WARNING**
 **This application contains intentional security vulnerabilities and should NEVER be deployed in production environments or used with real financial data. It is exclusively for educational and training purposes.**
 
 ---
 
-## 🎯 **What is WhoopsPay?**
+## **What is WhoopsPay?**
 
 WhoopsPay is a full-featured financial application that includes:
 
@@ -37,7 +37,7 @@ WhoopsPay is a full-featured financial application that includes:
 
 ---
 
-## 🚀 **Quick Start Guide**
+## **Quick Start Guide**
 
 ### **System Requirements**
 - **Node.js 20+** (Required for running the application)
@@ -70,7 +70,7 @@ The application runs on a single port (5000) with both frontend and backend inte
 
 ---
 
-## 🏗️ **Technology Stack**
+## **Technology Stack**
 
 ### **Frontend Technologies**
 - **React 18** - Modern component-based UI framework
@@ -105,7 +105,7 @@ The application runs on a single port (5000) with both frontend and backend inte
 
 ---
 
-## 🏛️ **System Architecture**
+## **System Architecture**
 
 WhoopsPay follows a modern monorepo architecture with integrated frontend and backend:
 
@@ -140,7 +140,7 @@ WhoopsPay follows a modern monorepo architecture with integrated frontend and ba
 
 ---
 
-## 🔐 **Educational Vulnerabilities**
+## **Educational Vulnerabilities**
 
 WhoopsPay intentionally implements real-world security vulnerabilities for hands-on learning:
 
@@ -162,7 +162,7 @@ WhoopsPay intentionally implements real-world security vulnerabilities for hands
 
 ---
 
-## 🛡️ **Automated Security Testing**
+## **Automated Security Testing**
 
 WhoopsPay includes a comprehensive **Secure SDLC Pipeline** with 6 phases (4 security phases + Docker deployment + Render cloud deployment):
 
@@ -210,7 +210,7 @@ WhoopsPay includes a comprehensive **Secure SDLC Pipeline** with 6 phases (4 sec
 
 ---
 
-## 🚀 **GitHub Actions Deployment Pipeline**
+## **GitHub Actions Deployment Pipeline**
 
 ### **Required GitHub Secrets**
 For complete CI/CD automation, configure these secrets in your repository:
@@ -238,7 +238,7 @@ RENDER_SERVICE_ID=srv-[your_service_id]
 
 ---
 
-## 📁 **Key Features Deep Dive**
+## **Key Features Deep Dive**
 
 ### **Financial Operations**
 - **Wallet Management**: Add/withdraw funds, check balances
@@ -261,7 +261,7 @@ RENDER_SERVICE_ID=srv-[your_service_id]
 
 ---
 
-## 📚 **Documentation**
+## **Documentation**
 
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - Detailed system architecture and design patterns
 - **[DOCKER.md](DOCKER.md)** - Container deployment and Docker configuration
@@ -296,7 +296,7 @@ By working with WhoopsPay, you will learn:
 
 ---
 
-## 🛠️ **Development Commands**
+## **Development Commands**
 
 ```bash
 # Development (with hot reload)
@@ -318,7 +318,7 @@ npm run check                # TypeScript type checking
 
 ---
 
-## ⚖️ **Legal & Ethical Use**
+## ️ **Legal & Ethical Use**
 
 ### **Authorized Use Only**
 - ✅ Educational environments and controlled labs
@@ -333,7 +333,7 @@ If you discover unintended vulnerabilities, please report them responsibly throu
 
 ---
 
-## 🤝 **Contributing**
+## **Contributing**
 
 Contributions that enhance the educational value while maintaining realistic vulnerability examples are welcome. Please ensure:
 - All vulnerabilities remain realistic and educational
@@ -343,7 +343,7 @@ Contributions that enhance the educational value while maintaining realistic vul
 
 ---
 
-## 📄 **License & Disclaimer**
+## **License & Disclaimer**
 
 This project is provided for **educational purposes only**. The developers are not responsible for any misuse of this application or any damages resulting from its use. Users must ensure their activities comply with applicable laws and regulations.
 

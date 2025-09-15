@@ -4,7 +4,7 @@
 
 WhoopsPay follows a modern full-stack architecture with clear separation of concerns, implementing both secure practices and intentional vulnerabilities for educational purposes.
 
-## 🏗️ High-Level Architecture
+## High-Level Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -20,7 +20,7 @@ WhoopsPay follows a modern full-stack architecture with clear separation of conc
 └─────────────────┘    └─────────────────┘
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 whoopspay/
@@ -42,7 +42,7 @@ whoopspay/
 └── attached_assets/      # Static assets and reports
 ```
 
-## 🎯 Frontend Architecture
+## Frontend Architecture
 
 ### Technology Stack
 - **Framework**: React 18 with TypeScript
@@ -74,7 +74,7 @@ App.tsx
 - CSRF protection through custom headers
 - XSS prevention via React's built-in sanitization
 
-## 🖥️ Backend Architecture
+## Backend Architecture
 
 ### Technology Stack
 - **Framework**: Express.js with TypeScript
@@ -119,7 +119,7 @@ Request → Middleware → Controller → Service → Database
 - Excessive data exposure in API responses
 - Weak encryption standards for some fields
 
-## 🔌 Integration Architecture
+## Integration Architecture
 
 ### Juice Shop Integration
 WhoopsPay integrates with OWASP Juice Shop for cross-platform payment simulation:
@@ -138,7 +138,7 @@ Juice Shop → Checkout → WhoopsPay Payment → Return to Juice Shop
 - **OWASP ZAP**: Security testing integration
 - **Snyk**: Vulnerability scanning services
 
-## 🚀 Deployment Architecture
+## Deployment Architecture
 
 ### Development Environment
 ```
@@ -155,7 +155,7 @@ Docker Container → Express Server (Port 5000) → External PostgreSQL
 GitHub Push → Security Pipeline → Docker Build → Registry Push → Deployment
 ```
 
-## 🔐 Security Architecture
+## Security Architecture
 
 ### Authentication Flow
 ```
@@ -176,7 +176,7 @@ User → Login → Session Creation → JWT Token → API Access
 - Weak session management
 - Plain text sensitive data storage
 
-## 📊 Data Flow Architecture
+## Data Flow Architecture
 
 ### Typical Transaction Flow
 ```
@@ -192,7 +192,7 @@ Response → JSON Serialization → Client Update
 - Live transaction updates
 - Cross-user payment request notifications
 
-## 🛠️ Development Practices
+##  Development Practices
 
 ### Code Organization
 - **Controllers**: Thin layer for request/response handling
@@ -205,7 +205,7 @@ Response → JSON Serialization → Client Update
 - Intentionally verbose error messages (educational vulnerability)
 - Comprehensive logging with security implications
 
-## 🎓 Educational Value
+## Educational Value
 
 This architecture demonstrates:
 - **Secure Patterns**: Modern full-stack development practices

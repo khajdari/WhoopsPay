@@ -40,7 +40,7 @@ WhoopsPay uses a **monorepo architecture** with integrated frontend and backend:
 localhost:5000 → Vite Dev Server → Express API → SQLite Database
 ```
 
-## 🏗️ **Project Structure**
+## **Project Structure**
 
 ```
 whoopspay/
@@ -68,7 +68,7 @@ whoopspay/
 └── attached_assets/      # Static files and security reports
 ```
 
-## 💻 **Development Workflow**
+## **Development Workflow**
 
 ### **Daily Development Process**
 
@@ -137,7 +137,7 @@ The schema intentionally includes security flaws:
 - Excessive data exposure
 - Weak encryption practices
 
-## 🔌 **API Development**
+## **API Development**
 
 ### **API Structure**
 ```
@@ -162,7 +162,7 @@ The schema intentionally includes security flaws:
 - **Admin Access**: Check console output for admin credentials
 - **Cookie Management**: Automatic session handling
 
-## 🎨 **Frontend Development**
+## **Frontend Development**
 
 ### **Technology Stack**
 - **React 18**: Component-based UI development
@@ -262,7 +262,7 @@ npx eslint . --ext .js,.ts,.tsx
 - **IDOR**: Access other users' data with direct object references
 - **Auth Bypass**: Explore session and authentication weaknesses
 
-## 🚀 **Production Preparation**
+## **Production Preparation**
 
 ### **Build Process**
 ```bash
@@ -279,7 +279,7 @@ npm run start
 - **Database**: Same SQLite file, but production-optimized
 - **Logging**: Production logging format
 
-## 🛠️ **Development Tools**
+## **Development Tools**
 
 ### **IDE Setup**
 Recommended VS Code extensions:
@@ -307,7 +307,7 @@ DEBUG=express:*
 VITE_API_URL=http://localhost:5000
 ```
 
-## 📊 **Performance Monitoring**
+## **Performance Monitoring**
 
 ### **Development Metrics**
 - **Vite HMR**: Sub-second hot reload times
