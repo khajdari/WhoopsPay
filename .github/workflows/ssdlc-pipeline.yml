@@ -603,39 +603,83 @@ jobs:
           curl -s http://localhost:5000 | head -10 || echo "Failed to get homepage"
           curl -s http://localhost:5000/api/auth/user || echo "API endpoint test completed"
           
-          echo "🕷️ Running OWASP ZAP full deep security scan with official reporting..."
+          echo "🕷️ Running OWASP ZAP authenticated deep security scan with official reporting..."
           
-          # Use official ZAP full scan for thorough security analysis
-          echo "🎯 Running deep ZAP scan covering web app and API endpoints..."
+          # Use official ZAP automation framework for authenticated security analysis  
+          echo "🎯 Running authenticated deep ZAP scan covering protected app areas and API endpoints..."
           
           # Create output directory
           mkdir -p ./zap-output && chmod 777 ./zap-output
           
-          # Run ZAP full deep scan for comprehensive security analysis
+          # Create ZAP automation config for authenticated deep scanning
+          cat > ./zap-output/automation.yaml << 'EOF'
+env:
+  contexts:
+    - name: "WhoopsPay Context"
+      urls:
+        - "http://localhost:5000"
+      includePaths:
+        - "http://localhost:5000/.*"
+      authentication:
+        method: "json"
+        loginUrl: "http://localhost:5000/api/auth/login"
+        loginRequestData: '{"email":"test@whoopspay.com","password":"test123"}'
+        loggedInRegex: '\Q{"success":true\E'
+        loggedOutRegex: '\Q{"message":"Unauthorized"\E'
+      users:
+        - name: "testuser"
+          credentials:
+            email: "test@whoopspay.com"
+            password: "test123"
+  parameters:
+    failOnError: true
+    progressToStdout: true
+jobs:
+  - parameters:
+      context: "WhoopsPay Context"
+      url: "http://localhost:5000"
+      maxDuration: 15
+      maxChildren: 20
+      recurse: 5
+      user: "testuser"
+    type: "spiderAjax"
+  - parameters:
+      context: "WhoopsPay Context"
+      user: "testuser"
+    type: "activeScan"
+  - parameters:
+      template: "traditional-html"
+      reportDir: "/zap/wrk"
+      reportFile: "OWASP-ZAP-Security-Report"
+    type: "report"
+EOF
+          
+          # Run ZAP automation framework for deep authenticated scanning
           docker run --rm \
             --network host \
             -v $(pwd)/zap-output:/zap/wrk/:rw \
             zaproxy/zap-stable:latest \
-            zap-full-scan.py \
-            -t http://localhost:5000 \
-            -r OWASP-ZAP-Security-Report.html \
-            -J OWASP-ZAP-Security-Report.json \
-            -I \
-            -l WARN \
-            -T 15 || echo "ZAP full deep scan completed with findings"
+            zap.sh -cmd \
+            -autorun /zap/wrk/automation.yaml \
+            -addoninstall pscanrulesAlpha \
+            -addoninstall pscanrulesBeta \
+            -addoninstall ascanrulesAlpha \
+            -addoninstall ascanrulesBeta || echo "ZAP deep authenticated scan completed with findings"
           
-          # Verify comprehensive report files were created
-          echo "📋 Verifying comprehensive security report files..."
-          ls -la ./zap-output/*.html ./zap-output/*.json 2>/dev/null || echo "No report files found in zap-output directory"
+          # Verify authenticated deep scan report files were created  
+          echo "📋 Verifying authenticated deep scan report files..."
+          ls -la ./zap-output/OWASP-ZAP-Security-Report.html ./zap-output/OWASP-ZAP-Security-Report.json 2>/dev/null || echo "Checking for all report files..."
+          ls -la ./zap-output/*.html 2>/dev/null || echo "No HTML reports found"
+          ls -la ./zap-output/*.json 2>/dev/null || echo "No JSON reports found"
           
-          # Copy comprehensive report to current directory for organization script
+          # Copy authenticated scan report to current directory for organization script
           if [ -f "./zap-output/OWASP-ZAP-Security-Report.html" ]; then
             cp ./zap-output/OWASP-ZAP-Security-Report.html ./
-            echo "✅ Comprehensive ZAP HTML report copied successfully"
+            echo "✅ Authenticated ZAP HTML report copied successfully"
           fi
           if [ -f "./zap-output/OWASP-ZAP-Security-Report.json" ]; then
             cp ./zap-output/OWASP-ZAP-Security-Report.json ./
-            echo "✅ Comprehensive ZAP JSON report copied successfully"
+            echo "✅ Authenticated ZAP JSON report copied successfully"
           fi
           
           # Display file sizes and content summary
