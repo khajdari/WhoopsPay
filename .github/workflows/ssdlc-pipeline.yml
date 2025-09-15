@@ -603,27 +603,26 @@ jobs:
           curl -s http://localhost:5000 | head -10 || echo "Failed to get homepage"
           curl -s http://localhost:5000/api/auth/user || echo "API endpoint test completed"
           
-          echo "🕷️ Running OWASP ZAP comprehensive security scan with official reporting..."
+          echo "🕷️ Running OWASP ZAP full deep security scan with official reporting..."
           
-          # Use official ZAP comprehensive scan for entire application
-          echo "🎯 Running comprehensive ZAP scan covering web app and API endpoints..."
+          # Use official ZAP full scan for thorough security analysis
+          echo "🎯 Running deep ZAP scan covering web app and API endpoints..."
           
           # Create output directory
           mkdir -p ./zap-output && chmod 777 ./zap-output
           
-          # Run single comprehensive ZAP baseline scan that covers both web app and API
+          # Run ZAP full deep scan for comprehensive security analysis
           docker run --rm \
             --network host \
             -v $(pwd)/zap-output:/zap/wrk/:rw \
             zaproxy/zap-stable:latest \
-            zap-baseline.py \
+            zap-full-scan.py \
             -t http://localhost:5000 \
             -r OWASP-ZAP-Security-Report.html \
             -J OWASP-ZAP-Security-Report.json \
             -I \
-            -a \
             -l WARN \
-            -T 10 || echo "ZAP comprehensive scan completed with findings"
+            -T 15 || echo "ZAP full deep scan completed with findings"
           
           # Verify comprehensive report files were created
           echo "📋 Verifying comprehensive security report files..."
