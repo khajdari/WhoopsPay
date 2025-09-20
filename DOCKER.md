@@ -81,7 +81,7 @@ CMD ["npm", "run", "start"]
 - **Production build** with Vite-optimized assets
 - **Single port deployment** (5000) serving both frontend and backend
 
-## 🚀 Running with Docker
+## Running with Docker
 
 ### Local Development
 
@@ -124,7 +124,7 @@ services:
 ### SQLite Database Persistence
 The SQLite database (`data/whoopspay.db`) is persisted using volume mounts to ensure data survives container restarts.
 
-## 🏗️ CI/CD Integration
+##  CI/CD Integration
 
 ### GitHub Actions Workflow
 
