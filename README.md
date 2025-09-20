@@ -172,19 +172,19 @@ WhoopsPay includes a comprehensive **Secure SDLC Pipeline** with 6 phases (4 sec
 - **Educational Documentation**: Comprehensive vulnerability explanations and exploitation examples
 - **Safe Environment**: Isolated training platform with clear educational disclaimers
 
-### **Phase 1: 🛡️ ESLint Security Linting**
+### **Phase 1:  ESLint Security Linting**
 - **Static code analysis** with security-focused rules
 - **Microsoft SDL compliance** checking
 - **SonarJS quality** and vulnerability detection
 - **Output**: Detailed security reports with line-by-line analysis
 
-### **Phase 2: 🔒 SAST (Static Application Security Testing)**
+### **Phase 2: SAST (Static Application Security Testing)**
 - **Snyk Code** with DeepCode AI engine
 - **Cross-file data flow** analysis
 - **Vulnerability detection**: XSS, SQL injection, cryptographic issues
 - **Output**: Professional security reports with remediation guidance
 
-### **Phase 3: 📦 SCA (Software Composition Analysis)**  
+### **Phase 3: SCA (Software Composition Analysis)**  
 - **Dependency vulnerability scanning** with Snyk
 - **Transitive dependency analysis** across 115+ packages
 - **Known vulnerability database** matching
@@ -196,13 +196,13 @@ WhoopsPay includes a comprehensive **Secure SDLC Pipeline** with 6 phases (4 sec
 - **Real exploit verification** and evidence collection
 - **Output**: Detailed vulnerability reports with proof-of-concept
 
-### **Phase 5: 🐳 Docker Hub Deployment**
+### **Phase 5: Docker Hub Deployment**
 - **Multi-platform Docker builds** with semantic versioning
 - **Automated registry publishing** to Docker Hub
 - **Image tagging strategy** with version and latest tags
 - **Output**: Production-ready container images
 
-### **Phase 6: 🌐 Render Production Deployment**
+### **Phase 6: Render Production Deployment**
 - **Automated cloud deployment** using latest Docker image
 - **Zero-downtime deployments** with health checks
 - **Production environment provisioning** 
@@ -321,12 +321,12 @@ npm run check                # TypeScript type checking
 ## ️ **Legal & Ethical Use**
 
 ### **Authorized Use Only**
-- ✅ Educational environments and controlled labs
-- ✅ Security training and professional development
-- ✅ Penetration testing practice with proper authorization
-- ❌ **NEVER** in production environments
-- ❌ **NEVER** with real financial data or credentials
-- ❌ **NEVER** against systems you don't own
+-  Educational environments and controlled labs
+-  Security training and professional development
+-  Penetration testing practice with proper authorization
+-  **NEVER** in production environments
+-  **NEVER** with real financial data or credentials
+-  **NEVER** against systems you don't own
 
 ### **Responsible Disclosure**
 If you discover unintended vulnerabilities, please report them responsibly through appropriate channels.

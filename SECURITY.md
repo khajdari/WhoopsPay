@@ -16,7 +16,7 @@ This application serves as a comprehensive cybersecurity training platform for:
 
 WhoopsPay implements a comprehensive 4-phase security testing pipeline:
 
-### Phase 1: ESLint Security Linting 🛡️
+### Phase 1: ESLint Security Linting 
 - **Tools**: ESLint with security plugins
 - **Plugins**:
   - `eslint-plugin-security` - Node.js security hotspot detection
@@ -25,13 +25,13 @@ WhoopsPay implements a comprehensive 4-phase security testing pipeline:
 - **Coverage**: All JavaScript/TypeScript files with 15+ security rules
 - **Output**: JSON, HTML, and Checkstyle XML reports
 
-### Phase 2: SAST - Static Application Security Testing 🔒
+### Phase 2: SAST - Static Application Security Testing 
 - **Tool**: Snyk Code with DeepCode AI engine
 - **Configuration**: Maximum depth analysis with comprehensive coverage
 - **Detection**: XSS, SQL injection, command injection, cryptographic issues
 - **Output**: Official Snyk HTML reports with remediation guidance
 
-### Phase 3: SCA - Software Composition Analysis 📦
+### Phase 3: SCA - Software Composition Analysis 
 - **Tool**: Snyk Open Source dependency scanner
 - **Coverage**: Production and development dependencies
 - **Analysis**: Transitive vulnerability detection across 115+ dependencies

@@ -2,10 +2,10 @@ name: Secure SDLC Pipeline
 
 on:
   pull_request:
-    branches: [ main-vulnerable ]
+    branches: [ main-stable ]
     types: [opened, synchronize, reopened]
   push:
-    branches: [ main-vulnerable, main ]
+    branches: [ main-stable, main ]
   workflow_dispatch:
 
 env:
@@ -35,12 +35,12 @@ jobs:
           if [ "${{ github.event_name }}" == "push" ]; then
             # Clean version for merged PRs (no date/time)
             FULL_VERSION="$VERSION"
-            echo "🚀 Using clean version for merged PR: v$FULL_VERSION"
+            echo " Using clean version for merged PR: v$FULL_VERSION"
           else
             # Version with timestamp for PR testing
             BUILD_DATE=$(date +"%Y%m%d_%H%M%S")
             FULL_VERSION="${VERSION}_${BUILD_DATE}"
-            echo "🧪 Using timestamped version for PR testing: v$FULL_VERSION"
+            echo " Using timestamped version for PR testing: v$FULL_VERSION"
             echo "Build date: $BUILD_DATE"
           fi
           
@@ -77,15 +77,15 @@ jobs:
         run: |
           echo "Using semantic version: v$VERSION"
           mkdir -p "security-reports/v$VERSION/00-eslint-security"
-          echo "📁 Created ESLint folder structure for v$VERSION"
+          echo " Created ESLint folder structure for v$VERSION"
 
       - name: Run ESLint Security Linting (Fixed Configuration)
         run: |
-          echo "🔍 Running ESLint security linting with fixed configuration..."
+          echo " Running ESLint security linting with fixed configuration..."
           
           # Ensure security reports directory exists first
           mkdir -p "security-reports/v$VERSION/00-eslint-security"
-          echo "📁 Created directory: security-reports/v$VERSION/00-eslint-security"
+          echo " Created directory: security-reports/v$VERSION/00-eslint-security"
           
           # Create ESLint v9 flat config for security linting
           cat > eslint-security.config.js << 'EOF'
@@ -141,14 +141,14 @@ jobs:
           ];
           EOF
           
-          echo "📄 ESLint security config created"
+          echo " ESLint security config created"
           
           # Test ESLint configuration first
-          echo "🧪 Testing ESLint configuration..."
+          echo " Testing ESLint configuration..."
           npx eslint --version
           
           # Run ESLint with security-only configuration using flat config
-          echo "🛡️ Running ESLint security scan..."
+          echo "🛡 Running ESLint security scan..."
           npx eslint . \
             --config eslint-security.config.js \
             --format @microsoft/eslint-formatter-sarif \
@@ -166,26 +166,26 @@ jobs:
           
           # Create a basic report even if ESLint fails
           if [ ! -f "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html" ]; then
-            echo "⚠️ Creating fallback HTML report..."
+            echo " Creating fallback HTML report..."
             echo '<!DOCTYPE html><html><head><title>ESLint Security Report</title></head><body><h1>ESLint Security Linting Report</h1><p><strong>Status:</strong> ESLint security scan completed</p><p><strong>Note:</strong> This is a basic security linting report. For detailed results, check the JSON and SARIF files.</p></body></html>' > "security-reports/v$VERSION/00-eslint-security/ESLint-Security-Report.html"
           fi
           
           # Display results
-          echo "📊 ESLint security linting completed"
+          echo " ESLint security linting completed"
           if [ -f "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" ]; then
-            echo "✅ Official SARIF report generated"
-            echo "🔍 Security Issues Found:"
+            echo " Official SARIF report generated"
+            echo " Security Issues Found:"
             jq -r '.runs[0].results | length' "security-reports/v$VERSION/00-eslint-security/eslint-security.sarif" 2>/dev/null || echo "0"
           fi
           
-          echo "✅ ESLint security linting completed for v$VERSION"
+          echo " ESLint security linting completed for v$VERSION"
           
           # Verify files were created and display directory contents
-          echo "📁 Checking ESLint report files:"
-          ls -la "security-reports/v$VERSION/00-eslint-security/" 2>/dev/null || echo "❌ Report directory not found"
+          echo " Checking ESLint report files:"
+          ls -la "security-reports/v$VERSION/00-eslint-security/" 2>/dev/null || echo " Report directory not found"
           if [ -d "security-reports/v$VERSION/00-eslint-security/" ]; then
-            echo "✅ Report directory exists"
-            echo "📄 Files in directory:"
+            echo " Report directory exists"
+            echo " Files in directory:"
             find "security-reports/v$VERSION/00-eslint-security/" -type f -exec ls -la {} \; 2>/dev/null || echo "No files found"
           fi
 
@@ -227,16 +227,16 @@ jobs:
           # Use version from setup job
           echo "Using semantic version: v$VERSION"
           mkdir -p "security-reports/v$VERSION/01-snyk-code"
-          echo "📁 Created Snyk Code folder for v$VERSION"
+          echo " Created Snyk Code folder for v$VERSION"
 
       - name: Run tests with coverage
         run: |
           # Check if test script exists in package.json
           if npm run | grep -q "test"; then
-            echo "✅ Test script found - running tests with coverage"
+            echo " Test script found - running tests with coverage"
             npm run test -- --coverage --watchAll=false || echo "Tests completed"
           else
-            echo "⚠️ No test script found in package.json - skipping tests"
+            echo " No test script found in package.json - skipping tests"
             echo "To add tests: Add 'test' script to package.json"
           fi
           ls -la coverage/ || echo "No coverage found"
@@ -251,15 +251,15 @@ jobs:
       - name: Check Snyk configuration
         run: |
           if [ -z "\${SNYK_TOKEN}" ]; then
-            echo "⚠️ SNYK_TOKEN not configured - Snyk Code analysis will be skipped"
+            echo " SNYK_TOKEN not configured - Snyk Code analysis will be skipped"
             echo "To enable Snyk Code:"
             echo "1. Go to https://snyk.io and sign up"
             echo "2. Get your API token from Account Settings"
             echo "3. Add it as SNYK_TOKEN in GitHub repository secrets"
           else
-            echo "✅ Snyk token configured"
-            echo "🔍 Token length: ${#SNYK_TOKEN}"
-            echo "🔍 Running Snyk Code SAST analysis..."
+            echo " Snyk token configured"
+            echo " Token length: ${#SNYK_TOKEN}"
+            echo " Running Snyk Code SAST analysis..."
           fi
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -278,20 +278,20 @@ jobs:
         run: |
           echo "🔍 Checking Snyk Code analysis results..."
           if [ -f "snyk-code.json" ]; then
-            echo "✅ Snyk Code analysis completed - JSON report found"
+            echo " Snyk Code analysis completed - JSON report found"
             ls -la snyk-code.* || echo "Cannot list Snyk Code files"
             
             # Copy results to version folder
             cp snyk-code.json "security-reports/v$VERSION/01-snyk-code/" 2>/dev/null || true
             cp snyk-code.sarif "security-reports/v$VERSION/01-snyk-code/" 2>/dev/null || true
-            echo "📁 Snyk Code results copied to version folder v$VERSION"
+            echo " Snyk Code results copied to version folder v$VERSION"
             
             # Display summary of vulnerabilities found
-            echo "📄 Snyk Code Analysis Summary:"
+            echo " Snyk Code Analysis Summary:"
             jq -r '.runs[0].results | length' snyk-code.sarif 2>/dev/null || echo "SARIF parsing failed"
             jq -r '.runs[0].results[].level' snyk-code.sarif 2>/dev/null | sort | uniq -c || echo "Cannot parse vulnerability levels"
           else
-            echo "❌ No Snyk Code results found - analysis may have failed or been skipped"
+            echo " No Snyk Code results found - analysis may have failed or been skipped"
             # Create placeholder in version folder
             echo "Snyk Code analysis failed or skipped" > "security-reports/v$VERSION/01-snyk-code/analysis-failed.txt"
           fi
@@ -299,7 +299,7 @@ jobs:
       - name: Generate Snyk Code HTML Report
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "🎨 Generating official Snyk Code HTML report..."
+            echo " Generating official Snyk Code HTML report..."
             
             # Install snyk-to-html tool (same version as SCA phase)
             npm install -g snyk-to-html
@@ -318,19 +318,19 @@ jobs:
                 -o "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" \
                 -t "$TEMPLATE_PATH" \
                 -a \
-                || echo "⚠️ HTML report generation failed - continuing without HTML"
+                || echo " HTML report generation failed - continuing without HTML"
             else
-              echo "⚠️ No JSON results found for HTML conversion"
+              echo " No JSON results found for HTML conversion"
             fi
             
             if [ -f "security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html" ]; then
-              echo "✅ Official Snyk Code HTML report generated successfully"
-              echo "📄 Report size: $(wc -c < security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html) bytes"
+              echo " Official Snyk Code HTML report generated successfully"
+              echo " Report size: $(wc -c < security-reports/v$VERSION/01-snyk-code/Snyk-Code-Security-Report.html) bytes"
             else
-              echo "❌ Official HTML report not generated"
+              echo " Official HTML report not generated"
             fi
           else
-            echo "⚠️ Skipping HTML report generation (no Snyk token or results)"
+            echo " Skipping HTML report generation (no Snyk token or results)"
           fi
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -375,12 +375,12 @@ jobs:
           # Use version from setup job
           echo "Using semantic version: v$VERSION"
           mkdir -p "security-reports/v$VERSION/02-snyk"
-          echo "📁 Created Snyk folder for v$VERSION"
+          echo " Created Snyk folder for v$VERSION"
 
       - name: Check Snyk authentication
         run: |
           if [ -z "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "⚠️ SNYK_TOKEN not configured - skipping Snyk scan"
+            echo " SNYK_TOKEN not configured - skipping Snyk scan"
             echo ""
             echo "To enable Snyk scanning:"
             echo "1. Go to https://snyk.io and create an account"
@@ -389,15 +389,15 @@ jobs:
             echo ""
             echo "Using npm audit as fallback..."
             npm audit --audit-level=low --json > "security-reports/v$VERSION/02-snyk/npm-audit.json" || true
-            echo "✅ NPM audit completed as security fallback for v$VERSION"
+            echo " NPM audit completed as security fallback for v$VERSION"
           else
-            echo "✅ Snyk token configured - proceeding with scan"
-            echo "🔍 Token length: ${#SNYK_TOKEN}"
-            echo "🔍 Token prefix: ${SNYK_TOKEN:0:10}..."
+            echo " Snyk token configured - proceeding with scan"
+            echo " Token length: ${#SNYK_TOKEN}"
+            echo " Token prefix: ${SNYK_TOKEN:0:10}..."
             # Test authentication with environment variable (no interactive auth needed)
             echo "Testing Snyk authentication..."
-            npx snyk test --dry-run --json || echo "⚠️ Dry run test failed - will proceed anyway"
-            echo "✅ Snyk authentication check completed"
+            npx snyk test --dry-run --json || echo " Dry run test failed - will proceed anyway"
+            echo " Snyk authentication check completed"
           fi
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -406,8 +406,8 @@ jobs:
         id: snyk
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "📦 Running Snyk dependency vulnerability scan for v$VERSION..."
-            echo "🔍 Scanning main package.json with comprehensive depth analysis"
+            echo " Running Snyk dependency vulnerability scan for v$VERSION..."
+            echo " Scanning main package.json with comprehensive depth analysis"
             
             # Create temporary .snyk file to exclude problematic directories
             cat > .snyk << 'EOF'
@@ -420,7 +420,7 @@ jobs:
           EOF
             
             # Clean focused scan targeting main package.json ONLY
-            echo "🎯 Scanning main Node.js project with --detection-depth=10..."
+            echo " Scanning main Node.js project with --detection-depth=10..."
             npx snyk test \
               --file=package.json \
               --package-manager=npm \
@@ -429,7 +429,7 @@ jobs:
               --severity-threshold=low \
               --json > "security-reports/v$VERSION/02-snyk/snyk-test.json" || echo "Scan completed with vulnerabilities"
             
-            echo "📄 Generating SARIF report..."
+            echo " Generating SARIF report..."
             npx snyk test \
               --file=package.json \
               --package-manager=npm \
@@ -439,35 +439,35 @@ jobs:
               --sarif > "security-reports/v$VERSION/02-snyk/snyk-test.sarif" || echo "SARIF completed with vulnerabilities"
             
             # Monitor for ongoing tracking (using specific package.json)
-            echo "📊 Setting up Snyk monitoring..."
+            echo " Setting up Snyk monitoring..."
             npx snyk monitor --file=package.json --package-manager=npm || true
             
             # Clean up temporary file
             rm -f .snyk
             
-            echo "✅ Snyk security scan completed for v$VERSION"
-            echo "📊 Checking generated reports..."
+            echo " Snyk security scan completed for v$VERSION"
+            echo " Checking generated reports..."
             ls -la "security-reports/v$VERSION/02-snyk/" 2>/dev/null || echo "Reports directory created"
             
             # Display JSON report summary
             if [ -f "security-reports/v$VERSION/02-snyk/snyk-test.json" ]; then
-              echo "📄 JSON report size: $(wc -c < security-reports/v$VERSION/02-snyk/snyk-test.json) bytes"
-              echo "🔍 JSON report content validation:"
+              echo " JSON report size: $(wc -c < security-reports/v$VERSION/02-snyk/snyk-test.json) bytes"
+              echo " JSON report content validation:"
               if grep -q '"vulnerabilities"' "security-reports/v$VERSION/02-snyk/snyk-test.json"; then
-                echo "✅ Valid vulnerability data found in JSON report"
+                echo " Valid vulnerability data found in JSON report"
                 grep -o '"vulnerabilities":\[[^]]*\]' "security-reports/v$VERSION/02-snyk/snyk-test.json" | head -3
               elif grep -q '"ok":' "security-reports/v$VERSION/02-snyk/snyk-test.json"; then
-                echo "✅ Valid Snyk response format detected"
+                echo " Valid Snyk response format detected"
                 head -5 "security-reports/v$VERSION/02-snyk/snyk-test.json"
               else
-                echo "⚠️ Unexpected JSON format - showing first 10 lines:"
+                echo " Unexpected JSON format - showing first 10 lines:"
                 head -10 "security-reports/v$VERSION/02-snyk/snyk-test.json"
               fi
             else
-              echo "⚠️ JSON report not found"
+              echo " JSON report not found"
             fi
           else
-            echo "✅ NPM audit security scan completed (Snyk fallback)"
+            echo " NPM audit security scan completed (Snyk fallback)"
             if [ -f "security-reports/v$VERSION/02-snyk/npm-audit.json" ]; then
               echo "Security audit results available for v$VERSION"
               cat "security-reports/v$VERSION/02-snyk/npm-audit.json" | head -20
@@ -480,7 +480,7 @@ jobs:
       - name: Generate Snyk HTML Report
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "🎨 Generating Snyk HTML report..."
+            echo " Generating Snyk HTML report..."
             
             # Install snyk-to-html tool
             npm install -g snyk-to-html
@@ -492,19 +492,19 @@ jobs:
                 -i "security-reports/v$VERSION/02-snyk/snyk-test.json" \
                 -o "security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html" \
                 -a \
-                || echo "⚠️ HTML report generation failed - continuing without HTML"
+                || echo " HTML report generation failed - continuing without HTML"
               
               if [ -f "security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html" ]; then
-                echo "✅ Snyk HTML report generated successfully"
-                echo "📄 Report size: $(wc -c < security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html) bytes"
+                echo " Snyk HTML report generated successfully"
+                echo " Report size: $(wc -c < security-reports/v$VERSION/02-snyk/Snyk-Security-Report.html) bytes"
               else
-                echo "❌ HTML report not generated"
+                echo " HTML report not generated"
               fi
             else
-              echo "⚠️ No JSON results found for HTML conversion"
+              echo " No JSON results found for HTML conversion"
             fi
           else
-            echo "⚠️ Skipping HTML report generation (no Snyk token)"
+            echo " Skipping HTML report generation (no Snyk token)"
           fi
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -546,7 +546,7 @@ jobs:
           # Use version from setup job
           echo "Using semantic version: v$VERSION"
           mkdir -p "security-reports/v$VERSION/03-owasp-zap"
-          echo "📁 Created OWASP ZAP folder for v$VERSION"
+          echo " Created OWASP ZAP folder for v$VERSION"
 
       - name: Start application for DAST testing
         run: |
@@ -562,11 +562,11 @@ jobs:
           echo "Waiting for application to start..."
           for i in {1..60}; do
             if curl -s http://localhost:5000/health >/dev/null 2>&1; then
-              echo "✅ Application is ready for DAST testing"
+              echo " Application is ready for DAST testing"
               break
             fi
             if [ $i -eq 60 ]; then
-              echo "❌ Application failed to start within timeout"
+              echo " Application failed to start within timeout"
               exit 1
             fi
             echo "Waiting for app... ($i/60)"
@@ -574,7 +574,7 @@ jobs:
           done
           
           # Verify application is responding
-          curl -s http://localhost:5000/ | grep -q "WhoopsPay" && echo "✅ Application verified"
+          curl -s http://localhost:5000/ | grep -q "WhoopsPay" && echo " Application verified"
         env:
           NODE_ENV: development
           DATABASE_URL: sqlite:./test.db
@@ -588,10 +588,10 @@ jobs:
           mkdir -p "security-reports/v$VERSION/03-owasp-zap"
           
           # Verify application is running before scanning
-          echo "🔍 Checking if application is accessible..."
+          echo " Checking if application is accessible..."
           for i in {1..10}; do
             if curl -s http://localhost:5000 >/dev/null 2>&1; then
-              echo "✅ Application is accessible at localhost:5000"
+              echo " Application is accessible at localhost:5000"
               break
             fi
             echo "Waiting for application... ($i/10)"
@@ -599,14 +599,14 @@ jobs:
           done
           
           # Test application endpoints
-          echo "🧪 Testing application endpoints..."
+          echo " Testing application endpoints..."
           curl -s http://localhost:5000 | head -10 || echo "Failed to get homepage"
           curl -s http://localhost:5000/api/auth/user || echo "API endpoint test completed"
           
           echo "🕷️ Running OWASP ZAP authenticated deep security scan with official reporting..."
           
           # Use official ZAP automation framework for authenticated security analysis  
-          echo "🎯 Running authenticated deep ZAP scan covering protected app areas and API endpoints..."
+          echo " Running authenticated deep ZAP scan covering protected app areas and API endpoints..."
           
           # Create output directory
           mkdir -p ./zap-output && chmod 777 ./zap-output
@@ -667,7 +667,7 @@ jobs:
             -addoninstall ascanrulesBeta || echo "ZAP deep authenticated scan completed with findings"
           
           # Verify authenticated deep scan report files were created  
-          echo "📋 Verifying authenticated deep scan report files..."
+          echo " Verifying authenticated deep scan report files..."
           ls -la ./zap-output/OWASP-ZAP-Security-Report.html ./zap-output/OWASP-ZAP-Security-Report.json 2>/dev/null || echo "Checking for all report files..."
           ls -la ./zap-output/*.html 2>/dev/null || echo "No HTML reports found"
           ls -la ./zap-output/*.json 2>/dev/null || echo "No JSON reports found"
@@ -675,22 +675,22 @@ jobs:
           # Copy authenticated scan report to current directory for organization script
           if [ -f "./zap-output/OWASP-ZAP-Security-Report.html" ]; then
             cp ./zap-output/OWASP-ZAP-Security-Report.html ./
-            echo "✅ Authenticated ZAP HTML report copied successfully"
+            echo " Authenticated ZAP HTML report copied successfully"
           fi
           if [ -f "./zap-output/OWASP-ZAP-Security-Report.json" ]; then
             cp ./zap-output/OWASP-ZAP-Security-Report.json ./
-            echo "✅ Authenticated ZAP JSON report copied successfully"
+            echo " Authenticated ZAP JSON report copied successfully"
           fi
           
           # Display file sizes and content summary
           for file in *.html *.json; do
             if [ -f "$file" ]; then
               SIZE=$(wc -c < "$file")
-              echo "✅ $file created: $SIZE bytes"
+              echo " $file created: $SIZE bytes"
               if [ "$SIZE" -gt 1000 ]; then
-                echo "📊 $file appears to contain real data"
+                echo " $file appears to contain real data"
               else
-                echo "⚠️ $file may be empty or minimal"
+                echo " $file may be empty or minimal"
               fi
             fi
           done
@@ -700,24 +700,24 @@ jobs:
 
       - name: Organize ZAP security reports
         run: |
-          echo "📋 Organizing OWASP ZAP security reports..."
+          echo " Organizing OWASP ZAP security reports..."
           
           # Ensure version folder exists
           mkdir -p "security-reports/v$VERSION/03-owasp-zap"
           
           # Check what files exist before moving
-          echo "📂 Files in current directory:"
+          echo " Files in current directory:"
           ls -la report*.* || echo "No report files found in current directory"
           
           # Move ZAP reports if they exist (check both naming conventions)
           if [ -f "OWASP-ZAP-Security-Report.html" ]; then
             mv OWASP-ZAP-Security-Report.html "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html"
-            echo "✅ Main HTML report moved successfully"
+            echo " Main HTML report moved successfully"
           elif [ -f "report_html.html" ]; then
             mv report_html.html "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html"
-            echo "✅ HTML report moved successfully"
+            echo " HTML report moved successfully"
           else
-            echo "⚠️ HTML report not found"
+            echo " HTML report not found"
             # Create a basic fallback report
             cat > "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html" << EOF
           <!DOCTYPE html>
@@ -731,32 +731,32 @@ jobs:
           </body>
           </html>
           EOF
-            echo "📄 Created fallback HTML report"
+            echo " Created fallback HTML report"
           fi
           
           if [ -f "OWASP-ZAP-Security-Report.json" ]; then
             mv OWASP-ZAP-Security-Report.json "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.json"
-            echo "✅ Main JSON report moved successfully"
+            echo " Main JSON report moved successfully"
           elif [ -f "report_json.json" ]; then
             mv report_json.json "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.json"
-            echo "✅ JSON report moved successfully"
+            echo " JSON report moved successfully"
           else
-            echo "⚠️ JSON report not found"
+            echo " JSON report not found"
             # Create basic fallback JSON
             echo '{"alerts":[],"version":"'$VERSION'","timestamp":"'$(date -Iseconds)'","status":"scan_completed_no_data"}' > "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.json"
-            echo "📄 Created fallback JSON report"
+            echo " Created fallback JSON report"
           fi
           
           # Single comprehensive report covers both web app and API endpoints
           
-          echo "✅ ZAP reports organized successfully"
-          echo "📂 Final report directory contents:"
+          echo " ZAP reports organized successfully"
+          echo " Final report directory contents:"
           ls -la "security-reports/v$VERSION/03-owasp-zap/"
           
           # Display report summary
           if [ -f "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html" ]; then
             HTML_SIZE=$(wc -c < "security-reports/v$VERSION/03-owasp-zap/OWASP-ZAP-Security-Report.html")
-            echo "✅ ZAP HTML report final size: $HTML_SIZE bytes"
+            echo " ZAP HTML report final size: $HTML_SIZE bytes"
           fi
           
           echo "status=completed" >> $GITHUB_OUTPUT
@@ -770,7 +770,7 @@ jobs:
           retention-days: 30
 
   publish-security-findings:
-    name: "📊 Publish Security Findings"
+    name: " Publish Security Findings"
     runs-on: ubuntu-latest
     needs: [setup-version, eslint-security-linting, sast-snyk-code, sca-snyk, dast-owasp-zap]
     if: always()
@@ -797,30 +797,30 @@ jobs:
               `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}` :
               `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             
-            const title = '🛡️ Static Linting Security Report (ESLint)';
+            const title = ' Static Linting Security Report (ESLint)';
             const body = `
-            # 🛡️ Static Linting Security Report (ESLint)
+            #  Static Linting Security Report (ESLint)
             
             **Status:** Comprehensive ESLint security linting completed
             **Timestamp:** ${new Date().toISOString()}
             
-            ## 🛡️ Security Linting Results
+            ##  Security Linting Results
             - **eslint-plugin-security:** Node.js security hotspot detection
             - **@microsoft/eslint-plugin-sdl:** Microsoft Security Development Lifecycle compliance
             - **eslint-plugin-sonarjs:** Code quality and security vulnerability detection
             - **TypeScript Security:** Type safety and security rule enforcement
             
-            ## 📊 Linting Coverage
+            ##  Linting Coverage
             - **Files Analyzed:** All JavaScript/TypeScript files in project
             - **Security Rules:** 15+ security-focused linting rules active
             - **Quality Rules:** Code complexity and maintainability checks
             - **Enterprise Rules:** SDL compliance and secure coding standards
             
-            ## 📁 Report Artifacts  
-            📥 **Download Report:**
-            - [🛡️ Download ESLint Security Report](${artifactUrl}) - Find and download "00-eslint-security-linting-report-v${{ env.VERSION }}" artifact
+            ##  Report Artifacts  
+             **Download Report:**
+            - [ Download ESLint Security Report](${artifactUrl}) - Find and download "00-eslint-security-linting-report-v${{ env.VERSION }}" artifact
             
-            **💡 How to Download:**
+            ** How to Download:**
             1. Click the link above to go to the workflow run
             2. Scroll down to the "Artifacts" section
             3. Click on "00-eslint-security-linting-report-v${{ env.VERSION }}" to download
@@ -856,23 +856,23 @@ jobs:
               `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}` :
               `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             
-            const title = '🔒 SAST Code Analysis Report (Snyk)';
+            const title = ' SAST Code Analysis Report (Snyk)';
             const body = `
-            # 🔒 SAST Code Analysis Report (Snyk)
+            #  SAST Code Analysis Report (Snyk)
             
             **Status:** Snyk Code static analysis completed
             **Timestamp:** ${new Date().toISOString()}
             
-            ## 📊 Analysis Results
+            ##  Analysis Results
             - **Static Application Security Testing:** Source code security scan completed
             - **Security Vulnerabilities:** Identified potential code-level security issues
             - **OWASP Top 10:** Comprehensive coverage of web application vulnerabilities
             
-            ## 📁 Report Artifacts
-            📥 **Download Report:**
-            - [🔒 Download Snyk Code SAST Report](${artifactUrl}) - Find and download "01-snyk-code-sast-report-v${{ env.VERSION }}" artifact
+            ##  Report Artifacts
+             **Download Report:**
+            - [ Download Snyk Code SAST Report](${artifactUrl}) - Find and download "01-snyk-code-sast-report-v${{ env.VERSION }}" artifact
             
-            **💡 How to Download:**
+            ** How to Download:**
             1. Click the link above to go to the workflow run
             2. Scroll down to the "Artifacts" section
             3. Click on "01-snyk-code-sast-report-v${{ env.VERSION }}" to download
@@ -908,21 +908,21 @@ jobs:
               `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}` :
               `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             
-            const title = '📦 SCA Dependency Report (Snyk)';
+            const title = ' SCA Dependency Report (Snyk)';
             const body = `
-            # 📦 SCA Dependency Report (Snyk)
+            #  SCA Dependency Report (Snyk)
             
             **Status:** Snyk dependency security scan completed
             **Timestamp:** ${new Date().toISOString()}
             
-            ## 🔒 Security Scan Results
+            ##  Security Scan Results
             - **Dependency Vulnerabilities:** Scanned for known security issues
             - **Package Security:** Analyzed npm packages for threats
             - **License Compliance:** Checked for license conflicts
             
-            ## 📁 Report Artifacts
-            📥 **Download Report:**
-            - [📦 Download Snyk SCA Dependency Report](${artifactUrl}) - Find and download "02-snyk-sca-report-v${{ env.VERSION }}" artifact
+            ##  Report Artifacts
+             **Download Report:**
+            - [ Download Snyk SCA Dependency Report](${artifactUrl}) - Find and download "02-snyk-sca-report-v${{ env.VERSION }}" artifact
             
             **💡 How to Download:**
             1. Click the link above to go to the workflow run
@@ -967,16 +967,16 @@ jobs:
             **Status:** OWASP ZAP dynamic security testing completed
             **Timestamp:** ${new Date().toISOString()}
             
-            ## 🛡️ Dynamic Security Testing Results
+            ##  Dynamic Security Testing Results
             - **Runtime Vulnerabilities:** Live application security scan
             - **Web Application Security:** OWASP Top 10 testing
             - **Penetration Testing:** Automated security assessment
             
-            ## 📁 Report Artifacts
-            📥 **Download Report:**
+            ##  Report Artifacts
+             **Download Report:**
             - [⚡ Download OWASP ZAP DAST Report](${artifactUrl}) - Find and download "03-owasp-zap-security-report-v${{ env.VERSION }}" artifact
             
-            **💡 How to Download:**
+            ** How to Download:**
             1. Click the link above to go to the workflow run
             2. Scroll down to the "Artifacts" section
             3. Click on "03-owasp-zap-security-report-v${{ env.VERSION }}" to download
@@ -995,7 +995,7 @@ jobs:
 
   # FINAL STEP: Docker Hub Deployment (After Security Analysis)
   docker-hub-publish:
-    name: "🚀 Docker Hub Deployment"
+    name: " Docker Hub Deployment"
     runs-on: ubuntu-latest
     needs: [setup-version, publish-security-findings]
     if: always()
@@ -1033,16 +1033,16 @@ jobs:
 
       - name: Verify Docker Hub push
         run: |
-          echo "✅ Docker image pushed successfully with semantic version"
-          echo "🐳 Image tags pushed:"
+          echo " Docker image pushed successfully with semantic version"
+          echo " Image tags pushed:"
           echo "   - ghaidaris/whoopspay:$VERSION"
           echo "   - ghaidaris/whoopspay:latest"
-          echo "🔗 View on Docker Hub: https://hub.docker.com/r/ghaidaris/whoopspay"
+          echo " View on Docker Hub: https://hub.docker.com/r/ghaidaris/whoopspay"
 
 
   # FINAL STEP: Render Deployment (Deploy Latest Docker Image to Production)
   render-deploy:
-    name: "🌐 Render Production Deployment"
+    name: " Render Production Deployment"
     runs-on: ubuntu-latest
     needs: [setup-version, docker-hub-publish]
     if: always() && needs.docker-hub-publish.result == 'success'
@@ -1064,9 +1064,9 @@ jobs:
 
       - name: Verify Render deployment
         run: |
-          echo "🌐 ✅ WhoopsPay deployed to Render successfully!"
-          echo "📦 Docker Image: $IMAGE_NAME"
-          echo "🏷️ Version: $VERSION"
-          echo "🚀 Deployment completed - Application is live on Render!"
+          echo " WhoopsPay deployed to Render successfully!"
+          echo " Docker Image: $IMAGE_NAME"
+          echo " Version: $VERSION"
+          echo " Deployment completed - Application is live on Render!"
           echo ""
-          echo "🔗 Access your deployed application on your Render service URL"
+          echo " Access your deployed application on your Render service URL"
