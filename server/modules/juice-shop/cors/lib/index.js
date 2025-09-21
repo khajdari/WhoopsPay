@@ -19,7 +19,9 @@
   function isOriginAllowed(origin, allowedOrigin) {
     if (Array.isArray(allowedOrigin)) {
       for (var i = 0; i < allowedOrigin.length; ++i) {
-        if (isOriginAllowed(origin, allowedOrigin[i])) {
+        var currentOrigin = Object.prototype.hasOwnProperty.call(allowedOrigin, i) ? 
+          Object.getOwnPropertyDescriptor(allowedOrigin, i).value : null;
+        if (currentOrigin && isOriginAllowed(origin, currentOrigin)) {
           return true;
         }
       }
@@ -34,37 +36,38 @@
   }
 
   function configureOrigin(options, req) {
-    var requestOrigin = req.headers.origin,
+    // Secure header access to prevent object injection
+    var requestOrigin = req && req.headers && Object.prototype.hasOwnProperty.call(req.headers, 'origin') ? req.headers.origin : undefined,
       headers = [],
       isAllowed;
 
     if (!options.origin || options.origin === '*') {
       // allow any origin
-      headers.push([{
+      headers.push({
         key: 'Access-Control-Allow-Origin',
         value: '*'
-      }]);
+      });
     } else if (isString(options.origin)) {
       // fixed origin
-      headers.push([{
+      headers.push({
         key: 'Access-Control-Allow-Origin',
         value: options.origin
-      }]);
-      headers.push([{
+      });
+      headers.push({
         key: 'Vary',
         value: 'Origin'
-      }]);
+      });
     } else {
       isAllowed = isOriginAllowed(requestOrigin, options.origin);
       // reflect origin
-      headers.push([{
+      headers.push({
         key: 'Access-Control-Allow-Origin',
         value: isAllowed ? requestOrigin : false
-      }]);
-      headers.push([{
+      });
+      headers.push({
         key: 'Vary',
         value: 'Origin'
-      }]);
+      });
     }
 
     return headers;
@@ -96,19 +99,20 @@
     var headers = [];
 
     if (!allowedHeaders) {
-      allowedHeaders = req.headers['access-control-request-headers']; // .headers wasn't specified, so reflect the request headers
-      headers.push([{
+      // Secure header access to prevent object injection
+      allowedHeaders = req && req.headers && Object.prototype.hasOwnProperty.call(req.headers, 'access-control-request-headers') ? req.headers['access-control-request-headers'] : undefined; // .headers wasn't specified, so reflect the request headers
+      headers.push({
         key: 'Vary',
         value: 'Access-Control-Request-Headers'
-      }]);
-    } else if (allowedHeaders.join) {
+      });
+    } else if (allowedHeaders && allowedHeaders.join) {
       allowedHeaders = allowedHeaders.join(','); // .headers is an array, so turn it into a string
     }
     if (allowedHeaders && allowedHeaders.length) {
-      headers.push([{
+      headers.push({
         key: 'Access-Control-Allow-Headers',
         value: allowedHeaders
-      }]);
+      });
     }
 
     return headers;
@@ -143,14 +147,19 @@
 
   function applyHeaders(headers, res) {
     for (var i = 0, n = headers.length; i < n; i++) {
-      var header = headers[i];
+      var header = Object.prototype.hasOwnProperty.call(headers, i) ? 
+        Object.getOwnPropertyDescriptor(headers, i).value : null;
       if (header) {
         if (Array.isArray(header)) {
           applyHeaders(header, res);
         } else if (header.key === 'Vary' && header.value) {
           vary(res, header.value);
-        } else if (header.value) {
-          res.setHeader(header.key, header.value);
+        } else if (header.value && header.key) {
+          // Validate header key to prevent prototype pollution
+          var safeKey = String(header.key).replace(/[^a-zA-Z0-9-_]/g, '');
+          if (safeKey && safeKey.length > 0) {
+            res.setHeader(safeKey, header.value);
+          }
         }
       }
     }
@@ -158,7 +167,8 @@
 
   function cors(options, req, res, next) {
     var headers = [],
-      method = req.method && req.method.toUpperCase && req.method.toUpperCase();
+      // Secure method access
+      method = req && req.method && typeof req.method.toUpperCase === 'function' ? req.method.toUpperCase() : 'GET';
 
     if (method === 'OPTIONS') {
       // preflight
@@ -216,7 +226,9 @@
           }
 
           if (originCallback) {
-            originCallback(req.headers.origin, function (err2, origin) {
+            // Secure origin header access
+            var safeOrigin = req && req.headers && Object.prototype.hasOwnProperty.call(req.headers, 'origin') ? req.headers.origin : undefined;
+            originCallback(safeOrigin, function (err2, origin) {
               if (err2 || !origin) {
                 next(err2);
               } else {

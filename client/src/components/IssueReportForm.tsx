@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { AlertTriangle, FileText, Send } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import type { InsertIssueReport } from "@shared/schema";
 
 interface IssueReportFormProps {
   onSubmitSuccess?: () => void;
@@ -25,7 +26,7 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
   const { t } = useI18n();
 
   const submitIssueMutation = useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: InsertIssueReport) => {
       return apiRequest("/api/issues", "POST", data);
     },
     onSuccess: () => {
@@ -47,7 +48,7 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
         onSubmitSuccess();
       }
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: t('submissionFailed'),
         description: t('submissionFailedDesc'),
@@ -76,25 +77,25 @@ export function IssueReportForm({ onSubmitSuccess }: IssueReportFormProps) {
     });
   };
 
-  const getCategoryIcon = (cat: string) => {
-    switch (cat) {
-      case "technical": return "🔧";
-      case "payment": return "💳";
-      case "security": return "🔒";
-      case "account": return "👤";
-      default: return "📝";
-    }
-  };
+  // const getCategoryIcon = (cat: string) => {
+  //   switch (cat) {
+  //     case "technical": return "🔧";
+  //     case "payment": return "💳";
+  //     case "security": return "🔒";
+  //     case "account": return "👤";
+  //     default: return "📝";
+  //   }
+  // };
 
-  const getPriorityColor = (pri: string) => {
-    switch (pri) {
-      case "critical": return "text-red-600 dark:text-red-400";
-      case "high": return "text-orange-600 dark:text-orange-400";
-      case "medium": return "text-yellow-600 dark:text-yellow-400";
-      case "low": return "text-green-600 dark:text-green-400";
-      default: return "text-gray-600 dark:text-gray-400";
-    }
-  };
+  // const getPriorityColor = (pri: string) => {
+  //   switch (pri) {
+  //     case "critical": return "text-red-600 dark:text-red-400";
+  //     case "high": return "text-orange-600 dark:text-orange-400";
+  //     case "medium": return "text-yellow-600 dark:text-yellow-400";
+  //     case "low": return "text-green-600 dark:text-green-400";
+  //     default: return "text-gray-600 dark:text-gray-400";
+  //   }
+  // };
 
   return (
     <Card className="w-full max-w-2xl mx-auto">

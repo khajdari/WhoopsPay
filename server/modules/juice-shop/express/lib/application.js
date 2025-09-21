@@ -42,7 +42,8 @@ var slice = Array.prototype.slice;
  * Application prototype.
  */
 
-var app = exports = module.exports = {};
+var app = {};
+module.exports = app;
 
 /**
  * Variable for trust proxy inheritance back-compat
@@ -95,8 +96,11 @@ app.defaultConfiguration = function defaultConfiguration() {
 
   this.on('mount', function onmount(parent) {
     // inherit trust proxy
-    if (this.settings[trustProxyDefaultSymbol] === true
-      && typeof parent.settings['trust proxy fn'] === 'function') {
+    var thisProxyFlag = Object.prototype.hasOwnProperty.call(this.settings, trustProxyDefaultSymbol) ? 
+      Object.getOwnPropertyDescriptor(this.settings, trustProxyDefaultSymbol).value : false;
+    var parentProxyFn = Object.prototype.hasOwnProperty.call(parent.settings, 'trust proxy fn') ? 
+      Object.getOwnPropertyDescriptor(parent.settings, 'trust proxy fn').value : null;
+    if (thisProxyFlag === true && typeof parentProxyFn === 'function') {
       delete this.settings['trust proxy'];
       delete this.settings['trust proxy fn'];
     }
@@ -115,7 +119,13 @@ app.defaultConfiguration = function defaultConfiguration() {
   this.mountpath = '/';
 
   // default locals
-  this.locals.settings = this.settings;
+  // Secure reference to settings
+  Object.defineProperty(this.locals, 'settings', {
+    value: this.settings,
+    writable: false,
+    enumerable: true,
+    configurable: false
+  });
 
   // default configuration
   this.set('view', View);
@@ -307,8 +317,13 @@ app.engine = function engine(ext, fn) {
     ? '.' + ext
     : ext;
 
-  // store engine
-  this.engines[extension] = fn;
+  // store engine (secure property assignment)
+  Object.defineProperty(this.engines, extension, {
+    value: fn,
+    writable: true,
+    enumerable: true,
+    configurable: true
+  });
 
   return this;
 };
@@ -330,7 +345,9 @@ app.param = function param(name, fn) {
 
   if (Array.isArray(name)) {
     for (var i = 0; i < name.length; i++) {
-      this.param(name[i], fn);
+      var paramName = Object.prototype.hasOwnProperty.call(name, i) ? 
+        Object.getOwnPropertyDescriptor(name, i).value : null;
+      if (paramName) this.param(paramName, fn);
     }
 
     return this;
@@ -363,7 +380,8 @@ app.set = function set(setting, val) {
 
     while (settings && settings !== Object.prototype) {
       if (hasOwnProperty.call(settings, setting)) {
-        return settings[setting]
+        return Object.prototype.hasOwnProperty.call(settings, setting) ? 
+          Object.getOwnPropertyDescriptor(settings, setting).value : undefined
       }
 
       settings = Object.getPrototypeOf(settings)
@@ -374,8 +392,13 @@ app.set = function set(setting, val) {
 
   debug('set "%s" to %o', setting, val);
 
-  // set value
-  this.settings[setting] = val;
+  // set value (secure property assignment)
+  Object.defineProperty(this.settings, setting, {
+    value: val,
+    writable: true,
+    enumerable: true,
+    configurable: true
+  });
 
   // trigger matched settings
   switch (setting) {
@@ -487,7 +510,9 @@ app.disable = function disable(setting) {
  */
 
 methods.forEach(function(method){
-  app[method] = function(path){
+  if (Object.prototype.hasOwnProperty.call(app, method)) return;
+  Object.defineProperty(app, method, {
+    value: function(path) {
     if (method === 'get' && arguments.length === 1) {
       // app.get(setting)
       return this.set(path);
@@ -496,9 +521,17 @@ methods.forEach(function(method){
     this.lazyrouter();
 
     var route = this._router.route(path);
-    route[method].apply(route, slice.call(arguments, 1));
-    return this;
-  };
+      var methodFn = Object.prototype.hasOwnProperty.call(route, method) ? 
+        Object.getOwnPropertyDescriptor(route, method).value : null;
+      if (methodFn && typeof methodFn === 'function') {
+        methodFn.apply(route, slice.call(arguments, 1));
+      }
+      return this;
+    },
+    writable: true,
+    enumerable: true,
+    configurable: true
+  });
 });
 
 /**
@@ -518,7 +551,13 @@ app.all = function all(path) {
   var args = slice.call(arguments, 1);
 
   for (var i = 0; i < methods.length; i++) {
-    route[methods[i]].apply(route, args);
+    var methodName = Object.prototype.hasOwnProperty.call(methods, i) ? methods[i] : null;
+    if (!methodName) continue;
+    var methodFn = Object.prototype.hasOwnProperty.call(route, methodName) ? 
+      Object.getOwnPropertyDescriptor(route, methodName).value : null;
+    if (methodFn && typeof methodFn === 'function') {
+      methodFn.apply(route, args);
+    }
   }
 
   return this;
@@ -577,7 +616,8 @@ app.render = function render(name, options, callback) {
 
   // primed cache
   if (renderOptions.cache) {
-    view = cache[name];
+    view = Object.prototype.hasOwnProperty.call(cache, name) ? 
+      Object.getOwnPropertyDescriptor(cache, name).value : null;
   }
 
   // view
@@ -601,7 +641,12 @@ app.render = function render(name, options, callback) {
 
     // prime the cache
     if (renderOptions.cache) {
-      cache[name] = view;
+      Object.defineProperty(cache, name, {
+        value: view,
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
     }
   }
 

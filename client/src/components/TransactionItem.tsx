@@ -3,9 +3,10 @@ import { ArrowUpRight, ArrowDownLeft, ExternalLink, Users, Clock, Check, X } fro
 import { formatDistanceToNow } from "date-fns";
 import { el } from "date-fns/locale";
 import { useI18n } from '@/lib/i18n';
+import type { Transaction } from '@shared/schema';
 
 interface TransactionItemProps {
-  transaction: any;
+  transaction: Transaction;
 }
 
 export default function TransactionItem({ transaction }: TransactionItemProps) {
@@ -16,7 +17,7 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
     return <div>Loading transaction...</div>;
   }
   
-  const isReceived = transaction.toUserId && typeof transaction.toUserId === 'string' && transaction.toUserId.startsWith('@');
+  const isReceived = Boolean(transaction.toUserId && typeof transaction.toUserId === 'string' && transaction.toUserId.startsWith('@'));
   const isONUS = transaction.transactionCategory === 'ONUS';
   const isOFFUS = transaction.transactionCategory === 'OFFUS';
   
@@ -26,11 +27,12 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
     }
     if (transaction.type === 'money_request') {
       // Different icons for money requests based on status
-      if (transaction.status === 'pending') {
+      const status = transaction.status;
+      if (status === 'pending') {
         return <Clock className="w-5 h-5 text-yellow-600" />;
-      } else if (transaction.status === 'approved') {
+      } else if (status === 'approved') {
         return <Check className="w-5 h-5 text-green-600" />;
-      } else if (transaction.status === 'rejected') {
+      } else if (status === 'rejected') {
         return <X className="w-5 h-5 text-red-600" />;
       }
     }
@@ -56,7 +58,8 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
     };
     
     const getStatusText = () => {
-      switch(transaction.status) {
+      const status = transaction.status;
+      switch(status) {
         case 'completed':
           return t('completed');
         case 'pending':
@@ -66,12 +69,12 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
         case 'approved':
           return t('requestApproved');
         default:
-          return transaction.status?.toUpperCase() || '';
+          return transaction.status ? String(transaction.status).toUpperCase() : '';
       }
     };
     
     return (
-      <Badge className={`${statusColors[transaction.status as keyof typeof statusColors] || "bg-gray-100 text-gray-800"} text-xs`}>
+      <Badge className={`${(transaction.status && statusColors[transaction.status as keyof typeof statusColors]) || "bg-gray-100 text-gray-800"} text-xs`}>
         {getStatusText()}
       </Badge>
     );
@@ -154,7 +157,7 @@ export default function TransactionItem({ transaction }: TransactionItemProps) {
         </div>
         <div className="flex-shrink-0">
           <p className={`text-sm font-semibold ${getTransactionColor()}`}>
-            {isReceived ? '+ ¤' : '- ¤'}{parseFloat(transaction.amount || '0').toFixed(2)}
+            {isReceived ? '+ ¤' : '- ¤'}{parseFloat(String(transaction.amount || 0)).toFixed(2)}
           </p>
         </div>
       </div>

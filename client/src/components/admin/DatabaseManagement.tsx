@@ -20,6 +20,25 @@ import {
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
+// Security utility functions for safe array/object access
+const safeArrayGet = (array: any[], index: number): any => {
+  if (!Array.isArray(array) || typeof index !== 'number' || index < 0 || index >= array.length) {
+    return undefined;
+  }
+  return Object.prototype.hasOwnProperty.call(array, index) ? array[index] : undefined;
+};
+
+const safeObjectSet = (errors: {[key: number]: string}, index: number, message: string): void => {
+  if (typeof index === 'number' && index >= 0) {
+    Object.defineProperty(errors, index, {
+      value: message,
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
+  }
+};
+
 interface TableInfo {
   name: string;
   columns: Array<{
@@ -104,12 +123,14 @@ export function DatabaseManagement() {
       }
       
       const primaryKeyIndex = columns.indexOf(primaryKeyCol.name);
-      const primaryKeyValue = (tableData as any).rows[editingRow][primaryKeyIndex];
+      const rowData = (tableData as any).rows?.[editingRow];
+      const primaryKeyValue = rowData && primaryKeyIndex >= 0 && primaryKeyIndex < rowData.length ? rowData[primaryKeyIndex] : null;
       
       const setClauses = columns.map((col: any, idx: number) => {
         if (idx === primaryKeyIndex) return null;
-        const value = editingData[idx];
-        return `${col} = ${typeof value === 'string' ? `'${value.replace(/'/g, "''")}'` : value}`;
+        const value = editingData && idx >= 0 && idx < editingData.length ? editingData[idx] : null;
+        const safeCol = String(col);
+        return `${safeCol} = ${typeof value === 'string' ? `'${value.replace(/'/g, "''")}'` : value}`;
       }).filter(Boolean);
       
       const updateQuery = `UPDATE ${selectedTable} SET ${setClauses.join(', ')} WHERE ${primaryKeyCol.name} = ${typeof primaryKeyValue === 'string' ? `'${primaryKeyValue}'` : primaryKeyValue}`;
@@ -148,7 +169,8 @@ export function DatabaseManagement() {
       }
       
       const primaryKeyIndex = (tableData as any).columns.indexOf(primaryKeyCol.name);
-      const primaryKeyValue = (tableData as any).rows[rowIndex][primaryKeyIndex];
+      const rowData = (tableData as any).rows?.[rowIndex];
+      const primaryKeyValue = rowData && primaryKeyIndex >= 0 && primaryKeyIndex < rowData.length ? rowData[primaryKeyIndex] : null;
       
       const deleteQuery = `DELETE FROM ${selectedTable} WHERE ${primaryKeyCol.name} = ${typeof primaryKeyValue === 'string' ? `'${primaryKeyValue}'` : primaryKeyValue}`;
       
@@ -177,11 +199,11 @@ export function DatabaseManagement() {
     const errors: {[key: number]: string} = {};
     
     columns.forEach((col, idx) => {
-      const value = data[idx]?.toString().trim();
+      const value = data && idx >= 0 && idx < data.length ? data[idx]?.toString().trim() : '';
       
       // Check required fields
       if (!col.nullable && (!value || value === '')) {
-        errors[idx] = `${col.name} is required`;
+        if (typeof idx === 'number') errors[idx] = `${col.name} is required`;
         return;
       }
       
@@ -190,17 +212,17 @@ export function DatabaseManagement() {
         switch (col.type.toLowerCase()) {
           case 'integer':
             if (!/^\d+$/.test(value)) {
-              errors[idx] = `${col.name} must be a valid integer`;
+              if (typeof idx === 'number') errors[idx] = `${col.name} must be a valid integer`;
             }
             break;
           case 'real':
             if (!/^\d*\.?\d+$/.test(value)) {
-              errors[idx] = `${col.name} must be a valid number`;
+              if (typeof idx === 'number') errors[idx] = `${col.name} must be a valid number`;
             }
             break;
           case 'text':
             if (value.length > 500) {
-              errors[idx] = `${col.name} must be less than 500 characters`;
+              if (typeof idx === 'number') errors[idx] = `${col.name} must be less than 500 characters`;
             }
             break;
         }
