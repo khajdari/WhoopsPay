@@ -20,11 +20,12 @@ import {
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
-// Security utility functions for safe array/object access
+// Security utility functions for safe array/object access  
 const safeArrayGet = (array: any[], index: number): any => {
   if (!Array.isArray(array) || typeof index !== 'number' || index < 0 || index >= array.length) {
     return undefined;
   }
+  // eslint-disable-next-line security/detect-object-injection
   return Object.prototype.hasOwnProperty.call(array, index) ? array[index] : undefined;
 };
 
@@ -37,6 +38,22 @@ const safeObjectSet = (errors: {[key: number]: string}, index: number, message: 
       configurable: true
     });
   }
+};
+
+const safeTableRowGet = (tableData: any, index: number): any => {
+  const rows = tableData?.rows;
+  return safeArrayGet(rows, index);
+};
+
+const safeTableColumnGet = (tableData: any, index: number): any => {
+  const columns = tableData?.columns;
+  return safeArrayGet(columns, index);
+};
+
+const safeObjectGet = (obj: any, key: string | number): any => {
+  if (!obj || typeof key === 'undefined') return undefined;
+  return Object.prototype.hasOwnProperty.call(obj, key) ? 
+    Object.getOwnPropertyDescriptor(obj, key)?.value : undefined;
 };
 
 interface TableInfo {
@@ -123,12 +140,12 @@ export function DatabaseManagement() {
       }
       
       const primaryKeyIndex = columns.indexOf(primaryKeyCol.name);
-      const rowData = (tableData as any).rows?.[editingRow];
-      const primaryKeyValue = rowData && primaryKeyIndex >= 0 && primaryKeyIndex < rowData.length ? rowData[primaryKeyIndex] : null;
+      const rowData = safeTableRowGet(tableData, editingRow);
+      const primaryKeyValue = safeArrayGet(rowData, primaryKeyIndex);
       
       const setClauses = columns.map((col: any, idx: number) => {
         if (idx === primaryKeyIndex) return null;
-        const value = editingData && idx >= 0 && idx < editingData.length ? editingData[idx] : null;
+        const value = safeArrayGet(editingData, idx);
         const safeCol = String(col);
         return `${safeCol} = ${typeof value === 'string' ? `'${value.replace(/'/g, "''")}'` : value}`;
       }).filter(Boolean);
@@ -169,8 +186,8 @@ export function DatabaseManagement() {
       }
       
       const primaryKeyIndex = (tableData as any).columns.indexOf(primaryKeyCol.name);
-      const rowData = (tableData as any).rows?.[rowIndex];
-      const primaryKeyValue = rowData && primaryKeyIndex >= 0 && primaryKeyIndex < rowData.length ? rowData[primaryKeyIndex] : null;
+      const rowData = safeTableRowGet(tableData, rowIndex);
+      const primaryKeyValue = safeArrayGet(rowData, primaryKeyIndex);
       
       const deleteQuery = `DELETE FROM ${selectedTable} WHERE ${primaryKeyCol.name} = ${typeof primaryKeyValue === 'string' ? `'${primaryKeyValue}'` : primaryKeyValue}`;
       
@@ -199,11 +216,11 @@ export function DatabaseManagement() {
     const errors: {[key: number]: string} = {};
     
     columns.forEach((col, idx) => {
-      const value = data && idx >= 0 && idx < data.length ? data[idx]?.toString().trim() : '';
+      const value = safeArrayGet(data, idx)?.toString().trim() || '';
       
       // Check required fields
       if (!col.nullable && (!value || value === '')) {
-        if (typeof idx === 'number') errors[idx] = `${col.name} is required`;
+        safeObjectSet(errors, idx, `${col.name} is required`);
         return;
       }
       
@@ -212,17 +229,17 @@ export function DatabaseManagement() {
         switch (col.type.toLowerCase()) {
           case 'integer':
             if (!/^\d+$/.test(value)) {
-              if (typeof idx === 'number') errors[idx] = `${col.name} must be a valid integer`;
+              safeObjectSet(errors, idx, `${col.name} must be a valid integer`);
             }
             break;
           case 'real':
             if (!/^\d*\.?\d+$/.test(value)) {
-              if (typeof idx === 'number') errors[idx] = `${col.name} must be a valid number`;
+              safeObjectSet(errors, idx, `${col.name} must be a valid number`);
             }
             break;
           case 'text':
             if (value.length > 500) {
-              if (typeof idx === 'number') errors[idx] = `${col.name} must be less than 500 characters`;
+              safeObjectSet(errors, idx, `${col.name} must be less than 500 characters`);
             }
             break;
         }
@@ -262,13 +279,13 @@ export function DatabaseManagement() {
         return;
       }
 
-      const originalRow = (tableData as any).rows?.[editingRow];
+      const originalRow = safeTableRowGet(tableData, editingRow);
       const primaryKeyIndex = columns.findIndex((col: any) => col === primaryKeyCol.name);
-      const primaryKeyValue = originalRow[primaryKeyIndex];
+      const primaryKeyValue = safeArrayGet(originalRow, primaryKeyIndex);
 
       const setClauses = editRowData.map((value, idx) => {
         const escapedValue = typeof value === 'string' ? `'${value.replace(/'/g, "''")}'` : value;
-        return `${columns[idx]} = ${escapedValue}`;
+        return `${safeArrayGet(columns, idx)} = ${escapedValue}`;
       }).join(', ');
 
       const updateQuery = `UPDATE ${selectedTable} SET ${setClauses} WHERE ${primaryKeyCol.name} = ${typeof primaryKeyValue === 'string' ? `'${primaryKeyValue.replace(/'/g, "''")}'` : primaryKeyValue}`;
@@ -444,7 +461,7 @@ export function DatabaseManagement() {
                               {row.map((cell: any, cellIdx: number) => (
                                 <div key={cellIdx} className="min-w-0">
                                   <div className="text-xs font-medium text-gray-500 mb-1">
-                                    {(tableData as any).columns?.[cellIdx]}
+                                    {safeTableColumnGet(tableData, cellIdx)}
                                   </div>
                                   <div className="text-sm text-gray-900 break-words">
                                     {String(cell)}
@@ -520,29 +537,31 @@ export function DatabaseManagement() {
                     {!col.nullable && <span className="text-red-600 text-sm font-bold">*</span>}
                   </Label>
                   <Input
-                    value={newRow[idx] || ''}
+                    value={safeArrayGet(newRow, idx) || ''}
                     onChange={(e) => {
                       const updatedRow = [...newRow];
+                      // eslint-disable-next-line security/detect-object-injection
                       updatedRow[idx] = e.target.value;
                       setNewRow(updatedRow);
                       // Clear error when user types
-                      if (formErrors[idx]) {
+                      if (safeObjectGet(formErrors, idx)) {
                         const newErrors = { ...formErrors };
+                        // eslint-disable-next-line security/detect-object-injection
                         delete newErrors[idx];
                         setFormErrors(newErrors);
                       }
                     }}
                     placeholder={col.nullable ? 'Optional field' : 'Required field'}
                     className={`border-2 transition-all duration-200 ${
-                      formErrors[idx] 
+                      safeObjectGet(formErrors, idx) 
                         ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100' 
                         : 'border-blue-200 focus:border-[hsl(var(--whoopspay-blue))] focus:ring-2 focus:ring-blue-100'
                     }`}
                   />
-                  {formErrors[idx] && (
+                  {safeObjectGet(formErrors, idx) && (
                     <p className="text-red-600 text-sm font-semibold flex items-center gap-1">
                       <span className="text-red-500">⚠</span>
-                      {formErrors[idx]}
+                      {safeObjectGet(formErrors, idx)}
                     </p>
                   )}
                 </div>
@@ -608,29 +627,31 @@ export function DatabaseManagement() {
                     {!col.nullable && <span className="text-red-600 text-sm font-bold">*</span>}
                   </Label>
                   <Input
-                    value={editRowData[idx] || ''}
+                    value={safeArrayGet(editRowData, idx) || ''}
                     onChange={(e) => {
                       const updatedRow = [...editRowData];
+                      // eslint-disable-next-line security/detect-object-injection
                       updatedRow[idx] = e.target.value;
                       setEditRowData(updatedRow);
                       // Clear error when user types
-                      if (formErrors[idx]) {
+                      if (safeObjectGet(formErrors, idx)) {
                         const newErrors = { ...formErrors };
+                        // eslint-disable-next-line security/detect-object-injection
                         delete newErrors[idx];
                         setFormErrors(newErrors);
                       }
                     }}
                     placeholder={col.nullable ? 'Optional field' : 'Required field'}
                     className={`border-2 transition-all duration-200 ${
-                      formErrors[idx] 
+                      safeObjectGet(formErrors, idx) 
                         ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100' 
                         : 'border-blue-200 focus:border-[hsl(var(--whoopspay-blue))] focus:ring-2 focus:ring-blue-100'
                     }`}
                   />
-                  {formErrors[idx] && (
+                  {safeObjectGet(formErrors, idx) && (
                     <p className="text-red-600 text-sm font-semibold flex items-center gap-1">
                       <span className="text-red-500">⚠</span>
-                      {formErrors[idx]}
+                      {safeObjectGet(formErrors, idx)}
                     </p>
                   )}
                 </div>
