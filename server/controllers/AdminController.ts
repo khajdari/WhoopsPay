@@ -361,7 +361,7 @@ export class AdminController {
 
       res.json({
         columns,
-        rows: rows.map((row: any) => columns.map(col => row[col])),
+        rows: rows.map((row: any) => columns.map(col => Object.prototype.hasOwnProperty.call(row, col) ? row[col] : null)),
         totalRows: rows.length,
         limit,
         offset
@@ -410,7 +410,7 @@ export class AdminController {
 
         res.json({
           columns,
-          rows: rows.map((row: any) => columns.map(col => row[col])),
+          rows: rows.map((row: any) => columns.map(col => Object.prototype.hasOwnProperty.call(row, col) ? row[col] : null)),
           rowsAffected: rows.length
         });
       } else {
@@ -466,7 +466,8 @@ export class AdminController {
           
           // Extract error info
           let type = 'API Error';
-          let message = log.split('] ')[1] || log;
+          const logParts = log.split('] ');
+          let message = logParts.length > 1 ? logParts[1] : log;
           let severity = 'medium';
           
           if (log.includes('500 in')) {
@@ -497,7 +498,8 @@ export class AdminController {
           const time = timeMatch ? new Date(timeMatch[1]) : new Date();
           
           let type = 'Database Error';
-          let message = log.split('] ')[1] || log;
+          const logParts = log.split('] ');
+          let message = logParts.length > 1 ? logParts[1] : log;
           let severity = 'high';
           
           if (log.includes('SQLITE_CORRUPT')) {

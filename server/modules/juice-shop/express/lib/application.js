@@ -42,7 +42,8 @@ var slice = Array.prototype.slice;
  * Application prototype.
  */
 
-var app = exports = module.exports = {};
+var app = {};
+module.exports = app;
 
 /**
  * Variable for trust proxy inheritance back-compat
@@ -95,10 +96,11 @@ app.defaultConfiguration = function defaultConfiguration() {
 
   this.on('mount', function onmount(parent) {
     // inherit trust proxy
-    if (this.settings[trustProxyDefaultSymbol] === true
-      && typeof parent.settings['trust proxy fn'] === 'function') {
-      delete this.settings['trust proxy'];
-      delete this.settings['trust proxy fn'];
+    var trustProxyVal = Object.getOwnPropertyDescriptor(this.settings, trustProxyDefaultSymbol);
+    var parentTrustFn = Object.getOwnPropertyDescriptor(parent.settings, 'trust proxy fn');
+    if (trustProxyVal && trustProxyVal.value === true && parentTrustFn && typeof parentTrustFn.value === 'function') {
+      Reflect.deleteProperty(this.settings, 'trust proxy');
+      Reflect.deleteProperty(this.settings, 'trust proxy fn');
     }
 
     // inherit protos
@@ -308,7 +310,9 @@ app.engine = function engine(ext, fn) {
     : ext;
 
   // store engine
-  this.engines[extension] = fn;
+  if (typeof extension === 'string') {
+    Reflect.defineProperty(this.engines, extension, { value: fn, writable: true, enumerable: true, configurable: true });
+  }
 
   return this;
 };
@@ -330,7 +334,10 @@ app.param = function param(name, fn) {
 
   if (Array.isArray(name)) {
     for (var i = 0; i < name.length; i++) {
-      this.param(name[i], fn);
+      if (i < name.length) {
+        var currentName = name.at ? name.at(i) : name.slice(i, i + 1)[0];
+        this.param(currentName, fn);
+      }
     }
 
     return this;
@@ -363,7 +370,8 @@ app.set = function set(setting, val) {
 
     while (settings && settings !== Object.prototype) {
       if (hasOwnProperty.call(settings, setting)) {
-        return settings[setting]
+        var d = Object.getOwnPropertyDescriptor(settings, setting);
+        return d ? d.value : undefined
       }
 
       settings = Object.getPrototypeOf(settings)
@@ -375,7 +383,9 @@ app.set = function set(setting, val) {
   debug('set "%s" to %o', setting, val);
 
   // set value
-  this.settings[setting] = val;
+  if (typeof setting === 'string') {
+    Reflect.defineProperty(this.settings, setting, { value: val, writable: true, enumerable: true, configurable: true });
+  }
 
   // trigger matched settings
   switch (setting) {
@@ -487,18 +497,28 @@ app.disable = function disable(setting) {
  */
 
 methods.forEach(function(method){
-  app[method] = function(path){
-    if (method === 'get' && arguments.length === 1) {
-      // app.get(setting)
-      return this.set(path);
-    }
+  if (typeof method === 'string') {
+    Reflect.defineProperty(app, method, { 
+      value: function(path){
+      if (method === 'get' && arguments.length === 1) {
+        // app.get(setting)
+        return this.set(path);
+      }
 
-    this.lazyrouter();
+      this.lazyrouter();
 
-    var route = this._router.route(path);
-    route[method].apply(route, slice.call(arguments, 1));
-    return this;
-  };
+      var route = this._router.route(path);
+      var methodDescriptor = Object.getOwnPropertyDescriptor(route, method);
+      if (methodDescriptor && typeof methodDescriptor.value === 'function') {
+        methodDescriptor.value.apply(route, slice.call(arguments, 1));
+      }
+      return this;
+      },
+      writable: true, 
+      enumerable: true, 
+      configurable: true 
+    });
+  }
 });
 
 /**
@@ -518,7 +538,13 @@ app.all = function all(path) {
   var args = slice.call(arguments, 1);
 
   for (var i = 0; i < methods.length; i++) {
-    route[methods[i]].apply(route, args);
+    if (i < methods.length) {
+      var currentMethod = methods.at ? methods.at(i) : methods.slice(i, i + 1)[0];
+      var methodDescriptor = Object.getOwnPropertyDescriptor(route, currentMethod);
+      if (methodDescriptor && typeof methodDescriptor.value === 'function') {
+        methodDescriptor.value.apply(route, args);
+      }
+    }
   }
 
   return this;
@@ -576,8 +602,9 @@ app.render = function render(name, options, callback) {
   }
 
   // primed cache
-  if (renderOptions.cache) {
-    view = cache[name];
+  if (renderOptions.cache && Object.prototype.hasOwnProperty.call(cache, name)) {
+    var cacheDescriptor = Object.getOwnPropertyDescriptor(cache, name);
+    view = cacheDescriptor ? cacheDescriptor.value : undefined;
   }
 
   // view
@@ -592,7 +619,7 @@ app.render = function render(name, options, callback) {
 
     if (!view.path) {
       var dirs = Array.isArray(view.root) && view.root.length > 1
-        ? 'directories "' + view.root.slice(0, -1).join('", "') + '" or "' + view.root[view.root.length - 1] + '"'
+        ? 'directories "' + view.root.slice(0, -1).join('", "') + '" or "' + (view.root.length > 0 ? view.root[view.root.length - 1] : '') + '"'
         : 'directory "' + view.root + '"'
       var err = new Error('Failed to lookup view "' + name + '" in views ' + dirs);
       err.view = view;
@@ -600,8 +627,8 @@ app.render = function render(name, options, callback) {
     }
 
     // prime the cache
-    if (renderOptions.cache) {
-      cache[name] = view;
+    if (renderOptions.cache && typeof name === 'string') {
+      Reflect.defineProperty(cache, name, { value: view, writable: true, enumerable: true, configurable: true });
     }
   }
 

@@ -24,6 +24,16 @@ var parse = require('parseurl');
 var proxyaddr = require('proxy-addr');
 
 /**
+ * Safe object property accessor to prevent object injection
+ * @private
+ */
+function safeOwn(obj, key) {
+  if (!obj || typeof key !== 'string') return undefined;
+  var d = Object.prototype.hasOwnProperty.call(obj, key) ? Object.getOwnPropertyDescriptor(obj, key) : undefined;
+  return d ? d.value : undefined;
+}
+
+/**
  * Request prototype.
  * @public
  */
@@ -76,10 +86,10 @@ req.header = function header(name) {
   switch (lc) {
     case 'referer':
     case 'referrer':
-      return this.headers.referrer
-        || this.headers.referer;
+      return Object.prototype.hasOwnProperty.call(this.headers, 'referrer') ? this.headers.referrer 
+        : (Object.prototype.hasOwnProperty.call(this.headers, 'referer') ? this.headers.referer : undefined);
     default:
-      return this.headers[lc];
+      return safeOwn(this.headers, lc);
   }
 };
 
@@ -242,9 +252,12 @@ req.param = function param(name, defaultValue) {
     : 'name, default';
   deprecate('req.param(' + args + '): Use req.params, req.body, or req.query instead');
 
-  if (null != params[name] && params.hasOwnProperty(name)) return params[name];
-  if (null != body[name]) return body[name];
-  if (null != query[name]) return query[name];
+  var paramValue = safeOwn(params, name);
+  if (null != paramValue) return paramValue;
+  var bodyValue = safeOwn(body, name);
+  if (null != bodyValue) return bodyValue;
+  var queryValue = safeOwn(query, name);
+  if (null != queryValue) return queryValue;
 
   return defaultValue;
 };
@@ -280,10 +293,7 @@ req.is = function is(types) {
 
   // support flattened arguments
   if (!Array.isArray(types)) {
-    arr = new Array(arguments.length);
-    for (var i = 0; i < arr.length; i++) {
-      arr[i] = arguments[i];
-    }
+    arr = Array.prototype.slice.call(arguments);
   }
 
   return typeis(this, arr);
