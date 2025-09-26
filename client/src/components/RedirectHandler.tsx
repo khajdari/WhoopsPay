@@ -31,9 +31,46 @@ export function RedirectHandler() {
         // Clear the stored URL to prevent repeated redirects
         sessionStorage.removeItem('redirectAfterLogin');
         
+        // Security: Validate redirect URL to prevent Open Redirect attacks
+        const validateAndRedirect = (url: string): void => {
+          try {
+            const parsedUrl = new URL(url, window.location.origin);
+            
+            // Security: Restrict to same-origin in production, localhost only in development
+            const allowedOrigins = import.meta.env.PROD 
+              ? [window.location.origin]
+              : [
+                  window.location.origin,
+                  'http://localhost:5000',
+                  'http://localhost:3000',
+                  'https://localhost:5000',
+                  'https://localhost:3000'
+                ];
+            
+            if (allowedOrigins.includes(parsedUrl.origin)) {
+              // Security: Additional validation before redirect
+              const cleanUrl = parsedUrl.href.replace(/[<>"'`]/g, '');
+              if (cleanUrl === parsedUrl.href) {
+                window.location.assign(parsedUrl.href);
+              } else {
+                console.warn('Potentially malicious URL blocked:', parsedUrl.href);
+                window.location.assign('/dashboard');
+              }
+            } else {
+              // Redirect to safe default if URL is not trusted
+              console.warn('Unsafe redirect URL blocked:', url);
+              window.location.href = '/dashboard';
+            }
+          } catch (error) {
+            // Invalid URL format, redirect to safe default
+            console.warn('Invalid redirect URL format:', url);
+            window.location.href = '/dashboard';
+          }
+        };
+        
         // Small delay to ensure authentication state is stable
         setTimeout(() => {
-          window.location.href = redirectUrl;
+          validateAndRedirect(redirectUrl);
         }, 100);
       }
     }

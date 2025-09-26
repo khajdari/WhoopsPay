@@ -25,7 +25,43 @@ export function RedirectHandler() {
   const orderId = urlParams.get('orderId') || '';
   const amount = urlParams.get('amount');
   const returnTo = urlParams.get('returnTo') || '';
-  const redirectUrl = decodeURIComponent(urlParams.get('url') || '');
+  // Security: Enhanced URL validation with strict allowlist to prevent open redirect attacks
+  const validateRedirectUrl = (url: string): string => {
+    if (!url) return '';
+    
+    // Security: Define explicit allowlist of safe redirect paths (relative URLs only)
+    const allowedPaths = [
+      '/dashboard',
+      '/transactions', 
+      '/wallet',
+      '/profile',
+      '/settings',
+      '/juice-shop'
+    ];
+    
+    try {
+      // Security: Only allow relative URLs to prevent external redirects
+      if (url.startsWith('/') && !url.startsWith('//')) {
+        // Extract base path without query parameters
+        const basePath = url.split('?')[0];
+        
+        // Check if the base path is in our allowlist
+        if (allowedPaths.includes(basePath) || basePath.startsWith('/juice-shop')) {
+          return url; // Return the full URL with query parameters
+        }
+      }
+      
+      // Security: For any invalid or potentially dangerous URL, redirect to dashboard
+      console.warn('Blocked potentially unsafe redirect URL:', url);
+      return '/dashboard';
+    } catch (error) {
+      // Security: Invalid URL format, default to safe redirect
+      console.warn('Invalid redirect URL format provided:', url);
+      return '/dashboard';
+    }
+  };
+
+  const redirectUrl = validateRedirectUrl(decodeURIComponent(urlParams.get('url') || ''));
   
   const isApproved = status === 'approved';
   const isExternal = !!redirectUrl;
@@ -51,24 +87,48 @@ export function RedirectHandler() {
     if (!redirectUrl) return;
     setRedirecting(true);
     setTimeout(() => {
-      // For Juice Shop, construct the correct URL
+      // Security: Always use the router for internal navigation to prevent open redirects
       if (returnTo === 'juice-shop') {
-        const juiceShopUrl = `/juice-shop?success=1&orderId=${orderId}&amount=${amount}`;
-        window.location.href = juiceShopUrl;
+        const juiceShopUrl = `/juice-shop?success=1&orderId=${encodeURIComponent(orderId)}&amount=${encodeURIComponent(amount || '')}`;
+        const safeUrl = validateRedirectUrl(juiceShopUrl);
+        // Use client-side routing for internal URLs
+        if (safeUrl.startsWith('/')) {
+          setLocation(safeUrl);
+        } else {
+          setLocation('/dashboard');
+        }
       } else {
-        window.location.href = redirectUrl;
+        // Security: Re-validate URL and only allow internal navigation
+        const safeUrl = validateRedirectUrl(redirectUrl);
+        if (safeUrl.startsWith('/')) {
+          setLocation(safeUrl);
+        } else {
+          setLocation('/dashboard');
+        }
       }
     }, 500);
   };
 
   const handleManualRedirect = () => {
     if (!redirectUrl) return;
-    // For Juice Shop, construct the correct URL
+    // Security: Always use the router for internal navigation to prevent open redirects
     if (returnTo === 'juice-shop') {
-      const juiceShopUrl = `/juice-shop?success=1&orderId=${orderId}&amount=${amount}`;
-      window.location.href = juiceShopUrl;
+      const juiceShopUrl = `/juice-shop?success=1&orderId=${encodeURIComponent(orderId)}&amount=${encodeURIComponent(amount || '')}`;
+      const safeUrl = validateRedirectUrl(juiceShopUrl);
+      // Use client-side routing for internal URLs
+      if (safeUrl.startsWith('/')) {
+        setLocation(safeUrl);
+      } else {
+        setLocation('/dashboard');
+      }
     } else {
-      window.location.href = redirectUrl;
+      // Security: Re-validate URL and only allow internal navigation
+      const safeUrl = validateRedirectUrl(redirectUrl);
+      if (safeUrl.startsWith('/')) {
+        setLocation(safeUrl);
+      } else {
+        setLocation('/dashboard');
+      }
     }
   };
 

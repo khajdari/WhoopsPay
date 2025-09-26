@@ -99,10 +99,14 @@ export class AdminController {
       }
 
       // OWASP A03: Injection & A04: Insecure Design
-      // VULNERABLE: No input validation for balance amount
-      // Admin can set negative balances, extremely high amounts, or invalid values
+      // SECURE: Type validation and bounds checking for balance amount
       if (!userId || newBalance === undefined) {
         return res.status(400).json({ message: "User ID and new balance are required" });
+      }
+
+      // Type validation and bounds checking
+      if (typeof newBalance !== 'number' || isNaN(newBalance) || newBalance < 0 || newBalance > 1000000) {
+        return res.status(400).json({ message: "Invalid balance amount. Must be a number between 0 and 1,000,000" });
       }
 
       await storage.updateUserBalance(userId, newBalance.toString());
