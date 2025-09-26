@@ -156,16 +156,22 @@ export function AuthView({
     }
   };
 
-  // Test account login
+  // Test account login - Use environment-based test credentials for demo functionality
   const handleTestLogin = async (testEmail: string) => {
     setLoading(true);
+    
+    // Security: Use environment variable for test passwords with production safety
+    // Fail fast in production if test password env var is not set
+    const testPassword = import.meta.env.VITE_TEST_PASSWORD || 
+      (import.meta.env.PROD ? (() => { throw new Error('VITE_TEST_PASSWORD required in production'); })() : 'test2024');
+    
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: testEmail,
-          password: 'password123'
+          password: testPassword // Use consistent test password for demo functionality
         })
       });
 

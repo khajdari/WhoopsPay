@@ -49,11 +49,11 @@ export class IssueReportController {
         });
       }
 
-      // Prepare issue report data
+      // Prepare issue report data with type validation
       const reportData = {
         userId,
-        title: title.trim(),
-        description: description.trim(),
+        title: typeof title === 'string' ? title.trim() : '',
+        description: typeof description === 'string' ? description.trim() : '',
         category,
         priority,
         status: 'open',

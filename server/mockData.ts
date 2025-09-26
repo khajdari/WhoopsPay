@@ -38,9 +38,9 @@ export async function seedMockData() {
       updatedAt: Date.now(),
       isAdmin: 1,
 
-      // VULNERABLE: Sensitive data stored unencrypted
-      ssn: "555-11-1111",
-      password: "admin2024", // VULNERABLE: Plain text password
+      // Security: Minimized sensitive data exposure
+      ssn: "555-11-XXXX", // Masked for security
+      password: process.env.MOCK_ADMIN_PASSWORD || 'admin2024!Security',
     });
 
     await storage.upsertUser({
@@ -57,8 +57,8 @@ export async function seedMockData() {
       updatedAt: Date.now(),
       isAdmin: 0,
 
-      ssn: "555-22-2222",
-      password: "sarah123", // VULNERABLE: Weak password
+      ssn: "555-22-XXXX", // Masked for security
+      password: process.env.MOCK_USER_PASSWORD || 'user2024!Demo',
     });
 
     await storage.upsertUser({
@@ -75,8 +75,8 @@ export async function seedMockData() {
       updatedAt: Date.now(),
       isAdmin: 0,
 
-      ssn: "555-33-3333",
-      password: "james2024", // VULNERABLE: Weak password
+      ssn: "555-33-XXXX", // Masked for security
+      password: process.env.MOCK_USER_PASSWORD || 'user2024!Demo',
     });
 
     await storage.upsertUser({
@@ -93,8 +93,8 @@ export async function seedMockData() {
       updatedAt: Date.now(),
       isAdmin: 0,
 
-      ssn: "555-44-4444",
-      password: "elena456", // VULNERABLE: Extremely weak password
+      ssn: "555-44-XXXX", // Masked for security
+      password: process.env.MOCK_USER_PASSWORD || 'user2024!Demo',
     });
 
     // Create mock transactions between new users

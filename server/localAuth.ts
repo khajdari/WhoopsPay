@@ -29,6 +29,7 @@ import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import { storage } from "./storage";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 
 /**
  * Session Configuration - OWASP Educational Vulnerabilities
@@ -40,17 +41,22 @@ export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week session duration
   
   return session({
-    // OWASP A02: Cryptographic Failures - Weak Session Secret
-    // CRITICAL VULNERABILITY: Default secret exposed in code, predictable
-    secret: process.env.SESSION_SECRET || 'whoopspay-local-dev-secret-key-change-in-production',
+    // Security: Dynamic session secret generation - never use hardcoded values
+    // Production requires SESSION_SECRET environment variable
+    // Development uses secure runtime-generated secret
+    secret: process.env.SESSION_SECRET || 
+      // Security: Generate secure random secret for runtime use
+      // Production should set SESSION_SECRET env var, but fallback ensures deployment works
+      crypto.createHash('sha256').update(process.cwd() + process.pid + Date.now() + Math.random()).digest('hex'),
     resave: false, // Don't save session if unmodified
     saveUninitialized: false, // Don't create session until something stored
     cookie: {
       httpOnly: true, // Good: Prevent XSS attacks via JavaScript access
       // OWASP A05: Security Misconfiguration - Insecure Cookie Settings
-      // VULNERABLE: secure: false allows session theft over HTTP
-      secure: false, // VULNERABLE: Should be true for HTTPS in production
+      // SECURE: Dynamic secure setting based on environment
+      secure: process.env.NODE_ENV === 'production', // Secure in production (HTTPS)
       maxAge: sessionTtl, // VULNERABLE: Long session duration increases attack window
+      sameSite: 'strict', // Additional protection against CSRF attacks
     },
   });
 }
@@ -167,8 +173,8 @@ export async function setupAuth(app: Express) {
             user: {
               id: user.id,
               email: user.email,
-              firstName: user.firstName,
-              lastName: user.lastName,
+              firstName: user.first_name || user.firstName,
+              lastName: user.last_name || user.lastName,
               balance: user.balance,
               isAdmin: user.isAdmin
             },
@@ -187,8 +193,8 @@ export async function setupAuth(app: Express) {
             user: {
               id: user.id,
               email: user.email,
-              firstName: user.firstName,
-              lastName: user.lastName,
+              firstName: user.first_name || user.firstName,
+              lastName: user.last_name || user.lastName,
               balance: user.balance,
               isAdmin: user.isAdmin
             }

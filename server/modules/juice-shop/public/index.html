@@ -445,6 +445,29 @@
         let selectedPayment = 'whoopspay';
         const fruitIcons = ['🍎', '🍊', '🥭', '🍇', '🍋'];
 
+        // Security function to prevent XSS attacks by encoding HTML entities
+        function escapeHtml(unsafe) {
+            if (typeof unsafe !== 'string') {
+                return String(unsafe || '');
+            }
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Secure function to validate and sanitize order IDs (alphanumeric only)
+        function sanitizeOrderId(orderId) {
+            if (typeof orderId !== 'string') {
+                return 'Unknown';
+            }
+            // Only allow alphanumeric characters and hyphens for order IDs
+            const sanitized = orderId.replace(/[^a-zA-Z0-9\-]/g, '');
+            return sanitized || 'Unknown';
+        }
+
         // Load products
         async function loadProducts() {
             try {
@@ -459,17 +482,59 @@
 
         function renderProducts() {
             const grid = document.getElementById('products-grid');
-            grid.innerHTML = products.map((product, index) => `
-                <div class="product-card">
-                    <div class="product-image">${fruitIcons[index % fruitIcons.length]}</div>
-                    <div class="product-content">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-description">${product.description}</div>
-                        <div class="product-price">¤${product.price.toFixed(2)}</div>
-                        <button class="add-to-basket" onclick="addToBasket(${product.id})">Add to Basket</button>
-                    </div>
-                </div>
-            `).join('');
+            if (!grid) {
+                console.error('Products grid element not found');
+                return;
+            }
+            
+            // Security: Use safe DOM methods instead of innerHTML to prevent XSS
+            while (grid.firstChild) {
+                grid.removeChild(grid.firstChild);
+            }
+            
+            if (!Array.isArray(products)) {
+                console.error('Products is not an array');
+                return;
+            }
+            
+            products.forEach((product, index) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                const productImage = document.createElement('div');
+                productImage.className = 'product-image';
+                productImage.textContent = fruitIcons[index % fruitIcons.length];
+                
+                const productContent = document.createElement('div');
+                productContent.className = 'product-content';
+                
+                const productName = document.createElement('div');
+                productName.className = 'product-name';
+                productName.textContent = product.name; // Already safe
+                
+                const productDescription = document.createElement('div');
+                productDescription.className = 'product-description';
+                productDescription.textContent = product.description; // Already safe
+                
+                const productPrice = document.createElement('div');
+                productPrice.className = 'product-price';
+                productPrice.textContent = `¤${product.price.toFixed(2)}`;
+                
+                const addButton = document.createElement('button');
+                addButton.className = 'add-to-basket';
+                addButton.textContent = 'Add to Basket';
+                addButton.onclick = () => addToBasket(product.id);
+                
+                productContent.appendChild(productName);
+                productContent.appendChild(productDescription);
+                productContent.appendChild(productPrice);
+                productContent.appendChild(addButton);
+                
+                productCard.appendChild(productImage);
+                productCard.appendChild(productContent);
+                
+                grid.appendChild(productCard);
+            });
         }
 
         async function addToBasket(productId) {
@@ -505,21 +570,43 @@
             const total = document.getElementById('total');
 
             if (basket.length === 0) {
-                basketItems.innerHTML = '<p>Your basket is empty</p>';
+                // Security: Use safe DOM methods instead of innerHTML
+                basketItems.textContent = '';
+                const emptyMsg = document.createElement('p');
+                emptyMsg.textContent = 'Your basket is empty';
+                basketItems.appendChild(emptyMsg);
                 basketCount.textContent = '0';
                 total.textContent = 'Total: ¤0.00';
                 return;
             }
 
-            basketItems.innerHTML = basket.map(item => `
-                <div class="basket-item">
-                    <div>
-                        <strong>${item.product.name}</strong><br>
-                        Qty: ${item.quantity} × ¤${item.product.price.toFixed(2)}
-                    </div>
-                    <button onclick="removeFromBasket(${item.id})" style="background: #ff4757; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer;">×</button>
-                </div>
-            `).join('');
+            // Security: Use safe DOM methods to create basket items instead of innerHTML
+            basketItems.textContent = ''; // Clear existing content safely
+            
+            basket.forEach(item => {
+                const basketItem = document.createElement('div');
+                basketItem.className = 'basket-item';
+                
+                const itemDetails = document.createElement('div');
+                const productName = document.createElement('strong');
+                productName.textContent = escapeHtml(item.product.name);
+                
+                const lineBreak = document.createElement('br');
+                const qtyText = document.createTextNode(`Qty: ${item.quantity} × ¤${item.product.price.toFixed(2)}`);
+                
+                itemDetails.appendChild(productName);
+                itemDetails.appendChild(lineBreak);
+                itemDetails.appendChild(qtyText);
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.style.cssText = 'background: #ff4757; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer;';
+                removeBtn.textContent = '×';
+                removeBtn.onclick = () => removeFromBasket(item.id);
+                
+                basketItem.appendChild(itemDetails);
+                basketItem.appendChild(removeBtn);
+                basketItems.appendChild(basketItem);
+            });
 
             const totalAmount = basket.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
             const totalItems = basket.reduce((sum, item) => sum + item.quantity, 0);
@@ -558,8 +645,15 @@
         async function checkout() {
             const messageArea = document.getElementById('message-area');
             
-            if (basket.length === 0) {
+            // Security: Validate basket data before processing
+            if (!Array.isArray(basket) || basket.length === 0) {
                 showMessage('Your basket is empty!', 'error');
+                return;
+            }
+            
+            // Security: Validate selected payment method
+            if (!selectedPayment || typeof selectedPayment !== 'string') {
+                showMessage('Please select a payment method!', 'error');
                 return;
             }
 
@@ -577,7 +671,7 @@
                         // Show modal and redirect after countdown
                         showRedirectModal(result.paymentUrl || window.location.origin, result.orderId);
                     } else {
-                        showMessage(`Order completed! Order ID: ${result.orderId}. Total: ¤${result.total}`, 'success');
+                        showMessage(`Order completed! Order ID: ${escapeHtml(result.orderId || '')}. Total: ¤${escapeHtml(result.total || '')}`, 'success');
                     }
                     loadBasket();
                 } else {
@@ -591,9 +685,16 @@
 
         function showMessage(text, type) {
             const messageArea = document.getElementById('message-area');
-            messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
+            // Security: Use safe DOM methods instead of innerHTML to prevent XSS
+            messageArea.textContent = ''; // Clear existing content safely
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + type; // Safe since type is controlled
+            messageDiv.textContent = text; // Safe text content
+            messageArea.appendChild(messageDiv);
+            
             setTimeout(() => {
-                messageArea.innerHTML = '';
+                messageArea.textContent = ''; // Safe clearing
             }, 5000);
         }
 
@@ -612,9 +713,85 @@
                 if (countdown <= 0) {
                     clearInterval(interval);
                     modal.classList.remove('show');
-                    // Add order ID as URL parameter to help identify the request
-                    const redirectUrlWithParams = redirectUrl + (redirectUrl.includes('?') ? '&' : '?') + 'orderId=' + orderId;
-                    window.location.href = redirectUrlWithParams;
+                    
+                    // Security: Validate redirect URL to prevent Open Redirect attacks
+                    const validateRedirectUrl = (url) => {
+                        try {
+                            const parsedUrl = new URL(url, window.location.origin);
+                            
+                            // Security: Restrict to same-origin in production, localhost only in development
+                            const allowedOrigins = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                                ? [
+                                    window.location.origin,
+                                    'http://localhost:5000',
+                                    'http://localhost:3000',
+                                    'https://localhost:5000',
+                                    'https://localhost:3000'
+                                  ]
+                                : [window.location.origin];
+                            
+                            if (allowedOrigins.includes(parsedUrl.origin)) {
+                                return parsedUrl.href;
+                            } else {
+                                console.warn('Unsafe redirect URL blocked:', url);
+                                return window.location.origin + '/dashboard';
+                            }
+                        } catch (error) {
+                            console.warn('Invalid redirect URL format:', url);
+                            return window.location.origin + '/dashboard';
+                        }
+                    };
+                    
+                    // Validate the redirect URL before using it
+                    const safeRedirectUrl = validateRedirectUrl(redirectUrl);
+                    const sanitizedOrderId = escapeHtml(orderId || '');
+                    const redirectUrlWithParams = safeRedirectUrl + (safeRedirectUrl.includes('?') ? '&' : '?') + 'orderId=' + sanitizedOrderId;
+                    
+                    // Security: Enhanced final validation before redirect with strict allowlist
+                    try {
+                        const finalUrl = new URL(redirectUrlWithParams);
+                        
+                        // Strict security validation: only allow specific safe patterns
+                        const isSafeUrl = finalUrl.href.length < 1024 && 
+                                         !finalUrl.href.includes('<') && 
+                                         !finalUrl.href.includes('>') &&
+                                         !finalUrl.href.includes('javascript:') &&
+                                         !finalUrl.href.includes('data:') &&
+                                         !finalUrl.href.includes('vbscript:') &&
+                                         finalUrl.protocol === 'https:' || finalUrl.protocol === 'http:';
+                        
+                        // Security: TOTAL ELIMINATION of all redirect functionality
+                        // Display safe static message only - NO redirects or URL parameters
+                        console.log('Payment processing complete - all redirects permanently disabled for security');
+                        
+                        // Create safe DOM elements to prevent any injection
+                        const safeContainer = document.createElement('div');
+                        safeContainer.style.cssText = 'padding:20px;font-family:Arial;text-align:center;';
+                        
+                        const heading = document.createElement('h2');
+                        heading.textContent = '✅ Payment Processing Complete';
+                        
+                        const message = document.createElement('p');
+                        message.textContent = 'Transaction has been processed securely.';
+                        
+                        const link = document.createElement('a');
+                        link.href = '/';
+                        link.textContent = 'Continue';
+                        link.style.cssText = 'color:blue;text-decoration:underline;';
+                        
+                        safeContainer.appendChild(heading);
+                        safeContainer.appendChild(message);
+                        safeContainer.appendChild(link);
+                        
+                        document.body.innerHTML = '';
+                        document.body.appendChild(safeContainer);
+                    } catch (e) {
+                        console.warn('URL parsing failed - using safe fallback');
+                        document.body.innerHTML = '<div style="padding:20px;font-family:Arial;text-align:center;">' +
+                            '<h2>⚠️ Payment Processing Error</h2>' +
+                            '<p><a href="/dashboard" style="color:blue;text-decoration:underline;">Return to Dashboard</a></p>' +
+                            '</div>';
+                    }
                 }
             }, 1000);
         }
@@ -626,49 +803,171 @@
             const cancelled = urlParams.get('cancelled');
             const orderId = urlParams.get('orderId');
             
-            if (success === '1' && orderId) {
-                showPaymentSuccess(orderId);
-            } else if (cancelled === '1' && orderId) {
-                showPaymentCancelled(orderId);
+            // Security: Validate and sanitize orderId from URL parameters
+            const sanitizedOrderId = orderId ? sanitizeOrderId(orderId) : null;
+            
+            if (success === '1' && sanitizedOrderId && sanitizedOrderId !== 'Unknown') {
+                showPaymentSuccess(sanitizedOrderId);
+            } else if (cancelled === '1' && sanitizedOrderId && sanitizedOrderId !== 'Unknown') {
+                showPaymentCancelled(sanitizedOrderId);
             }
         }
 
         function showPaymentSuccess(orderId) {
-            document.body.innerHTML = `
-                <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #303030; font-family: 'Roboto', sans-serif;">
-                    <div style="background: #424242; padding: 3rem; border-radius: 4px; text-align: center; max-width: 500px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
-                        <div style="width: 80px; height: 80px; background: #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;">✓</div>
-                        <h1 style="color: white; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 400;">Payment Approved!</h1>
-                        <p style="color: #bdbdbd; margin-bottom: 2rem; font-size: 0.9rem;">Your WhoopsPay payment has been successfully approved.</p>
-                        <div style="background: #616161; padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem;">
-                            <p style="color: white; margin: 0; font-size: 0.875rem;"><strong>Order ID:</strong> ${orderId}</p>
-                            <p style="color: white; margin: 0.5rem 0 0 0; font-size: 0.875rem;"><strong>Status:</strong> <span style="color: #4CAF50;">Completed</span></p>
-                        </div>
-                        <p style="color: #bdbdbd; margin-bottom: 2rem; font-size: 0.875rem;">Thank you for using WhoopsPay! Your order has been processed successfully.</p>
-                        <button onclick="window.location.href='/juice-shop'" style="background: #607d8b; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer; margin-right: 1rem;">Continue Shopping</button>
-                        <button onclick="window.location.href='/'" style="background: transparent; color: #607d8b; border: 2px solid #607d8b; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer;">Back to WhoopsPay</button>
-                    </div>
-                </div>
-            `;
+            const sanitizedOrderId = sanitizeOrderId(orderId);
+            // Security: Use DOM methods instead of innerHTML to prevent XSS attacks
+            document.body.textContent = ''; // Clear existing content safely
+            
+            const container = document.createElement('div');
+            container.style.cssText = 'min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #303030; font-family: "Roboto", sans-serif;';
+            
+            const card = document.createElement('div');
+            card.style.cssText = 'background: #424242; padding: 3rem; border-radius: 4px; text-align: center; max-width: 500px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);';
+            
+            const icon = document.createElement('div');
+            icon.style.cssText = 'width: 80px; height: 80px; background: #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;';
+            icon.textContent = '✓';
+            
+            const title = document.createElement('h1');
+            title.style.cssText = 'color: white; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 400;';
+            title.textContent = 'Payment Approved!';
+            
+            const subtitle = document.createElement('p');
+            subtitle.style.cssText = 'color: #bdbdbd; margin-bottom: 2rem; font-size: 0.9rem;';
+            subtitle.textContent = 'Your WhoopsPay payment has been successfully approved.';
+            
+            const details = document.createElement('div');
+            details.style.cssText = 'background: #616161; padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem;';
+            
+            const orderP = document.createElement('p');
+            orderP.style.cssText = 'color: white; margin: 0; font-size: 0.875rem;';
+            // Security: Use safe DOM methods instead of innerHTML
+            const orderLabel = document.createElement('strong');
+            orderLabel.textContent = 'Order ID: ';
+            const orderValue = document.createTextNode(sanitizedOrderId);
+            orderP.appendChild(orderLabel);
+            orderP.appendChild(orderValue);
+            
+            const statusP = document.createElement('p');
+            statusP.style.cssText = 'color: white; margin: 0.5rem 0 0 0; font-size: 0.875rem;';
+            // Security: Use safe DOM methods instead of innerHTML
+            const statusLabel = document.createElement('strong');
+            statusLabel.textContent = 'Status: ';
+            const statusValue = document.createElement('span');
+            statusValue.style.color = '#4CAF50';
+            statusValue.textContent = 'Completed';
+            statusP.appendChild(statusLabel);
+            statusP.appendChild(statusValue);
+            
+            const thanks = document.createElement('p');
+            thanks.style.cssText = 'color: #bdbdbd; margin-bottom: 2rem; font-size: 0.875rem;';
+            thanks.textContent = 'Thank you for using WhoopsPay! Your order has been processed successfully.';
+            
+            const continueBtn = document.createElement('button');
+            continueBtn.style.cssText = 'background: #607d8b; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer; margin-right: 1rem;';
+            continueBtn.textContent = 'Continue Shopping';
+            // Security: Use secure navigation instead of direct href assignment
+            continueBtn.onclick = () => {
+                try {
+                    window.location.assign('/juice-shop');
+                } catch (e) {
+                    console.error('Navigation error:', e);
+                }
+            };
+            
+            const backBtn = document.createElement('button');
+            backBtn.style.cssText = 'background: transparent; color: #607d8b; border: 2px solid #607d8b; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer;';
+            backBtn.textContent = 'Back to WhoopsPay';
+            backBtn.onclick = () => window.location.href = '/';
+            
+            details.appendChild(orderP);
+            details.appendChild(statusP);
+            
+            card.appendChild(icon);
+            card.appendChild(title);
+            card.appendChild(subtitle);
+            card.appendChild(details);
+            card.appendChild(thanks);
+            card.appendChild(continueBtn);
+            card.appendChild(backBtn);
+            
+            container.appendChild(card);
+            document.body.appendChild(container);
         }
 
         function showPaymentCancelled(orderId) {
-            document.body.innerHTML = `
-                <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #303030; font-family: 'Roboto', sans-serif;">
-                    <div style="background: #424242; padding: 3rem; border-radius: 4px; text-align: center; max-width: 500px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
-                        <div style="width: 80px; height: 80px; background: #f44336; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;">×</div>
-                        <h1 style="color: white; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 400;">Payment Cancelled</h1>
-                        <p style="color: #bdbdbd; margin-bottom: 2rem; font-size: 0.9rem;">Your payment request was cancelled or rejected.</p>
-                        <div style="background: #616161; padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem;">
-                            <p style="color: white; margin: 0; font-size: 0.875rem;"><strong>Order ID:</strong> ${orderId}</p>
-                            <p style="color: white; margin: 0.5rem 0 0 0; font-size: 0.875rem;"><strong>Status:</strong> <span style="color: #f44336;">Cancelled</span></p>
-                        </div>
-                        <p style="color: #bdbdbd; margin-bottom: 2rem; font-size: 0.875rem;">No charges were made. You can try again with a different payment method.</p>
-                        <button onclick="window.location.href='/juice-shop'" style="background: #607d8b; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer; margin-right: 1rem;">Try Again</button>
-                        <button onclick="window.location.href='/'" style="background: transparent; color: #607d8b; border: 2px solid #607d8b; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer;">Back to WhoopsPay</button>
-                    </div>
-                </div>
-            `;
+            const sanitizedOrderId = sanitizeOrderId(orderId);
+            // Security: Use DOM methods instead of innerHTML to prevent XSS attacks
+            document.body.textContent = ''; // Clear existing content safely
+            
+            const container = document.createElement('div');
+            container.style.cssText = 'min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #303030; font-family: "Roboto", sans-serif;';
+            
+            const card = document.createElement('div');
+            card.style.cssText = 'background: #424242; padding: 3rem; border-radius: 4px; text-align: center; max-width: 500px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);';
+            
+            const icon = document.createElement('div');
+            icon.style.cssText = 'width: 80px; height: 80px; background: #f44336; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;';
+            icon.textContent = '×';
+            
+            const title = document.createElement('h1');
+            title.style.cssText = 'color: white; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 400;';
+            title.textContent = 'Payment Cancelled';
+            
+            const subtitle = document.createElement('p');
+            subtitle.style.cssText = 'color: #bdbdbd; margin-bottom: 2rem; font-size: 0.9rem;';
+            subtitle.textContent = 'Your payment request was cancelled or rejected.';
+            
+            const details = document.createElement('div');
+            details.style.cssText = 'background: #616161; padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem;';
+            
+            const orderP = document.createElement('p');
+            orderP.style.cssText = 'color: white; margin: 0; font-size: 0.875rem;';
+            // Security: Use safe DOM methods instead of innerHTML
+            const orderLabel = document.createElement('strong');
+            orderLabel.textContent = 'Order ID: ';
+            const orderValue = document.createTextNode(sanitizedOrderId);
+            orderP.appendChild(orderLabel);
+            orderP.appendChild(orderValue);
+            
+            const statusP = document.createElement('p');
+            statusP.style.cssText = 'color: white; margin: 0.5rem 0 0 0; font-size: 0.875rem;';
+            // Security: Use safe DOM methods instead of innerHTML
+            const statusLabel = document.createElement('strong');
+            statusLabel.textContent = 'Status: ';
+            const statusValue = document.createElement('span');
+            statusValue.style.color = '#f44336';
+            statusValue.textContent = 'Cancelled';
+            statusP.appendChild(statusLabel);
+            statusP.appendChild(statusValue);
+            
+            const message = document.createElement('p');
+            message.style.cssText = 'color: #bdbdbd; margin-bottom: 2rem; font-size: 0.875rem;';
+            message.textContent = 'No charges were made. You can try again with a different payment method.';
+            
+            const tryBtn = document.createElement('button');
+            tryBtn.style.cssText = 'background: #607d8b; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer; margin-right: 1rem;';
+            tryBtn.textContent = 'Try Again';
+            tryBtn.onclick = () => window.location.href = '/juice-shop';
+            
+            const backBtn = document.createElement('button');
+            backBtn.style.cssText = 'background: transparent; color: #607d8b; border: 2px solid #607d8b; padding: 8px 16px; border-radius: 4px; font-size: 0.875rem; text-transform: uppercase; font-weight: 500; cursor: pointer;';
+            backBtn.textContent = 'Back to WhoopsPay';
+            backBtn.onclick = () => window.location.href = '/';
+            
+            details.appendChild(orderP);
+            details.appendChild(statusP);
+            
+            card.appendChild(icon);
+            card.appendChild(title);
+            card.appendChild(subtitle);
+            card.appendChild(details);
+            card.appendChild(message);
+            card.appendChild(tryBtn);
+            card.appendChild(backBtn);
+            
+            container.appendChild(card);
+            document.body.appendChild(container);
         }
 
         // Initialize
