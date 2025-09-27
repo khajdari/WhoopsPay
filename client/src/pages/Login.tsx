@@ -212,10 +212,10 @@ export default function Login() {
                 <div className="flex flex-wrap gap-1">
                   {testAccounts.map((account: any) => {
                     const passwords: { [key: string]: string } = {
-                      "@admin_maria": "admin2024",
-                      "@sarah_wilson": "sarah123", 
-                      "@james_chen": "james2024",
-                      "@elena_kowalski": "elena456"
+                      "@admin_maria": "uon2025!AdminUser",
+                      "@sarah_wilson": "uon2025!User", 
+                      "@james_chen": "uon2025!User",
+                      "@elena_kowalski": "uon2025!User"
                     };
                     return (
                       <button

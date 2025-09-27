@@ -40,7 +40,7 @@ export async function seedMockData() {
 
       // Security: Minimized sensitive data exposure
       ssn: "555-11-XXXX", // Masked for security
-      password: process.env.MOCK_ADMIN_PASSWORD || 'admin2024!Security',
+      password: process.env.MOCK_ADMIN_PASSWORD || 'uon2025!AdminUser',
     });
 
     await storage.upsertUser({
@@ -58,7 +58,7 @@ export async function seedMockData() {
       isAdmin: 0,
 
       ssn: "555-22-XXXX", // Masked for security
-      password: process.env.MOCK_USER_PASSWORD || 'user2024!Demo',
+      password: process.env.MOCK_USER_PASSWORD || 'uon2025!User',
     });
 
     await storage.upsertUser({
@@ -76,7 +76,7 @@ export async function seedMockData() {
       isAdmin: 0,
 
       ssn: "555-33-XXXX", // Masked for security
-      password: process.env.MOCK_USER_PASSWORD || 'user2024!Demo',
+      password: process.env.MOCK_USER_PASSWORD || 'uon2025!User',
     });
 
     await storage.upsertUser({
@@ -94,7 +94,7 @@ export async function seedMockData() {
       isAdmin: 0,
 
       ssn: "555-44-XXXX", // Masked for security
-      password: process.env.MOCK_USER_PASSWORD || 'user2024!Demo',
+      password: process.env.MOCK_USER_PASSWORD || 'uon2025!User',
     });
 
     // Create mock transactions between new users
