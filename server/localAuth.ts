@@ -206,8 +206,8 @@ export async function setupAuth(app: Express) {
           user: {
             id: user.id,
             email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            firstName: user.first_name || user.firstName,
+            lastName: user.last_name || user.lastName,
             balance: user.balance,
             isAdmin: user.isAdmin
           }
