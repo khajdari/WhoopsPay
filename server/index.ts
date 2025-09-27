@@ -66,8 +66,72 @@ async function initializeSystem() {
 initializeSystem().catch(console.error);
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+// Security: Disable X-Powered-By header to prevent information exposure
+app.disable('x-powered-by');
+
+// CRITICAL: Trust proxy for production deployment (Render, Heroku, etc.)
+// This enables proper IP detection and rate limiting behind reverse proxies
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1); // Trust first proxy
+} else {
+  // Development: Enable proxy trust for local development with proxies  
+  app.set('trust proxy', 'loopback');
+}
+
+app.use(express.json({ 
+  limit: '10mb',
+  strict: true,
+  type: 'application/json'
+}));
+app.use(express.urlencoded({ 
+  extended: false, 
+  limit: '10mb',
+  parameterLimit: 1000
+}));
+
+// Security: Comprehensive security headers middleware for DAST compliance
+app.use((req, res, next) => {
+  // Security: Validate Content-Type for POST requests
+  if (req.method === 'POST' && req.headers['content-type'] && 
+      !req.headers['content-type'].includes('application/json') &&
+      !req.headers['content-type'].includes('application/x-www-form-urlencoded')) {
+    return res.status(400).json({ error: 'Invalid Content-Type' });
+  }
+  
+  // Security: Set comprehensive security headers for DAST compliance
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  // Security: Permissions Policy Header for feature control
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), fullscreen=(self), sync-xhr=()');
+  
+  // Security: Cross-Origin Headers for Spectre vulnerability mitigation
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
+  
+  // Security: Production HTTPS enforcement and comprehensive headers
+  if (process.env.NODE_ENV === 'production') {
+    // Security: HTTPS enforcement for production
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+    
+    // Security: HTTPS redirect for production cleartext prevention
+    if (req.headers['x-forwarded-proto'] !== 'https' && req.headers.host && !req.headers.host.includes('localhost')) {
+      return res.redirect(301, `https://${req.headers.host}${req.url}`);
+    }
+    
+    // Security: Strict CSP for production
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+  } else {
+    // Development: Allow HMR and local development
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' ws: wss:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+  }
+  
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();
