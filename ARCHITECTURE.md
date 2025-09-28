@@ -9,7 +9,7 @@ WhoopsPay follows a modern full-stack architecture with clear separation of conc
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │    Backend      │    │   Database      │
-│   React/TS      │◄──►│   Express/TS    │◄──►│  PostgreSQL     │
+│   React/TS      │◄──►│   Express/TS    │◄──►│   Sqlite        │
 │   Port: 5000    │    │   API Server    │    │   Drizzle ORM   │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │                       │
@@ -78,7 +78,7 @@ App.tsx
 
 ### Technology Stack
 - **Framework**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
+- **Database**: Sqlite with Drizzle ORM
 - **Authentication**: Session-based with express-session
 - **API Documentation**: Swagger/OpenAPI
 - **Security**: CORS, rate limiting, input validation
@@ -134,7 +134,6 @@ Juice Shop → Checkout → WhoopsPay Payment → Return to Juice Shop
 - Cross-domain authentication handling
 
 ### External Services
-- **PayPal SDK**: Real payment processing simulation
 - **OWASP ZAP**: Security testing integration
 - **Snyk**: Vulnerability scanning services
 
@@ -142,12 +141,12 @@ Juice Shop → Checkout → WhoopsPay Payment → Return to Juice Shop
 
 ### Development Environment
 ```
-localhost:5000 → Vite Dev Server → Express API → Local PostgreSQL
+localhost:5000 → Vite Dev Server → Express API → Local Sqlite
 ```
 
 ### Production Environment (Docker)
 ```
-Docker Container → Express Server (Port 5000) → External PostgreSQL
+Docker Container → Express Server (Port 5000) → External SqliteL
 ```
 
 ### CI/CD Pipeline
