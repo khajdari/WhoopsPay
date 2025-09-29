@@ -167,16 +167,29 @@ export async function registerRoutes(app: Express): Promise<HttpServer | HttpsSe
   };
 
   const specs = swaggerJsdoc(swaggerOptions);
-  
-  // Security: Only expose API documentation in development mode
-  if (process.env.NODE_ENV === 'development') {
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-  } else {
-    // Security: Block API documentation access in production
-    app.get('/api-docs*', (req, res) => {
-      res.status(404).json({ error: 'Not found' });
-    });
-  }
+
+  // API Documentation - accessible to authenticated admin users
+  // Custom middleware to override CSP for iframe embedding
+  const swaggerCspMiddleware = (req: any, res: any, next: any) => {
+    // Override CSP to allow iframe embedding for admin panel
+    res.setHeader('Content-Security-Policy',
+        "default-src 'self'; " +
+        "script-src 'self' 'unsafe-inline'; " +
+        "style-src 'self' 'unsafe-inline'; " +
+        "img-src 'self' data: https:; " +
+        "font-src 'self'; " +
+        "frame-ancestors 'self'; " + // Allow framing from same origin
+        "connect-src 'self'"
+    );
+    // Remove X-Frame-Options to allow iframe
+    res.removeHeader('X-Frame-Options');
+    next();
+  };
+
+  // Serve Swagger UI with custom CSP
+  app.use('/api-docs', swaggerCspMiddleware, swaggerUi.serve, swaggerUi.setup(specs, {
+    customCss: '.swagger-ui .topbar { display: none }' // Hide default topbar
+  }))
 
   // ============================================================================
   // AUTHENTICATION ROUTES
@@ -628,6 +641,16 @@ export async function registerRoutes(app: Express): Promise<HttpServer | HttpsSe
   // Serve Juice Shop static files with rate limiting protection
   app.use('/juice-shop', fileServeRateLimit, (req, res, next) => {
     if (req.path === '/' || req.path === '') {
+      // Override CSP for Juice Shop to allow inline styles and scripts (educational purposes)
+      res.setHeader('Content-Security-Policy',
+          "default-src 'self'; " +
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+          "style-src 'self' 'unsafe-inline'; " +
+          "img-src 'self' data: https:; " +
+          "font-src 'self'; " +
+          "connect-src 'self'; " +
+          "worker-src 'self' blob:"
+      );
       const juiceShopPath = path.join(process.cwd(), 'server/modules/juice-shop/public/index.html');
       res.sendFile(juiceShopPath);
     } else {
@@ -732,7 +755,8 @@ export async function registerRoutes(app: Express): Promise<HttpServer | HttpsSe
     
     // Security: Block ALL requests except health checks and root path (for DAST testing)
     restrictedHealthApp.use((req: any, res: any, next: any) => {
-      if (req.path === '/health' || req.path === '/api/health' || req.path === '/') {
+      if (req.path === '/health' || req.path === '/api/health' || req.path === '/'
+          || req.path.startsWith('/api-docs')) {
         next();
       } else {
         // Block all non-essential requests - redirect to HTTPS

@@ -215,26 +215,53 @@ function addSecurityHeaders(res: any, req: any) {
   // Only set headers if not already set (avoid double setting)
   if (!res.headersSent) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'DENY');
+
+    // Check if CSP already set by route-specific middleware (e.g., Swagger)
+    const existingCSP = res.getHeader('Content-Security-Policy');
+
+    if (!existingCSP) {
+      // Allow iframe embedding for API documentation (admin panel)
+      if (req.url && req.url.startsWith('/api-docs')) {
+        // Don't set X-Frame-Options for API docs - allow iframe
+        res.setHeader('Content-Security-Policy',
+            "default-src 'self'; " +
+            "script-src 'self' 'unsafe-inline'; " +
+            "style-src 'self' 'unsafe-inline'; " +
+            "img-src 'self' data: https:; " +
+            "font-src 'self'; " +
+            "frame-ancestors 'self'; " + // Allow framing from same origin
+            "connect-src 'self'"
+        );
+      } else {
+        // Normal security headers for all other routes
+        res.setHeader('X-Frame-Options', 'DENY');
+
+        // SECURITY FIXED: CSP with React inline styles support
+        if (req.url && req.url.startsWith('/juice-shop')) {
+          res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+        } else {
+          res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+        }
+      }
+    }
+
+    // Only set X-Frame-Options if not already handling /api-docs
+    if (!req.url || !req.url.startsWith('/api-docs')) {
+      res.setHeader('X-Frame-Options', 'DENY');
+    }
+
     res.setHeader('X-XSS-Protection', '1; mode=block');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), fullscreen=(self), sync-xhr=()');
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), fullscreen=(self), sync-xhr=()');
     res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
     res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
     res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
-    
-    // SECURITY FIXED: CSP without unsafe directives and wildcards
-    if (req.url && req.url.startsWith('/juice-shop')) {
-      res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
-    } else {
-      res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
-    }
-    
+
     // Cache-Control headers to fix cacheable content vulnerability
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
-    
+
     // Production and DAST HTTPS headers (consistent with other locations)
     if (process.env.NODE_ENV === 'production' || process.env.DAST_MODE === 'true') {
       res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
@@ -296,7 +323,10 @@ app.use((req, res, next) => {
   
   // Security: Set comprehensive security headers for DAST compliance
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
+  // Allow iframe embedding for API documentation (admin panel)
+  if (!req.url || !req.url.startsWith('/api-docs')) {
+    res.setHeader('X-Frame-Options', 'DENY');
+  }
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   
@@ -312,28 +342,63 @@ app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
-  
-  // Security: HTTPS enforcement for production and DAST mode
-  if (process.env.NODE_ENV === 'production' || process.env.DAST_MODE === 'true') {
-    // Security: HTTPS enforcement for production and DAST testing
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-    
-    // Security: HTTPS redirect for production cleartext prevention
-    if (req.headers['x-forwarded-proto'] !== 'https' && req.headers.host && !req.headers.host.includes('localhost')) {
-      return res.redirect(301, `https://${req.headers.host}${req.url}`);
-    }
-    
-    // SECURITY FIXED: CSP without unsafe directives and wildcards
-    if (req.url && req.url.startsWith('/juice-shop')) {
-      // Educational platform with strict security
-      res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+
+  // Check if CSP already set by route-specific middleware (e.g., Swagger)
+  const existingCSP = res.getHeader('Content-Security-Policy');
+
+  if (!existingCSP) {
+    // Security: HTTPS enforcement for production and DAST mode
+    if (process.env.NODE_ENV === 'production' || process.env.DAST_MODE === 'true') {
+      // Security: HTTPS enforcement for production and DAST testing
+      res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+
+      // Security: HTTPS redirect for production cleartext prevention
+      if (req.headers['x-forwarded-proto'] !== 'https' && req.headers.host && !req.headers.host.includes('localhost')) {
+        return res.redirect(301, `https://${req.headers.host}${req.url}`);
+      }
+
+      // SECURITY FIXED: CSP without unsafe directives and wildcards
+      if (req.url && req.url.startsWith('/api-docs')) {
+        // Allow API docs to be framed for admin panel
+        res.setHeader('Content-Security-Policy',
+            "default-src 'self'; " +
+            "script-src 'self' 'unsafe-inline'; " +
+            "style-src 'self' 'unsafe-inline'; " +
+            "img-src 'self' data: https:; " +
+            "font-src 'self'; " +
+            "frame-ancestors 'self'; " +
+            "connect-src 'self'"
+        );
+      } else if (req.url && req.url.startsWith('/juice-shop')) {
+        // Educational platform with strict security
+        res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+      } else {
+        // Relaxed CSP for main application to allow React inline styles
+        res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+      }
     } else {
-      // Strict CSP for main application - SECURITY HARDENED
-      res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+      // Development mode CSP
+      if (req.url && req.url.startsWith('/api-docs')) {
+        // Allow API docs to be framed for admin panel
+        res.setHeader('Content-Security-Policy',
+            "default-src 'self'; " +
+            "script-src 'self' 'unsafe-inline'; " +
+            "style-src 'self' 'unsafe-inline'; " +
+            "img-src 'self' data: https:; " +
+            "font-src 'self'; " +
+            "frame-ancestors 'self'; " +
+            "connect-src 'self' ws: wss:"
+        );
+      } else {
+        // Development CSP with React inline styles support
+        res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' ws: wss:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+      }
     }
-  } else {
-    // SECURITY FIXED: Development CSP hardened - Removed unsafe directives
-    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' ws: wss:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+  }
+
+  // Add HSTS header if in production/DAST mode (outside CSP check)
+  if (process.env.NODE_ENV === 'production' || process.env.DAST_MODE === 'true') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   }
   
   next();
@@ -453,26 +518,42 @@ registerRoutes(app).then((server) => {
         
         // Inject comprehensive security headers
         finalHeaders['X-Content-Type-Options'] = 'nosniff';
-        finalHeaders['X-Frame-Options'] = 'DENY';
+        // Allow iframe embedding for API documentation (admin panel)
+        if (!req.url || !req.url.startsWith('/api-docs')) {
+          finalHeaders['X-Frame-Options'] = 'DENY';
+        }
         finalHeaders['X-XSS-Protection'] = '1; mode=block';
         finalHeaders['Referrer-Policy'] = 'strict-origin-when-cross-origin';
-        finalHeaders['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), fullscreen=(self), sync-xhr=()';
+        finalHeaders['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), fullscreen=(self), sync-xhr=()';
         finalHeaders['Cross-Origin-Embedder-Policy'] = 'require-corp';
         finalHeaders['Cross-Origin-Opener-Policy'] = 'same-origin';
         finalHeaders['Cross-Origin-Resource-Policy'] = 'same-origin';
-        
+
         // Cache-Control headers to fix cacheable content vulnerability
         finalHeaders['Cache-Control'] = 'no-store, no-cache, must-revalidate, private';
         finalHeaders['Pragma'] = 'no-cache';
         finalHeaders['Expires'] = '0';
-        
-        // SECURITY FIXED: CSP without unsafe directives and wildcards
-        if (req.url && req.url.startsWith('/juice-shop')) {
-          finalHeaders['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'";
-        } else {
-          finalHeaders['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'";
+
+        // Check if CSP already set by route-specific middleware (e.g., Swagger)
+        if (!finalHeaders['Content-Security-Policy']) {
+          // SECURITY FIXED: CSP without unsafe directives and wildcards
+          if (req.url && req.url.startsWith('/api-docs')) {
+            // Allow API docs to be framed for admin panel
+            finalHeaders['Content-Security-Policy'] =
+                "default-src 'self'; " +
+                "script-src 'self' 'unsafe-inline'; " +
+                "style-src 'self' 'unsafe-inline'; " +
+                "img-src 'self' data: https:; " +
+                "font-src 'self'; " +
+                "frame-ancestors 'self'; " +
+                "connect-src 'self'";
+          } else if (req.url && req.url.startsWith('/juice-shop')) {
+            finalHeaders['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'";
+          } else {
+            finalHeaders['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'";
+          }
         }
-        
+
         // Production and DAST HTTPS headers
         if (process.env.NODE_ENV === 'production' || process.env.DAST_MODE === 'true') {
           finalHeaders['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload';
